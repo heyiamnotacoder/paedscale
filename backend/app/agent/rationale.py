@@ -71,7 +71,9 @@ def synthesize_rationale(facts: dict) -> dict:
 
     # The Anthropic tool-use "required" list is advisory, not enforced: the model
     # can still omit a field. Fill in safe defaults rather than let a schema
-    # validation error surface as a 500 to the caller.
+    # validation error surface as a 500 to the caller. Covers every RationaleOut
+    # field, including "rationale" itself.
+    result.setdefault("rationale", "")
     result.setdefault("assumptions", [])
     result.setdefault("uncertainty_flags", [])
     result.setdefault("narrow_therapeutic_index_warning", "")

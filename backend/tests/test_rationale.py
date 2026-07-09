@@ -21,6 +21,19 @@ def test_synthesize_rationale_fills_missing_optional_fields():
     assert result["concordance_summary"] == ""
 
 
+def test_synthesize_rationale_fills_missing_rationale_field():
+    # 'rationale' is a required RationaleOut field too; if the model omits it,
+    # we must still return a valid dict rather than let main.py 500.
+    with patch("app.agent.rationale.call_structured", return_value={"assumptions": ["a1"]}):
+        result = synthesize_rationale({"drug": "vancomycin"})
+
+    assert result["rationale"] == ""
+    assert result["assumptions"] == ["a1"]
+    assert result["uncertainty_flags"] == []
+    assert result["narrow_therapeutic_index_warning"] == ""
+    assert result["concordance_summary"] == ""
+
+
 def test_synthesize_rationale_preserves_all_present_fields():
     full_response = {
         "rationale": "text",
