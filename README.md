@@ -81,8 +81,37 @@ uvicorn app.main:app --reload # http://localhost:8000
 ```bash
 cd frontend
 npm install
-npm run dev                   # http://localhost:3000
+cp .env.local.example .env.local   # NEXT_PUBLIC_API_BASE_URL, defaults to localhost:8000
+npm run dev                        # http://localhost:3000
 ```
+
+With both running, open `http://localhost:3000`, pick a drug, and submit a case.
+
+## 90-second demo script
+
+1. **The problem (10s).** Point at the maturation-vs-linear gap: a neonate's clearance sits far
+   below the naive `weight/70` line. That gap is what gets an adult dose scaled straight into an
+   overdose in the young.
+2. **Submit a case (20s).** Pick **Vancomycin** (renal, narrow-therapeutic-index) for a **term
+   neonate** (3.5 kg, 40 wk gestational + 2 wk postnatal age). Hit *Extrapolate dose*.
+3. **Read the result card (20s).** Recommended dose in mg and mg/kg, the elimination pathway and fm
+   split, the maturation fraction actually applied at this age, and the concordance badge comparing
+   it to the published neonatal guideline dose.
+4. **Show the maturation curve (15s).** The chart is the real Hill curve for this drug's pathway —
+   not illustrative — with the case's own point marked on it.
+5. **Show the rationale (15s).** Scroll to the full auditable derivation: assumptions, uncertainty
+   flags, and (for vancomycin/morphine) the narrow-therapeutic-index → TDM warning.
+6. **Toggle renal impairment (10s)** and resubmit to show the dose drop — the organ-function
+   modifier only touches the matched pathway (try it on midazolam too: no change, since it's
+   hepatically cleared).
+
+## Deploy
+
+- **Backend (FastAPI):** any container/PaaS host that runs `uvicorn app.main:app` — e.g. Render or
+  Fly.io. Set `ANTHROPIC_API_KEY` as a secret env var. Update CORS `allow_origins` in `app/main.py`
+  to the deployed frontend origin.
+- **Frontend (Next.js):** Vercel (zero-config for a standard Next.js app). Set
+  `NEXT_PUBLIC_API_BASE_URL` to the deployed backend URL.
 
 ## License
 
