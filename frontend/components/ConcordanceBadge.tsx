@@ -1,0 +1,16 @@
+import type { Concordance } from "@/lib/types";
+
+export default function ConcordanceBadge({ concordance }: { concordance: Concordance | null }) {
+  if (!concordance || concordance.verdict === "no_guideline_available") {
+    return <span className="badge unmatched">No guideline match — mechanistic estimate only</span>;
+  }
+
+  const { verdict, ratio, guideline_age_group } = concordance;
+  const ratioText = ratio !== null ? `${ratio.toFixed(2)}x guideline` : "";
+
+  return (
+    <span className={`badge ${verdict}`}>
+      {verdict === "concordant" ? "Concordant" : "Divergent"} vs. {guideline_age_group} ({ratioText})
+    </span>
+  );
+}

@@ -42,7 +42,7 @@ Three drugs, one per elimination archetype, each concordance-checked against kno
       `rationale.py` with structured JSON outputs.
 - [x] **Phase 3 — FastAPI backend.** `schemas.py` + `main.py` wiring the pipeline behind
       `POST /extrapolate` with CORS.
-- [ ] **Phase 4 — Next.js frontend.** Case input form + results (dose, rationale trace, maturation
+- [x] **Phase 4 — Next.js frontend.** Case input form + results (dose, rationale trace, maturation
       chart, concordance badge, disclaimer).
 - [ ] **Phase 5 — Integration, demo polish, deploy docs.** End-to-end wiring, error/uncertainty
       states, README run + 90s demo script, deploy notes.

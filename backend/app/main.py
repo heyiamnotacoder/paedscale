@@ -110,6 +110,11 @@ def extrapolate_case(case: CaseRequest) -> ExtrapolationResponse:
         tm50_weeks=MATURATION[primary_pathway]["tm50_weeks"],
         hill=MATURATION[primary_pathway]["hill"],
     )
+    # Enrich the pathway_split payload with the maturation curve params so the
+    # frontend can render the actual Hill curve used, not an illustrative one.
+    pathway["tm50_weeks"] = pathway_maturation.tm50_weeks
+    pathway["hill"] = pathway_maturation.hill
+    pathway["maturation_source"] = MATURATION[primary_pathway]["source"]
 
     rec = extrapolate(
         drug_profile,
