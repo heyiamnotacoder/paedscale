@@ -36,7 +36,7 @@ Three drugs, one per elimination archetype, each concordance-checked against kno
 
 - [x] **Phase 0 — Repo, scaffolding, docs.** git init, `.gitignore`, public repo, `docs/`,
       `README.md`, `CLAUDE.md`, `plan.md`.
-- [ ] **Phase 1 — Pharmacometric core + concordance tests.** `pk/*` + `data/*.json` + pytest
+- [x] **Phase 1 — Pharmacometric core + concordance tests.** `pk/*` + `data/*.json` + pytest
       reproducing known guideline doses for all three drugs.
 - [ ] **Phase 2 — Claude agent layer.** `agent/client.py`, `pathways.py`, `adult_pk.py`,
       `rationale.py` with structured JSON outputs.
