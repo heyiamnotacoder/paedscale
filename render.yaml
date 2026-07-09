@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: paedscale-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      # Set in the Render dashboard (Environment tab) — never commit the key.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # Set to your deployed frontend origin, e.g. https://paedscale.vercel.app
+      # (comma-separated for multiple). Falls back to localhost:3000 if unset.
+      - key: ALLOWED_ORIGINS
+        sync: false
