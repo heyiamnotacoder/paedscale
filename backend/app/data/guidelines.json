@@ -1,0 +1,50 @@
+{
+  "midazolam": [
+    {
+      "age_group": "Term neonate",
+      "weight_kg": 3.5,
+      "pma_weeks": 42,
+      "guideline_dose_mg_per_kg": 0.03,
+      "source": "Neonatal procedural sedation guidance, approx. 0.03 mg/kg/dose IV"
+    },
+    {
+      "age_group": "Infant (~6 months)",
+      "weight_kg": 7.0,
+      "pma_weeks": 66,
+      "guideline_dose_mg_per_kg": 0.1,
+      "source": "Pediatric procedural sedation, approx. 0.1 mg/kg/dose IV"
+    }
+  ],
+  "vancomycin": [
+    {
+      "age_group": "Term neonate",
+      "weight_kg": 3.5,
+      "pma_weeks": 42,
+      "guideline_dose_mg_per_kg": 10.0,
+      "source": "Neonatal vancomycin dosing, approx. 10-15 mg/kg/dose (q12-24h depending on PMA)"
+    },
+    {
+      "age_group": "Child (2 years)",
+      "weight_kg": 12.0,
+      "pma_weeks": 144,
+      "guideline_dose_mg_per_kg": 15.0,
+      "source": "Pediatric vancomycin dosing, approx. 15 mg/kg/dose q6h"
+    }
+  ],
+  "morphine": [
+    {
+      "age_group": "Term neonate",
+      "weight_kg": 3.5,
+      "pma_weeks": 42,
+      "guideline_dose_mg_per_kg": 0.05,
+      "source": "Neonatal analgesia guidance, approx. 0.05 mg/kg/dose IV"
+    },
+    {
+      "age_group": "Infant (~6 months)",
+      "weight_kg": 7.0,
+      "pma_weeks": 66,
+      "guideline_dose_mg_per_kg": 0.1,
+      "source": "Pediatric analgesia, approx. 0.1 mg/kg/dose IV"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "CYP3A4": {
+    "tm50_weeks": 55.4,
+    "hill": 1.0,
+    "source": "Approximate CYP3A4 ontogeny, PMA-based Hill form (Salem et al. 2013; Anderson & Holford 2008 framework)"
+  },
+  "renal_GFR": {
+    "tm50_weeks": 47.7,
+    "hill": 3.4,
+    "source": "Rhodin et al. 2009 glomerular filtration rate maturation model"
+  },
+  "UGT2B7": {
+    "tm50_weeks": 64.0,
+    "hill": 2.0,
+    "source": "Approximate UGT2B7 / morphine clearance ontogeny, simplified to PMA-based Hill form (cf. Bouwmeester et al. 2004; Anand et al. 2008)"
+  }
+}

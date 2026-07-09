@@ -1,0 +1,44 @@
+{
+  "midazolam": {
+    "name": "Midazolam",
+    "adult_clearance_l_per_h": 27.0,
+    "adult_volume_l": 77.0,
+    "adult_weight_kg": 70.0,
+    "adult_protein_binding": 0.96,
+    "primary_pathway": "CYP3A4",
+    "fm_primary": 0.93,
+    "adult_reference_dose_mg": 5.0,
+    "dosing_interval_h": 4,
+    "route": "IV",
+    "indication": "Procedural sedation",
+    "notes": "Predominantly hepatic CYP3A4 metabolism to 1-hydroxymidazolam; minor renal elimination of glucuronide metabolites."
+  },
+  "vancomycin": {
+    "name": "Vancomycin",
+    "adult_clearance_l_per_h": 4.5,
+    "adult_volume_l": 49.0,
+    "adult_weight_kg": 70.0,
+    "adult_protein_binding": 0.5,
+    "primary_pathway": "renal_GFR",
+    "fm_primary": 0.85,
+    "adult_reference_dose_mg": 1250.0,
+    "dosing_interval_h": 12,
+    "route": "IV",
+    "indication": "Suspected/confirmed Gram-positive infection",
+    "notes": "Predominantly cleared by glomerular filtration, largely unchanged; narrow therapeutic index, requires TDM."
+  },
+  "morphine": {
+    "name": "Morphine",
+    "adult_clearance_l_per_h": 72.0,
+    "adult_volume_l": 245.0,
+    "adult_weight_kg": 70.0,
+    "adult_protein_binding": 0.35,
+    "primary_pathway": "UGT2B7",
+    "fm_primary": 0.9,
+    "adult_reference_dose_mg": 7.0,
+    "dosing_interval_h": 4,
+    "route": "IV",
+    "indication": "Moderate-severe pain / analgesia",
+    "notes": "Predominantly hepatic UGT2B7 glucuronidation to morphine-3-glucuronide and morphine-6-glucuronide; narrow therapeutic index in neonates due to respiratory depression risk."
+  }
+}
