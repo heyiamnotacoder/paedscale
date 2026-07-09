@@ -5,6 +5,7 @@ allometry x maturation -> dose solve -> rationale + concordance.
 """
 
 import json
+import os
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -38,9 +39,18 @@ IMPAIRMENT_ORGAN_FUNCTION_MODIFIER = 0.5
 
 app = FastAPI(title="PaedScale", version="0.1.0")
 
+# Comma-separated list of allowed frontend origins. Defaults to the local dev
+# server; in production set ALLOWED_ORIGINS to the deployed frontend URL(s),
+# e.g. "https://paedscale.vercel.app".
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
