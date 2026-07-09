@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PaedScale — Pediatric Dose-Extrapolation Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFF3F3;
+    --card:#FFFFFF;
+    --ink:#12212A;
+    --ink-2:#375260;
+    --ink-3:#6A828D;
+    --line:#D5DFDF;
+    --line-2:#E5ECEC;
+    --teal:#0E7A6B;
+    --teal-deep:#0A564B;
+    --teal-wash:#E4F0ED;
+    --amber:#B9760A;
+    --amber-wash:#F7EDDA;
+    --shadow:0 1px 2px rgba(18,33,42,.04),0 8px 28px rgba(18,33,42,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;font-size:17px;line-height:1.62;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 28px}
+
+  /* progress bar */
+  #prog{position:fixed;top:0;left:0;height:3px;width:0;background:var(--teal);z-index:50;transition:width .1s linear}
+
+  /* topbar */
+  .topbar{position:sticky;top:0;z-index:40;background:rgba(239,243,243,.86);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{font-family:"JetBrains Mono",monospace;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-deep);font-weight:500}
+  .brand b{color:var(--ink)}
+  .topnav{display:flex;gap:22px;font-size:.82rem}
+  .topnav a{color:var(--ink-2);text-decoration:none}
+  .topnav a:hover{color:var(--teal)}
+  @media(max-width:680px){.topnav{display:none}}
+
+  /* hero */
+  .hero{padding:78px 0 44px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:22px}
+  h1{
+    font-family:"Fraunces",serif;font-weight:500;font-size:clamp(2.5rem,6.4vw,4.4rem);
+    line-height:1.02;letter-spacing:-.015em;margin:0 0 22px;color:var(--ink)
+  }
+  h1 em{font-style:italic;color:var(--teal-deep)}
+  .lede{font-size:1.2rem;line-height:1.55;color:var(--ink-2);max-width:640px;margin:0}
+  .metarow{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+  .chip{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.04em;padding:6px 11px;border:1px solid var(--line);border-radius:100px;background:var(--card);color:var(--ink-2)}
+  .chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+  /* the signature: maturation chart */
+  .chartcard{margin:40px 0 4px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:26px 24px 18px;overflow:hidden}
+  .chartcard .ctitle{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:2px}
+  .chartcard .csub{font-size:.94rem;color:var(--ink-2);margin:0 0 14px}
+  .chartcard svg{width:100%;height:auto;display:block}
+  .curve{fill:none;stroke:var(--teal);stroke-width:3.2;stroke-linecap:round}
+  .curve-lin{fill:none;stroke:var(--amber);stroke-width:2;stroke-dasharray:5 5}
+  .gridline{stroke:var(--line-2);stroke-width:1}
+  .axis{stroke:var(--ink-3);stroke-width:1.2}
+  .alab{font-family:"JetBrains Mono",monospace;font-size:11px;fill:var(--ink-3)}
+  .zlab{font-family:"Inter",sans-serif;font-size:11px;fill:var(--ink-2);font-weight:500}
+  .keyrow{display:flex;gap:20px;flex-wrap:wrap;margin-top:12px;font-size:.82rem;color:var(--ink-2)}
+  .keyrow span{display:inline-flex;align-items:center;gap:7px}
+  .sw{width:16px;height:3px;border-radius:2px;display:inline-block}
+  .caption{font-size:.86rem;color:var(--ink-3);margin:14px 2px 0;line-height:1.5}
+
+  /* sections */
+  section{padding:56px 0;border-bottom:1px solid var(--line)}
+  .snum{font-family:"JetBrains Mono",monospace;font-size:.76rem;letter-spacing:.16em;color:var(--teal);margin-bottom:12px}
+  h2{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(1.7rem,3.6vw,2.4rem);line-height:1.12;letter-spacing:-.01em;margin:0 0 8px}
+  h3{font-family:"Inter",sans-serif;font-weight:600;font-size:1.06rem;margin:30px 0 8px;color:var(--ink)}
+  p{margin:0 0 16px}
+  strong{font-weight:600;color:var(--ink)}
+  a.inline{color:var(--teal-deep);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+
+  ul.clean{list-style:none;padding:0;margin:16px 0}
+  ul.clean li{position:relative;padding:9px 0 9px 26px;border-bottom:1px solid var(--line-2)}
+  ul.clean li:before{content:"";position:absolute;left:2px;top:17px;width:8px;height:8px;border-radius:2px;background:var(--teal);transform:rotate(45deg)}
+  ul.clean li.gap:before{background:var(--amber)}
+
+  .callout{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:10px;padding:18px 20px;margin:22px 0;box-shadow:var(--shadow)}
+  .callout.amber{border-left-color:var(--amber)}
+  .callout .k{font-family:"JetBrains Mono",monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+  .callout p:last-child{margin-bottom:0}
+
+  .eq{background:var(--ink);color:#EAF1F0;border-radius:12px;padding:24px 22px;margin:22px 0;font-family:"JetBrains Mono",monospace;font-size:1.02rem;line-height:1.7;overflow-x:auto}
+  .eq .var{color:#8FD9CC}
+  .eq .op{color:#F0C070}
+  .eq .cm{color:#7C97A2;font-size:.82rem}
+
+  /* two-col contrast */
+  .contrast{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+  @media(max-width:640px){.contrast{grid-template-columns:1fr}}
+  .col{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;box-shadow:var(--shadow)}
+  .col h4{margin:0 0 12px;font-size:.78rem;font-family:"JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase}
+  .col.g h4{color:var(--amber)}
+  .col.a h4{color:var(--teal)}
+  .col ul{list-style:none;padding:0;margin:0}
+  .col li{padding:8px 0;border-bottom:1px solid var(--line-2);font-size:.94rem;color:var(--ink-2)}
+  .col li:last-child{border-bottom:none}
+
+  /* pipeline */
+  .pipe{margin:26px 0;counter-reset:step}
+  .step{display:grid;grid-template-columns:44px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--line-2)}
+  .step:last-child{border-bottom:none}
+  .snumbig{font-family:"Fraunces",serif;font-size:1.5rem;color:var(--teal);line-height:1;padding-top:2px}
+  .step h4{margin:0 0 4px;font-size:1.02rem;font-weight:600}
+  .step p{margin:0;font-size:.95rem;color:var(--ink-2)}
+  .step .claude{display:inline-block;margin-top:8px;font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--teal-deep);background:var(--teal-wash);padding:4px 9px;border-radius:6px}
+
+  /* comparison table */
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:.9rem}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
+  th{font-family:"JetBrains Mono",monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+  td:first-child{font-weight:500;color:var(--ink)}
+  .tag{font-family:"JetBrains Mono",monospace;font-size:.72rem;padding:2px 7px;border-radius:5px}
+  .tag.hi{background:var(--teal-wash);color:var(--teal-deep)}
+  .tag.md{background:#EFE7D6;color:var(--amber)}
+
+  .summary{background:var(--ink);color:#DDE8E6;border-radius:16px;padding:30px 28px;margin:8px 0 0}
+  .summary h2{color:#fff;margin-bottom:14px}
+  .summary p{color:#B9CBCB}
+  .summary strong{color:#8FD9CC}
+  .summary ul.clean li{border-color:rgba(255,255,255,.1)}
+  .summary ul.clean li:before{background:#8FD9CC}
+
+  footer{padding:40px 0 70px;color:var(--ink-3);font-size:.84rem}
+  footer .brand{margin-bottom:6px}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    html{scroll-behavior:auto}
+    .curve{stroke-dasharray:none!important;stroke-dashoffset:0!important}
+  }
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand"><b>PaedScale</b> · concept</div>
+    <nav class="topnav">
+      <a href="#problem">Problem</a>
+      <a href="#objection">Why not guidelines</a>
+      <a href="#science">How it works</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#novelty">Novelty</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Dev Track · Built with Claude: Life Sciences</div>
+    <h1>Dosing children where the <em>guidelines run out</em>.</h1>
+    <p class="lede">A pediatric dose-extrapolation agent that derives a defensible starting dose from adult pharmacokinetics — using allometry and organ maturation, with every assumption shown and cited.</p>
+    <div class="metarow">
+      <span class="chip on">Working title: PaedScale</span>
+      <span class="chip">PBPK + ontogeny</span>
+      <span class="chip">Claude as reasoning engine</span>
+      <span class="chip">Solo · 7-day scope</span>
+    </div>
+
+    <div class="chartcard">
+      <div class="ctitle">The thesis, in one curve</div>
+      <p class="csub">Drug clearance does not scale linearly with body size in early life. This is the whole reason the app exists.</p>
+      <svg viewBox="0 0 720 320" role="img" aria-label="Maturation curve: fraction of adult clearance versus postmenstrual age. The true curve is sigmoidal and sits far below the naive linear mg/kg assumption in neonates and infants.">
+        <!-- gridlines -->
+        <line class="gridline" x1="70" y1="40" x2="690" y2="40"/>
+        <line class="gridline" x1="70" y1="100" x2="690" y2="100"/>
+        <line class="gridline" x1="70" y1="160" x2="690" y2="160"/>
+        <line class="gridline" x1="70" y1="220" x2="690" y2="220"/>
+        <!-- axes -->
+        <line class="axis" x1="70" y1="280" x2="690" y2="280"/>
+        <line class="axis" x1="70" y1="40" x2="70" y2="280"/>
+        <!-- y labels -->
+        <text class="alab" x="30" y="284">0%</text>
+        <text class="alab" x="24" y="224">25%</text>
+        <text class="alab" x="24" y="164">50%</text>
+        <text class="alab" x="24" y="104">75%</text>
+        <text class="alab" x="20" y="44">100%</text>
+        <!-- zone labels -->
+        <text class="zlab" x="86"  y="300">neonate</text>
+        <text class="zlab" x="210" y="300">infant</text>
+        <text class="zlab" x="380" y="300">child</text>
+        <text class="zlab" x="600" y="300">adult</text>
+        <!-- naive linear assumption (mg/kg): flat at ~100% of adult per kg -->
+        <path class="curve-lin" d="M70,52 L690,52"/>
+        <!-- true maturation sigmoid: low at birth, rises to plateau -->
+        <path class="curve" id="matcurve"
+          d="M70,250 C150,244 175,150 230,120 C300,82 360,60 440,50 C520,44 610,42 690,42"/>
+        <!-- marker dots -->
+        <circle cx="70"  cy="250" r="4" fill="#0E7A6B"/>
+        <circle cx="440" cy="50"  r="4" fill="#0E7A6B"/>
+      </svg>
+      <div class="keyrow">
+        <span><i class="sw" style="background:#0E7A6B"></i> True maturation (allometry × ontogeny)</span>
+        <span><i class="sw" style="background:#B9760A"></i> Naive linear mg/kg assumption</span>
+      </div>
+      <p class="caption">A neonate can clear a drug at a small fraction of the per-kilogram adult rate. Scale the adult dose linearly and you overdose. The gap between the two lines is exactly the knowledge PaedScale encodes — and exactly what a flat “mg/kg” rule ignores.</p>
+    </div>
+  </header>
+
+  <section id="problem">
+    <div class="snum">01 — THE PROBLEM (zero)</div>
+    <h2>Children are the last population to get a dose.</h2>
+    <p>Drugs are developed and licensed in adults first. Pediatric trials are expensive, ethically constrained, and slow — so pediatric labeling lags adult approval by years, and for many drugs never arrives. This is the long-recognised <strong>“therapeutic orphan”</strong> problem.</p>
+    <p>The consequence at the bedside: a large share of what children actually receive is prescribed <strong>off-label or unlicensed</strong> — roughly half of pediatric prescriptions in general, and higher still in neonatal intensive care, where much of the formulary was never studied in that population.</p>
+    <p>Where no pediatric data exist, clinicians fall back on the only simple rule available: scale the adult dose by body weight — <span style="font-family:'JetBrains Mono',monospace;font-size:.9em">dose = adult&nbsp;dose × (weight / 70)</span>. The curve above shows why that is unsafe in the young: <strong>clearance does not track weight linearly</strong>, because the organs that eliminate the drug are still maturing.</p>
+    <ul class="clean">
+      <li>Hepatic drug-metabolising enzymes (CYPs, UGTs) are expressed at a fraction of adult capacity at birth and each follows its own maturation trajectory over weeks to years.</li>
+      <li>Renal filtration (GFR) is low at birth and matures over roughly the first one to two years.</li>
+      <li>Body composition shifts — neonates are proportionally higher in total body water and lower in fat — changing the volume of distribution.</li>
+      <li>Plasma protein binding is lower in neonates, raising the free (active) fraction of many drugs.</li>
+    </ul>
+    <p>Each of these pushes the correct dose away from the naive linear answer, in a direction and magnitude that depend on the specific drug. That is a reasoning problem, not a lookup.</p>
+  </section>
+
+  <section id="objection">
+    <div class="snum">02 — THE OBJECTION, ANSWERED</div>
+    <h2>“But most drugs already have pediatric dosing guidelines. Why build this?”</h2>
+    <p>This is the right question to ask, and the honest answer is that the app is <strong>not</strong> a replacement for guidelines. Guidelines are the pre-computed answer for a small, well-studied set of drugs. PaedScale is the <strong>reasoning that generalises that same process to everything else</strong> — and adds three things a static guideline cannot.</p>
+
+    <h3>1. Coverage — the guideline set is the minority</h3>
+    <p>Pediatric dosing references cover common, commercially important, well-trialled drugs. They are silent for the long tail: rare diseases, newly approved drugs still in their pediatric-data gap, off-label indications, uncommon combinations, and drugs used in narrow subpopulations. The off-label prevalence figures above <em>are</em> the size of this gap. PaedScale is built for the case where the clinician opens the reference and finds nothing.</p>
+
+    <h3>2. Individualisation — a guideline is a population average</h3>
+    <p>Even where a guideline exists, it typically gives one number (e.g. “10&nbsp;mg/kg”) for a broad band. It does not adjust for a <em>specific</em> child whose situation sits off the average: a preterm neonate, impaired renal or hepatic function, obesity, or a maturation state between the guideline’s age brackets. PaedScale reasons at the level of the individual’s covariates, not the bracket.</p>
+
+    <h3>3. Transparency — a guideline tells you the number, not the why</h3>
+    <p>A dosing table gives an answer with no visible derivation. PaedScale shows the full chain — which elimination pathways were assumed, which maturation functions were applied, what adult PK it started from, and where the data are weak. In pediatrics, where the prescriber carries the risk, an auditable rationale is worth more than a bare number.</p>
+
+    <div class="contrast">
+      <div class="col g">
+        <h4>Static guideline</h4>
+        <ul>
+          <li>Exists for a minority of drugs</li>
+          <li>One number per broad age band</li>
+          <li>No individual covariate adjustment</li>
+          <li>Answer only — no derivation</li>
+          <li>Frozen until the next revision</li>
+        </ul>
+      </div>
+      <div class="col a">
+        <h4>PaedScale agent</h4>
+        <ul>
+          <li>Generalises to any drug with adult PK</li>
+          <li>Continuous in age / maturation state</li>
+          <li>Reasons on the child’s covariates</li>
+          <li>Full cited, auditable rationale</li>
+          <li>Self-checks against guidelines where they exist</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="k">The key move</div>
+      <p>Where a guideline <em>does</em> exist, PaedScale runs against it as a <strong>concordance check</strong> — if the mechanistic estimate lands on the established dose, that validates the engine and builds trust; where it diverges, it flags why. The guideline set becomes the test suite, not the competitor.</p>
+    </div>
+  </section>
+
+  <section id="science">
+    <div class="snum">03 — HOW IT WORKS (the science)</div>
+    <h2>Allometry sets the scale. Ontogeny bends it.</h2>
+    <p>The engine rests on a well-established pharmacometric result, not a novel model. Two forces combine:</p>
+
+    <h3>Allometric scaling — size</h3>
+    <p>Across body sizes, clearance scales with weight to the power <strong>0.75</strong>, and volume of distribution scales roughly linearly (power <strong>1.0</strong>). This is the standardised “70&nbsp;kg” framework. It handles size, but on its own it over-predicts clearance in the very young.</p>
+
+    <h3>Maturation function — organ development</h3>
+    <p>Layer a maturation factor on top: a sigmoidal (Hill / Emax) function of <strong>postmenstrual age</strong> (gestational + postnatal age) that rises from near-zero at extreme prematurity to a plateau of 1 in adulthood. Each elimination pathway has its own maturation curve — CYP3A4, CYP2D6, UGT1A1 and renal GFR do not mature at the same rate — so the correct factor depends on <em>how the specific drug is cleared</em>.</p>
+
+    <div class="eq">
+<span class="cm"># Anderson–Holford maturation model (per elimination pathway)</span><br>
+<span class="var">CL</span><sub>child</sub> <span class="op">=</span> <span class="var">CL</span><sub>adult</sub> <span class="op">×</span> (WT/70)<sup>0.75</sup> <span class="op">×</span> <span class="var">MF</span>(PMA) <span class="op">×</span> OF<br><br>
+<span class="var">MF</span>(PMA) <span class="op">=</span> PMA<sup>H</sup> <span class="op">/</span> ( TM50<sup>H</sup> <span class="op">+</span> PMA<sup>H</sup> )<br><br>
+<span class="cm"># WT weight · PMA postmenstrual age · TM50 age at 50% maturation</span><br>
+<span class="cm"># H Hill coefficient · OF organ-function modifier (renal/hepatic)</span>
+    </div>
+
+    <p>Volume of distribution is corrected in parallel for the neonate’s higher water fraction and altered protein binding. Once corrected clearance and volume are in hand, the target is simple: <strong>choose the dose and interval that reproduce the adult exposure</strong> — matched on whichever metric drives the drug’s effect (total exposure AUC, steady-state concentration, or peak, depending on the PK/PD relationship).</p>
+
+    <div class="callout amber">
+      <div class="k">Two engines — pick by data available</div>
+      <p><strong>Allometry + maturation (top-down):</strong> needs only adult clearance, the elimination-pathway split, and age. Fast, transparent, and the right default for a 7-day build.</p>
+      <p><strong>Full PBPK (bottom-up):</strong> a physiological model with age-scaled organ volumes, blood flows, and enzyme abundances (open-source PK-Sim / OSP). More mechanistic and handles first-pass and interactions, but far more data-hungry. Position it as the rigorous extension, not the MVP.</p>
+    </div>
+  </section>
+
+  <section id="pipeline">
+    <div class="snum">04 — HOW THE APP DOES IT</div>
+    <h2>Where Claude sits in the loop.</h2>
+    <p>The arithmetic above is trivial to code. The hard, historically manual step is <strong>knowing which model to assemble for an arbitrary drug</strong> — mapping the molecule to its elimination pathways, selecting the right maturation curves, judging data quality, and writing a defensible rationale. That mapping across the whole drug space is exactly what a frontier model with tool access does that a hardcoded calculator cannot.</p>
+
+    <div class="pipe">
+      <div class="step">
+        <div class="snumbig">1</div>
+        <div>
+          <h4>Case input</h4>
+          <p>Clinician enters drug, indication, and the child’s data — gestational + postnatal age, weight, and any renal/hepatic flags.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="snumbig">2</div>
+        <div>
+          <h4>Retrieve adult PK</h4>
+          <p>Pull adult clearance, volume, bioavailability, protein binding, and the fraction cleared by each route from the label and literature.</p>
+          <span class="claude">Claude + PubMed / label retrieval</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="snumbig">3</div>
+        <div>
+          <h4>Decompose elimination pathways</h4>
+          <p>Attribute clearance across specific enzymes and renal excretion (the f<sub>m</sub> split) — the step that decides which maturation curves apply.</p>
+          <span class="claude">Claude reasoning — the core moat</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="snumbig">4</div>
+        <div>
+          <h4>Apply maturation, pathway by pathway</h4>
+          <p>Scale each pathway with allometry × its own ontogeny function; correct volume for body water and binding. Deterministic math in the backend.</p>
+          <span class="claude">Compute layer (Python)</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="snumbig">5</div>
+        <div>
+          <h4>Derive dose to match exposure</h4>
+          <p>Solve for the dose and interval that reproduce the adult exposure target on the effect-driving metric.</p>
+          <span class="claude">Compute layer (Python)</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="snumbig">6</div>
+        <div>
+          <h4>Explain, flag, and self-check</h4>
+          <p>Emit the recommendation with a cited rationale, explicit assumptions, uncertainty, data-gap flags, narrow-therapeutic-index warnings, and — where one exists — a concordance check against the published guideline.</p>
+          <span class="claude">Claude synthesis + guardrails</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="novelty">
+    <div class="snum">05 — NOVELTY</div>
+    <h2>Why this isn’t “another dosing calculator”.</h2>
+    <p>Dosing calculators exist — but they hardcode a fixed table of known drugs. The moment you ask about a drug outside the table, they fail. PaedScale is different on four axes that map directly onto how the hackathon will be judged:</p>
+    <table>
+      <thead><tr><th>Dimension</th><th>Hardcoded calculator</th><th>PaedScale</th></tr></thead>
+      <tbody>
+        <tr><td>Drug coverage</td><td>Fixed list</td><td><span class="tag hi">Any drug with adult PK</span></td></tr>
+        <tr><td>Reasoning</td><td>Table lookup</td><td><span class="tag hi">Mechanistic + cited</span></td></tr>
+        <tr><td>Transparency</td><td>Black-box number</td><td><span class="tag hi">Auditable derivation</span></td></tr>
+        <tr><td>Trust model</td><td>Assert</td><td><span class="tag hi">Self-validates vs guidelines</span></td></tr>
+      </tbody>
+    </table>
+    <p>The novelty is not the pharmacometrics — that is textbook. It is putting a frontier model in the one seat that was previously a human expert: the <strong>drug-to-model mapping and the written justification</strong>, generalised across the entire drug space and made transparent. That is a genuine capability that did not exist in an accessible form before, which is what an AI-for-science event is looking for.</p>
+
+    <div class="callout">
+      <div class="k">Why an app, not a lab-track analysis</div>
+      <p>The value only appears in an interactive loop: a clinician enters a real case and gets an auditable recommendation back in seconds. That is inherently a tool, it demos cleanly in 90 seconds, and it lands squarely in the Development Track — which is also where your record of shipping clinical tools makes the “can they build it?” question answer itself.</p>
+    </div>
+  </section>
+
+  <section id="limits">
+    <div class="snum">06 — HONEST LIMITS &amp; SCOPE</div>
+    <h2>What it is not — and the 7-day slice.</h2>
+    <p>Credibility with this audience depends on stating the boundaries plainly:</p>
+    <ul class="clean">
+      <li class="gap"><strong>Decision support, not prescribing.</strong> Output is a defensible starting estimate for a qualified clinician, not an autonomous order.</li>
+      <li class="gap"><strong>Narrow-therapeutic-index drugs need confirmation.</strong> For these the app should recommend therapeutic drug monitoring rather than stand alone.</li>
+      <li class="gap"><strong>A model estimate is only as good as its inputs.</strong> Sparse adult PK or an ill-characterised pathway split must surface as explicit uncertainty, never a false-confident number.</li>
+      <li class="gap"><strong>Not a regulatory instrument.</strong> It mirrors the logic of model-informed pediatric dosing; it is not a validated clinical-decision-support device.</li>
+    </ul>
+    <div class="callout amber">
+      <div class="k">Scope discipline for the demo</div>
+      <p>Do not build a universal engine in a week. Pick <strong>one elimination archetype</strong> — for example a predominantly renally-cleared drug and a predominantly CYP3A4-cleared drug — get the full pipeline working end-to-end and correct against two or three known guideline doses, and let the concordance check carry the credibility. A narrow pipeline that <em>runs</em> beats a broad one that half-works.</p>
+    </div>
+  </section>
+
+  <div class="summary reveal">
+    <h2>Summary</h2>
+    <p>Children are dosed last and dosed worst, because linear mg/kg scaling breaks exactly where organs are still maturing — and guidelines only cover a minority of the drug space.</p>
+    <ul class="clean">
+      <li><strong>What:</strong> an agent that extrapolates a pediatric starting dose from adult PK via allometry × organ-maturation, with a cited, auditable rationale.</li>
+      <li><strong>Why not just guidelines:</strong> it covers the guideline-absent long tail, individualises within brackets, explains the derivation, and self-validates against guidelines where they exist.</li>
+      <li><strong>How:</strong> Claude does the drug→pathway→maturation mapping and the justification; a deterministic Python layer does the scaling and dose solve.</li>
+      <li><strong>Novelty:</strong> a frontier model in the seat of the pharmacometric expert, generalised across all drugs and made transparent — not a hardcoded calculator.</li>
+      <li><strong>Form:</strong> an interactive Dev-Track app; demos in 90 seconds; scoped to one or two elimination archetypes for the 7-day build.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <div class="brand"><b>PaedScale</b> · working title, provisional</div>
+    Concept brief for Built with Claude: Life Sciences · Development Track.
+  </footer>
+
+</div>
+
+<script>
+  // progress bar
+  const prog=document.getElementById('prog');
+  const onScroll=()=>{
+    const h=document.documentElement;
+    const p=h.scrollTop/(h.scrollHeight-h.clientHeight);
+    prog.style.width=(p*100)+'%';
+  };
+  document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  // animate the maturation curve draw-on
+  const mc=document.getElementById('matcurve');
+  if(mc && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const len=mc.getTotalLength();
+    mc.style.strokeDasharray=len;mc.style.strokeDashoffset=len;
+    mc.style.transition='stroke-dashoffset 1.6s cubic-bezier(.4,0,.1,1)';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{mc.style.strokeDashoffset=0;}));
+  }
+
+  // reveal on scroll
+  const io=new IntersectionObserver((es)=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
