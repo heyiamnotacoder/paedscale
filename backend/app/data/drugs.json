@@ -11,6 +11,7 @@
     "dosing_interval_h": 4,
     "route": "IV",
     "indication": "Procedural sedation",
+    "narrow_therapeutic_index": false,
     "notes": "Predominantly hepatic CYP3A4 metabolism to 1-hydroxymidazolam; minor renal elimination of glucuronide metabolites."
   },
   "vancomycin": {
@@ -25,6 +26,7 @@
     "dosing_interval_h": 12,
     "route": "IV",
     "indication": "Suspected/confirmed Gram-positive infection",
+    "narrow_therapeutic_index": true,
     "notes": "Predominantly cleared by glomerular filtration, largely unchanged; narrow therapeutic index, requires TDM."
   },
   "morphine": {
@@ -39,6 +41,7 @@
     "dosing_interval_h": 4,
     "route": "IV",
     "indication": "Moderate-severe pain / analgesia",
+    "narrow_therapeutic_index": true,
     "notes": "Predominantly hepatic UGT2B7 glucuronidation to morphine-3-glucuronide and morphine-6-glucuronide; narrow therapeutic index in neonates due to respiratory depression risk."
   }
 }

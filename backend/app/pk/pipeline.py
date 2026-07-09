@@ -45,6 +45,7 @@ def extrapolate(
     pathway: PathwayMaturation,
     child: ChildCovariates,
     child_interval_h: float | None = None,
+    organ_function_modifier: float = 1.0,
 ) -> DoseRecommendation:
     maturation = combined_pathway_maturation(
         pma_weeks=child.pma_weeks,
@@ -53,7 +54,7 @@ def extrapolate(
         pathway_hill=pathway.hill,
     )
     size_scaled_cl = scale_clearance(drug.adult_clearance_l_per_h, child.weight_kg)
-    child_cl = size_scaled_cl * maturation
+    child_cl = size_scaled_cl * maturation * organ_function_modifier
 
     child_protein_binding = (
         child.protein_binding if child.protein_binding is not None else drug.adult_protein_binding
@@ -65,7 +66,7 @@ def extrapolate(
         child_protein_binding,
     )
 
-    return solve_dose(
+    rec = solve_dose(
         adult_reference_dose_mg=drug.adult_reference_dose_mg,
         adult_clearance_l_per_h=drug.adult_clearance_l_per_h,
         adult_interval_h=drug.dosing_interval_h,
@@ -74,3 +75,5 @@ def extrapolate(
         weight_kg=child.weight_kg,
         child_interval_h=child_interval_h,
     )
+    rec.maturation_fraction = maturation
+    return rec

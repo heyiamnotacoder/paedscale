@@ -40,7 +40,7 @@ Three drugs, one per elimination archetype, each concordance-checked against kno
       reproducing known guideline doses for all three drugs.
 - [ ] **Phase 2 — Claude agent layer.** `agent/client.py`, `pathways.py`, `adult_pk.py`,
       `rationale.py` with structured JSON outputs.
-- [ ] **Phase 3 — FastAPI backend.** `schemas.py` + `main.py` wiring the pipeline behind
+- [x] **Phase 3 — FastAPI backend.** `schemas.py` + `main.py` wiring the pipeline behind
       `POST /extrapolate` with CORS.
 - [ ] **Phase 4 — Next.js frontend.** Case input form + results (dose, rationale trace, maturation
       chart, concordance badge, disclaimer).

@@ -21,6 +21,7 @@ class DoseRecommendation:
     interval_h: float
     child_clearance_l_per_h: float
     child_volume_l: float
+    maturation_fraction: float = 1.0
 
 
 def solve_dose(
