@@ -67,4 +67,13 @@ def synthesize_rationale(facts: dict) -> dict:
         "autonomous prescribing order — never imply otherwise."
     )
     user = f"Pipeline facts (JSON):\n{facts}"
-    return call_structured(system, user, "rationale", RATIONALE_SCHEMA)
+    result = call_structured(system, user, "rationale", RATIONALE_SCHEMA)
+
+    # The Anthropic tool-use "required" list is advisory, not enforced: the model
+    # can still omit a field. Fill in safe defaults rather than let a schema
+    # validation error surface as a 500 to the caller.
+    result.setdefault("assumptions", [])
+    result.setdefault("uncertainty_flags", [])
+    result.setdefault("narrow_therapeutic_index_warning", "")
+    result.setdefault("concordance_summary", "")
+    return result

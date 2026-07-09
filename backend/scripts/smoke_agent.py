@@ -17,6 +17,7 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "app" / "data"
 MATURATION = json.load(open(DATA_DIR / "maturation.json"))
+DRUGS = json.load(open(DATA_DIR / "drugs.json"))
 
 CASES = {
     "midazolam": {"weight_kg": 3.5, "pma_weeks": 42, "indication": "Procedural sedation"},
@@ -33,6 +34,7 @@ def run_one(drug_name: str, case: dict) -> None:
     print("adult_pk:", adult_pk)
     print("pathway_split:", pathway)
 
+    drug_entry = DRUGS[drug_name]
     drug = DrugProfile(
         name=drug_name,
         adult_clearance_l_per_h=adult_pk["adult_clearance_l_per_h"],
@@ -40,8 +42,8 @@ def run_one(drug_name: str, case: dict) -> None:
         adult_protein_binding=adult_pk["adult_protein_binding"],
         primary_pathway=pathway["primary_pathway"],
         fm_primary=pathway["fm_primary"],
-        adult_reference_dose_mg=5.0,  # placeholder outside curated demo path
-        dosing_interval_h=8,
+        adult_reference_dose_mg=drug_entry["adult_reference_dose_mg"],
+        dosing_interval_h=drug_entry["dosing_interval_h"],
     )
     mat = MATURATION[pathway["primary_pathway"]]
     child = ChildCovariates(weight_kg=case["weight_kg"], pma_weeks=case["pma_weeks"])
