@@ -80,6 +80,34 @@ def test_extrapolate_missing_payload_returns_502(client, monkeypatch):
     assert resp.status_code == 502
 
 
+def test_extrapolate_accepts_stringified_critique(client, monkeypatch):
+    """Regression: LLM tool-use sometimes submits nested objects as JSON strings."""
+    import copy
+
+    payload = copy.deepcopy(CANNED_PAYLOAD)
+    payload["critique"] = (
+        '{"objections": ["Guideline may not fit this weight band"], '
+        '"dose_grade": "accept_with_caveats", '
+        '"resolution": "Mechanistic path used; effective dose needed.", '
+        '"residual_risks": ["hepatic risk"]}'
+    )
+    payload["dose_recommendation"] = (
+        '{"dose_mg": 120.0, "dose_mg_per_kg": 15.0, "interval_h": 6.0, "method": "guideline"}'
+    )
+
+    async def fake_run(query, on_event=None, overrides=None):
+        return payload, 0.11, []
+
+    monkeypatch.setattr(main_module, "run_orchestrator", fake_run)
+    resp = client.post("/extrapolate", json={"query": "Paracetamol dosage for 2 year old with weight of 8 kg"})
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["critique"]["dose_grade"] == "accept_with_caveats"
+    assert body["critique"]["objections"][0].startswith("Guideline")
+    assert body["dose_recommendation"]["dose_mg"] == 120.0
+    assert body["dose_recommendation"]["dose_mg_per_kg"] == 15.0
+
+
 def test_extrapolate_requires_query(client):
     resp = client.post("/extrapolate", json={})
     assert resp.status_code == 422

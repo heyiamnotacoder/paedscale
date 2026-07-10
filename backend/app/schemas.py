@@ -4,9 +4,71 @@ Input is now a free-text clinical query. Output is the orchestrator's assembled,
 cited, self-critiqued recommendation. Every output sub-model is lenient (wide
 defaults) because the fields are populated by an LLM's structured tool call —
 a missing field should degrade gracefully, never 500 the request.
+
+Nested objects/arrays sometimes arrive as JSON *strings* from tool-use (double-
+encoded). Before-validators coerce those so validation does not 502 a good run.
 """
 
-from pydantic import BaseModel, Field
+from __future__ import annotations
+
+import json
+from typing import Any
+
+from pydantic import BaseModel, Field, field_validator
+
+
+def parse_jsonish(value: Any) -> Any:
+    """If *value* is a JSON object/array encoded as a string, parse it; else return as-is."""
+    if not isinstance(value, str):
+        return value
+    s = value.strip()
+    if not s:
+        return value
+    if (s.startswith("{") and s.endswith("}")) or (s.startswith("[") and s.endswith("]")):
+        try:
+            return json.loads(s)
+        except json.JSONDecodeError:
+            return value
+    return value
+
+
+_NESTED_SUBMIT_KEYS = (
+    "covariates",
+    "adult_pk",
+    "pathways",
+    "dose_recommendation",
+    "evidence_grade",
+    "citations",
+    "concordance",
+    "critique",
+    "safety_flags",
+)
+
+
+def normalize_submit_payload(payload: dict[str, Any] | Any) -> dict[str, Any] | Any:
+    """Coerce JSON-string nested fields from LLM submit_recommendation args.
+
+    Used at tool-capture time and safe to re-run before model_validate.
+    """
+    if not isinstance(payload, dict):
+        return payload
+    out = dict(payload)
+    for key in _NESTED_SUBMIT_KEYS:
+        if key in out:
+            out[key] = parse_jsonish(out[key])
+    dr = out.get("dose_recommendation")
+    if isinstance(dr, dict) and "safety_bounds" in dr:
+        dr = dict(dr)
+        dr["safety_bounds"] = parse_jsonish(dr["safety_bounds"])
+        out["dose_recommendation"] = dr
+    cr = out.get("critique")
+    if isinstance(cr, dict):
+        cr = dict(cr)
+        for k in ("objections", "residual_risks"):
+            if k in cr:
+                cr[k] = parse_jsonish(cr[k])
+        out["critique"] = cr
+    return out
 
 
 class QueryRequest(BaseModel):
@@ -42,6 +104,11 @@ class Covariates(BaseModel):
     albumin_g_dl: float | None = None
     route: str | None = None
     assumed_defaults: list[str] = []  # covariates not given, filled with population defaults
+
+    @field_validator("assumed_defaults", mode="before")
+    @classmethod
+    def _coerce_assumed_defaults(cls, v: Any) -> Any:
+        return parse_jsonish(v)
 
 
 class Citation(BaseModel):
@@ -83,6 +150,11 @@ class DoseOut(BaseModel):
     maturation_fraction: float | None = None
     safety_bounds: SafetyBoundsOut = SafetyBoundsOut()
 
+    @field_validator("safety_bounds", mode="before")
+    @classmethod
+    def _coerce_safety_bounds(cls, v: Any) -> Any:
+        return parse_jsonish(v)
+
 
 class EvidenceGradeOut(BaseModel):
     grade: str = "very-low"  # high | moderate | low | very-low
@@ -105,6 +177,11 @@ class CritiqueOut(BaseModel):
     residual_risks: list[str] = []
     dose_grade: str | None = None  # accept | accept_with_caveats | revise
 
+    @field_validator("objections", "residual_risks", mode="before")
+    @classmethod
+    def _coerce_string_lists(cls, v: Any) -> Any:
+        return parse_jsonish(v)
+
 
 class ExtrapolationResponse(BaseModel):
     query: str
@@ -125,3 +202,19 @@ class ExtrapolationResponse(BaseModel):
     rationale: str = ""
     disclaimer: str = ""
     cost_usd: float | None = None  # measured inference cost for this query (observability)
+
+    @field_validator(
+        "covariates",
+        "adult_pk",
+        "pathways",
+        "dose_recommendation",
+        "evidence_grade",
+        "citations",
+        "concordance",
+        "critique",
+        "safety_flags",
+        mode="before",
+    )
+    @classmethod
+    def _coerce_json_strings(cls, v: Any) -> Any:
+        return parse_jsonish(v)

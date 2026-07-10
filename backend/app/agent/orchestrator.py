@@ -28,6 +28,7 @@ from app.agent import intake
 from app.agent.math_tools import MATH_TOOLS, is_math_tool, run_math_tool
 from app.agent.recovery import assemble_partial_payload
 from app.agent.research_tools import RESEARCH_TOOLS, is_research_tool, run_research_tool
+from app.schemas import normalize_submit_payload
 
 load_dotenv()
 
@@ -340,7 +341,8 @@ async def run_orchestrator(query: str, on_event=None, overrides: dict | None = N
                 continue
             args = blk.input or {}
             if blk.name == "submit_recommendation":
-                holder["payload"] = args
+                # LLM tool-use sometimes double-encodes nested objects as JSON strings.
+                holder["payload"] = normalize_submit_payload(args if isinstance(args, dict) else {})
                 submitted = True
                 tool_results.append({"type": "tool_result", "tool_use_id": blk.id,
                                      "content": "Recorded."})

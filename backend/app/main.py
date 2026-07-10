@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 
 from app.agent.orchestrator import run_orchestrator
-from app.schemas import ExtrapolationResponse, QueryRequest
+from app.schemas import ExtrapolationResponse, QueryRequest, normalize_submit_payload
 
 DISCLAIMER = (
     "Decision support only, not an autonomous prescribing order. This is a defensible "
@@ -50,7 +50,10 @@ def _to_response(query: str, payload: dict | None, cost_usd: float | None) -> Ex
             status_code=502,
             detail="The agent did not produce a structured recommendation. Please retry.",
         )
-    data = {**payload, "query": query, "disclaimer": DISCLAIMER, "cost_usd": cost_usd}
+    # Coerce JSON-string nested fields (critique, dose_recommendation, …) before validate.
+    data = normalize_submit_payload(
+        {**payload, "query": query, "disclaimer": DISCLAIMER, "cost_usd": cost_usd}
+    )
     try:
         return ExtrapolationResponse.model_validate(data)
     except Exception as exc:  # lenient schema, but guard against a malformed payload
