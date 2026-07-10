@@ -1,13 +1,13 @@
 services:
   - type: web
     name: paedscale-backend
-    # Docker runtime: the Claude Agent SDK needs Node + the Claude CLI alongside
-    # Python (see backend/Dockerfile). The plain Python runtime cannot provide it.
-    runtime: docker
+    # Plain Python runtime — the orchestrator runs in-process on the Anthropic
+    # Messages API (no Node / Claude Code CLI). A Docker image is no longer required.
+    runtime: python
     plan: starter
     rootDir: backend
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       # Set in the Render dashboard (Environment tab) — never commit the key.
@@ -16,17 +16,18 @@ services:
       # Deployed frontend origin(s), comma-separated, e.g. https://paedscale.vercel.app
       - key: ALLOWED_ORIGINS
         sync: false
-      # Optional: raises the PubMed E-utilities rate limit.
+      # Optional: raises the openFDA / PubMed rate limits.
+      - key: OPENFDA_API_KEY
+        sync: false
       - key: NCBI_API_KEY
         sync: false
-      # Multi-agent cost/latency controls (defaults keep a query <= $0.50).
+      # Orchestrator config (single in-process Sonnet agent loop).
       - key: PAEDSCALE_ORCH_MODEL
         value: claude-sonnet-5
-      - key: PAEDSCALE_SUBAGENT_MODEL
-        value: claude-haiku-4-5-20251001
-      - key: PAEDSCALE_CRITIC_MODEL
-        value: claude-sonnet-5
       - key: PAEDSCALE_MAX_TURNS
-        value: "14"
-      - key: PAEDSCALE_BUDGET_USD
-        value: "0.40"
+        value: "8"
+      - key: PAEDSCALE_GUIDELINE_AGENT
+        value: "1"
+      # Optional: route edge-case literature through an MCP server (JSON array).
+      - key: PAEDSCALE_MCP_SERVERS
+        sync: false

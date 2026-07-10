@@ -73,9 +73,11 @@ population averages; PaedScale exists to individualise.
   see `PAEDSCALE_*` in `.env.example`. Hard budget ceiling **~$2** (`PAEDSCALE_BUDGET_USD`); typical
   runs should stay much lower. Read `ANTHROPIC_API_KEY` from env (`.env`, gitignored). Never hardcode
   or commit keys.
-- **Deployment needs the Claude CLI runtime:** the Agent SDK spawns the `claude` Node binary, so the
-  backend deploys via `backend/Dockerfile` (Python + Node + `@anthropic-ai/claude-code`), wired in
-  `render.yaml`. A plain Python runtime will not work.
+- **Deployment is plain Python** (as of the 2026-07-11 rewrite): the orchestrator runs in-process on
+  the Anthropic Messages API (`anthropic.AsyncAnthropic`) — no Claude Code CLI, no Node subprocess.
+  `render.yaml` uses `runtime: python`; `backend/Dockerfile` is a plain `python:3.12-slim`. See the
+  changelog "In-process Messages-API rewrite" below — the older Agent-SDK sections describe the
+  superseded design.
 - **Subagents:** only `research-agent` and `critic-agent`. Both `background=False` (synchronous Task).
   Async team tools are disallowed (`ScheduleWakeup`, `TaskOutput`, `SendMessage`, `ToolSearch`, …).
 - **Generalizable, not prefill:** there is no curated drug set. Agents research each drug live;
@@ -279,3 +281,64 @@ cd backend && pytest   # expect 51+ passed
 
 Live smoke (manual): well child + common antibiotic → often guideline path; same + renal/hepatic
 impairment → mechanistic; unlabeled drug → research → math → critic → submit.
+
+---
+
+## Changelog: in-process Messages-API rewrite (2026-07-11)
+
+Problem: simple queries took ~3 min. Root cause was structural — `run_orchestrator` opened
+`ClaudeSDKClient` **per request**, and the Claude Agent SDK cold-spawned two Node processes each
+time (`claude -v` + the ~240MB CLI, ~20s) before any thinking. Plus bloat (huge system prompt +
+`SUBMIT_SCHEMA` tool + 3 MCP servers + math tools re-sent every turn), a separate Sonnet critic
+subagent run last, and slow WebSearch on the hot path. This rewrite matches the user's whiteboard.
+
+### Architecture now
+
+```
+USER → intake.parse (Python) → covariates + drug + organ_impaired + edge_case
+  ├─ fetch_drug_pk (openFDA + seed cache)  ┐  asyncio.gather (concurrent)
+  └─ guideline-agent (parallel Sonnet call)┘
+      → orchestrator: in-process anthropic.AsyncAnthropic Messages-API tool-use loop
+           (Sonnet 5, adaptive thinking, prompt-cached system+tools)
+           tools: PK Maths (deterministic) + research (edge-gated: pubmed / MCP connector)
+           ends by calling submit_recommendation with a self-critiqued payload
+      → RESULT (+ optional POST /report → PDF via the `pdf` Agent Skill, off hot path)
+```
+
+- **No Node subprocess, no Agent SDK.** `anthropic.AsyncAnthropic()` created once, reused.
+- **Sonnet 5 for everything** (no Haiku).
+- **Happy path is deterministic**: openFDA drug data + PK-maths tool. The **agentic Web/PubMed loop is
+  gated to edge cases** (`edge_case` flag or openFDA miss).
+- **MCP** (edge branch): set `PAEDSCALE_MCP_SERVERS` (JSON) to route edge literature through a
+  PubMed/ClinicalTrials MCP via the connector (`mcp-client-2025-11-20`); else native `pubmed_search`.
+- **Skills**: custom `backend/skills/pediatric-pk/SKILL.md` (methodology "moat"); `POST /report`
+  renders a PDF via the pre-built `pdf` skill (off the query path).
+- **Multi-agent**: `guideline-agent` (parallel, ~0 wall-clock) · edge-research-agent (edge-only) ·
+  orchestrator. Critic subagent removed → self-critique folded into the submit payload.
+
+### Diff by file
+- `agent/orchestrator.py` — full rewrite: Messages-API loop, submit-tool terminator, adaptive
+  thinking, prompt caching, edge gate, parallel guideline-agent, cost estimate. Env:
+  `PAEDSCALE_ORCH_MODEL`, `PAEDSCALE_MAX_TURNS`, `PAEDSCALE_MAX_TOKENS`, `PAEDSCALE_GUIDELINE_AGENT`,
+  `PAEDSCALE_MCP_SERVERS`.
+- `agent/math_tools.py`, `agent/research_tools.py` — plain Anthropic tool dicts + async dispatch (no
+  `create_sdk_mcp_server`). New `fetch_drug_pk` (openFDA + seed cache); `pubmed_search` kept (edge).
+- `agent/intake.py` — new deterministic `parse(query)` → covariates + organ_impaired + edge_case.
+- `agent/recovery.py` — now takes the captured `{tool: result}` dict, not the SDK message stream.
+- `agent/stream.py` — **deleted**; the orchestrator emits ready-made trace events via `on_event`.
+- `app/report.py` (new), `main.py` — `on_event` trace contract; `POST /report`; `overrides` wired.
+- `Dockerfile` / `render.yaml` / `requirements.txt` — plain Python; dropped Node + `claude-agent-sdk`.
+- Tests: `test_concordance.py` (pure `pk/`) untouched; rewrote `test_recovery.py`, `test_api.py`,
+  `test_stream.py`; added `test_orchestrator.py` (offline loop with a fake client + seed cache hit).
+
+### Not changed
+- `backend/app/pk/*` pure math (golden rule; concordance tests stay green).
+- `ExtrapolationResponse` shape / frontend contract; SSE endpoints `POST /extrapolate(/stream)`.
+- Legacy `agent/{client,adult_pk,pathways,rationale}.py` left in place (own tests still pass).
+
+### Verification
+```bash
+cd backend && pytest   # 49 passed (offline; no live orchestrator run)
+```
+Live smoke (manual, costs money): common antibiotic (no edge) → guideline/mechanistic fast path;
++ renal impairment → mechanistic; unlabelled drug → edge research fires; `POST /report` → PDF.

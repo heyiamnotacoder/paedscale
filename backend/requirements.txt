@@ -1,8 +1,7 @@
 fastapi>=0.111
 uvicorn[standard]>=0.30
 pydantic>=2.7
-anthropic>=0.34
-claude-agent-sdk>=0.2
+anthropic>=0.116
 python-dotenv>=1.0
 pytest>=8.2
 scipy>=1.13

@@ -27,8 +27,18 @@ def find_concordance(
     guideline_cases: list[dict],
     pma_window_weeks: float = PMA_MATCH_WINDOW_WEEKS,
 ) -> ConcordanceResult:
-    """Find the nearest guideline case (by PMA) within the match window and compare."""
-    candidates = [g for g in guideline_cases if abs(g["pma_weeks"] - pma_weeks) <= pma_window_weeks]
+    """Find the nearest guideline case (by PMA) within the match window and compare.
+
+    Cases with a missing/null pma_weeks or guideline_dose_mg_per_kg are skipped (real guideline
+    entries — e.g. "children > 3 months" — often carry no specific PMA).
+    """
+    candidates = [
+        g
+        for g in guideline_cases
+        if g.get("pma_weeks") is not None
+        and g.get("guideline_dose_mg_per_kg") is not None
+        and abs(g["pma_weeks"] - pma_weeks) <= pma_window_weeks
+    ]
     if not candidates:
         return ConcordanceResult(
             matched=False,

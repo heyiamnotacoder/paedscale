@@ -41,32 +41,29 @@ When the child is **renally or hepatically impaired**, or no regimen fits, it al
 ```
 Free-text query
     │
-    ├─ intake (covariates, organ impairment?)
+    ├─ intake.parse (Python): covariates · organ impairment? · edge case?
     │
-    ├─ solid guideline + normal organ function?
-    │      YES → guideline dose  ──┐
-    │      NO  → research-agent    │
-    │            (PubMed · S2 · web)│
-    │            → allometry × maturation (Python)
-    │            → safety bounds · concordance
-    │                              │
-    └──────────── critic-agent ────┘
-                    (dose grade)
-                         │
-              submit_recommendation
-                         │
-         (fallback: partial recovery from math tools)
+    ├─ fetch_drug_pk (openFDA)  ∥  guideline-agent      (run concurrently)
+    │
+    ├─ orchestrator loop (Sonnet, in-process Messages API):
+    │      solid guideline + normal organ function? → guideline dose
+    │      else → allometry × maturation via PK-maths tools → safety · concordance
+    │      edge case → agentic PubMed / MCP research
+    │      → self-critique (dose grade) → submit_recommendation
+    │
+    └─ (fallback: partial recovery from captured math results)
 ```
 
 | Layer | Role |
 |-------|------|
-| **Orchestrator** (Sonnet) | Plan path, call tools, assemble result |
-| **research-agent** (Haiku) | One specialist: pathways (fm), adult PK, safety window, guideline cases |
-| **critic-agent** (Sonnet) | Mandatory red-team + `dose_grade` before submit |
+| **Orchestrator** (Sonnet, one in-process agent loop) | Plan path, call tools, self-critique, assemble |
+| **guideline-agent** (Sonnet, parallel) | Published pediatric mg/kg regimens for concordance |
+| **edge-research-agent** (edge-only) | PubMed / ClinicalTrials MCP for unlabelled / edge drugs |
+| **fetch_drug_pk** (openFDA + seed cache) | Deterministic adult PK on the happy path |
 | **Python `pk/`** | All numbers: allometry, Hill maturation, organ function, dose solve |
 
-**Golden rule:** the LLM does not invent the mechanistic dose — it feeds structured inputs into
-`mcp__paedscale_math__*` tools and explains the result.
+**Golden rule:** the LLM does not invent the mechanistic dose — it feeds structured inputs into the
+deterministic PK-maths tools and explains the result.
 
 ### Maturation model (per elimination pathway)
 
@@ -111,24 +108,26 @@ Fixtures live under `backend/tests/fixtures/` — not loaded as a product prefil
 ## Repo layout
 
 ```
-backend/   FastAPI — Claude Agent SDK orchestrator + deterministic PK (Python)
+backend/   FastAPI — in-process Messages-API agent loop + deterministic PK (Python)
   app/pk/          pure math
-  app/agent/       orchestrator, research/math MCP tools, recovery, stream
+  app/agent/       orchestrator, math/research tools, intake, recovery
   app/data/        maturation.json (pathway curve library)
-  tests/           pytest (math + mocked API + recovery)
+  app/report.py    PDF export via the pdf Agent Skill
+  skills/          custom pediatric-pk methodology Skill
+  tests/           pytest (math + mocked API + offline agent loop + recovery)
 frontend/  Next.js (App Router, TypeScript) — dark search home, collapsible reasoning, inline cites
 docs/      Concept brief (paedscale-concept.html), concordance analysis
 ```
 
-Engineering conventions for agents/IDEs: **`CLAUDE.md`** / **`AGENTS.md`** (full changelog of the
-agent reliability rewrite is in `CLAUDE.md`).
+Engineering conventions for agents/IDEs: **`CLAUDE.md`** / **`AGENTS.md`** (see the changelog
+"in-process Messages-API rewrite" in `CLAUDE.md`).
 
 ---
 
 ## Run locally
 
-Requires Python 3.11+, Node 18+, and the Claude Agent SDK runtime (Node `claude` CLI is pulled by
-the SDK / Docker image).
+Requires Python 3.11+ only — the orchestrator runs in-process on the Anthropic Messages API
+(`anthropic` Python SDK). No Node, no Claude Code CLI.
 
 ### Backend
 
@@ -146,9 +145,11 @@ Useful env knobs (see `.env.example`):
 ```
 ANTHROPIC_API_KEY=...
 ALLOWED_ORIGINS=http://localhost:3000
-PAEDSCALE_BUDGET_USD=2.0
-PAEDSCALE_MAX_TURNS=14
-PAEDSCALE_RESEARCH_MAX_TURNS=7
+PAEDSCALE_ORCH_MODEL=claude-sonnet-5
+PAEDSCALE_MAX_TURNS=8
+PAEDSCALE_GUIDELINE_AGENT=1          # parallel guideline sub-agent (0 to disable)
+OPENFDA_API_KEY=                     # optional; raises the openFDA rate limit
+PAEDSCALE_MCP_SERVERS=               # optional JSON: route edge literature via an MCP server
 ```
 
 ### Frontend
@@ -161,7 +162,7 @@ npm run dev                        # http://localhost:3000
 ```
 
 Open `http://localhost:3000`, enter a free-text case, expand the **one-line reasoning** trace as it streams, then
-read the dose card (source, critic grade, pathways, concordance, disclaimer).
+read the dose card (source, self-critique grade, pathways, concordance, disclaimer).
 
 ### API
 
@@ -170,6 +171,7 @@ read the dose card (source, critic grade, pathways, concordance, disclaimer).
 | `GET /health` | Liveness |
 | `POST /extrapolate` | JSON body `{ "query": "..." }` → full `ExtrapolationResponse` |
 | `POST /extrapolate/stream` | Same query; SSE events: `trace` · `result` · `error` · `done` |
+| `POST /report` | JSON recommendation → PDF dosing report (via the `pdf` Agent Skill) |
 
 ---
 
@@ -177,18 +179,18 @@ read the dose card (source, critic grade, pathways, concordance, disclaimer).
 
 1. **Problem (10s).** Linear mg/kg ignores maturation — neonates clear less than weight scaling implies.
 2. **Guideline-ish case (25s).** e.g. oral amoxicillin for AOM in a well 1-year-old — often a fast
-   **guideline** path + critic; note `source_of_dose`.
+   **guideline** path; note `source_of_dose`.
 3. **Impaired case (25s).** Same drug with renal or hepatic impairment — **must** take the
    mechanistic path (organ modifiers); no guideline short-circuit.
-4. **Result card (20s).** Dose mg/mg/kg, method, critic dose grade, safety flags, concordance badge.
-5. **Sidebar (10s).** Live research / math / critic tool calls — not a black box.
+4. **Result card (20s).** Dose mg/mg/kg, method, self-critique dose grade, safety flags, concordance badge.
+5. **Sidebar (10s).** Live drug-data / math / self-critique tool calls — not a black box.
 
 ---
 
 ## Deploy
 
-- **Backend (FastAPI):** root `render.yaml` + `backend/Dockerfile` (Python **and** Node/`claude-code`).
-  Set `ANTHROPIC_API_KEY`, `ALLOWED_ORIGINS` (your Vercel origin), optional `PAEDSCALE_*` knobs.
+- **Backend (FastAPI):** root `render.yaml` (`runtime: python` — plain Python, no Node). Set
+  `ANTHROPIC_API_KEY`, `ALLOWED_ORIGINS` (your Vercel origin), optional `PAEDSCALE_*` / `OPENFDA_API_KEY`.
 - **Frontend (Next.js):** deploy `frontend/` on Vercel. Set `NEXT_PUBLIC_API_BASE_URL` to the
   Render backend URL.
 
@@ -196,18 +198,19 @@ Redeploy after env changes.
 
 ---
 
-## Recent reliability work
+## Recent work
 
-Live multi-agent runs used to thrash (async task polling, ToolSearch, three overlapping research
-agents) and sometimes finished **with no structured result**. The stack now:
+The 2026-07-11 rewrite dropped the Claude Agent SDK (which cold-spawned a Node `claude` CLI
+subprocess per request, ~20s) for an **in-process Anthropic Messages-API agent loop**. The stack now:
 
-- Forces **synchronous** research + critic agents
-- Collapses research to **one** specialist
-- Raises the hard budget ceiling to **~$2** so critic + submit can finish
-- **Recovers** a dose from math tool outputs if submit never fires
-- Short-circuits **guidelines only** when organ function is intact
+- Runs entirely in Python — no Node, no subprocess; Sonnet 5 for everything.
+- **Deterministic happy path** (openFDA drug data + PK-maths tool) with the **agentic Web/PubMed loop
+  gated to edge cases** (MCP connector).
+- Folds the critic into the orchestrator's **self-critique**; runs a **parallel guideline sub-agent**.
+- Adds Skills: a custom `pediatric-pk` methodology Skill and a `POST /report` PDF export.
+- Prompt caching, adaptive thinking, and partial-recovery fallback retained.
 
-Details and file-level changelog: **`CLAUDE.md`**.
+Details and file-level changelog: **`CLAUDE.md`** → "Changelog: in-process Messages-API rewrite".
 
 ---
 

@@ -1,42 +1,51 @@
-"""Literature-search tools, exposed as an in-process MCP server.
+"""Data-fetch tools for the orchestrator.
 
-Grounds the research subagents' claims in real citations. Thin async wrappers
-over free REST APIs — no third-party MCP binary to deploy:
+Two tiers, matching the whiteboard:
+  - `fetch_drug_pk` (deterministic, HAPPY PATH): one openFDA drug-label call, with a small local
+    seed cache checked first for instant hits. Grounds adult PK without an agentic web loop.
+  - `pubmed_search` (EDGE PATH): kept as a fallback literature tool for the edge-case branch.
 
-  - PubMed via NCBI E-utilities (esearch + esummary). Optional NCBI_API_KEY
-    raises the rate limit.
-  - Semantic Scholar Graph API (paper search).
-
-Web search is added separately as the Anthropic server-side `web_search` tool.
-Every result carries what a citation needs: title, authors, year, source,
-identifier (PMID/DOI), and URL.
-
-Includes a small in-process query cache so parallel/overlapping agent searches
-do not re-hit the same endpoint in one process lifetime.
+Thin async wrappers over free REST APIs — no MCP binary to deploy. A process-level query cache and a
+shared `httpx.AsyncClient` avoid re-hitting endpoints within one process lifetime.
 """
 
 import json
 import os
 import time
-from typing import Any
+from pathlib import Path
 
 import httpx
-from claude_agent_sdk import create_sdk_mcp_server, tool
 
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
-SEMANTIC_SCHOLAR = "https://api.semanticscholar.org/graph/v1/paper/search"
+OPENFDA_LABEL = "https://api.fda.gov/drug/label.json"
 TIMEOUT = 20.0
 CACHE_TTL_S = 600.0  # 10 minutes
 
-_cache: dict[tuple[str, str, int], tuple[float, dict]] = {}
+_cache: dict[tuple, tuple[float, dict]] = {}
 _client: httpx.AsyncClient | None = None
 
+# Seed cache: instant hits for validation drugs (a CACHE, not the source of truth — openFDA is the
+# generalizable path). Loaded once from the fixtures file if present; absence is fine.
+_SEED_PATH = Path(os.environ.get(
+    "PAEDSCALE_DRUG_SEED",
+    str(Path(__file__).resolve().parent.parent.parent / "tests" / "fixtures" / "validation_drugs.json"),
+))
+_seed: dict | None = None
 
-def _text(payload) -> dict:
-    return {"content": [{"type": "text", "text": json.dumps(payload, default=str)}]}
+
+def _load_seed() -> dict:
+    global _seed
+    if _seed is None:
+        try:
+            with open(_SEED_PATH) as f:
+                raw = json.load(f)
+            _seed = {k.lower(): v for k, v in raw.items()}
+        except (OSError, ValueError):
+            _seed = {}
+    return _seed
 
 
-def _cache_get(key: tuple[str, str, int]) -> dict | None:
+def _cache_get(key: tuple) -> dict | None:
     entry = _cache.get(key)
     if not entry:
         return None
@@ -47,7 +56,7 @@ def _cache_get(key: tuple[str, str, int]) -> dict | None:
     return payload
 
 
-def _cache_set(key: tuple[str, str, int], payload: dict) -> None:
+def _cache_set(key: tuple, payload: dict) -> None:
     _cache[key] = (time.monotonic(), payload)
 
 
@@ -58,6 +67,86 @@ async def _http() -> httpx.AsyncClient:
     return _client
 
 
+def clear_research_cache() -> None:
+    """Test helper."""
+    _cache.clear()
+
+
+# --------------------------------------------------------------------------- #
+# fetch_drug_pk — deterministic happy-path drug data.                          #
+# --------------------------------------------------------------------------- #
+
+_OPENFDA_SECTIONS = (
+    "pharmacokinetics",
+    "clinical_pharmacology",
+    "mechanism_of_action",
+    "dosage_and_administration",
+    "pediatric_use",
+    "use_in_specific_populations",
+)
+
+
+async def _fetch_drug_pk(args: dict) -> dict:
+    drug = (args.get("drug_name") or "").strip()
+    if not drug:
+        return {"error": "drug_name is required", "found": False}
+    key = ("drugpk", drug.lower())
+
+    seed = _load_seed().get(drug.lower())
+    if seed is not None:
+        return {"source": "seed_cache", "found": True, "drug_name": drug, "structured_pk": seed}
+
+    hit = _cache_get(key)
+    if hit is not None:
+        return hit
+
+    try:
+        c = await _http()
+        params = {"search": f'openfda.generic_name:"{drug}"', "limit": 1}
+        api_key = os.environ.get("OPENFDA_API_KEY")
+        if api_key:
+            params["api_key"] = api_key
+        r = await c.get(OPENFDA_LABEL, params=params)
+        if r.status_code == 404:
+            payload = {"source": "openFDA", "found": False, "drug_name": drug,
+                       "note": "No openFDA label — treat as edge case; use pubmed_search."}
+            _cache_set(key, payload)
+            return payload
+        r.raise_for_status()
+        results = r.json().get("results", [])
+    except (httpx.HTTPError, ValueError, KeyError) as exc:
+        return {"source": "openFDA", "found": False, "drug_name": drug,
+                "error": f"openFDA fetch failed: {exc}. Treat as edge case; use pubmed_search."}
+
+    if not results:
+        payload = {"source": "openFDA", "found": False, "drug_name": drug,
+                   "note": "No openFDA label — treat as edge case; use pubmed_search."}
+        _cache_set(key, payload)
+        return payload
+
+    doc = results[0]
+    sections = {}
+    for sec in _OPENFDA_SECTIONS:
+        val = doc.get(sec)
+        if val:
+            text = " ".join(val) if isinstance(val, list) else str(val)
+            sections[sec] = text[:2500]  # cap to keep context lean
+    payload = {
+        "source": "openFDA",
+        "found": True,
+        "drug_name": drug,
+        "brand_names": (doc.get("openfda", {}) or {}).get("brand_name", [])[:3],
+        "label_sections": sections,
+    }
+    _cache_set(key, payload)
+    return payload
+
+
+# --------------------------------------------------------------------------- #
+# pubmed_search — edge-path literature fallback.                               #
+# --------------------------------------------------------------------------- #
+
+
 def _ncbi_params(extra: dict) -> dict:
     params = {"db": "pubmed", "retmode": "json", **extra}
     key = os.environ.get("NCBI_API_KEY")
@@ -66,27 +155,15 @@ def _ncbi_params(extra: dict) -> dict:
     return params
 
 
-@tool(
-    "pubmed_search",
-    "Search PubMed for pharmacokinetics / pediatric dosing literature. Returns "
-    "up to `retmax` articles with PMID, title, authors, year, and journal. Use "
-    "focused queries, e.g. 'paracetamol neonate pharmacokinetics clearance'.",
-    {
-        "type": "object",
-        "properties": {
-            "query": {"type": "string"},
-            "retmax": {"type": "integer", "default": 5},
-        },
-        "required": ["query"],
-    },
-)
-async def pubmed_search(args):
+async def _pubmed_search(args: dict) -> dict:
     retmax = int(args.get("retmax", 5))
-    q = args["query"]
-    cache_key = ("pubmed", q, retmax)
-    hit = _cache_get(cache_key)
+    q = args.get("query", "")
+    if not q:
+        return {"query": q, "results": [], "error": "query is required"}
+    key = ("pubmed", q, retmax)
+    hit = _cache_get(key)
     if hit is not None:
-        return _text(hit)
+        return hit
 
     try:
         c = await _http()
@@ -98,13 +175,13 @@ async def pubmed_search(args):
         ids = r.json().get("esearchresult", {}).get("idlist", [])
         if not ids:
             payload = {"query": q, "results": []}
-            _cache_set(cache_key, payload)
-            return _text(payload)
+            _cache_set(key, payload)
+            return payload
         s = await c.get(f"{EUTILS}/esummary.fcgi", params=_ncbi_params({"id": ",".join(ids)}))
         s.raise_for_status()
         docs = s.json().get("result", {})
     except (httpx.HTTPError, ValueError, KeyError) as exc:
-        return _text({"error": f"PubMed search failed: {exc}", "query": q, "results": []})
+        return {"error": f"PubMed search failed: {exc}", "query": q, "results": []}
 
     results = []
     for pmid in docs.get("uids", []):
@@ -120,93 +197,53 @@ async def pubmed_search(args):
             "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
         })
     payload = {"query": q, "results": results}
-    _cache_set(cache_key, payload)
-    return _text(payload)
+    _cache_set(key, payload)
+    return payload
 
 
-@tool(
-    "semantic_scholar_search",
-    "Semantic (meaning-based) paper search via Semantic Scholar. Good for "
-    "finding PK-parameter papers when exact keywords are unknown. Returns title, "
-    "authors, year, DOI/URL, and abstract snippet. On rate-limit (429), switch to "
-    "PubMed or WebSearch — do not retry immediately.",
+# --------------------------------------------------------------------------- #
+# Tool definitions + dispatch.                                                 #
+# --------------------------------------------------------------------------- #
+
+RESEARCH_TOOLS = [
     {
-        "type": "object",
-        "properties": {
-            "query": {"type": "string"},
-            "limit": {"type": "integer", "default": 5},
+        "name": "fetch_drug_pk",
+        "description": "Fetch adult pharmacokinetic drug data in ONE call — checks a local seed cache "
+        "first, else the openFDA drug label. Returns structured PK (seed) or label text sections "
+        "(pharmacokinetics, clinical_pharmacology, metabolism/elimination). Call this FIRST for every "
+        "drug. If found=false, the drug is an edge case — use pubmed_search.",
+        "input_schema": {
+            "type": "object",
+            "properties": {"drug_name": {"type": "string"}},
+            "required": ["drug_name"],
         },
-        "required": ["query"],
     },
-)
-async def semantic_scholar_search(args):
-    limit = int(args.get("limit", 5))
-    q = args["query"]
-    cache_key = ("s2", q, limit)
-    hit = _cache_get(cache_key)
-    if hit is not None:
-        return _text(hit)
-
-    try:
-        c = await _http()
-        r = await c.get(
-            SEMANTIC_SCHOLAR,
-            params={
-                "query": q,
-                "limit": limit,
-                "fields": "title,authors,year,abstract,externalIds,url",
+    {
+        "name": "pubmed_search",
+        "description": "Edge-case literature fallback. Search PubMed for pediatric PK / dosing when "
+        "openFDA has no label or key numbers are missing. Returns PMID, title, authors, year, journal.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string"},
+                "retmax": {"type": "integer", "default": 5},
             },
-        )
-        if r.status_code == 429:
-            return _text({
-                "error": "Semantic Scholar rate-limited (429). Do not retry now — use "
-                         "pubmed_search or WebSearch instead.",
-                "query": q,
-                "results": [],
-            })
-        r.raise_for_status()
-        data = r.json().get("data", [])
-    except (httpx.HTTPError, ValueError) as exc:
-        return _text({
-            "error": f"Semantic Scholar search failed: {exc}. Prefer pubmed_search or WebSearch.",
-            "query": q,
-            "results": [],
-        })
-
-    results = []
-    for p in data:
-        ext = p.get("externalIds") or {}
-        doi = ext.get("DOI")
-        authors = ", ".join(a.get("name", "") for a in (p.get("authors") or [])[:4])
-        abstract = (p.get("abstract") or "")[:280]
-        results.append({
-            "source": "Semantic Scholar",
-            "identifier": f"DOI:{doi}" if doi else (p.get("paperId", "")),
-            "title": p.get("title", ""),
-            "authors": authors,
-            "year": p.get("year"),
-            "url": p.get("url", ""),
-            "snippet": abstract,
-        })
-    payload = {"query": q, "results": results}
-    _cache_set(cache_key, payload)
-    return _text(payload)
-
-
-def build_literature_server():
-    """The 'literature' in-process MCP server."""
-    return create_sdk_mcp_server(
-        "literature",
-        tools=[pubmed_search, semantic_scholar_search],
-    )
-
-
-def clear_research_cache() -> None:
-    """Test helper."""
-    _cache.clear()
-
-
-LITERATURE_TOOL_NAMES = [
-    "mcp__literature__pubmed_search",
-    "mcp__literature__semantic_scholar_search",
+            "required": ["query"],
+        },
+    },
 ]
+
+_DISPATCH = {
+    "fetch_drug_pk": _fetch_drug_pk,
+    "pubmed_search": _pubmed_search,
+}
+
+RESEARCH_TOOL_NAMES = list(_DISPATCH)
+
+
+def is_research_tool(name: str) -> bool:
+    return name in _DISPATCH
+
+
+async def run_research_tool(name: str, args: dict) -> dict:
+    return await _DISPATCH[name](args or {})

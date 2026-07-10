@@ -8,22 +8,25 @@ Keep both docs aligned when you change pipeline or frontend shell behaviour.
 
 ## What this is
 
-PaedScale is a **generalizable multi-agent pediatric dose-extrapolation agent** for the "Built with
-Claude: Life Sciences" hackathon. A free-text clinical query drives a Sonnet orchestrator that either
-returns a **published guideline dose** (solid regimen + normal organ function) or spawns one
-**research-agent** (Haiku) to research literature (PubMed · Semantic Scholar · web), then scales
-adult PK by **allometric scaling × organ maturation (Anderson–Holford)** in Python. A mandatory
-**critic-agent** grades the dose before submit. No prefill drug set.
+PaedScale is a **generalizable pediatric dose-extrapolation agent** for the "Built with Claude: Life
+Sciences" hackathon. A free-text query is parsed in Python, then an **in-process Sonnet Messages-API
+agent loop** (`anthropic.AsyncAnthropic` — no Node, no Agent SDK) either returns a **published
+guideline dose** or runs the mechanistic path, scaling adult PK by **allometry × organ maturation
+(Anderson–Holford)** through deterministic PK-maths tools. Adult drug data comes from a deterministic
+**openFDA** fetch (happy path); the **agentic Web/PubMed loop is gated to edge cases** (MCP). The
+orchestrator **self-critiques** in its submit payload (no critic subagent). No prefill drug set.
 
-Authoritative concept brief: `docs/paedscale-concept.html`. Engineering detail + changelog: `CLAUDE.md`.
+Authoritative concept brief: `docs/paedscale-concept.html`. Full detail + changelog: `CLAUDE.md`
+("Changelog: in-process Messages-API rewrite, 2026-07-11"). Older sections describe the superseded
+Agent-SDK design.
 
 ## Golden rule: keep the LLM and the math separate
 
 - **Deterministic Python (`backend/app/pk/`)** owns ALL numbers. No LLM calls here.
 - **Agent layer (`backend/app/agent/`)** owns judgment and language. It must NOT invent the
-  mechanistic dose — it feeds structured inputs to `pk/` (via math MCP tools) and explains the result.
+  mechanistic dose — it feeds structured inputs to `pk/` (via the PK-maths tools) and explains it.
 - **Guideline short path:** published mg/kg allowed only when solid **and** not renally/hepatically
-  impaired; critic still runs.
+  impaired; the orchestrator self-critiques on both paths.
 
 ## Architecture
 
@@ -31,38 +34,44 @@ Authoritative concept brief: `docs/paedscale-concept.html`. Engineering detail +
 backend/app/
   pk/          allometry · maturation · distribution · methods · organ_function ·
                safety · concordance · pipeline            (pure functions — ALL the math)
-  agent/       orchestrator.py  (research + critic, budget ~$2, partial recovery)
-               math_tools.py    (in-process MCP: pk/)
-               research_tools.py(PubMed + Semantic Scholar, cached)
-               recovery.py      (payload if submit never fires)
-               stream.py        (SSE trace events)
-               intake.py        · adult_pk.py/pathways.py (legacy helpers)
+  agent/       orchestrator.py  (AsyncAnthropic Messages-API loop, guideline-agent, self-critique)
+               math_tools.py    (PK-maths tool dicts + async dispatch)
+               research_tools.py(fetch_drug_pk = openFDA + seed cache; pubmed_search = edge)
+               intake.py        (deterministic parse → covariates + organ_impaired + edge_case)
+               recovery.py      (partial payload from captured math results)
+               {client,adult_pk,pathways,rationale}.py  (legacy helpers, unused by the loop)
   data/        maturation.json  (only production data file)
+  report.py    POST /report → PDF via the `pdf` Agent Skill (off hot path)
   schemas.py   QueryRequest / ExtrapolationResponse (+ source_of_dose, dose_grade)
-  main.py      POST /extrapolate · POST /extrapolate/stream
-backend/tests/fixtures/  validation_* (test-only)
+  main.py      POST /extrapolate · POST /extrapolate/stream · POST /report
+  skills/pediatric-pk/SKILL.md   custom methodology skill (the "moat")
+backend/tests/fixtures/  validation_* (test-only + drug seed cache)
 frontend/      Next.js dark shell: landing composer, collapsible reasoning, inline cites
 ```
 
 ### Pipeline
 
 ```
-query → intake → (guideline if solid & not organ-impaired)
-              OR research-agent → extrapolate_dose → safety → concordance?
-      → critic-agent (dose_grade) → submit_recommendation
-      → else recovery.assemble_partial_payload
+query → intake.parse → drug + covariates + organ_impaired + edge_case
+  fetch_drug_pk (openFDA) ∥ guideline-agent        (asyncio.gather)
+  → orchestrator loop (Sonnet, adaptive thinking, prompt-cached):
+       PK Maths tools (deterministic) + research tools (edge-gated: pubmed / MCP)
+       → submit_recommendation (with self-critique)
+  → else recovery.assemble_partial_payload
 ```
 
 ## Conventions
 
-- **Models:** Sonnet orch + critic, Haiku research — `PAEDSCALE_*` in `.env.example`.
-  Hard budget **~$2** (`PAEDSCALE_BUDGET_USD`). Never commit API keys.
-- **Deploy:** needs Claude CLI runtime (`backend/Dockerfile` + Node `@anthropic-ai/claude-code`).
-- **Subagents only:** `research-agent`, `critic-agent`; both `background=False`. Disallow
-  ToolSearch / ScheduleWakeup / TaskOutput / SendMessage thrash tools.
+- **Model:** Sonnet 5 for everything (`PAEDSCALE_ORCH_MODEL`); no Haiku, no critic subagent. Config in
+  `.env.example` (`PAEDSCALE_MAX_TURNS`, `PAEDSCALE_GUIDELINE_AGENT`, `PAEDSCALE_MCP_SERVERS`,
+  `OPENFDA_API_KEY`). Never commit API keys.
+- **Deploy:** plain Python (`render.yaml` `runtime: python`; `backend/Dockerfile` = `python:3.12-slim`).
+  No Node, no `claude-agent-sdk`.
+- **Agents:** orchestrator + parallel `guideline-agent` + edge-only research; MCP connector
+  (`mcp-client-2025-11-20`) gated on `PAEDSCALE_MCP_SERVERS`.
 - **Safety in output:** disclaimer, NTI→TDM, bounds, evidence grade, assumed defaults,
-  `source_of_dose`, critic `dose_grade`.
-- **Concordance tests** offline only; do not loop live orchestrator in CI.
+  `source_of_dose`, self-critique `dose_grade`.
+- **Tests** offline only (`pytest` → 49 passed); never loop the live orchestrator in CI.
 
 ## Working style
 
@@ -80,6 +89,8 @@ cd frontend && npm run dev
 
 ## Changelog
 
+- **In-process Messages-API rewrite (2026-07-11):** **`CLAUDE.md` → “Changelog: in-process
+  Messages-API rewrite”** — dropped the Agent SDK / Node; openFDA happy path; MCP + Skills.
 - Perplexity-style frontend: **`CLAUDE.md` → “Changelog: Perplexity-style frontend UX”**
 - Agent reliability rewrite: **`CLAUDE.md` → “Changelog: agent reliability rewrite”**
 

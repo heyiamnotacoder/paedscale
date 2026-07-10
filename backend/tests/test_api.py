@@ -52,7 +52,7 @@ def test_health(client):
 
 
 def test_extrapolate_maps_payload_to_response(client, monkeypatch):
-    async def fake_run(query, on_message=None):
+    async def fake_run(query, on_event=None, overrides=None):
         return CANNED_PAYLOAD, 0.23, []
 
     monkeypatch.setattr(main_module, "run_orchestrator", fake_run)
@@ -72,7 +72,7 @@ def test_extrapolate_maps_payload_to_response(client, monkeypatch):
 
 
 def test_extrapolate_missing_payload_returns_502(client, monkeypatch):
-    async def fake_run(query, on_message=None):
+    async def fake_run(query, on_event=None, overrides=None):
         return None, None, []
 
     monkeypatch.setattr(main_module, "run_orchestrator", fake_run)

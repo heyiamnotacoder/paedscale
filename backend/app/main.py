@@ -1,9 +1,9 @@
-"""FastAPI app for PaedScale — generalizable multi-agent dose extrapolation.
+"""FastAPI app for PaedScale — generalizable pediatric dose extrapolation.
 
-POST /extrapolate takes a free-text clinical query, runs the Opus-4.8
-orchestrator + specialist subagents (which research the literature and compute
-every number through the deterministic paedscale_math tools), and returns the
-assembled, cited, self-critiqued recommendation.
+POST /extrapolate takes a free-text clinical query and runs an in-process Sonnet Messages-API agent
+loop: deterministic openFDA drug-data fetch + a parallel guideline sub-agent feed the orchestrator,
+which computes every number through the deterministic PK-maths tools, self-critiques, and returns the
+assembled, cited recommendation. POST /report exports it as a PDF via the pdf Agent Skill.
 """
 
 import asyncio
@@ -12,10 +12,9 @@ import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import Response, StreamingResponse
 
 from app.agent.orchestrator import run_orchestrator
-from app.agent.stream import TraceMapper
 from app.schemas import ExtrapolationResponse, QueryRequest
 
 DISCLAIMER = (
@@ -61,7 +60,9 @@ def _to_response(query: str, payload: dict | None, cost_usd: float | None) -> Ex
 @app.post("/extrapolate", response_model=ExtrapolationResponse)
 async def extrapolate_case(request: QueryRequest) -> ExtrapolationResponse:
     try:
-        payload, cost_usd, _messages = await run_orchestrator(request.query)
+        payload, cost_usd, _messages = await run_orchestrator(
+            request.query, overrides=request.overrides
+        )
     except RuntimeError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
     return _to_response(request.query, payload, cost_usd)
@@ -79,15 +80,15 @@ async def extrapolate_stream(request: QueryRequest):
     the trace live in the right sidebar instead of a spinner.
     """
     queue: asyncio.Queue = asyncio.Queue()
-    mapper = TraceMapper()
 
-    async def on_message(msg):
-        for ev in mapper.events(msg):
-            await queue.put(("trace", ev))
+    async def on_event(ev: dict):
+        await queue.put(("trace", ev))
 
     async def run():
         try:
-            payload, cost_usd, _ = await run_orchestrator(request.query, on_message=on_message)
+            payload, cost_usd, _ = await run_orchestrator(
+                request.query, on_event=on_event, overrides=request.overrides
+            )
             if not payload:
                 await queue.put(("error", {"detail": "The agent did not produce a recommendation."}))
             else:
@@ -113,3 +114,19 @@ async def extrapolate_stream(request: QueryRequest):
                 task.cancel()
 
     return StreamingResponse(gen(), media_type="text/event-stream")
+
+
+@app.post("/report")
+async def report(recommendation: dict):
+    """Export a recommendation as a PDF via the `pdf` Agent Skill (off the query hot path)."""
+    from app.report import generate_report_pdf
+
+    try:
+        data, filename = await generate_report_pdf(recommendation)
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Report generation failed: {exc}") from exc
+    return Response(
+        content=data,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
