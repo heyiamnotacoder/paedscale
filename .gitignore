@@ -27,6 +27,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# Local analysis notes (not for the repo)
+docs/concordance-analysis.md
+
 # Editor / OS
 .DS_Store
 .idea/
