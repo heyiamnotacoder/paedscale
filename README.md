@@ -72,7 +72,7 @@ Requires Python 3.11+ and Node 18+.
 cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env         # add your ANTHROPIC_API_KEY
+cp .env.example .env         # add your ANTHROPIC_API_KEY; keep ALLOWED_ORIGINS for local frontend
 pytest                        # concordance tests
 uvicorn app.main:app --reload # http://localhost:8000
 ```
@@ -107,11 +107,16 @@ With both running, open `http://localhost:3000`, pick a drug, and submit a case.
 
 ## Deploy
 
-- **Backend (FastAPI):** any container/PaaS host that runs `uvicorn app.main:app` — e.g. Render or
-  Fly.io. Set `ANTHROPIC_API_KEY` as a secret env var. Update CORS `allow_origins` in `app/main.py`
-  to the deployed frontend origin.
-- **Frontend (Next.js):** Vercel (zero-config for a standard Next.js app). Set
-  `NEXT_PUBLIC_API_BASE_URL` to the deployed backend URL.
+- **Backend (FastAPI):** Render can use the root `render.yaml`. Set `ANTHROPIC_API_KEY` and
+  `ALLOWED_ORIGINS` in the Render service environment. `ALLOWED_ORIGINS` should be your deployed
+  Vercel origin, for example `https://paedscale.vercel.app` (comma-separated if you need multiple
+  origins).
+- **Frontend (Next.js):** Vercel can deploy from the `frontend/` directory. Set
+  `NEXT_PUBLIC_API_BASE_URL` to the deployed Render backend URL, for example
+  `https://paedscale-backend.onrender.com`.
+
+After changing environment variables on either platform, redeploy that service so the new values are
+picked up.
 
 ## License
 
