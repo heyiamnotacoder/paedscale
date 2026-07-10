@@ -1,29 +1,29 @@
 # AGENTS.md — PaedScale
 
-Guidance for Codex sessions working in this repo.
+Guidance for Codex / coding-agent sessions working in this repo.
+
+This file mirrors the engineering guide in **`CLAUDE.md`**. Prefer **`CLAUDE.md`** for the full
+**changelog of the agent reliability rewrite** (`cd74841`) and file-level diffs. Keep both docs
+aligned when you change pipeline behaviour.
 
 ## What this is
 
 PaedScale is a **generalizable multi-agent pediatric dose-extrapolation agent** for the "Built with
-Codex: Life Sciences" hackathon. A free-text clinical query drives an Opus/Sonnet orchestrator that
-spawns specialist subagents (pathway / PK / safety) to research the literature (PubMed · Semantic
-Scholar · web), decomposes the drug's **multiple** elimination pathways, scales adult PK by
-**allometric scaling × organ maturation (Anderson–Holford)**, picks the right dosing method,
-self-critiques, and self-checks against known guideline doses. It generalizes to any drug — there is
-no prefill drug set.
+Claude: Life Sciences" hackathon. A free-text clinical query drives a Sonnet orchestrator that either
+returns a **published guideline dose** (solid regimen + normal organ function) or spawns one
+**research-agent** (Haiku) to research literature (PubMed · Semantic Scholar · web), then scales
+adult PK by **allometric scaling × organ maturation (Anderson–Holford)** in Python. A mandatory
+**critic-agent** grades the dose before submit. No prefill drug set.
 
-The authoritative concept brief is `docs/paedscale-concept.html` — read it before making product
-decisions. This file is the engineering guide.
+Authoritative concept brief: `docs/paedscale-concept.html`. Engineering detail + changelog: `CLAUDE.md`.
 
 ## Golden rule: keep the LLM and the math separate
 
-- **Deterministic Python (`backend/app/pk/`)** owns ALL numbers: allometry, maturation, Vd
-  correction, dose solve. No LLM calls here. This is what tests pin.
-- **Codex (`backend/app/agent/`)** owns judgment and language: mapping a drug to its elimination
-  pathways (fm split), retrieving/annotating adult PK, and writing the cited rationale. It must NOT
-  invent the final dose — it feeds structured inputs to `pk/` and explains the result.
-
-If you find yourself asking Codex to "compute the dose," stop — that belongs in `pk/`.
+- **Deterministic Python (`backend/app/pk/`)** owns ALL numbers. No LLM calls here.
+- **Agent layer (`backend/app/agent/`)** owns judgment and language. It must NOT invent the
+  mechanistic dose — it feeds structured inputs to `pk/` (via math MCP tools) and explains the result.
+- **Guideline short path:** published mg/kg allowed only when solid **and** not renally/hepatically
+  impaired; critic still runs.
 
 ## Architecture
 
@@ -31,55 +31,54 @@ If you find yourself asking Codex to "compute the dose," stop — that belongs i
 backend/app/
   pk/          allometry · maturation · distribution · methods · organ_function ·
                safety · concordance · pipeline            (pure functions — ALL the math)
-  agent/       orchestrator.py  (Agent SDK: research + critic, budget, partial recovery)
-               math_tools.py    (in-process MCP: pk/ exposed as tools — golden rule)
-               research_tools.py(in-process MCP: PubMed + Semantic Scholar)
-               recovery.py      (assemble payload if submit never fires)
-               stream.py        (SDK messages → SSE trace events)
-               intake.py        (free-text → covariates)  · adult_pk.py/pathways.py (legacy helpers)
-  data/        maturation.json  (drug-agnostic pathway curve library — the ONLY data file)
-  schemas.py   pydantic QueryRequest / ExtrapolationResponse
-  main.py      FastAPI: POST /extrapolate (JSON) · POST /extrapolate/stream (SSE) · CORS
-backend/tests/fixtures/  validation_drugs.json · validation_guidelines.json  (test-only)
-frontend/      Next.js (App Router, TS). Free-text box + live reasoning sidebar; teal/paper tokens.
+  agent/       orchestrator.py  (research + critic, budget ~$2, partial recovery)
+               math_tools.py    (in-process MCP: pk/)
+               research_tools.py(PubMed + Semantic Scholar, cached)
+               recovery.py      (payload if submit never fires)
+               stream.py        (SSE trace events)
+               intake.py        · adult_pk.py/pathways.py (legacy helpers)
+  data/        maturation.json  (only production data file)
+  schemas.py   QueryRequest / ExtrapolationResponse (+ source_of_dose, dose_grade)
+  main.py      POST /extrapolate · POST /extrapolate/stream
+backend/tests/fixtures/  validation_* (test-only)
+frontend/      Next.js free-text + reasoning sidebar
+```
+
+### Pipeline
+
+```
+query → intake → (guideline if solid & not organ-impaired)
+              OR research-agent → extrapolate_dose → safety → concordance?
+      → critic-agent (dose_grade) → submit_recommendation
+      → else recovery.assemble_partial_payload
 ```
 
 ## Conventions
 
-- **Models (tiered for cost, env-configurable):** Sonnet orchestrator + critic, Haiku research-agent —
-  see `PAEDSCALE_*` in `.env.example`. Hard budget ceiling **~$2** (`PAEDSCALE_BUDGET_USD`); typical
-  runs should stay much lower. Read `ANTHROPIC_API_KEY` from env (`.env`, gitignored). Never hardcode
-  or commit keys.
-- **Deployment needs the Codex CLI runtime:** the Agent SDK spawns the `Codex` Node binary, so the
-  backend deploys via `backend/Dockerfile` (Python + Node + `@anthropic-ai/Codex`), wired in
-  `render.yaml`. A plain Python runtime will not work.
-- **Pipeline** (backend `/extrapolate[/stream]`): free-text query → intake → guideline short path
-  (only if solid regimen AND no renal/hepatic impairment) OR one `research-agent` → method choice →
-  `extrapolate_dose` → `check_safety_bounds` → `find_concordance` → mandatory `critic-agent` (dose
-  grade) → `submit_recommendation`. Partial recovery if submit never fires.
-- **Generalizable, not prefill:** there is no curated drug set. Agents research each drug live;
-  `data/maturation.json` is the drug-agnostic pathway curve library. The three former demo drugs live
-  only in `tests/fixtures/` as a validation set.
-- **Safety must surface in output:** decision-support-only disclaimer, NTI→TDM warnings, safety-bounds
-  clamp/flag, evidence grade, and assumed-default flags. Never emit a false-confident number.
-- **Concordance = the test suite:** `backend/tests/test_concordance.py` asserts the PK math reproduces
-  known guideline doses (from `tests/fixtures/`) within tolerance. Keep it green. Live agent runs cost
-  money — validate with the offline/mocked suite; never run the orchestrator ad hoc in a loop.
+- **Models:** Sonnet orch + critic, Haiku research — `PAEDSCALE_*` in `.env.example`.
+  Hard budget **~$2** (`PAEDSCALE_BUDGET_USD`). Never commit API keys.
+- **Deploy:** needs Claude CLI runtime (`backend/Dockerfile` + Node `@anthropic-ai/claude-code`).
+- **Subagents only:** `research-agent`, `critic-agent`; both `background=False`. Disallow
+  ToolSearch / ScheduleWakeup / TaskOutput / SendMessage thrash tools.
+- **Safety in output:** disclaimer, NTI→TDM, bounds, evidence grade, assumed defaults,
+  `source_of_dose`, critic `dose_grade`.
+- **Concordance tests** offline only; do not loop live orchestrator in CI.
 
 ## Working style
 
-- **Phased delivery with a push after every phase.** Commit and `git push` when a phase is done;
-  don't batch phases. Repo: `github.com/heyiamnotacoder/paedscale` (public).
-- Use `gh` CLI for GitHub operations.
-- Co-author trailer on commits:
-  `Co-Authored-By: Codex Opus 4.8 <noreply@anthropic.com>`
+- Commit + `git push` after each phase. Repo: `github.com/heyiamnotacoder/paedscale`.
+- Use `gh` for GitHub ops.
+- Co-author trailer: `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>` (or session agent).
 
 ## Commands
 
 ```bash
-# backend
 cd backend && pytest
 cd backend && uvicorn app.main:app --reload
-# frontend
 cd frontend && npm run dev
 ```
+
+## Changelog
+
+Full file-level diff of the reliability rewrite: **`CLAUDE.md` → section “Changelog: agent
+reliability rewrite”**. Public product overview: **`README.md`**.
