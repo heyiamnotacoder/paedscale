@@ -108,6 +108,33 @@ def test_extrapolate_accepts_stringified_critique(client, monkeypatch):
     assert body["dose_recommendation"]["dose_mg_per_kg"] == 15.0
 
 
+def test_extrapolate_fail_open_on_garbage_critique(client, monkeypatch):
+    """Production-shaped failure: critique is a non-JSON string after a full run."""
+    import copy
+
+    payload = copy.deepcopy(CANNED_PAYLOAD)
+    payload["critique"] = (
+        "{'objections': ['Guideli...monitoring protocol.'], "
+        "'dose_grade': 'accept_with_caveats'}"
+    )
+
+    async def fake_run(query, on_event=None, overrides=None):
+        return payload, 0.20, []
+
+    monkeypatch.setattr(main_module, "run_orchestrator", fake_run)
+    resp = client.post(
+        "/extrapolate",
+        json={"query": "find dosage for gentamicin for 2 year old with 7 kg weight"},
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["dose_recommendation"]["dose_mg"] == 28.17
+    assert body["critique"]["dose_grade"] == "accept_with_caveats"
+    assert any("Guideli" in o or "monitoring" in o for o in body["critique"]["objections"]) or (
+        "monitoring" in (body["critique"].get("resolution") or "")
+    )
+
+
 def test_extrapolate_requires_query(client):
     resp = client.post("/extrapolate", json={})
     assert resp.status_code == 422

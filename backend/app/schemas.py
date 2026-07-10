@@ -11,25 +11,69 @@ encoded). Before-validators coerce those so validation does not 502 a good run.
 
 from __future__ import annotations
 
+import ast
 import json
 from typing import Any
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 
 def parse_jsonish(value: Any) -> Any:
-    """If *value* is a JSON object/array encoded as a string, parse it; else return as-is."""
+    """If *value* is an object/array encoded as a string, parse it; else return as-is.
+
+    Tries JSON first, then ``ast.literal_eval`` for Python-style single-quoted dicts
+    that models sometimes emit inside tool-arg strings.
+    """
     if not isinstance(value, str):
         return value
     s = value.strip()
     if not s:
         return value
-    if (s.startswith("{") and s.endswith("}")) or (s.startswith("[") and s.endswith("]")):
-        try:
-            return json.loads(s)
-        except json.JSONDecodeError:
-            return value
+    if not (
+        (s.startswith("{") and s.endswith("}"))
+        or (s.startswith("[") and s.endswith("]"))
+    ):
+        return value
+    try:
+        return json.loads(s)
+    except json.JSONDecodeError:
+        pass
+    try:
+        parsed = ast.literal_eval(s)
+        if isinstance(parsed, (dict, list)):
+            return parsed
+    except (ValueError, SyntaxError, MemoryError, TypeError):
+        pass
     return value
+
+
+def coerce_critique(value: Any) -> dict[str, Any]:
+    """Always return a CritiqueOut-shaped dict; never leave a bare string."""
+    value = parse_jsonish(value)
+    if isinstance(value, dict):
+        out = dict(value)
+        for k in ("objections", "residual_risks"):
+            if k in out:
+                out[k] = parse_jsonish(out[k])
+                if isinstance(out[k], str):
+                    out[k] = [out[k]] if out[k].strip() else []
+                elif not isinstance(out[k], list):
+                    out[k] = []
+        return out
+    if value is None:
+        return {
+            "objections": [],
+            "resolution": "",
+            "residual_risks": [],
+            "dose_grade": "accept_with_caveats",
+        }
+    # Preserve free text so self-critique content is not lost.
+    return {
+        "objections": [],
+        "resolution": str(value)[:2000],
+        "residual_risks": ["critique field was not structured; preserved as text"],
+        "dose_grade": "accept_with_caveats",
+    }
 
 
 _NESTED_SUBMIT_KEYS = (
@@ -44,6 +88,24 @@ _NESTED_SUBMIT_KEYS = (
     "safety_flags",
 )
 
+# Soft nested fields: on validation failure we can default them and still return a dose.
+_SOFT_NESTED_DEFAULTS: dict[str, Any] = {
+    "covariates": {},
+    "adult_pk": {},
+    "pathways": [],
+    "dose_recommendation": {},
+    "evidence_grade": {},
+    "citations": [],
+    "concordance": None,
+    "critique": {
+        "objections": [],
+        "resolution": "Soft-field validation failed; dose numbers preserved where present.",
+        "residual_risks": ["partial_payload_shape"],
+        "dose_grade": "accept_with_caveats",
+    },
+    "safety_flags": [],
+}
+
 
 def normalize_submit_payload(payload: dict[str, Any] | Any) -> dict[str, Any] | Any:
     """Coerce JSON-string nested fields from LLM submit_recommendation args.
@@ -54,21 +116,84 @@ def normalize_submit_payload(payload: dict[str, Any] | Any) -> dict[str, Any] | 
         return payload
     out = dict(payload)
     for key in _NESTED_SUBMIT_KEYS:
-        if key in out:
+        if key not in out:
+            continue
+        if key == "critique":
+            out[key] = coerce_critique(out[key])
+        else:
             out[key] = parse_jsonish(out[key])
     dr = out.get("dose_recommendation")
     if isinstance(dr, dict) and "safety_bounds" in dr:
         dr = dict(dr)
         dr["safety_bounds"] = parse_jsonish(dr["safety_bounds"])
         out["dose_recommendation"] = dr
-    cr = out.get("critique")
-    if isinstance(cr, dict):
-        cr = dict(cr)
-        for k in ("objections", "residual_risks"):
-            if k in cr:
-                cr[k] = parse_jsonish(cr[k])
-        out["critique"] = cr
     return out
+
+
+def assemble_lenient_response(data: dict[str, Any]) -> "ExtrapolationResponse":
+    """Validate *data*, stripping/defaulting soft nested fields that still fail.
+
+    Hard requirement: ``query`` must be present. Soft nested shape quirks must
+    never erase a finished agent run.
+    """
+    data = normalize_submit_payload(data)
+    if not isinstance(data, dict):
+        raise ValueError("payload is not a dict")
+    try:
+        return ExtrapolationResponse.model_validate(data)
+    except ValidationError:
+        pass
+
+    # Second pass: re-coerce critique aggressively, then default any still-bad soft fields.
+    repaired = dict(data)
+    if "critique" in repaired:
+        repaired["critique"] = coerce_critique(repaired.get("critique"))
+    try:
+        return ExtrapolationResponse.model_validate(repaired)
+    except ValidationError as exc:
+        bad_locs = {str(err["loc"][0]) for err in exc.errors() if err.get("loc")}
+        for key in bad_locs:
+            if key in _SOFT_NESTED_DEFAULTS:
+                if key == "critique":
+                    repaired[key] = coerce_critique(repaired.get(key))
+                    # If still not a dict somehow, use blank default.
+                    if not isinstance(repaired[key], dict):
+                        repaired[key] = dict(_SOFT_NESTED_DEFAULTS[key])
+                else:
+                    repaired[key] = _SOFT_NESTED_DEFAULTS[key]
+        # Drop unknown keys that break validation? Prefer defaults only.
+        try:
+            return ExtrapolationResponse.model_validate(repaired)
+        except ValidationError:
+            # Last resort: keep scalars + dose-ish numbers, blank the rest of soft fields.
+            minimal = {
+                "query": repaired.get("query") or "",
+                "drug_name": repaired.get("drug_name") or "",
+                "dosing_method": repaired.get("dosing_method") or "",
+                "source_of_dose": repaired.get("source_of_dose") or "mechanistic",
+                "rationale": repaired.get("rationale") or "",
+                "disclaimer": repaired.get("disclaimer") or "",
+                "cost_usd": repaired.get("cost_usd"),
+                "safety_flags": list(repaired.get("safety_flags") or [])
+                if isinstance(repaired.get("safety_flags"), list)
+                else ["payload_shape_repaired"],
+                "dose_recommendation": (
+                    repaired["dose_recommendation"]
+                    if isinstance(repaired.get("dose_recommendation"), dict)
+                    else {}
+                ),
+                "critique": coerce_critique(repaired.get("critique")),
+                "evidence_grade": (
+                    repaired["evidence_grade"]
+                    if isinstance(repaired.get("evidence_grade"), dict)
+                    else {"grade": "very-low", "rationale": "repaired payload"}
+                ),
+            }
+            flags = minimal["safety_flags"]
+            if "payload_shape_repaired" not in flags:
+                flags = list(flags) + ["payload_shape_repaired"]
+            minimal["safety_flags"] = flags
+            return ExtrapolationResponse.model_validate(minimal)
 
 
 class QueryRequest(BaseModel):
@@ -211,10 +336,14 @@ class ExtrapolationResponse(BaseModel):
         "evidence_grade",
         "citations",
         "concordance",
-        "critique",
         "safety_flags",
         mode="before",
     )
     @classmethod
     def _coerce_json_strings(cls, v: Any) -> Any:
         return parse_jsonish(v)
+
+    @field_validator("critique", mode="before")
+    @classmethod
+    def _coerce_critique_field(cls, v: Any) -> Any:
+        return coerce_critique(v)
