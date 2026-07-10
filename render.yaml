@@ -1,17 +1,32 @@
 services:
   - type: web
     name: paedscale-backend
-    runtime: python
-    plan: free
+    # Docker runtime: the Claude Agent SDK needs Node + the Claude CLI alongside
+    # Python (see backend/Dockerfile). The plain Python runtime cannot provide it.
+    runtime: docker
+    plan: starter
     rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /health
     envVars:
       # Set in the Render dashboard (Environment tab) — never commit the key.
       - key: ANTHROPIC_API_KEY
         sync: false
-      # Set to your deployed frontend origin, e.g. https://paedscale.vercel.app
-      # (comma-separated for multiple). Falls back to localhost:3000 if unset.
+      # Deployed frontend origin(s), comma-separated, e.g. https://paedscale.vercel.app
       - key: ALLOWED_ORIGINS
         sync: false
+      # Optional: raises the PubMed E-utilities rate limit.
+      - key: NCBI_API_KEY
+        sync: false
+      # Multi-agent cost/latency controls (defaults keep a query <= $0.50).
+      - key: PAEDSCALE_ORCH_MODEL
+        value: claude-sonnet-5
+      - key: PAEDSCALE_SUBAGENT_MODEL
+        value: claude-haiku-4-5-20251001
+      - key: PAEDSCALE_CRITIC_MODEL
+        value: claude-sonnet-5
+      - key: PAEDSCALE_MAX_TURNS
+        value: "14"
+      - key: PAEDSCALE_BUDGET_USD
+        value: "0.40"
