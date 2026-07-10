@@ -116,7 +116,7 @@ backend/   FastAPI — Claude Agent SDK orchestrator + deterministic PK (Python)
   app/agent/       orchestrator, research/math MCP tools, recovery, stream
   app/data/        maturation.json (pathway curve library)
   tests/           pytest (math + mocked API + recovery)
-frontend/  Next.js (App Router, TypeScript) — free-text query + live reasoning sidebar
+frontend/  Next.js (App Router, TypeScript) — dark search home, collapsible reasoning, inline cites
 docs/      Concept brief (paedscale-concept.html), concordance analysis
 ```
 
@@ -160,7 +160,7 @@ cp .env.local.example .env.local   # NEXT_PUBLIC_API_BASE_URL → http://localho
 npm run dev                        # http://localhost:3000
 ```
 
-Open `http://localhost:3000`, enter a free-text case, watch the **reasoning sidebar** stream, then
+Open `http://localhost:3000`, enter a free-text case, expand the **one-line reasoning** trace as it streams, then
 read the dose card (source, critic grade, pathways, concordance, disclaimer).
 
 ### API

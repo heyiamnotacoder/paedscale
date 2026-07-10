@@ -2,9 +2,9 @@
 
 Guidance for Codex / coding-agent sessions working in this repo.
 
-This file mirrors the engineering guide in **`CLAUDE.md`**. Prefer **`CLAUDE.md`** for the full
-**changelog of the agent reliability rewrite** (`cd74841`) and file-level diffs. Keep both docs
-aligned when you change pipeline behaviour.
+This file mirrors the engineering guide in **`CLAUDE.md`**. Prefer **`CLAUDE.md`** for full
+changelogs (agent reliability rewrite `cd74841`, Perplexity-style frontend UX, and later diffs).
+Keep both docs aligned when you change pipeline or frontend shell behaviour.
 
 ## What this is
 
@@ -41,7 +41,7 @@ backend/app/
   schemas.py   QueryRequest / ExtrapolationResponse (+ source_of_dose, dose_grade)
   main.py      POST /extrapolate · POST /extrapolate/stream
 backend/tests/fixtures/  validation_* (test-only)
-frontend/      Next.js free-text + reasoning sidebar
+frontend/      Next.js dark shell: landing composer, collapsible reasoning, inline cites
 ```
 
 ### Pipeline
@@ -80,5 +80,7 @@ cd frontend && npm run dev
 
 ## Changelog
 
-Full file-level diff of the reliability rewrite: **`CLAUDE.md` → section “Changelog: agent
-reliability rewrite”**. Public product overview: **`README.md`**.
+- Perplexity-style frontend: **`CLAUDE.md` → “Changelog: Perplexity-style frontend UX”**
+- Agent reliability rewrite: **`CLAUDE.md` → “Changelog: agent reliability rewrite”**
+
+Public product overview: **`README.md`**.

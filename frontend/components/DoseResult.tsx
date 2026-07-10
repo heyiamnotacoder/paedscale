@@ -7,6 +7,7 @@ import SafetyBoundsBar from "./SafetyBounds";
 import Citations from "./Citations";
 import CritiquePanel from "./CritiquePanel";
 import Disclaimer from "./Disclaimer";
+import InlineCitedText from "./InlineCitedText";
 
 function fmtNum(n: number | null | undefined, digits = 2): string {
   return n == null ? "—" : n.toFixed(digits);
@@ -15,6 +16,7 @@ function fmtNum(n: number | null | undefined, digits = 2): string {
 export default function DoseResult({ result }: { result: ExtrapolationResponse }) {
   const { dose_recommendation: rec, covariates: cov, pathways, concordance, evidence_grade } = result;
   const cov_defaults = cov?.assumed_defaults ?? [];
+  const citations = result.citations ?? [];
 
   return (
     <div>
@@ -55,16 +57,48 @@ export default function DoseResult({ result }: { result: ExtrapolationResponse }
 
         {evidence_grade && <EvidenceGradeBadge grade={evidence_grade} />}
 
-        {rec.method_rationale && <p className="rationale-text" style={{ marginTop: 12 }}>{rec.method_rationale}</p>}
+        {rec.method_rationale && (
+          <p className="rationale-text" style={{ marginTop: 12 }}>
+            {rec.method_rationale}
+          </p>
+        )}
 
         <table className="facts">
           <tbody>
-            <tr><td>Postmenstrual age</td><td>{cov?.pma_weeks != null ? `${cov.pma_weeks} weeks` : "—"}</td></tr>
-            <tr><td>Weight</td><td>{cov?.weight_kg != null ? `${cov.weight_kg} kg` : "—"}</td></tr>
-            <tr><td>Maturation applied</td><td>{rec.maturation_fraction != null ? `${(rec.maturation_fraction * 100).toFixed(1)}% of adult clearance capacity` : "—"}</td></tr>
-            <tr><td>Child clearance / volume</td><td>{fmtNum(rec.child_clearance_l_per_h)} L/h · {fmtNum(rec.child_volume_l)} L</td></tr>
-            {cov?.child_pugh_score != null && <tr><td>Child-Pugh</td><td>{cov.child_pugh_score}</td></tr>}
-            {cov?.egfr_ml_min_1_73 != null && <tr><td>eGFR</td><td>{fmtNum(cov.egfr_ml_min_1_73)} mL/min/1.73m²</td></tr>}
+            <tr>
+              <td>Postmenstrual age</td>
+              <td>{cov?.pma_weeks != null ? `${cov.pma_weeks} weeks` : "—"}</td>
+            </tr>
+            <tr>
+              <td>Weight</td>
+              <td>{cov?.weight_kg != null ? `${cov.weight_kg} kg` : "—"}</td>
+            </tr>
+            <tr>
+              <td>Maturation applied</td>
+              <td>
+                {rec.maturation_fraction != null
+                  ? `${(rec.maturation_fraction * 100).toFixed(1)}% of adult clearance capacity`
+                  : "—"}
+              </td>
+            </tr>
+            <tr>
+              <td>Child clearance / volume</td>
+              <td>
+                {fmtNum(rec.child_clearance_l_per_h)} L/h · {fmtNum(rec.child_volume_l)} L
+              </td>
+            </tr>
+            {cov?.child_pugh_score != null && (
+              <tr>
+                <td>Child-Pugh</td>
+                <td>{cov.child_pugh_score}</td>
+              </tr>
+            )}
+            {cov?.egfr_ml_min_1_73 != null && (
+              <tr>
+                <td>eGFR</td>
+                <td>{fmtNum(cov.egfr_ml_min_1_73)} mL/min/1.73m²</td>
+              </tr>
+            )}
           </tbody>
         </table>
 
@@ -76,12 +110,18 @@ export default function DoseResult({ result }: { result: ExtrapolationResponse }
 
         {result.safety_flags?.length > 0 && (
           <ul className="clean" style={{ marginTop: 12 }}>
-            {result.safety_flags.map((f, i) => <li className="flag" key={i}>{f}</li>)}
+            {result.safety_flags.map((f, i) => (
+              <li className="flag" key={i}>
+                {f}
+              </li>
+            ))}
           </ul>
         )}
 
         <Disclaimer disclaimer={result.disclaimer} ntiWarning="" />
-        {result.cost_usd != null && <div className="cost-note">run cost ${result.cost_usd.toFixed(3)}</div>}
+        {result.cost_usd != null && (
+          <div className="cost-note">run cost ${result.cost_usd.toFixed(3)}</div>
+        )}
       </div>
 
       <SafetyBoundsBar dose={rec} />
@@ -97,12 +137,12 @@ export default function DoseResult({ result }: { result: ExtrapolationResponse }
       {result.rationale && (
         <div className="card">
           <div className="ctitle">Rationale — full auditable derivation</div>
-          <p className="rationale-text">{result.rationale}</p>
+          <InlineCitedText text={result.rationale} citations={citations} />
         </div>
       )}
 
       <CritiquePanel critique={result.critique} />
-      <Citations citations={result.citations} />
+      <Citations citations={citations} />
     </div>
   );
 }

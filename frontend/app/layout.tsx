@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "PaedScale — Pediatric Dose-Extrapolation Agent",
   description:
-    "Dosing children where the guidelines run out — allometry x organ maturation, with a cited, auditable rationale.",
+    "Dosing children where the guidelines run out — allometry × organ maturation, with a cited, auditable rationale.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -18,17 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body>
-        <div className="topbar">
-          <div className="wrap">
-            <div className="brand">
-              <b>PaedScale</b> · dose-extrapolation agent
-            </div>
-          </div>
-        </div>
-        {children}
-        <footer>PaedScale · working title, provisional · decision support, not prescribing</footer>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

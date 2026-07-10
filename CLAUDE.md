@@ -44,7 +44,8 @@ backend/app/
   schemas.py   pydantic QueryRequest / ExtrapolationResponse
   main.py      FastAPI: POST /extrapolate (JSON) · POST /extrapolate/stream (SSE) · CORS
 backend/tests/fixtures/  validation_drugs.json · validation_guidelines.json  (test-only)
-frontend/      Next.js (App Router, TS). Free-text box + live reasoning sidebar; teal/paper tokens.
+frontend/      Next.js (App Router, TS). Dark Perplexity-style shell: landing composer,
+               collapsible live reasoning, answer column, inline citation chips.
 ```
 
 ### Runtime pipeline
@@ -103,6 +104,60 @@ cd backend && pytest
 cd backend && uvicorn app.main:app --reload
 # frontend
 cd frontend && npm run dev
+```
+
+---
+
+## Changelog: Perplexity-style frontend UX (2026-07-10)
+
+Problem: the light teal form + always-open reasoning sidebar did not match the product UX goal —
+a clean search-home, one-line expandable reasoning while agents run, and **inline** source chips
+(not only a bottom bibliography).
+
+### Behaviour before → after
+
+| Area | Before | After |
+|------|--------|--------|
+| Home | Hero + multi-line form + example chips | Dark shell, centered **paedscale** wordmark, “Ask anything…” composer, two mode cards |
+| Chrome | Sticky light topbar | Left rail: New · history (session) · decision-support note |
+| Reasoning | Right sticky sidebar, always listing events | **One collapsible line** above the answer (expands while streaming; collapses on result) |
+| Citations | Numbered list only | **Inline chips** on rationale sentences + Sources list |
+| Theme | Teal/paper light | Dark panels + teal accents |
+
+### Diff by file
+
+#### New
+
+| File | Purpose |
+|------|---------|
+| `frontend/components/AppShell.tsx` | Sidebar + main shell; session history list |
+| `frontend/components/HomeLanding.tsx` | Centered wordmark, composer, Ask / Try-example cards |
+| `frontend/components/QueryComposer.tsx` | Shared ask box (landing + follow-up) |
+| `frontend/components/ReasoningTrace.tsx` | Collapsible status line + expanded agent trace |
+| `frontend/components/InlineCitedText.tsx` | Sentence-level cite chips from `citations[]` |
+| `frontend/lib/citations.ts` | `safeHttpUrl`, `citeLabel`, claim→sentence matching |
+
+#### Updated
+
+| File | Change |
+|------|--------|
+| `frontend/app/page.tsx` | Idle home vs answer view; history cache; stream wiring |
+| `frontend/app/layout.tsx` | Shell owns chrome (no light topbar/footer) |
+| `frontend/app/globals.css` | Dark design system (composer, chips, reasoning, cards) |
+| `frontend/components/DoseResult.tsx` | Rationale via `InlineCitedText` |
+| `frontend/components/Citations.tsx` | Restyled Sources list + chip labels |
+| `frontend/components/ReasoningSidebar.tsx` | Legacy (superseded by `ReasoningTrace`; still in tree) |
+
+### What not changed
+
+- Backend API / SSE contract (`POST /extrapolate/stream`).
+- `ExtrapolationResponse` shape; no new citation markers from the LLM.
+- Clinical panels: dose, pathways, maturation chart, safety, critic, disclaimer.
+
+### Verification
+
+```bash
+cd frontend && npm run build
 ```
 
 ---
