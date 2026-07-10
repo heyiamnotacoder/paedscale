@@ -1,17 +1,68 @@
 {
-  "CYP3A4": {
-    "tm50_weeks": 55.4,
-    "hill": 1.0,
-    "source": "Approximate CYP3A4 ontogeny, PMA-based Hill form (Salem et al. 2013; Anderson & Holford 2008 framework)"
-  },
   "renal_GFR": {
     "tm50_weeks": 47.7,
     "hill": 3.4,
-    "source": "Rhodin et al. 2009 glomerular filtration rate maturation model"
+    "organ": "renal",
+    "source": "Rhodin et al. 2009 glomerular filtration rate maturation model (PMA-based Hill)."
+  },
+  "CYP1A2": {
+    "tm50_weeks": 68.0,
+    "hill": 1.5,
+    "organ": "hepatic",
+    "source": "Approximate CYP1A2 ontogeny (slow postnatal maturation), PMA-based Hill form (cf. Salem et al. 2014 ontogeny review)."
+  },
+  "CYP2C9": {
+    "tm50_weeks": 30.0,
+    "hill": 1.6,
+    "organ": "hepatic",
+    "source": "Approximate CYP2C9 ontogeny, PMA-based Hill form (cf. Salem et al. 2014; Upreti & Wahlstrom 2016)."
+  },
+  "CYP2C19": {
+    "tm50_weeks": 34.0,
+    "hill": 1.4,
+    "organ": "hepatic",
+    "source": "Approximate CYP2C19 ontogeny, PMA-based Hill form (cf. Salem et al. 2014; Upreti & Wahlstrom 2016)."
+  },
+  "CYP2D6": {
+    "tm50_weeks": 26.0,
+    "hill": 1.7,
+    "organ": "hepatic",
+    "source": "Approximate CYP2D6 ontogeny (relatively early maturation), PMA-based Hill form (cf. Salem et al. 2014)."
+  },
+  "CYP2E1": {
+    "tm50_weeks": 42.0,
+    "hill": 1.5,
+    "organ": "hepatic",
+    "source": "Approximate CYP2E1 ontogeny, PMA-based Hill form (cf. Salem et al. 2014; Upreti & Wahlstrom 2016)."
+  },
+  "CYP3A4": {
+    "tm50_weeks": 55.4,
+    "hill": 1.0,
+    "organ": "hepatic",
+    "source": "Approximate CYP3A4 ontogeny, PMA-based Hill form (Salem et al. 2013; Anderson & Holford 2008 framework)."
+  },
+  "UGT1A1": {
+    "tm50_weeks": 48.0,
+    "hill": 1.8,
+    "organ": "hepatic",
+    "source": "Approximate UGT1A1 (bilirubin/glucuronidation) ontogeny, PMA-based Hill form (cf. Anderson & Holford 2008; Krekels et al. 2012 framework)."
   },
   "UGT2B7": {
     "tm50_weeks": 64.0,
     "hill": 2.0,
-    "source": "Approximate UGT2B7 / morphine clearance ontogeny, simplified to PMA-based Hill form (cf. Bouwmeester et al. 2004; Anand et al. 2008)"
+    "organ": "hepatic",
+    "source": "Approximate UGT2B7 / morphine clearance ontogeny, PMA-based Hill form (cf. Bouwmeester et al. 2004; Anand et al. 2008)."
+  },
+  "sulfation": {
+    "tm50_weeks": 30.0,
+    "hill": 1.3,
+    "organ": "hepatic",
+    "source": "Approximate sulfotransferase (SULT) ontogeny — comparatively mature at birth; PMA-based Hill form (cf. paracetamol pathway literature)."
+  },
+  "hepatic_other": {
+    "tm50_weeks": 50.0,
+    "hill": 1.4,
+    "organ": "hepatic",
+    "source": "Generic hepatic-metabolism maturation placeholder for pathways without a specific curve; flag as low confidence when used."
   }
 }

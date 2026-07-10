@@ -8,6 +8,27 @@ top of the allometrically size-scaled volume.
 
 from app.pk.allometry import scale_volume
 
+# Reference adult serum albumin (g/dL) for scaling protein binding.
+REFERENCE_ADULT_ALBUMIN_G_DL = 4.0
+
+
+def protein_binding_from_albumin(
+    adult_protein_binding: float,
+    child_albumin_g_dl: float,
+    adult_albumin_g_dl: float = REFERENCE_ADULT_ALBUMIN_G_DL,
+) -> float:
+    """Estimate a child's bound fraction from albumin (for albumin-bound drugs).
+
+    Neonates have lower albumin, so the *bound* fraction falls roughly in
+    proportion to the albumin ratio: bound_child ≈ bound_adult · (alb_c/alb_a),
+    capped in [0, 1). The unbound (active) fraction rises accordingly. This is a
+    first-order approximation for a starting estimate, not a binding model.
+    """
+    if child_albumin_g_dl <= 0 or adult_albumin_g_dl <= 0:
+        raise ValueError("albumin values must be positive")
+    bound = adult_protein_binding * (child_albumin_g_dl / adult_albumin_g_dl)
+    return max(0.0, min(bound, 0.999))
+
 
 def corrected_volume(
     adult_volume_l: float,
