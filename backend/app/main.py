@@ -1,14 +1,9 @@
-"""FastAPI app for PaedScale.
+"""FastAPI app for PaedScale — generalizable multi-agent dose extrapolation.
 
-The prefill drug set (midazolam / vancomycin / morphine) has been removed —
-PaedScale is being rebuilt into a generalizable multi-agent system (free-text
-query -> Opus-4.8 orchestrator + specialist subagents -> deterministic dose
-solve -> cited, self-critiqued rationale).
-
-Phase 0 ships the data removal and keeps the deterministic `pk/` engine and its
-validation suite green. The generalized `/extrapolate` pipeline lands in Phase 2;
-until then the endpoint returns 503 rather than a number it can no longer solve
-without the curated reference dose.
+POST /extrapolate takes a free-text clinical query, runs the Opus-4.8
+orchestrator + specialist subagents (which research the literature and compute
+every number through the deterministic paedscale_math tools), and returns the
+assembled, cited, self-critiqued recommendation.
 """
 
 import os
@@ -16,7 +11,8 @@ import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.schemas import CaseRequest
+from app.agent.orchestrator import run_orchestrator
+from app.schemas import ExtrapolationResponse, QueryRequest
 
 DISCLAIMER = (
     "Decision support only, not an autonomous prescribing order. This is a defensible "
@@ -24,10 +20,8 @@ DISCLAIMER = (
     "drugs must be confirmed with therapeutic drug monitoring."
 )
 
-app = FastAPI(title="PaedScale", version="0.2.0-dev")
+app = FastAPI(title="PaedScale", version="0.2.0")
 
-# Comma-separated list of allowed frontend origins. Defaults to the local dev
-# server; in production set ALLOWED_ORIGINS to the deployed frontend URL(s).
 ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
@@ -47,16 +41,23 @@ def health():
     return {"status": "ok"}
 
 
-@app.post("/extrapolate")
-def extrapolate_case(case: CaseRequest):
-    # Transitional: the generalized multi-agent pipeline is under construction
-    # (Phase 2). The old curated exposure-match path was removed with the prefill
-    # drug set. Pydantic still validates the request shape before we reach here.
-    raise HTTPException(
-        status_code=503,
-        detail=(
-            "The generalized dose-extrapolation pipeline is under construction. "
-            "PaedScale is being rebuilt into a multi-agent system; this endpoint "
-            "will return in Phase 2."
-        ),
-    )
+def _to_response(query: str, payload: dict | None, cost_usd: float | None) -> ExtrapolationResponse:
+    if not payload:
+        raise HTTPException(
+            status_code=502,
+            detail="The agent did not produce a structured recommendation. Please retry.",
+        )
+    data = {**payload, "query": query, "disclaimer": DISCLAIMER, "cost_usd": cost_usd}
+    try:
+        return ExtrapolationResponse.model_validate(data)
+    except Exception as exc:  # lenient schema, but guard against a malformed payload
+        raise HTTPException(status_code=502, detail=f"Malformed recommendation: {exc}") from exc
+
+
+@app.post("/extrapolate", response_model=ExtrapolationResponse)
+async def extrapolate_case(request: QueryRequest) -> ExtrapolationResponse:
+    try:
+        payload, cost_usd, _messages = await run_orchestrator(request.query)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
+    return _to_response(request.query, payload, cost_usd)

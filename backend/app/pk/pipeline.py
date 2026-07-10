@@ -152,11 +152,15 @@ def extrapolate_generalized(
         adult_volume_l, child.weight_kg, adult_protein_binding, child.protein_binding
     )
 
-    # Offer the computed physiology to the solver; keep only params it declares.
+    # Offer the computed physiology (and the adult PK it derived from) to the
+    # solver; keep only the params that solver declares. Caller-supplied
+    # method_params win on conflict.
     available = {
         "weight_kg": child.weight_kg,
         "child_clearance_l_per_h": child_cl,
         "child_volume_l": child_vd,
+        "adult_clearance_l_per_h": adult_clearance_l_per_h,
+        "adult_volume_l": adult_volume_l,
         **(method_params or {}),
     }
     from app.pk.methods import _SOLVERS  # local import to avoid surfacing the registry
