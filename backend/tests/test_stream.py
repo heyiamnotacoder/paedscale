@@ -42,10 +42,10 @@ def test_mapper_orchestrator_text_and_tool():
 
 def test_mapper_attributes_subagent_by_parent_tool_id():
     m = TraceMapper()
-    started = m.events(TaskStartedMessage("pathway-agent", tool_use_id="tid-1"))
-    assert started[0]["agent"] == "pathway-agent"
+    started = m.events(TaskStartedMessage("research-agent", tool_use_id="tid-1"))
+    assert started[0]["agent"] == "research-agent"
     evs = m.events(AssistantMessage([TextBlock("fm split: UGT1A1 0.5")], parent_tool_use_id="tid-1"))
-    assert evs[0]["agent"] == "pathway-agent"
+    assert evs[0]["agent"] == "research-agent"
 
 
 def test_mapper_result_message_reports_cost():
@@ -63,7 +63,7 @@ def test_stream_endpoint_emits_trace_result_and_done(client, monkeypatch):
     async def fake_run(query, on_message=None):
         # emit a couple of trace-producing messages, then return a payload
         if on_message:
-            await on_message(TaskStartedMessage("pk-agent", tool_use_id="t1"))
+            await on_message(TaskStartedMessage("research-agent", tool_use_id="t1"))
             await on_message(AssistantMessage([TextBlock("adult CL ~21 L/h")], parent_tool_use_id="t1"))
         return CANNED_PAYLOAD, 0.24, []
 
@@ -74,5 +74,5 @@ def test_stream_endpoint_emits_trace_result_and_done(client, monkeypatch):
     assert "event: trace" in body
     assert "event: result" in body
     assert "event: done" in body
-    assert "pk-agent" in body
+    assert "research-agent" in body
     assert "9.09" in body  # dose_mg_per_kg carried in the result event

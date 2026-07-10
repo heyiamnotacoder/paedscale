@@ -20,14 +20,22 @@ _TOOL_LABELS = {
     "mcp__paedscale_math__find_concordance": "compared against guideline (concordance)",
     "mcp__result__submit_recommendation": "assembled the final recommendation",
     "Task": "delegated to a specialist subagent",
+    "ToolSearch": "looked up tools (should be rare)",
+    "ScheduleWakeup": "scheduled a wakeup (async thrash)",
+    "TaskOutput": "polled task output",
+    "TaskGet": "fetched task status",
+    "SendMessage": "sent inter-agent message",
 }
 
 # Map an SDK Task task_type / description to a clean agent label.
 _AGENT_LABELS = {
+    "research-agent": "research-agent",
+    "critic-agent": "critic-agent",
+    # legacy names (older runs / traces)
     "pathway-agent": "pathway-agent",
     "pk-agent": "pk-agent",
     "safety-agent": "safety-agent",
-    "critic-agent": "critic-agent",
+    "local_agent": "local_agent",
 }
 
 
@@ -47,6 +55,13 @@ def _tool_line(name: str, tool_input) -> str:
         q = tool_input.get("query")
         if q:
             return f"{label}: “{_short(str(q), 80)}”"
+        # Task subagent type if present
+        for key in ("subagent_type", "agent", "description", "prompt"):
+            v = tool_input.get(key)
+            if v and key != "prompt":
+                return f"{label}: {_short(str(v), 80)}"
+            if v and key == "prompt":
+                return f"{label}: {_short(str(v), 60)}"
     return label
 
 
@@ -89,6 +104,14 @@ class TraceMapper:
                         "tool": getattr(b, "name", ""),
                         "text": _tool_line(getattr(b, "name", ""), getattr(b, "input", None)),
                     })
+                    # Attribute Task children when input names the agent
+                    if getattr(b, "name", "") == "Task":
+                        tuid = getattr(b, "id", None)
+                        tin = getattr(b, "input", None) or {}
+                        if isinstance(tin, dict) and tuid:
+                            raw = tin.get("subagent_type") or tin.get("agent") or tin.get("description") or ""
+                            if raw:
+                                self._agent_by_tool[tuid] = _AGENT_LABELS.get(str(raw), str(raw))
             return out
 
         if t == "UserMessage":

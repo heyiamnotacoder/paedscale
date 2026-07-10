@@ -1,11 +1,11 @@
-# CLAUDE.md — PaedScale
+# AGENTS.md — PaedScale
 
-Guidance for Claude Code sessions working in this repo.
+Guidance for Codex sessions working in this repo.
 
 ## What this is
 
 PaedScale is a **generalizable multi-agent pediatric dose-extrapolation agent** for the "Built with
-Claude: Life Sciences" hackathon. A free-text clinical query drives an Opus/Sonnet orchestrator that
+Codex: Life Sciences" hackathon. A free-text clinical query drives an Opus/Sonnet orchestrator that
 spawns specialist subagents (pathway / PK / safety) to research the literature (PubMed · Semantic
 Scholar · web), decomposes the drug's **multiple** elimination pathways, scales adult PK by
 **allometric scaling × organ maturation (Anderson–Holford)**, picks the right dosing method,
@@ -19,11 +19,11 @@ decisions. This file is the engineering guide.
 
 - **Deterministic Python (`backend/app/pk/`)** owns ALL numbers: allometry, maturation, Vd
   correction, dose solve. No LLM calls here. This is what tests pin.
-- **Claude (`backend/app/agent/`)** owns judgment and language: mapping a drug to its elimination
+- **Codex (`backend/app/agent/`)** owns judgment and language: mapping a drug to its elimination
   pathways (fm split), retrieving/annotating adult PK, and writing the cited rationale. It must NOT
   invent the final dose — it feeds structured inputs to `pk/` and explains the result.
 
-If you find yourself asking Claude to "compute the dose," stop — that belongs in `pk/`.
+If you find yourself asking Codex to "compute the dose," stop — that belongs in `pk/`.
 
 ## Architecture
 
@@ -50,8 +50,8 @@ frontend/      Next.js (App Router, TS). Free-text box + live reasoning sidebar;
   see `PAEDSCALE_*` in `.env.example`. Hard budget ceiling **~$2** (`PAEDSCALE_BUDGET_USD`); typical
   runs should stay much lower. Read `ANTHROPIC_API_KEY` from env (`.env`, gitignored). Never hardcode
   or commit keys.
-- **Deployment needs the Claude CLI runtime:** the Agent SDK spawns the `claude` Node binary, so the
-  backend deploys via `backend/Dockerfile` (Python + Node + `@anthropic-ai/claude-code`), wired in
+- **Deployment needs the Codex CLI runtime:** the Agent SDK spawns the `Codex` Node binary, so the
+  backend deploys via `backend/Dockerfile` (Python + Node + `@anthropic-ai/Codex`), wired in
   `render.yaml`. A plain Python runtime will not work.
 - **Pipeline** (backend `/extrapolate[/stream]`): free-text query → intake → guideline short path
   (only if solid regimen AND no renal/hepatic impairment) OR one `research-agent` → method choice →
@@ -72,7 +72,7 @@ frontend/      Next.js (App Router, TS). Free-text box + live reasoning sidebar;
   don't batch phases. Repo: `github.com/heyiamnotacoder/paedscale` (public).
 - Use `gh` CLI for GitHub operations.
 - Co-author trailer on commits:
-  `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`
+  `Co-Authored-By: Codex Opus 4.8 <noreply@anthropic.com>`
 
 ## Commands
 

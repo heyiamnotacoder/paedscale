@@ -81,6 +81,7 @@ export interface Critique {
   objections: string[];
   resolution: string;
   residual_risks: string[];
+  dose_grade?: string | null; // accept | accept_with_caveats | revise
 }
 
 export interface ExtrapolationResponse {
@@ -90,6 +91,8 @@ export interface ExtrapolationResponse {
   adult_pk: Record<string, unknown>;
   pathways: PathwayOut[];
   dosing_method: string;
+  /** guideline | mechanistic | partial_recovery */
+  source_of_dose?: string;
   dose_recommendation: DoseOut;
   evidence_grade: EvidenceGrade;
   citations: Citation[];

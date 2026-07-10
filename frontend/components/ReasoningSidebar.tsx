@@ -5,10 +5,13 @@ import type { TraceEvent } from "@/lib/types";
 
 const AGENT_CLASS: Record<string, string> = {
   orchestrator: "ag-orch",
+  "research-agent": "ag-path",
+  "critic-agent": "ag-critic",
+  // legacy labels (older traces)
   "pathway-agent": "ag-path",
   "pk-agent": "ag-pk",
   "safety-agent": "ag-safety",
-  "critic-agent": "ag-critic",
+  local_agent: "ag-pk",
 };
 
 function icon(kind: TraceEvent["kind"]): string {

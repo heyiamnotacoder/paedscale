@@ -7,6 +7,11 @@ export default function CritiquePanel({ critique }: { critique: Critique }) {
   return (
     <div className="card">
       <div className="ctitle">Self-critique</div>
+      {critique.dose_grade && (
+        <div className="method-line" style={{ marginBottom: 8 }}>
+          Dose grade: <b>{critique.dose_grade.replaceAll("_", " ")}</b>
+        </div>
+      )}
       {critique.objections?.length > 0 && (
         <>
           <div className="mini-h">Objections raised</div>

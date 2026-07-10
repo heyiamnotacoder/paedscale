@@ -21,6 +21,7 @@ CANNED_PAYLOAD = {
         {"name": "CYP2E1", "fm": 0.2, "organ": "hepatic"},
     ],
     "dosing_method": "auc",
+    "source_of_dose": "mechanistic",
     "dose_recommendation": {
         "dose_mg": 28.17, "dose_mg_per_kg": 9.09, "interval_h": 6.0, "method": "auc",
         "matched_metric": "AUC over dosing interval (steady state)",
@@ -29,7 +30,11 @@ CANNED_PAYLOAD = {
     "evidence_grade": {"grade": "low", "rationale": "sparse neonatal PK; height assumed"},
     "citations": [{"title": "Paracetamol neonatal PK", "source": "PubMed", "identifier": "PMID:123"}],
     "concordance": {"matched": False, "verdict": "no_guideline_available"},
-    "critique": {"objections": ["consider hepatotoxicity risk"], "resolution": "dose within safe bound"},
+    "critique": {
+        "objections": ["consider hepatotoxicity risk"],
+        "resolution": "dose within safe bound",
+        "dose_grade": "accept_with_caveats",
+    },
     "safety_flags": ["hepatic impairment reduces clearance"],
     "rationale": "Paracetamol is cleared by glucuronidation, sulfation and CYP2E1...",
 }
@@ -61,6 +66,8 @@ def test_extrapolate_maps_payload_to_response(client, monkeypatch):
     assert body["evidence_grade"]["grade"] == "low"
     assert body["citations"][0]["identifier"] == "PMID:123"
     assert body["cost_usd"] == 0.23
+    assert body["source_of_dose"] == "mechanistic"
+    assert body["critique"]["dose_grade"] == "accept_with_caveats"
     assert "Decision support only" in body["disclaimer"]
 
 

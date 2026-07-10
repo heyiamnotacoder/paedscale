@@ -75,8 +75,8 @@ def _sse(event: str, data: dict) -> str:
 async def extrapolate_stream(request: QueryRequest):
     """Run the pipeline and stream reasoning-trace events (SSE), then the result.
 
-    Streaming is the core UX mitigation for the ~25-40s multi-agent run — the
-    client renders the trace live in the right sidebar instead of a spinner.
+    Streaming is the core UX mitigation for multi-agent runs — the client renders
+    the trace live in the right sidebar instead of a spinner.
     """
     queue: asyncio.Queue = asyncio.Queue()
     mapper = TraceMapper()

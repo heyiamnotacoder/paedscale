@@ -35,6 +35,18 @@ export default function DoseResult({ result }: { result: ExtrapolationResponse }
                 {rec.matched_metric ? ` — matches ${rec.matched_metric}` : ""}
               </div>
             )}
+            {result.source_of_dose && (
+              <div className="method-line" style={{ marginTop: 4 }}>
+                Source:{" "}
+                <b>
+                  {result.source_of_dose === "guideline"
+                    ? "published guideline"
+                    : result.source_of_dose === "partial_recovery"
+                      ? "partial recovery (incomplete run)"
+                      : "mechanistic extrapolation"}
+                </b>
+              </div>
+            )}
           </div>
           <div className="header-badges">
             <ConcordanceBadge concordance={concordance} />

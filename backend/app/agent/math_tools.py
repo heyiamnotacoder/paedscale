@@ -23,10 +23,16 @@ from app.pk.distribution import protein_binding_from_albumin
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
+_MATURATION_LIBRARY: dict | None = None
+
 
 def _load_maturation_library() -> dict:
-    with open(DATA_DIR / "maturation.json") as f:
-        return json.load(f)
+    """Load maturation curves once per process (read-only library)."""
+    global _MATURATION_LIBRARY
+    if _MATURATION_LIBRARY is None:
+        with open(DATA_DIR / "maturation.json") as f:
+            _MATURATION_LIBRARY = json.load(f)
+    return _MATURATION_LIBRARY
 
 
 def _text(payload: dict) -> dict:

@@ -103,6 +103,7 @@ class CritiqueOut(BaseModel):
     objections: list[str] = []
     resolution: str = ""
     residual_risks: list[str] = []
+    dose_grade: str | None = None  # accept | accept_with_caveats | revise
 
 
 class ExtrapolationResponse(BaseModel):
@@ -112,6 +113,9 @@ class ExtrapolationResponse(BaseModel):
     adult_pk: dict = {}
     pathways: list[PathwayOut] = []
     dosing_method: str = ""
+    # guideline = published regimen short path; mechanistic = allometry×maturation;
+    # partial_recovery = assembled after submit_recommendation never ran.
+    source_of_dose: str = "mechanistic"
     dose_recommendation: DoseOut = DoseOut()
     evidence_grade: EvidenceGradeOut = EvidenceGradeOut()
     citations: list[Citation] = []

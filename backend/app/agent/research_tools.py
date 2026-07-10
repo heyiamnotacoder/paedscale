@@ -10,10 +10,15 @@ over free REST APIs — no third-party MCP binary to deploy:
 Web search is added separately as the Anthropic server-side `web_search` tool.
 Every result carries what a citation needs: title, authors, year, source,
 identifier (PMID/DOI), and URL.
+
+Includes a small in-process query cache so parallel/overlapping agent searches
+do not re-hit the same endpoint in one process lifetime.
 """
 
 import json
 import os
+import time
+from typing import Any
 
 import httpx
 from claude_agent_sdk import create_sdk_mcp_server, tool
@@ -21,10 +26,36 @@ from claude_agent_sdk import create_sdk_mcp_server, tool
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 SEMANTIC_SCHOLAR = "https://api.semanticscholar.org/graph/v1/paper/search"
 TIMEOUT = 20.0
+CACHE_TTL_S = 600.0  # 10 minutes
+
+_cache: dict[tuple[str, str, int], tuple[float, dict]] = {}
+_client: httpx.AsyncClient | None = None
 
 
 def _text(payload) -> dict:
     return {"content": [{"type": "text", "text": json.dumps(payload, default=str)}]}
+
+
+def _cache_get(key: tuple[str, str, int]) -> dict | None:
+    entry = _cache.get(key)
+    if not entry:
+        return None
+    ts, payload = entry
+    if time.monotonic() - ts > CACHE_TTL_S:
+        _cache.pop(key, None)
+        return None
+    return payload
+
+
+def _cache_set(key: tuple[str, str, int], payload: dict) -> None:
+    _cache[key] = (time.monotonic(), payload)
+
+
+async def _http() -> httpx.AsyncClient:
+    global _client
+    if _client is None or _client.is_closed:
+        _client = httpx.AsyncClient(timeout=TIMEOUT)
+    return _client
 
 
 def _ncbi_params(extra: dict) -> dict:
@@ -51,21 +82,29 @@ def _ncbi_params(extra: dict) -> dict:
 )
 async def pubmed_search(args):
     retmax = int(args.get("retmax", 5))
+    q = args["query"]
+    cache_key = ("pubmed", q, retmax)
+    hit = _cache_get(cache_key)
+    if hit is not None:
+        return _text(hit)
+
     try:
-        async with httpx.AsyncClient(timeout=TIMEOUT) as c:
-            r = await c.get(
-                f"{EUTILS}/esearch.fcgi",
-                params=_ncbi_params({"term": args["query"], "retmax": retmax, "sort": "relevance"}),
-            )
-            r.raise_for_status()
-            ids = r.json().get("esearchresult", {}).get("idlist", [])
-            if not ids:
-                return _text({"query": args["query"], "results": []})
-            s = await c.get(f"{EUTILS}/esummary.fcgi", params=_ncbi_params({"id": ",".join(ids)}))
-            s.raise_for_status()
-            docs = s.json().get("result", {})
+        c = await _http()
+        r = await c.get(
+            f"{EUTILS}/esearch.fcgi",
+            params=_ncbi_params({"term": q, "retmax": retmax, "sort": "relevance"}),
+        )
+        r.raise_for_status()
+        ids = r.json().get("esearchresult", {}).get("idlist", [])
+        if not ids:
+            payload = {"query": q, "results": []}
+            _cache_set(cache_key, payload)
+            return _text(payload)
+        s = await c.get(f"{EUTILS}/esummary.fcgi", params=_ncbi_params({"id": ",".join(ids)}))
+        s.raise_for_status()
+        docs = s.json().get("result", {})
     except (httpx.HTTPError, ValueError, KeyError) as exc:
-        return _text({"error": f"PubMed search failed: {exc}", "query": args["query"], "results": []})
+        return _text({"error": f"PubMed search failed: {exc}", "query": q, "results": []})
 
     results = []
     for pmid in docs.get("uids", []):
@@ -80,14 +119,17 @@ async def pubmed_search(args):
             "journal": d.get("fulljournalname", d.get("source", "")),
             "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
         })
-    return _text({"query": args["query"], "results": results})
+    payload = {"query": q, "results": results}
+    _cache_set(cache_key, payload)
+    return _text(payload)
 
 
 @tool(
     "semantic_scholar_search",
     "Semantic (meaning-based) paper search via Semantic Scholar. Good for "
     "finding PK-parameter papers when exact keywords are unknown. Returns title, "
-    "authors, year, DOI/URL, and abstract snippet.",
+    "authors, year, DOI/URL, and abstract snippet. On rate-limit (429), switch to "
+    "PubMed or WebSearch — do not retry immediately.",
     {
         "type": "object",
         "properties": {
@@ -99,20 +141,37 @@ async def pubmed_search(args):
 )
 async def semantic_scholar_search(args):
     limit = int(args.get("limit", 5))
+    q = args["query"]
+    cache_key = ("s2", q, limit)
+    hit = _cache_get(cache_key)
+    if hit is not None:
+        return _text(hit)
+
     try:
-        async with httpx.AsyncClient(timeout=TIMEOUT) as c:
-            r = await c.get(
-                SEMANTIC_SCHOLAR,
-                params={
-                    "query": args["query"],
-                    "limit": limit,
-                    "fields": "title,authors,year,abstract,externalIds,url",
-                },
-            )
-            r.raise_for_status()
-            data = r.json().get("data", [])
+        c = await _http()
+        r = await c.get(
+            SEMANTIC_SCHOLAR,
+            params={
+                "query": q,
+                "limit": limit,
+                "fields": "title,authors,year,abstract,externalIds,url",
+            },
+        )
+        if r.status_code == 429:
+            return _text({
+                "error": "Semantic Scholar rate-limited (429). Do not retry now — use "
+                         "pubmed_search or WebSearch instead.",
+                "query": q,
+                "results": [],
+            })
+        r.raise_for_status()
+        data = r.json().get("data", [])
     except (httpx.HTTPError, ValueError) as exc:
-        return _text({"error": f"Semantic Scholar search failed: {exc}", "query": args["query"], "results": []})
+        return _text({
+            "error": f"Semantic Scholar search failed: {exc}. Prefer pubmed_search or WebSearch.",
+            "query": q,
+            "results": [],
+        })
 
     results = []
     for p in data:
@@ -129,7 +188,9 @@ async def semantic_scholar_search(args):
             "url": p.get("url", ""),
             "snippet": abstract,
         })
-    return _text({"query": args["query"], "results": results})
+    payload = {"query": q, "results": results}
+    _cache_set(cache_key, payload)
+    return _text(payload)
 
 
 def build_literature_server():
@@ -138,6 +199,11 @@ def build_literature_server():
         "literature",
         tools=[pubmed_search, semantic_scholar_search],
     )
+
+
+def clear_research_cache() -> None:
+    """Test helper."""
+    _cache.clear()
 
 
 LITERATURE_TOOL_NAMES = [
