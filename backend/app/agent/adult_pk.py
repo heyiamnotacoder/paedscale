@@ -1,20 +1,17 @@
-"""Adult PK retrieval: curated data first, Claude fills gaps.
+"""Adult PK retrieval via Claude.
 
-For the three in-scope drugs, `data/drugs.json` is authoritative (curated
-from standard pharmacology references) and used directly for the demo path.
-For any other drug, Claude retrieves and annotates adult clearance, volume
-of distribution, bioavailability, and protein binding from its knowledge,
-with explicit confidence/citation notes — this is what lets PaedScale
-generalise beyond the curated set (concept: "Coverage — the guideline set
-is the minority").
+PaedScale no longer prefills a curated drug set — it generalises to any drug
+with adult PK (concept: "Coverage — the guideline set is the minority"). Given a
+drug name, Claude retrieves and annotates adult clearance, volume of distribution,
+bioavailability, and protein binding, with explicit confidence and citation notes.
+
+In the multi-agent build (Phase 2) this is superseded by the `pk-agent` subagent,
+which grounds each value in a literature search (PubMed / Semantic Scholar / web)
+rather than model recall alone. This module is retained as the single-call
+fallback and to keep the schema in one place.
 """
 
-import json
-from pathlib import Path
-
 from app.agent.client import call_structured
-
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 ADULT_PK_SCHEMA = {
     "type": "object",
@@ -48,28 +45,8 @@ ADULT_PK_SCHEMA = {
 }
 
 
-def _load_curated_drugs() -> dict:
-    with open(DATA_DIR / "drugs.json") as f:
-        return json.load(f)
-
-
 def get_adult_pk(drug_name: str) -> dict:
-    """Return adult PK for a drug: curated entry if in scope, else a Claude lookup."""
-    curated = _load_curated_drugs()
-    key = drug_name.strip().lower()
-    if key in curated:
-        entry = curated[key]
-        return {
-            "adult_clearance_l_per_h": entry["adult_clearance_l_per_h"],
-            "adult_volume_l": entry["adult_volume_l"],
-            "adult_protein_binding": entry["adult_protein_binding"],
-            "primary_pathway": entry["primary_pathway"],
-            "fm_primary": entry["fm_primary"],
-            "confidence": "high",
-            "sources": ["Curated reference PK (PaedScale demo dataset)"],
-            "data_gap_notes": "",
-        }
-
+    """Return standard adult PK parameters for a drug via a structured Claude call."""
     system = (
         "You are a clinical pharmacology reference assistant supporting a pediatric "
         "dose-extrapolation tool. Given a drug name, return its standard adult "
@@ -79,6 +56,6 @@ def get_adult_pk(drug_name: str) -> dict:
     )
     user = f"Retrieve adult PK parameters for: {drug_name}"
     result = call_structured(system, user, "adult_pk", ADULT_PK_SCHEMA)
-    result["primary_pathway"] = None
-    result["fm_primary"] = None
+    result.setdefault("primary_pathway", None)
+    result.setdefault("fm_primary", None)
     return result

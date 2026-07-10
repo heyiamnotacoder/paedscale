@@ -7,6 +7,12 @@ maturation model is a simplified top-down engine (concept §03), and honest
 uncertainty is preferred over false precision. We assert the predicted mg/kg
 dose falls within CONCORDANCE_TOLERANCE_FACTOR of the guideline mg/kg dose for
 each of the three in-scope elimination archetypes (CYP3A4, renal GFR, UGT2B7).
+
+The three drugs are no longer prefilled in the product (PaedScale is now a
+generalizable multi-agent system). Their curated PK and guideline values live
+here as a *validation fixture* — the concept's "guideline set becomes the test
+suite, not the competitor" — exercising the deterministic engine without any
+network or model calls.
 """
 
 import json
@@ -16,18 +22,19 @@ import pytest
 
 from app.pk.pipeline import ChildCovariates, DrugProfile, PathwayMaturation, extrapolate
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "app" / "data"
+FIXTURE_DIR = Path(__file__).resolve().parent / "fixtures"
+MATURATION_PATH = Path(__file__).resolve().parent.parent / "app" / "data" / "maturation.json"
 CONCORDANCE_TOLERANCE_FACTOR = 2.5
 
 
-def _load_json(name: str) -> dict:
-    with open(DATA_DIR / name) as f:
+def _load_json(path: Path) -> dict:
+    with open(path) as f:
         return json.load(f)
 
 
-DRUGS = _load_json("drugs.json")
-MATURATION = _load_json("maturation.json")
-GUIDELINES = _load_json("guidelines.json")
+DRUGS = _load_json(FIXTURE_DIR / "validation_drugs.json")
+MATURATION = _load_json(MATURATION_PATH)
+GUIDELINES = _load_json(FIXTURE_DIR / "validation_guidelines.json")
 
 
 def _drug_profile(key: str) -> DrugProfile:
