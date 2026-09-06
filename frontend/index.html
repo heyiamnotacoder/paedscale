@@ -940,6 +940,16 @@
         <div class="hint">PMA under 36 weeks abstains (Cao 2024: unsolved).</div>
       </div>
       <div class="field">
+        <label for="pcp">Child-Pugh class <span style="font-weight:400;color:var(--ink-3)">(if hepatic impairment)</span></label>
+        <select id="pcp">
+          <option value="">— none / not impaired —</option>
+          <option value="A">A (mild)</option>
+          <option value="B">B (moderate)</option>
+          <option value="C">C (severe)</option>
+        </select>
+        <div class="hint">Hepatic coverage is Child-Pugh A only — B and C abstain (no numeric band).</div>
+      </div>
+      <div class="field">
         <label for="pconditions">Conditions to check <span style="font-weight:400;color:var(--ink-3)">(optional)</span></label>
         <input id="pconditions" type="text" placeholder="e.g. sepsis, ICU — flags starting-point-only" autocomplete="off">
       </div>
@@ -1821,11 +1831,13 @@ $("pbpk-form").addEventListener("submit", (e)=>{
   if(!Number.isFinite(scr) || scr <= 0 || !Number.isFinite(ht) || ht <= 0){
     pbpkError("Serum creatinine and height are required — renal inputs drive a vancomycin dose and are never defaulted."); return;
   }
+  const cp = $("pcp").value;
   const payload = {
     drug, age_years: ageY, weight_kg: wt, calculator_mode: "pbpk",
-    renal_impairment: false, hepatic_impairment: false, route: "iv",
+    renal_impairment: false, hepatic_impairment: !!cp, route: "iv",
     serum_creatinine_mg_dl: scr, height_cm: ht,
   };
+  if(cp) payload.child_pugh = cp;
   const ind = ($("pind").value || "").trim();
   if(ind) payload.indication = ind;
   if(ageY < 2){
@@ -1996,6 +2008,8 @@ function renderResult(data){
     const prow = (k,v)=>`<div class="m"><div class="k">${k}</div><div class="v">${v!=null&&v!==""?esc(String(v)):"—"}</div></div>`;
     if(!blocked){
       h += prow("Give", `${p.per_dose_mg} mg (${p.per_dose_mg_per_kg} mg/kg) IV every ${p.interval_h} h`);
+      if(p.daily_dose_mg != null) h += prow(p.interval_h > 24 ? "24-h equivalent" : "Per day",
+        `${p.daily_dose_mg} mg/day (${p.daily_dose_mg_per_kg} mg/kg/day)`);
       h += prow("Infuse over", `≥ ${p.infusion_min} min`);
       h += prow("First TDM", p.first_tdm);
       h += prow("Predicted AUC24", `${p.auc_predicted} mg·h/L (target ${p.auc_target[0]}–${p.auc_target[1]})`);
@@ -2112,9 +2126,9 @@ function addMsg(role, html, isPreloadQ){
   body.appendChild(div);
   div.scrollIntoView({behavior:"smooth", block:"nearest"});
   return div;
-
 }
 function paras(s){ return (s||"").split(/\n\n+/).map(p=>`<p>${esc(p).replace(/\n/g,"<br>")}</p>`).join(""); }
+
 function buildChat(r){
   $("chat-body").innerHTML = ""; chatHistory = [];
   const hiOutcome = r.hi_outcome;

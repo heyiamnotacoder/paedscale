@@ -658,5 +658,11 @@ if __name__ == "__main__":
     test_contraindicated_blocked_no_dose()
     test_age_under_18_still_adult_facade()
     test_run_case_short_circuits_orchestrator()
+    # PBPK trial facade (branch muse-spark-pbpk) — axe with the branch.
+    from tests.test_pbpk import ALL as PBPK_TESTS
+    print("PBPK trial facade (branch muse-spark-pbpk):")
+    for _fn in PBPK_TESTS:
+        _fn()
+    print(f"  {len(PBPK_TESTS)} tests passed.")
     concordance_check()
     print("\nAll structural tests passed.")
