@@ -561,6 +561,7 @@
       <button class="link" onclick="go('landing');scrollToId('grades')">Grading</button>
       <button class="link" onclick="go('landing');scrollToId('drugs')">Coverage</button>
       <button class="link" onclick="go('future')">The future</button>
+      <button class="link" onclick="go('pbpk')">PBPK trial</button>
       <button class="link" onclick="go('landing');scrollToId('about')">About</button>
       <button class="btn" onclick="go('calc')">Calculate a dose</button>
     </nav>
@@ -888,6 +889,67 @@
         Narrow-therapeutic-index drugs require therapeutic drug monitoring.
         <a href="https://github.com/heyiamnotacoder/dosagecalc" target="_blank" rel="noopener">Open-source on GitHub</a>.</p>
     </footer>
+  </div>
+</section>
+
+<!-- ================= PBPK TRIAL (branch muse-spark-pbpk; axe with branch) ================= -->
+<section id="view-pbpk" class="view">
+  <div class="calc-shell">
+    <form class="calc-card" id="pbpk-form">
+      <div class="kicker">Trial · branch muse-spark-pbpk</div>
+      <h2>PBPK starting regimen — vancomycin IV</h2>
+      <p class="intro">Cited simplification of published vancomycin PBPK knowledge (OSP table + Emoto 2018
+        + Cao 2024), <b>not</b> simulator execution. Starting-regimen decision support only — confirm with TDM.
+        No A–D grade on this facade.</p>
+      <div class="field">
+        <label for="pdrug">Drug</label>
+        <input id="pdrug" value="Vancomycin">
+        <div class="hint">Trial facade bundles vancomycin only — anything else abstains.</div>
+      </div>
+      <div class="field">
+        <label for="pind">Indication <span style="font-weight:400;color:var(--ink-3)">(optional)</span></label>
+        <input id="pind" placeholder="e.g. MRSA sepsis">
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="page">Age (years)</label><input id="page" type="number" step="0.01" value="6"></div>
+        <div class="field"><label for="pwt">Weight (kg)</label><input id="pwt" type="number" step="0.1" value="20"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="pscr">Serum creatinine (mg/dL) — required</label><input id="pscr" type="number" step="0.01" placeholder="e.g. 0.5"></div>
+        <div class="field"><label for="pht">Height (cm) — required</label><input id="pht" type="number" step="0.5" placeholder="e.g. 115"></div>
+      </div>
+      <div class="hint">Renal inputs drive a vancomycin dose — never defaulted. No SCr/height, no number.</div>
+      <div class="neo" id="pbpk-neo">
+        <strong>Under 2 yr — PMA required (no assumed-term fill-in for an NTI drug).</strong>
+        <div class="grid2" style="margin-top:8px">
+          <div>
+            <label for="ppma">Postmenstrual age (weeks)</label>
+            <input id="ppma" type="number" step="0.5" min="22" max="60" placeholder="e.g. 40">
+          </div>
+          <div>
+            <label for="ppna">…or postnatal age (days)</label>
+            <input id="ppna" type="number" step="1" min="0" placeholder="e.g. 5">
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:8px">
+          <div>
+            <label for="pga">Gestational age at birth (weeks)</label>
+            <input id="pga" type="number" step="0.5" min="22" max="44" placeholder="40 = term">
+          </div>
+        </div>
+        <div class="hint">PMA under 36 weeks abstains (Cao 2024: unsolved).</div>
+      </div>
+      <div class="field">
+        <label for="pconditions">Conditions to check <span style="font-weight:400;color:var(--ink-3)">(optional)</span></label>
+        <input id="pconditions" type="text" placeholder="e.g. sepsis, ICU — flags starting-point-only" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="pallergies">Allergies <span style="font-weight:400;color:var(--ink-3)">(optional)</span></label>
+        <input id="pallergies" type="text" placeholder="e.g. vancomycin — hard-stops dosing" autocomplete="off">
+      </div>
+      <div class="hint" id="pbpk-keyhint"></div>
+      <div style="margin-top:14px"><button class="btn" type="submit">Compute starting regimen</button></div>
+    </form>
   </div>
 </section>
 
@@ -1491,6 +1553,7 @@ function stopReassure(){ clearInterval(reassureTimer); }
 /* ---------------- stages ---------------- */
 const PEDIATRIC_STAGES = ["mechanism","retrieve","compute","guideline","grade"];
 const ADULT_HI_STAGES = ["retrieve","resolve","outcome"];
+const PBPK_STAGES = ["params","compute","regimen"];
 let STAGE_ORDER = PEDIATRIC_STAGES.slice();
 const PEDIATRIC_STAGE_HTML = `<div class="stage" data-k="mechanism"><span class="ic">◇</span><span class="lbl"><b>Identify mechanism</b><small>elimination route · enzymes · metabolites</small></span></div>
         <div class="stage" data-k="retrieve"><span class="ic">⚗</span><span class="lbl"><b>Fire retrieval subagent</b><small>live PubMed + openFDA for adult PK</small></span></div>
@@ -1500,13 +1563,20 @@ const PEDIATRIC_STAGE_HTML = `<div class="stage" data-k="mechanism"><span class=
 const ADULT_HI_STAGE_HTML = `<div class="stage" data-k="retrieve"><span class="ic">⚗</span><span class="lbl"><b>Look up the adult label</b><small>openFDA hepatic-impairment dosing</small></span></div>
         <div class="stage" data-k="resolve"><span class="ic">∫</span><span class="lbl"><b>Resolve the cited HI row</b><small>no allometry · no maturation</small></span></div>
         <div class="stage" data-k="outcome"><span class="ic">✦</span><span class="lbl"><b>Outcome</b><small>Label dose · No labeled adjustment · Contraindicated</small></span></div>`;
-function setLoadingMode(adult){
-  STAGE_ORDER = adult ? ADULT_HI_STAGES.slice() : PEDIATRIC_STAGES.slice();
-  $("stages").innerHTML = adult ? ADULT_HI_STAGE_HTML : PEDIATRIC_STAGE_HTML;
+const PBPK_STAGE_HTML = `<div class="stage" data-k="params"><span class="ic">⚗</span><span class="lbl"><b>Load bundled cited params</b><small>OSP table · Emoto ontogeny · Cao envelope</small></span></div>
+        <div class="stage" data-k="compute"><span class="ic">∫</span><span class="lbl"><b>Translate to starting regimen</b><small>GFR-proportional CL · AUC-target solve</small></span></div>
+        <div class="stage" data-k="regimen"><span class="ic">✦</span><span class="lbl"><b>Regimen + first TDM</b><small>no A–D grade · trial</small></span></div>`;
+function setLoadingMode(mode){
+  const adult = mode === true || mode === "adult_hi";
+  const pbpk = mode === "pbpk";
+  STAGE_ORDER = adult ? ADULT_HI_STAGES.slice() : pbpk ? PBPK_STAGES.slice() : PEDIATRIC_STAGES.slice();
+  $("stages").innerHTML = adult ? ADULT_HI_STAGE_HTML : pbpk ? PBPK_STAGE_HTML : PEDIATRIC_STAGE_HTML;
   const title = $("load-title");
   if(title){
     title.innerHTML = adult
       ? `Looking up the labeled HI dose for <span class="dname" id="l-drug">a drug</span>`
+      : pbpk
+      ? `Translating the cited vancomycin PBPK model for <span class="dname" id="l-drug">a child</span>`
       : `Extrapolating <span class="dname" id="l-drug">a dose</span><br>from adult PK`;
   }
 }
@@ -1559,6 +1629,17 @@ function handleStep(text){
   } else if(text.startsWith("→ compute_pediatric_dose")){
     advanceTo("compute");
     pushLine(`<span class="arrow">∫ engine</span> — scaling adult PK by allometry × maturation…`);
+  } else if(text.startsWith("→ pbpk")){
+    if(/abstain/i.test(text)){
+      advanceTo("regimen");
+      pushLine(`<span class="arrow">⛔ abstain</span> — ${esc(text.replace(/^→\s*/,""))}`);
+    } else if(/done/i.test(text)){
+      advanceTo("regimen");
+      pushLine(`<span class="arrow">✦ regimen</span> — ${esc(text.replace(/^→\s*/,""))}`);
+    } else {
+      advanceTo("compute");
+      pushLine(`<span class="arrow">∫ translation</span> — GFR-proportional vancomycin translation (trial, no grade)…`);
+    }
   } else if(/adult_hi_facade|adult HI outcome/i.test(text)){
     if(/outcome/i.test(text)){
       advanceTo("outcome");
@@ -1665,20 +1746,30 @@ $("form").addEventListener("submit", async (e)=>{
   const conditions = splitList($("conditions").value);
   if(allergies.length) payload.allergies = allergies;
   if(conditions.length) payload.conditions = conditions;
+  launchCase(payload);
+});
+/* Shared SSE launcher: main form and the PBPK trial form post through here. */
+async function launchCase(payload){
   currentCase = payload;
+  const drugName = payload.drug;
 
   // prep loading screen
   $("console").innerHTML = "";
-  const adultHi = payload.calculator_mode === "adult_hi";
-  setLoadingMode(adultHi);
-  $("l-drug").textContent = (DRUGS[drug]||{}).name || drug;
+  const mode = payload.calculator_mode || "pediatric";
+  const adultHi = mode === "adult_hi";
+  const isPbpk = mode === "pbpk";
+  setLoadingMode(mode);
+  $("l-drug").textContent = (DRUGS[drugName]||{}).name || drugName;
   go("loading"); startReassure();
   if(adultHi){
     advanceTo("retrieve");
-    pushLine(`<span class="arrow">⚗ label lookup</span> — Adult HI calculator for <b>${esc((DRUGS[drug]||{}).name||drug)}</b> (no allometry, no A–D)`);
+    pushLine(`<span class="arrow">⚗ label lookup</span> — Adult HI calculator for <b>${esc((DRUGS[drugName]||{}).name||drugName)}</b> (no allometry, no A–D)`);
+  } else if(isPbpk){
+    advanceTo("params");
+    pushLine(`<span class="arrow">⚗ bundled params</span> — PBPK trial for <b>${esc((DRUGS[drugName]||{}).name||drugName)}</b>, ${payload.age_years} yr · ${payload.weight_kg} kg (cited simplification, no grade)`);
   } else {
     advanceTo("mechanism");
-    pushLine(`<span class="arrow">◇ booting orchestrator</span> — case received: <b>${esc((DRUGS[drug]||{}).name||drug)}</b>, ${payload.age_years} yr · ${payload.weight_kg} kg`);
+    pushLine(`<span class="arrow">◇ booting orchestrator</span> — case received: <b>${esc((DRUGS[drugName]||{}).name||drugName)}</b>, ${payload.age_years} yr · ${payload.weight_kg} kg`);
   }
 
   try{
@@ -1711,6 +1802,49 @@ $("form").addEventListener("submit", async (e)=>{
       }
     }
   }catch(err){ showError(err.message||String(err)); }
+}
+
+/* PBPK trial form (branch muse-spark-pbpk; axe with branch). */
+function pbpkError(msg){
+  const el = $("pbpk-keyhint");
+  el.textContent = msg; el.classList.add("warn");
+}
+$("pbpk-form").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  const drug = ($("pdrug").value || "Vancomycin").trim();
+  const ageY = parseFloat($("page").value);
+  const wt = parseFloat($("pwt").value);
+  const scr = parseFloat($("pscr").value);
+  const ht = parseFloat($("pht").value);
+  if(!Number.isFinite(ageY) || ageY < 0){ pbpkError("Enter a valid age in years."); return; }
+  if(!Number.isFinite(wt) || wt <= 0){ pbpkError("Enter a valid weight in kg (> 0)."); return; }
+  if(!Number.isFinite(scr) || scr <= 0 || !Number.isFinite(ht) || ht <= 0){
+    pbpkError("Serum creatinine and height are required — renal inputs drive a vancomycin dose and are never defaulted."); return;
+  }
+  const payload = {
+    drug, age_years: ageY, weight_kg: wt, calculator_mode: "pbpk",
+    renal_impairment: false, hepatic_impairment: false, route: "iv",
+    serum_creatinine_mg_dl: scr, height_cm: ht,
+  };
+  const ind = ($("pind").value || "").trim();
+  if(ind) payload.indication = ind;
+  if(ageY < 2){
+    const pma = parseFloat($("ppma").value);
+    const ga = parseFloat($("pga").value);
+    const pnaD = parseFloat($("ppna").value);
+    if(Number.isFinite(pma) && pma > 0){ payload.pma_weeks = pma; }
+    else if(Number.isFinite(ga) && ga > 0 && Number.isFinite(pnaD) && pnaD >= 0){
+      payload.gestational_age_weeks = ga;
+      payload.postnatal_age_weeks = pnaD / 7.0;
+    }
+    // else: backend abstains (no assumed-term fill-in for an NTI drug)
+  }
+  const split = s => (s||"").split(",").map(x=>x.trim()).filter(Boolean);
+  const allergies = split($("pallergies").value), conditions = split($("pconditions").value);
+  if(allergies.length) payload.allergies = allergies;
+  if(conditions.length) payload.conditions = conditions;
+  $("pbpk-keyhint").classList.remove("warn"); $("pbpk-keyhint").textContent = "";
+  launchCase(payload);
 });
 
 function showError(msg){
@@ -1725,10 +1859,15 @@ function showError(msg){
 async function finishAndRender(data){
   const adultHi = (currentCase && currentCase.calculator_mode === "adult_hi")
     || !!(data.recommendation && data.recommendation.hi_outcome);
+  const isPbpk = (currentCase && currentCase.calculator_mode === "pbpk")
+    || !!(data.recommendation && data.recommendation.calculator_mode === "pbpk");
   if(adultHi){
     advanceTo("outcome");
     const lab = (data.recommendation && (data.recommendation.hi_outcome_label || data.recommendation.hi_outcome)) || "done";
     pushLine(`<span class="arrow">✦ done</span> — Adult HI outcome: ${esc(String(lab))}.`);
+  } else if(isPbpk){
+    advanceTo("regimen");
+    pushLine(`<span class="arrow">✦ done</span> — PBPK trial regimen computed (no grade — provenance + checkpoints).`);
   } else {
     advanceTo("grade");
     pushLine(`<span class="arrow">✦ done</span> — recommendation graded and cited.`);
@@ -1757,7 +1896,8 @@ function renderResult(data){
   const r = currentRec;
   const hiOutcome = r.hi_outcome;
   const adultHi = (currentCase && currentCase.calculator_mode === "adult_hi") || !!hiOutcome;
-  const g = adultHi ? null : (r.grade||"D").toUpperCase();
+  const isPbpk = (currentCase && currentCase.calculator_mode === "pbpk") || r.calculator_mode === "pbpk";
+  const g = adultHi || isPbpk ? null : (r.grade||"D").toUpperCase();
   const dpk = r.final_dose_mg_per_kg_per_day;
   const dday = r.final_dose_mg_per_day;
 
@@ -1765,7 +1905,7 @@ function renderResult(data){
   const c = currentCase, dn = (DRUGS[c.drug]||{}).name||c.drug;
   $("case-sum").innerHTML = `<b>${esc(dn)}</b> · ${c.age_years} yr · ${c.weight_kg} kg · ${esc(c.route)}`
     + (c.indication?` · ${esc(c.indication)}`:"")
-    + (c.calculator_mode==="adult_hi"?` · Adult HI calculator`:` · Pediatric extrapolation`)
+    + (c.calculator_mode==="adult_hi"?` · Adult HI calculator`:c.calculator_mode==="pbpk"?` · PBPK trial (no grade)`:` · Pediatric extrapolation`)
     + (c.renal_impairment?` · renal impairment`:"") + (c.hepatic_impairment?` · hepatic impairment`:"")
     + (c.allergies&&c.allergies.length?` · allergies: ${esc(c.allergies.join(", "))}`:"")
     + (c.conditions&&c.conditions.length?` · conditions: ${esc(c.conditions.join(", "))}`:"")
@@ -1831,6 +1971,13 @@ function renderResult(data){
        + `<div class="row"><b>No labeled adjustment</b> — usual adult dose; no HI change</div>`
        + `<div class="row"><b>Contraindicated</b> — label says do not use in this class</div>`
        + `</div></div></div>`;
+  } else if(isPbpk){
+    h += `</div><div class="grade outcome abstain" tabindex="0" aria-label="Trial PBPK translation, no A–D grade.">`
+       + `<span class="lab">TRIAL</span>no grade`
+       + `<div class="tip" role="tooltip">`
+       + `<div class="row"><b>Trial facade</b> — cited simplification, not simulator execution</div>`
+       + `<div class="row"><b>Confidence</b> — provenance + checkpoints below, never a letter</div>`
+       + `</div></div></div>`;
   } else {
     h += `</div><div class="grade ${g}" tabindex="0" aria-label="Evidence grade ${g}. Hover for legend.">`
        + `<span class="lab">GRADE</span>${g}`
@@ -1842,6 +1989,32 @@ function renderResult(data){
        + `</div></div></div>`;
   }
   if(r.grade_rationale) h += `<div class="md" style="color:var(--ink-2);font-size:.92rem;margin-bottom:6px">${esc(r.grade_rationale)}</div>`;
+  // PBPK trial regimen box (branch muse-spark-pbpk; guarded — renders only when r.pbpk exists)
+  if(r.pbpk){
+    const p = r.pbpk;
+    h += `<div class="sec"><h3>PBPK starting regimen (trial)</h3><div class="mech">`;
+    const prow = (k,v)=>`<div class="m"><div class="k">${k}</div><div class="v">${v!=null&&v!==""?esc(String(v)):"—"}</div></div>`;
+    if(!blocked){
+      h += prow("Give", `${p.per_dose_mg} mg (${p.per_dose_mg_per_kg} mg/kg) IV every ${p.interval_h} h`);
+      h += prow("Infuse over", `≥ ${p.infusion_min} min`);
+      h += prow("First TDM", p.first_tdm);
+      h += prow("Predicted AUC24", `${p.auc_predicted} mg·h/L (target ${p.auc_target[0]}–${p.auc_target[1]})`);
+      h += prow("Translation", `CL ${p.cl_l_per_h} L/h from GFR ${p.gfr_absolute_ml_min} mL/min · Vd ${p.vd_l} L · t½ ${p.half_life_h} h`);
+    } else {
+      h += prow("Regimen", "withheld — see safety banner above");
+    }
+    h += `</div></div>`;
+  }
+  // Pinned validation checkpoints (Q12A/Q14A) — provenance, not a grade
+  if(r.pbpk_checkpoints && r.pbpk_checkpoints.length){
+    h += `<div class="sec"><h3>Validation checkpoints (trial verdict)</h3>`;
+    h += `<div class="hint">Paper-stated bands quoted verbatim; 2-fold gates a paper does not state are marked [INFERENCE] (conventional, not source claims). Paywalled quant marked ABSTAINED, never reconstructed. Only E4 is a paper-explicit peds gate.</div>`;
+    r.pbpk_checkpoints.forEach(cp=>{
+      h += `<div class="flag"><b>${esc(cp.id)}</b> — ${esc(cp.metric)}<br>`
+        + `<span style="font-size:.82rem;opacity:.85">${esc(cp.population)} · ${esc(cp.source)} · ${esc(cp.scope)}</span></div>`;
+    });
+    h += `</div>`;
+  }
 
   // concordance
   if(r.concordance && (r.concordance.ratio!=null || r.concordance.verdict)){
@@ -1939,14 +2112,15 @@ function addMsg(role, html, isPreloadQ){
   body.appendChild(div);
   div.scrollIntoView({behavior:"smooth", block:"nearest"});
   return div;
+
 }
 function paras(s){ return (s||"").split(/\n\n+/).map(p=>`<p>${esc(p).replace(/\n/g,"<br>")}</p>`).join(""); }
-
 function buildChat(r){
   $("chat-body").innerHTML = ""; chatHistory = [];
   const hiOutcome = r.hi_outcome;
   const adultHi = (currentCase && currentCase.calculator_mode === "adult_hi") || !!hiOutcome;
-  const g = adultHi ? null : (r.grade||"D").toUpperCase();
+  const isPbpk = (currentCase && currentCase.calculator_mode === "pbpk") || r.calculator_mode === "pbpk";
+  const g = adultHi || isPbpk ? null : (r.grade||"D").toUpperCase();
   const dpk = r.final_dose_mg_per_kg_per_day;
   const dday = r.final_dose_mg_per_day;
 
@@ -1954,6 +2128,8 @@ function buildChat(r){
   if(adultHi){
     const olab = r.hi_outcome_label || hiOutcome || "Abstain";
     addMsg("assistant", `<p>Here's the Adult HI outcome: <b>${esc(olab)}</b>${dday!=null?` — <b>${dday} mg/day</b>`:""}. This is a cited label lookup — not an A–D graded pediatric extrapolation.</p>`);
+  } else if(isPbpk){
+    addMsg("assistant", `<p>Here's your <b>trial PBPK starting regimen</b>${dpk!=null?` — <b>${dpk} mg/kg/day</b>`:""} (no A–D grade on this facade). Starting point only — confirm with TDM.</p>`);
   } else {
     addMsg("assistant", `<p>Here's your <b>Grade ${g}</b> recommendation${dpk!=null?` — <b>${dpk} mg/kg/day</b>`:""}. I've answered a few common questions below; ask me anything else.</p>`);
   }
@@ -1963,6 +2139,9 @@ function buildChat(r){
   if(adultHi){
     if(r.grade_rationale) pre.push(["Why is there no A–D grade?", r.grade_rationale]);
     if(r.rationale) pre.push(["What did the label say?", r.rationale]);
+  } else if(isPbpk){
+    if(r.grade_rationale) pre.push(["Why is there no A–D grade?", r.grade_rationale]);
+    if(r.pbpk && r.pbpk.first_tdm) pre.push(["When is the first TDM due?", r.pbpk.first_tdm]);
   } else {
     if(r.grade_rationale) pre.push(["Why did this earn a Grade "+g+"?", r.grade_rationale]);
   }
@@ -1984,6 +2163,11 @@ function buildChat(r){
   const chips = adultHi ? [
     "Where did this labeled dose come from?",
     "What if the label and a pediatric HI guideline disagree?",
+    "How should I monitor this patient?",
+  ] : isPbpk ? [
+    "Where do the bundled PBPK parameters come from?",
+    "When is the first TDM due?",
+    "Why is there no A–D grade on this tab?",
     "How should I monitor this patient?",
   ] : [
     "Why not just scale the adult dose by weight?",

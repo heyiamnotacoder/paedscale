@@ -179,7 +179,7 @@ def resolve_child_pugh(case: dict) -> dict[str, Any]:
     return out
 
 
-CALCULATOR_MODES = ("pediatric", "adult_hi")
+CALCULATOR_MODES = ("pediatric", "adult_hi", "pbpk")
 
 CHILD_PUGH_ON_CHILD_FLAG = (
     "Child-Pugh is adult cirrhosis scoring; applying it at age < 18 is not a pediatric "
@@ -201,7 +201,7 @@ def resolve_calculator_mode(case: dict) -> str:
     mode = str(raw).strip().lower()
     if mode not in CALCULATOR_MODES:
         raise ValueError(
-            f"calculator_mode must be 'pediatric' or 'adult_hi', not {raw!r}. "
+            f"calculator_mode must be one of {', '.join(CALCULATOR_MODES)}, not {raw!r}. "
             "Age does not switch facades."
         )
     return mode

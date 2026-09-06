@@ -650,6 +650,11 @@ def run_case(case: dict, on_step=None, max_turns: int = 12) -> dict:
         mode = "pediatric"
     if mode == "adult_hi":
         return _run_adult_hi_case(case, on_step=on_step)
+    if mode == "pbpk":
+        # Trial PBPK-translation facade (branch muse-spark-pbpk): deterministic,
+        # no orchestrator, no key, no A-D. Axe with the branch.
+        from engine.pbpk_vancomycin import run_pbpk_case
+        return run_pbpk_case(case, on_step=on_step)
     client = Anthropic()
     user_msg = (
         "Dose this case. Follow your pipeline and finish with submit_recommendation.\n\n"

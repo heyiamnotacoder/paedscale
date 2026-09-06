@@ -98,7 +98,7 @@ class Case(BaseModel):
         default=None, gt=0, description="Optional formulation strength in mg/mL"
     )
     # Facade: age must not switch this. adult_hi implies hepatic impairment on.
-    calculator_mode: Literal["pediatric", "adult_hi"] = "pediatric"
+    calculator_mode: Literal["pediatric", "adult_hi", "pbpk"] = "pediatric"
 
 
 @app.get("/")
@@ -116,8 +116,8 @@ def health():
 
 
 def _requires_anthropic(case: Case) -> bool:
-    """Adult HI is a deterministic openFDA label lookup — no orchestrator."""
-    return (case.calculator_mode or "pediatric") != "adult_hi"
+    """Adult HI and the PBPK trial facade are deterministic — no orchestrator."""
+    return (case.calculator_mode or "pediatric") not in ("adult_hi", "pbpk")
 
 
 @app.post("/calculate")
