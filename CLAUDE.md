@@ -145,3 +145,24 @@ Default roles: needs-triage, needs-info, ready-for-agent, ready-for-human, wontf
 ### Domain docs
 
 Single-context: CONTEXT.md + docs/adr/ at the repo root. See `docs/agents/domain.md`.
+
+## Branch note: `muse-spark-pbpk` (trial — do not merge to master as-is)
+Vancomycin-IV PBPK-translation tab ("PBPK trial" nav). Whole-branch trial:
+axe = revert `agent.py`, `api/main.py`, `child_pugh.py`, `index.html`; delete
+`engine/pbpk_vancomycin.py` + `docs/pbpk-trial-decisions.md`. Full decision log
+in `docs/pbpk-trial-decisions.md` (grill-me session Q1–Q16). Code review: the
+following are deliberate trial decisions, not regressions —
+- **Bundled cited params, not live retrieval.** A PBPK model lives in papers and
+  cannot be re-fetched per query; narrow branch exception (one drug, composite
+  OSP table + Emoto 2018 + Cao 2024, stated envelope, abstain outside it).
+- **No A–D grade, no concordance band.** Grade deferred post-trial; confidence is
+  provenance + the in-tab checkpoint table (`pbpk_checkpoints`). Do not flag the
+  missing grade/mechanism-score as a bug.
+- **Stricter than base rules on purpose:** refuses assumed-term for <2 y
+  (abstains), requires SCr+height (abstains), abstains PMA<36 wk / eGFR<15 /
+  CP-B/C. Flags (not models) ICU/sepsis and CP-A.
+- **Trial heuristics, labelled:** CL = 0.67×GFR + 1.05×(WT/70)^0.75,
+  Vss 0.37 L/kg, half-life-snapped interval. Checkpoint-gated, grade deferred.
+- **Honesty markings are load-bearing:** `[INFERENCE]` 2-fold gates and the
+  ABSTAINED Cao-quant checkpoint must survive any edit; paywalled numbers are
+  never reconstructed.
