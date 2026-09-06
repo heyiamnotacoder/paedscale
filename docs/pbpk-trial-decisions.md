@@ -1,8 +1,10 @@
 # PBPK Trial Tab — Decision Log (branch `muse-spark-pbpk`)
 
 Trial-only. Axe path: revert `backend/agents/agent.py`, `backend/api/main.py`,
-`backend/engine/child_pugh.py`, `frontend/index.html`; delete
-`backend/engine/pbpk_vancomycin.py` and this file. Nothing else is touched.
+`backend/engine/child_pugh.py`, `frontend/index.html`, the branch note in
+`CLAUDE.md`, and the `test_pbpk` hook at the bottom of
+`backend/tests/test_pk.py`; delete `backend/engine/pbpk_vancomycin.py`,
+`backend/tests/test_pbpk.py` and this file. Nothing else is touched.
 
 ## Locked scope decisions (grilling rounds 1–4)
 
@@ -63,11 +65,37 @@ Trial-only. Axe path: revert `backend/agents/agent.py`, `backend/api/main.py`,
 - **Added eGFR<15 and CP-B/C abstains** (E3 floor; hepatic cover is CP-A only).
 - **Infusion ≥60 min re-cited to Emoto-cited 1-h regimens** (Rybak rate-cap text
   paywalled — marked unverified, not cited as verified).
-- Reference output: 6 y/20 kg/SCr 0.5 → 270 mg q6h, AUC 497, t½ 2.36 h.
+- Reference output: 6 y / 20 kg / SCr 0.5 / **height 115 cm** → 270 mg q6h,
+  AUC 497, t½ 2.36 h. Height is a required input, so the case is not defined
+  without it (116 cm drifts to AUC 491 / t½ 2.33). Pinned in `test_pbpk.py`.
+
+## Code-review fixes (post-trial-build, applied on this branch)
+
+- **Extended intervals no longer split the daily dose by `round(24/II)`.**
+  Per-dose is now solved over the interval (`AUC24 = per_dose × 24/II ÷ CL`),
+  so q36h/q48h cannot under-dose by 33–50% with the AUC check disabled. Latent
+  at the time (the half-life floor caps t½ ≈ 17 h, so II > 24 h is currently
+  unreachable) — fixed because 36/48 stay in `STANDARD_INTERVALS_H`. mg/day
+  fields are 24-h **equivalents** above 24 h and are labelled as such in-tab.
+- **CP-B/C abstain made reachable.** It gated on `hepatic_impairment AND class`,
+  and the tab hardcoded `hepatic_impairment: false` with no class input. Now the
+  class alone gates, the tab has a Child-Pugh select, and hepatic impairment
+  declared *without* a class abstains (coverage is CP-A only — never assumed).
+- **Rounding step scales with the dose** (1 / 5 / 10 mg under 50 / 250 / above).
+  A flat 10 mg step moved a ~18 mg neonatal dose ±28%, and a sub-5 mg dose
+  rounded to 0 mg yet still rendered; a zero solve now abstains.
+- **ICU/sepsis scan reads `indication` too** — the tab's own placeholder is
+  "e.g. MRSA sepsis", so that path silently lost the flag.
+- **Missing/non-numeric age abstains** instead of `float(x or 0)` making it a
+  neonate (or raising a 500); `assert` replaced by a real abstain.
+- **`backend/tests/test_pbpk.py`** — 20 deterministic tests (reference case,
+  every abstain, AUC arithmetic across the whole interval set, rounding,
+  checkpoint honesty markings), wired into `tests.test_pk`.
 
 ## Verification done
 
-`tests.test_pk` passes; page script `node --check` clean; keyless
+`tests.test_pk` passes **including the 20 new `test_pbpk` cases**; page script
+`node --check` clean; keyless
 `/calculate/stream` smoke (regimen + all abstains); headless Chromium
 playtest of tab → result with zero page errors (screenshot reviewed).
 

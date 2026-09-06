@@ -148,8 +148,9 @@ Single-context: CONTEXT.md + docs/adr/ at the repo root. See `docs/agents/domain
 
 ## Branch note: `muse-spark-pbpk` (trial — do not merge to master as-is)
 Vancomycin-IV PBPK-translation tab ("PBPK trial" nav). Whole-branch trial:
-axe = revert `agent.py`, `api/main.py`, `child_pugh.py`, `index.html`; delete
-`engine/pbpk_vancomycin.py` + `docs/pbpk-trial-decisions.md`. Full decision log
+axe = revert `agent.py`, `api/main.py`, `child_pugh.py`, `index.html`, this
+branch note, and the `test_pbpk` hook in `tests/test_pk.py`; delete
+`engine/pbpk_vancomycin.py`, `tests/test_pbpk.py` + `docs/pbpk-trial-decisions.md`. Full decision log
 in `docs/pbpk-trial-decisions.md` (grill-me session Q1–Q16). Code review: the
 following are deliberate trial decisions, not regressions —
 - **Bundled cited params, not live retrieval.** A PBPK model lives in papers and
@@ -163,6 +164,11 @@ following are deliberate trial decisions, not regressions —
   CP-B/C. Flags (not models) ICU/sepsis and CP-A.
 - **Trial heuristics, labelled:** CL = 0.67×GFR + 1.05×(WT/70)^0.75,
   Vss 0.37 L/kg, half-life-snapped interval. Checkpoint-gated, grade deferred.
+- **Two contracts that must not regress** (both were review findings, now
+  tested in `tests/test_pbpk.py`): per-dose is solved over the interval, so
+  `doses_per_day` stays fractional above 24 h and mg/day is a 24-h *equivalent*;
+  and the CP-B/C abstain gates on the Child-Pugh **class alone** — a declared
+  hepatic impairment with no class abstains rather than assuming CP-A.
 - **Honesty markings are load-bearing:** `[INFERENCE]` 2-fold gates and the
   ABSTAINED Cao-quant checkpoint must survive any edit; paywalled numbers are
   never reconstructed.

@@ -153,22 +153,57 @@ CHECKPOINTS = [
 ]
 
 
+# Keys of the regimen block, shared by the success return, the abstain return and
+# the submit-shaped `pbpk` object so the three cannot drift apart.
+PBPK_DETAIL_KEYS = (
+    "per_dose_mg", "per_dose_mg_per_kg", "interval_h", "doses_per_day",
+    "daily_dose_mg", "daily_dose_mg_per_kg", "infusion_min", "auc_predicted",
+    "auc_target", "first_tdm", "cl_l_per_h", "vd_l", "half_life_h",
+    "egfr_indexed", "gfr_absolute_ml_min", "pma_weeks",
+)
+
+
+def _round_step_mg(dose_mg: float) -> float:
+    """Rounding granularity, NTI-aware.
+
+    A flat 10 mg step is ~28% of a neonatal vancomycin dose — far outside any
+    therapeutic tolerance for an NTI drug. Step scales with the dose instead.
+    """
+    if dose_mg < 50.0:
+        return 1.0
+    if dose_mg < 250.0:
+        return 5.0
+    return 10.0
+
+
 def _pma_or_abstain(case: dict) -> tuple[Optional[float], Optional[str]]:
     """Strict PMA for under-2s (Q11): supplied PMA wins, else GA+PNA, else ABSTAIN.
 
     The base engine assumes term here; this facade refuses to (NTI drug).
     Over-2s do not need PMA for a GFR-driven translation.
     """
-    age = float(case.get("age_years") or 0.0)
+    try:
+        age = float(case.get("age_years"))
+    except (TypeError, ValueError):
+        return None, (
+            "ABSTAIN — a numeric age in years is required on the PBPK trial facade "
+            "(it selects the PMA rule). Missing age must not fall through to the "
+            "neonatal branch for an NTI drug."
+        )
+    if age < 0:
+        return None, "ABSTAIN — age in years must not be negative."
     if age >= 2.0:
         return None, None
-    pma = case.get("pma_weeks")
-    if pma not in (None, ""):
-        return float(pma), None
-    ga = case.get("gestational_age_weeks")
-    pna = case.get("postnatal_age_weeks")
-    if ga not in (None, "") and pna not in (None, ""):
-        return float(ga) + float(pna), None
+    try:
+        pma = case.get("pma_weeks")
+        if pma not in (None, ""):
+            return float(pma), None
+        ga = case.get("gestational_age_weeks")
+        pna = case.get("postnatal_age_weeks")
+        if ga not in (None, "") and pna not in (None, ""):
+            return float(ga) + float(pna), None
+    except (TypeError, ValueError):
+        return None, "ABSTAIN — PMA / gestational + postnatal age must be numeric."
     return None, (
         "ABSTAIN — PMA required for age < 2 yr on the PBPK trial facade "
         "(supply pma_weeks or gestational + postnatal age). No assumed-term fill-in "
@@ -201,10 +236,10 @@ def _absolute_gfr_ml_min(case: dict) -> tuple[Optional[float], Optional[float], 
     return egfr * bsa / 1.73, egfr, None
 
 
-def _snap_interval(t_half_h: float, nominal_per_day: int) -> int:
+def _snap_interval(t_half_h: float, nominal_doses_per_day: int) -> int:
     """TRIAL heuristic: nominal interval from the AUC-matched daily dose, floored
     at the half-life onto the standard set (trough protection)."""
-    nominal = 24.0 / max(1, nominal_per_day)
+    nominal = 24.0 / max(1, nominal_doses_per_day)
     for ii in STANDARD_INTERVALS_H:
         if ii >= nominal and ii >= t_half_h:
             return ii
@@ -268,18 +303,29 @@ def run_pbpk_vancomycin(case: dict) -> dict[str, Any]:
     gfr_abs, egfr, err = _absolute_gfr_ml_min(case)
     if err:
         return _abstain(err, flags, assumptions)
-    assert gfr_abs is not None and egfr is not None
+    if gfr_abs is None or egfr is None:
+        return _abstain(
+            "ABSTAIN — renal inputs did not resolve to an eGFR.", flags, assumptions,
+        )
     if egfr < EGFR_FLOOR:
         return _abstain(
             f"ABSTAIN — eGFR {egfr:.0f} below the validated envelope "
             "(Emoto Fig 3c-d renal bins floor at CCr >= 15 mL/min, E3).",
             flags, assumptions,
         )
+    # Gate on the CLASS, not on a separate boolean: a case carrying child_pugh="C"
+    # must abstain whether or not a `hepatic_impairment` flag rode along with it.
     cp = str(case.get("child_pugh") or "").strip().upper()
-    if bool(case.get("hepatic_impairment")) and cp in ("B", "C"):
+    if cp in ("B", "C"):
         return _abstain(
             "ABSTAIN — Child-Pugh B/C outside the validated envelope "
             "(hepatic coverage is CP-A only, visual overlay, no numeric band).",
+            flags, assumptions,
+        )
+    if bool(case.get("hepatic_impairment")) and cp != "A":
+        return _abstain(
+            "ABSTAIN — hepatic impairment declared without a Child-Pugh class. "
+            "Coverage is CP-A only, so the class cannot be assumed for an NTI drug.",
             flags, assumptions,
         )
 
@@ -289,29 +335,50 @@ def run_pbpk_vancomycin(case: dict) -> dict[str, Any]:
     vd_l = VD_L_PER_KG * wt
     t_half_h = math.log(2) * vd_l / cl_l_per_h if cl_l_per_h > 0 else float("inf")
 
-    daily_dose_mg = cl_l_per_h * AUC_TARGET_MID  # AUC = dose/CL over 24 h
+    daily_dose_mg = cl_l_per_h * AUC_TARGET_MID  # AUC24 = 24-h dose / CL
     per_dose_nominal = PER_DOSE_MG_PER_KG * wt
-    n_per_day = max(1, min(4, round(daily_dose_mg / per_dose_nominal)))
-    interval_h = _snap_interval(t_half_h, n_per_day)
-    # Re-solve per-dose from the snapped interval so AUC stays on target.
-    n_doses = max(1, round(24.0 / interval_h))
-    per_dose_mg = daily_dose_mg / n_doses
-    per_dose_mg_rounded = round(per_dose_mg / 10.0) * 10.0  # vial-practical
-    daily_rounded = per_dose_mg_rounded * n_doses
-    auc_predicted = daily_rounded / cl_l_per_h if cl_l_per_h > 0 else float("nan")
+    nominal_doses_per_day = max(1, min(4, round(daily_dose_mg / per_dose_nominal)))
+    interval_h = _snap_interval(t_half_h, nominal_doses_per_day)
+    # Re-solve per-dose FROM the snapped interval so AUC stays on target. q36h and
+    # q48h do not divide the day, so the doses-per-day term must stay fractional:
+    # round()ing it to 1 hands the whole 24-h dose out once per 36-48 h, i.e. a
+    # 33-50% under-dose in exactly the renally-impaired band that snaps there —
+    # and it would feed the same wrong number to the AUC check, disabling it.
+    doses_per_day = 24.0 / interval_h
+    per_dose_mg = daily_dose_mg / doses_per_day
+    step_mg = _round_step_mg(per_dose_mg)
+    per_dose_mg_rounded = round(per_dose_mg / step_mg) * step_mg  # vial-practical
+    if per_dose_mg_rounded <= 0:
+        return _abstain(
+            f"ABSTAIN — solved per-dose {per_dose_mg:.2f} mg is below any deliverable "
+            "vancomycin dose. No regimen is issued rather than rounding to zero.",
+            flags, assumptions,
+        )
+    daily_equivalent_mg = per_dose_mg_rounded * doses_per_day
+    auc_predicted = daily_equivalent_mg / cl_l_per_h if cl_l_per_h > 0 else float("nan")
 
     infusion_min = max(MIN_INFUSION_MIN, per_dose_mg_rounded / MAX_INFUSION_RATE_MG_PER_HR * 60.0)
 
+    if interval_h > 24:
+        flags.append(
+            f"Extended interval q{interval_h}h — the mg/day figures below are 24-hour "
+            f"EQUIVALENTS for AUC comparison, not an amount given every day. The order "
+            f"is {per_dose_mg_rounded:g} mg once every {interval_h} h."
+        )
     if not (AUC_TARGET_LO <= auc_predicted <= AUC_TARGET_HI):
         flags.append(
             "AUC discordance — rounded regimen predicts AUC24 "
             f"{auc_predicted:.0f} outside 400-600; pharmacist review before use."
         )
     flags.append(NON_RENAL_MINOR_FLAG)
-    if bool(case.get("hepatic_impairment")):
+    if cp == "A" or bool(case.get("hepatic_impairment")):
         flags.append(HEPATIC_CP_A_FLAG)
-    conditions = " ".join(str(c) for c in (case.get("conditions") or [])).lower()
-    if any(k in conditions for k in ("sepsis", "septic", "icu", "critical", "shock")):
+    # The tab's own indication placeholder is "e.g. MRSA sepsis", so the indication
+    # is scanned alongside conditions — otherwise the obvious user path loses the flag.
+    condition_text = " ".join(
+        str(c) for c in [*(case.get("conditions") or []), case.get("indication") or ""]
+    ).lower()
+    if any(k in condition_text for k in ("sepsis", "septic", "icu", "critical", "shock")):
         flags.append(ICU_STARTING_POINT_FLAG)
 
     tdm_dose_number = 4
@@ -337,9 +404,10 @@ def run_pbpk_vancomycin(case: dict) -> dict[str, Any]:
         "per_dose_mg": per_dose_mg_rounded,
         "per_dose_mg_per_kg": round(per_dose_mg_rounded / wt, 2),
         "interval_h": interval_h,
-        "doses_per_day": n_doses,
-        "daily_dose_mg": daily_rounded,
-        "daily_dose_mg_per_kg": round(daily_rounded / wt, 2),
+        "doses_per_day": round(doses_per_day, 2),
+        # 24-h EQUIVALENT when the interval exceeds a day (flagged above).
+        "daily_dose_mg": round(daily_equivalent_mg, 1),
+        "daily_dose_mg_per_kg": round(daily_equivalent_mg / wt, 2),
         "infusion_min": round(infusion_min),
         "auc_predicted": round(auc_predicted, 0),
         "auc_target": [AUC_TARGET_LO, AUC_TARGET_HI],
@@ -354,19 +422,11 @@ def run_pbpk_vancomycin(case: dict) -> dict[str, Any]:
 
 def _abstain(reason: str, flags: list[str], assumptions: list[str]) -> dict[str, Any]:
     return {
+        **{k: None for k in PBPK_DETAIL_KEYS},
         "blocked": True,
         "block_reason": reason,
         "drug": DRUG,
-        "per_dose_mg": None,
-        "per_dose_mg_per_kg": None,
-        "interval_h": None,
-        "doses_per_day": None,
-        "daily_dose_mg": None,
-        "daily_dose_mg_per_kg": None,
-        "infusion_min": None,
-        "auc_predicted": None,
         "auc_target": [AUC_TARGET_LO, AUC_TARGET_HI],
-        "first_tdm": None,
         "flags": [reason, *flags],
         "assumptions": assumptions,
         "citations": CITATIONS,
@@ -416,22 +476,7 @@ def recommendation_from_pbpk(case: dict, result: dict) -> dict[str, Any]:
             f"every {result.get('interval_h')} hours"
             if not blocked and result.get("interval_h") else None
         ),
-        "pbpk": {
-            "per_dose_mg": result.get("per_dose_mg"),
-            "per_dose_mg_per_kg": result.get("per_dose_mg_per_kg"),
-            "interval_h": result.get("interval_h"),
-            "doses_per_day": result.get("doses_per_day"),
-            "infusion_min": result.get("infusion_min"),
-            "auc_predicted": result.get("auc_predicted"),
-            "auc_target": result.get("auc_target"),
-            "first_tdm": result.get("first_tdm"),
-            "cl_l_per_h": result.get("cl_l_per_h"),
-            "vd_l": result.get("vd_l"),
-            "half_life_h": result.get("half_life_h"),
-            "egfr_indexed": result.get("egfr_indexed"),
-            "gfr_absolute_ml_min": result.get("gfr_absolute_ml_min"),
-            "pma_weeks": result.get("pma_weeks"),
-        },
+        "pbpk": {k: result.get(k) for k in PBPK_DETAIL_KEYS},
     }
     if wtf:
         rec["pbpk"]["weight_kg"] = wtf
