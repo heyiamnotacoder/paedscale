@@ -943,11 +943,12 @@
         <label for="pcp">Child-Pugh class <span style="font-weight:400;color:var(--ink-3)">(if hepatic impairment)</span></label>
         <select id="pcp">
           <option value="">— none / not impaired —</option>
+          <option value="unknown">impaired — class unknown (abstains)</option>
           <option value="A">A (mild)</option>
           <option value="B">B (moderate)</option>
           <option value="C">C (severe)</option>
         </select>
-        <div class="hint">Hepatic coverage is Child-Pugh A only — B and C abstain (no numeric band).</div>
+        <div class="hint">Hepatic coverage is Child-Pugh A only — B, C, and impairment without a class abstain (no numeric band; class is never assumed).</div>
       </div>
       <div class="field">
         <label for="pconditions">Conditions to check <span style="font-weight:400;color:var(--ink-3)">(optional)</span></label>
@@ -1449,6 +1450,9 @@ function scrollToId(id){
 const age = $("age");
 function checkNeo(){ $("neo").classList.toggle("show", parseFloat(age.value) < 2); }
 age.addEventListener("input", checkNeo); checkNeo();
+const pAge = $("page");
+function checkPbpkNeo(){ $("pbpk-neo").classList.toggle("show", parseFloat(pAge.value) < 2); }
+pAge.addEventListener("input", checkPbpkNeo); pAge.addEventListener("change", checkPbpkNeo); checkPbpkNeo();
 
 function calculatorMode(){
   return (document.querySelector('input[name="calculator-mode"]:checked')||{}).value || "pediatric";
@@ -1831,10 +1835,12 @@ $("pbpk-form").addEventListener("submit", (e)=>{
   if(!Number.isFinite(scr) || scr <= 0 || !Number.isFinite(ht) || ht <= 0){
     pbpkError("Serum creatinine and height are required — renal inputs drive a vancomycin dose and are never defaulted."); return;
   }
-  const cp = $("pcp").value;
+  const cpRaw = $("pcp").value;
+  const cpUnknown = cpRaw === "unknown";
+  const cp = (cpRaw === "A" || cpRaw === "B" || cpRaw === "C") ? cpRaw : "";
   const payload = {
     drug, age_years: ageY, weight_kg: wt, calculator_mode: "pbpk",
-    renal_impairment: false, hepatic_impairment: !!cp, route: "iv",
+    renal_impairment: false, hepatic_impairment: !!(cp || cpUnknown), route: "iv",
     serum_creatinine_mg_dl: scr, height_cm: ht,
   };
   if(cp) payload.child_pugh = cp;
@@ -1940,15 +1946,17 @@ function renderResult(data){
       ? `<div class="dose-num"><span class="big">${dday}</span><span class="unit">mg/day</span></div>`
       : `<div class="dose-num"><span class="big">—</span></div>`;
   } else {
+    const eq = isPbpk && r.pbpk && r.pbpk.interval_h > 24;
     h += (dpk!=null && !blocked)
-      ? `<div class="dose-num"><span class="big">${dpk}</span><span class="unit">mg/kg/day</span></div>`
+      ? `<div class="dose-num"><span class="big">${dpk}</span><span class="unit">mg/kg/day${eq?" equivalent":""}</span></div>`
       : `<div class="dose-num"><span class="big">—</span></div>`;
   }
   const metrics = [];
   if(adultHi){
     if(dpk!=null && !blocked) metrics.push(`<span class="m">≈ <b>${dpk}</b> mg/kg/day</span>`);
   } else if(r.final_dose_mg_per_day!=null){
-    metrics.push(`<span class="m">≈ <b>${r.final_dose_mg_per_day}</b> mg/day</span>`);
+    const eq = isPbpk && r.pbpk && r.pbpk.interval_h > 24;
+    metrics.push(`<span class="m">≈ <b>${r.final_dose_mg_per_day}</b> mg/day${eq?" equivalent":""}</span>`);
   }
   if(r.interval) metrics.push(`<span class="m">${esc(r.interval)}</span>`);
   if(r.route) metrics.push(`<span class="m">${esc(r.route)}</span>`);
@@ -2047,7 +2055,7 @@ function renderResult(data){
   const flags = r.flags||[];
   if(flags.length){
     h += `<div class="sec"><h3>Flags &amp; warnings</h3>`;
-    flags.forEach(f=>{ const stop=/exceed|toxic|do not|below|sub-therapeutic|safety stop|contraindicat/i.test(f);
+    flags.forEach(f=>{ const stop=/exceed|toxic|do not|below|sub-therapeutic|safety stop|contraindicat|auc discordance/i.test(f);
       h += `<div class="flag ${stop?"stop":""}">${esc(f)}</div>`; });
     h += `</div>`;
   }

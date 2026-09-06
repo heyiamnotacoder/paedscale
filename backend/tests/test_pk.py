@@ -600,6 +600,7 @@ if __name__ == "__main__":
     from tests.test_hi_gate import (
         test_pediatric_healthy_liver_still_submits,
         test_pediatric_hepatic_requires_class_or_complete_labs,
+        test_pbpk_mode_does_not_trip_the_generic_hi_gate,
         test_adult_hi_requires_class_even_if_hepatic_box_off,
         test_empty_ascites_is_not_implicit_none,
         test_age_does_not_switch_facades,
@@ -610,6 +611,7 @@ if __name__ == "__main__":
     print("HI gate + calculator toggle (issue #4):")
     test_pediatric_healthy_liver_still_submits()
     test_pediatric_hepatic_requires_class_or_complete_labs()
+    test_pbpk_mode_does_not_trip_the_generic_hi_gate()
     test_adult_hi_requires_class_even_if_hepatic_box_off()
     test_empty_ascites_is_not_implicit_none()
     test_age_does_not_switch_facades()

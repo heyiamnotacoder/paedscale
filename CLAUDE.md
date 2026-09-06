@@ -160,15 +160,18 @@ following are deliberate trial decisions, not regressions —
   provenance + the in-tab checkpoint table (`pbpk_checkpoints`). Do not flag the
   missing grade/mechanism-score as a bug.
 - **Stricter than base rules on purpose:** refuses assumed-term for <2 y
-  (abstains), requires SCr+height (abstains), abstains PMA<36 wk / eGFR<15 /
-  CP-B/C. Flags (not models) ICU/sepsis and CP-A.
+  (abstains; tab must collect PMA when age < 2), requires SCr+height
+  (abstains), abstains PMA<36 wk / indexed eGFR<15 (pediatric analogue of
+  Emoto E3 adult CCr≥15 — not absolute adult CCr on a child) / CP-B/C.
+  Flags (not models) ICU/sepsis and CP-A.
 - **Trial heuristics, labelled:** CL = 0.67×GFR + 1.05×(WT/70)^0.75,
   Vss 0.37 L/kg, half-life-snapped interval. Checkpoint-gated, grade deferred.
 - **Two contracts that must not regress** (both were review findings, now
   tested in `tests/test_pbpk.py`): per-dose is solved over the interval, so
   `doses_per_day` stays fractional above 24 h and mg/day is a 24-h *equivalent*;
   and the CP-B/C abstain gates on the Child-Pugh **class alone** — a declared
-  hepatic impairment with no class abstains rather than assuming CP-A.
+  hepatic impairment with no class abstains rather than assuming CP-A (the
+  generic HI-incomplete 400 does not fire on this facade).
 - **Honesty markings are load-bearing:** `[INFERENCE]` 2-fold gates and the
   ABSTAINED Cao-quant checkpoint must survive any edit; paywalled numbers are
   never reconstructed.

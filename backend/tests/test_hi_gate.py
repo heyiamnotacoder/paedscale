@@ -47,6 +47,14 @@ def test_pediatric_hepatic_requires_class_or_complete_labs():
     print("  hi gate: pediatric + hepatic on  OK")
 
 
+def test_pbpk_mode_does_not_trip_the_generic_hi_gate():
+    """PBPK owns CP-B/C and HI-without-class; the 400 must not fire first."""
+    incomplete = _base(calculator_mode="pbpk", hepatic_impairment=True)
+    assert hi_gate_error(incomplete) is None
+    assert hi_resolution_required(incomplete) is False
+    print("  hi gate: pbpk skips generic incomplete-HI 400  OK")
+
+
 def test_adult_hi_requires_class_even_if_hepatic_box_off():
     assert hi_gate_error(_base(calculator_mode="adult_hi")) == HI_GATE_INCOMPLETE
     assert hi_resolution_required(_base(calculator_mode="adult_hi", hepatic_impairment=False)) is True
@@ -144,6 +152,7 @@ if __name__ == "__main__":
     print("HI gate + calculator toggle (issue #4):")
     test_pediatric_healthy_liver_still_submits()
     test_pediatric_hepatic_requires_class_or_complete_labs()
+    test_pbpk_mode_does_not_trip_the_generic_hi_gate()
     test_adult_hi_requires_class_even_if_hepatic_box_off()
     test_empty_ascites_is_not_implicit_none()
     test_age_does_not_switch_facades()

@@ -31,10 +31,15 @@ Trial-only. Axe path: revert `backend/agents/agent.py`, `backend/api/main.py`,
 6. **Inputs: WT + PMA + SCr required; rest = surfaced paper medians** (Q7/Q11).
    No assumed-term fill-in for <2 y (abstain), no defaulted-normal kidney
    (abstain without SCr+height). Every defaulted physiology value renders as an
-   assumption in the UI.
-7. **Abstain outside the envelope** (Q8/Q16). PMA<36 wk, eGFR<15, Child-Pugh B/C,
+   assumption in the UI. The tab must reveal `#pbpk-neo` (PMA / GA+PNA) when
+   age &lt; 2 y — backend abstain without a collectible input is not enough.
+7. **Abstain outside the envelope** (Q8/Q16). PMA&lt;36 wk, indexed eGFR&lt;15
+   mL/min/1.73 m² (pediatric analogue of Emoto E3 adult CCr≥15 — absolute
+   adult CCr 15 applied to a child would empty the Cao PMA≥36 envelope),
+   Child-Pugh B/C, and hepatic impairment declared without a class.
    ICU/sepsis flagged starting-point-only. Testing-only does not excuse a
-   confident wrong NTI dose.
+   confident wrong NTI dose. The generic HI-incomplete 400 does not fire on
+   `calculator_mode=pbpk`; the facade abstains itself.
 8. **No A–D grade in the trial** (Q9/Q12). Confidence = provenance +
    in-tab checkpoint table, never a letter. Grade deferred to post-trial.
 9. **Composite source of truth** (Q10). OSP vancomycin table (params: fu 0.67,
@@ -62,7 +67,8 @@ Trial-only. Axe path: revert `backend/agents/agent.py`, `backend/api/main.py`,
 - **Vss 0.7 → 0.37 L/kg** (Emoto Table 1 predicted; observed 0.30–0.43).
 - **CL ≈ 0.7×GFR → fu(0.67)×GFR + 1.05×(WT/70)^0.75** (OSP + Emoto Table 1;
   0.7-factor under-read adult CL ~25%). Nonrenal ontogeny unmodelled — stated.
-- **Added eGFR<15 and CP-B/C abstains** (E3 floor; hepatic cover is CP-A only).
+- **Added indexed eGFR&lt;15 and CP-B/C abstains** (E3 floor as pediatric
+  analogue of adult CCr≥15 mL/min; hepatic cover is CP-A only).
 - **Infusion ≥60 min re-cited to Emoto-cited 1-h regimens** (Rybak rate-cap text
   paywalled — marked unverified, not cited as verified).
 - Reference output: 6 y / 20 kg / SCr 0.5 / **height 115 cm** → 270 mg q6h,
@@ -88,9 +94,20 @@ Trial-only. Axe path: revert `backend/agents/agent.py`, `backend/api/main.py`,
   "e.g. MRSA sepsis", so that path silently lost the flag.
 - **Missing/non-numeric age abstains** instead of `float(x or 0)` making it a
   neonate (or raising a 500); `assert` replaced by a real abstain.
-- **`backend/tests/test_pbpk.py`** — 20 deterministic tests (reference case,
+- **`backend/tests/test_pbpk.py`** — deterministic tests (reference case,
   every abstain, AUC arithmetic across the whole interval set, rounding,
-  checkpoint honesty markings), wired into `tests.test_pk`.
+  checkpoint honesty markings, product-path HI-without-class), wired into
+  `tests.test_pk`.
+- **PMA fields are collectible on the tab.** `#pbpk-neo` was `display:none`
+  and only the main-form `#neo` was toggled, so under-2s always omitted PMA
+  and the Cao PMA≥36 envelope was API-only. Age &lt; 2 now shows PMA / GA+PNA.
+- **HI-without-class reaches the trial abstain on `/calculate`.** The generic
+  HI gate skipped `calculator_mode=pbpk`; the tab can declare impairment
+  without a class (`impaired — class unknown`).
+- **Renal floor stays indexed Schwartz**, not adult absolute CCr. Documented
+  so E3 is not misread as emptying the Cao envelope.
+- **AUC discordance is a stop-styled flag** (safety-bounds prominent warning).
+  Dose-hero mg/day is labelled “equivalent” when II &gt; 24 h.
 
 ## Verification done
 

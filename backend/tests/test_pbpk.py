@@ -113,6 +113,21 @@ def test_hepatic_impairment_without_a_class_abstains():
     assert "Child-Pugh class" in r["block_reason"]
 
 
+def test_product_path_hi_without_class_abstains_not_400():
+    """The generic HI gate used to 400 before the trial facade could abstain."""
+    from fastapi.testclient import TestClient
+    from api.main import app
+
+    c = TestClient(app)
+    body = dict(REF, calculator_mode="pbpk", hepatic_impairment=True, route="iv")
+    r = c.post("/calculate", json=body)
+    assert r.status_code == 200, r.text
+    rec = r.json()["recommendation"]
+    assert rec["blocked"] is True
+    assert "Child-Pugh class" in (rec.get("block_reason") or "")
+    assert rec.get("per_dose_mg") is None or rec["pbpk"]["per_dose_mg"] is None
+
+
 def test_pma_under_36_weeks_abstains():
     r = run_pbpk_vancomycin(_case(age_years=0.02, weight_kg=1.0, pma_weeks=30.0,
                                   serum_creatinine_mg_dl=0.6, height_cm=35.0))
@@ -146,7 +161,24 @@ def test_missing_renal_inputs_abstain():
 
 def test_egfr_below_floor_abstains():
     r = run_pbpk_vancomycin(_case(serum_creatinine_mg_dl=4.0))
-    assert r["blocked"] is True and "eGFR" in r["block_reason"]
+    assert r["blocked"] is True and "indexed eGFR" in r["block_reason"]
+
+
+def test_renal_floor_is_indexed_not_adult_absolute_ccr():
+    """E3's adult CCr >= 15 mL/min is NOT applied as an absolute mL/min cut on a child.
+
+    The 20 kg / 115 cm reference child at SCr 2.0 has indexed eGFR ~24
+    (above the floor) and absolute GFR ~11 mL/min (below adult CCr 15).
+    Absolute-15 would also empty the Cao PMA>=36 neonate envelope.
+    """
+    mid = run_pbpk_vancomycin(_case(serum_creatinine_mg_dl=2.0))
+    assert not mid["blocked"], mid["block_reason"]
+    assert mid["egfr_indexed"] >= 15
+    assert mid["gfr_absolute_ml_min"] < 15
+    neo = run_pbpk_vancomycin(_case(age_years=0.05, weight_kg=1.2, pma_weeks=38.0,
+                                    serum_creatinine_mg_dl=0.4, height_cm=38.0))
+    assert not neo["blocked"], neo["block_reason"]
+    assert neo["gfr_absolute_ml_min"] < 15
 
 
 def test_non_vancomycin_and_oral_abstain():

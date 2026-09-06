@@ -208,11 +208,18 @@ def resolve_calculator_mode(case: dict) -> str:
 
 
 def hi_resolution_required(case: dict) -> bool:
-    """Adult HI always; pediatric only when the hepatic box is on."""
+    """Adult HI always; pediatric only when the hepatic box is on.
+
+    The PBPK trial facade owns its own CP-A/B/C envelope (class-alone
+    B/C abstain; HI with no class abstains). The generic incomplete-HI
+    400 must not fire first, or that trial abstain is unreachable.
+    """
     try:
         mode = resolve_calculator_mode(case)
     except ValueError:
         return True
+    if mode == "pbpk":
+        return False
     if mode == "adult_hi":
         return True
     return bool(case.get("hepatic_impairment"))

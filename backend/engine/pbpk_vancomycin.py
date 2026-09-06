@@ -55,7 +55,10 @@ CL_NONRENAL_L_PER_H_70KG = 1.05  # Emoto Table 1 (total 6.78, renal 5.73, urine 
 VD_L_PER_KG = 0.37  # Emoto Table 1 predicted Vss (observed 0.30-0.43)
 
 PMA_MIN_WEEKS = 36.0  # Cao 2024 abstract caveat (C2): PMA < 36 wk unsolved -> abstain
-EGFR_FLOOR = 15.0  # Emoto Fig 3c-d renal bins floor CCr >= 15 (E3); below -> abstain
+# Pediatric analogue of Emoto E3's adult CCr >= 15 mL/min: bedside-Schwartz
+# INDEXED eGFR (mL/min/1.73 m²). Adult absolute CCr 15 applied to a neonate
+# would empty the Cao PMA>=36 envelope (1.2 kg term abs GFR is ~2–3 mL/min).
+EGFR_FLOOR = 15.0
 
 MAX_INFUSION_RATE_MG_PER_HR = 1000.0  # standard rate cap (Rybak full text inaccessible — marked unverified)
 MIN_INFUSION_MIN = 60.0  # Emoto-cited regimens run 15 mg/kg over 1 h
@@ -309,8 +312,10 @@ def run_pbpk_vancomycin(case: dict) -> dict[str, Any]:
         )
     if egfr < EGFR_FLOOR:
         return _abstain(
-            f"ABSTAIN — eGFR {egfr:.0f} below the validated envelope "
-            "(Emoto Fig 3c-d renal bins floor at CCr >= 15 mL/min, E3).",
+            f"ABSTAIN — indexed eGFR {egfr:.0f} mL/min/1.73 m² below the "
+            f"validated envelope (pediatric analogue of Emoto E3 adult CCr "
+            f">= {EGFR_FLOOR:.0f} mL/min; absolute adult CCr is not applied "
+            "to a child — that would empty the Cao PMA>=36 envelope).",
             flags, assumptions,
         )
     # Gate on the CLASS, not on a separate boolean: a case carrying child_pugh="C"
