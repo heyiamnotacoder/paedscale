@@ -42,8 +42,18 @@ app.add_middleware(
 )
 
 HERE = os.path.dirname(__file__)
-FRONTEND = os.path.join(HERE, "..", "..", "frontend", "index.html")
+FRONTEND_DIR = os.path.join(HERE, "..", "..", "frontend")
+FRONTEND = os.path.join(FRONTEND_DIR, "index.html")
 EVAL_PK = os.path.join(HERE, "..", "eval_data", "drug_pk.json")
+
+# Browser-tab / home-screen marks. Keep this allow-list tight — these are
+# the only files besides index.html that the product path serves from frontend/.
+_FRONTEND_ASSETS = {
+    "favicon.ico": "image/x-icon",
+    "favicon.svg": "image/svg+xml",
+    "favicon-32.png": "image/png",
+    "apple-touch-icon.png": "image/png",
+}
 
 
 def _oracle_pk() -> dict:
@@ -104,6 +114,37 @@ class Case(BaseModel):
 @app.get("/")
 def index():
     return FileResponse(FRONTEND)
+
+
+def _serve_frontend_asset(name: str) -> FileResponse:
+    media = _FRONTEND_ASSETS.get(name)
+    if not media:
+        raise HTTPException(404)
+    path = os.path.abspath(os.path.join(FRONTEND_DIR, name))
+    root = os.path.abspath(FRONTEND_DIR) + os.sep
+    if not path.startswith(root) or not os.path.isfile(path):
+        raise HTTPException(404)
+    return FileResponse(path, media_type=media)
+
+
+@app.api_route("/favicon.ico", methods=["GET", "HEAD"])
+def favicon_ico():
+    return _serve_frontend_asset("favicon.ico")
+
+
+@app.api_route("/favicon.svg", methods=["GET", "HEAD"])
+def favicon_svg():
+    return _serve_frontend_asset("favicon.svg")
+
+
+@app.api_route("/favicon-32.png", methods=["GET", "HEAD"])
+def favicon_png():
+    return _serve_frontend_asset("favicon-32.png")
+
+
+@app.api_route("/apple-touch-icon.png", methods=["GET", "HEAD"])
+def apple_touch_icon():
+    return _serve_frontend_asset("apple-touch-icon.png")
 
 
 @app.get("/health")

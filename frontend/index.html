@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PaedScale — Pediatric Dose Extrapolation</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0E7A6B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -41,7 +46,7 @@
     display:flex;align-items:center;justify-content:space-between}
   .brand{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.8rem;
     letter-spacing:.14em;text-transform:uppercase;color:var(--teal-deep);cursor:pointer;font-weight:600;background:none;border:0}
-  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px var(--teal-wash)}
+  .brand-mark{width:28px;height:28px;border-radius:7px;display:block;flex-shrink:0}
   .brand b{color:var(--ink)}
   .topnav{display:flex;align-items:center;gap:8px}
   .topnav .link{background:none;border:0;font:inherit;font-size:.85rem;color:var(--ink-2);cursor:pointer;padding:8px 12px;border-radius:8px}
@@ -555,7 +560,7 @@
 <!-- ================= TOP BAR ================= -->
 <div class="topbar">
   <div class="inner">
-    <button class="brand" onclick="go('landing')"><span class="dot"></span><b>Paed</b>Scale</button>
+    <button class="brand" onclick="go('landing')"><img class="brand-mark" src="/favicon.svg" width="28" height="28" alt=""><b>Paed</b>Scale</button>
     <nav class="topnav">
       <button class="link" onclick="go('landing');scrollToId('how-it-works')">How it works</button>
       <button class="link" onclick="go('landing');scrollToId('grades')">Grading</button>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="PaedScale">
+  <!-- Allometric scale mark: three rising bars on brand teal. -->
+  <rect width="32" height="32" rx="7" fill="#0E7A6B"/>
+  <rect x="6.4" y="17.92" width="4.8" height="7.68" rx="1.5" fill="#fff"/>
+  <rect x="13.6" y="13.70" width="4.8" height="11.90" rx="1.5" fill="#fff"/>
+  <rect x="20.8" y="8.70" width="4.8" height="16.90" rx="1.5" fill="#fff"/>
+</svg>
