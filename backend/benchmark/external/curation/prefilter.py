@@ -10,18 +10,19 @@ alone (L/kg) does not match. Fixed before screening (Amendment 1); a change is a
 import re
 
 _NUM = r"\d+(?:[.,]\d+)?"
-_BRACKETED = r"(?:[\(\[][^\)\]]{0,40}[\)\]]\s*)?"
-_VOL = r"(?:m?l|millilit(?:er|re)s?|lit(?:er|re)s?)"
-_EXP = r"(?:\s*(?:\(\s*[-−]\s*1\s*\)|[-−]\s*1|⁻¹|\^\s*[-−]?1))?"
-_SEP = r"\s*(?:/|·|⋅|\.|\*|×|\bx\b|\bper\b|\s)\s*\(?\s*"
-_SIZE = r"(?:1\.73\s*m(?:2|²|\^2)?|70\s*kg|kg|m2|m²|m\^2)"
-_TIME = r"(?:hours?|hrs?|h|minutes?|min|days?)(?![a-z])"
+_BRACKETED = r"(?:[\(\[][^\)\]]{0,40}[\)\]] ?)?"
+_VOL = r"(?:[md]?l|millilit(?:er|re)s?|lit(?:er|re)s?)"
+_EXP = r"(?: ?(?:\( ?[-−–] ?1 ?\)|[-−–] ?1|⁻¹|\^ ?[-−–]?1))?"
+_SEP = r" ?(?:/|·|⋅|\.|\*|×|\bx\b|\bper\b| ) ?\(? ?"
+_SIZE = r"(?:1\.73 ?m(?:2|²|\^2)?|70 ?kg|kg|m2|m²|m\^2)"
+_TIME = r"(?:hours?|hrs?|h|minutes?|min|days?|d)(?![a-z])"
 _UNIT = rf"{_VOL}{_EXP}{_SEP}(?:{_SIZE}{_EXP}{_SEP})?{_TIME}"
 CLEARANCE_VALUE = re.compile(
-    rf"{_NUM}\s*{_BRACKETED}{_UNIT}"          # 3.2 (95% CI 2.9-3.5) L/h
-    rf"|\(\s*{_UNIT}[^)]{{0,20}}\)[^.;]{{0,30}}?{_NUM}",   # CL (L/h) was 3.2
+    rf"{_NUM} ?{_BRACKETED}{_UNIT}"          # 3.2 (95% CI 2.9-3.5) L/h
+    rf"|\( ?{_UNIT}[^)]{{0,20}}\)[^.;]{{0,30}}?{_NUM}",   # CL (L/h) was 3.2
     re.I)
 
 
 def has_clearance_value(text: str) -> bool:
-    return bool(CLEARANCE_VALUE.search(text or ""))
+    # Whitespace is collapsed to single spaces first, so the pattern needs no unbounded \s*.
+    return bool(CLEARANCE_VALUE.search(re.sub(r"\s+", " ", text or "")))

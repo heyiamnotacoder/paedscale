@@ -28,7 +28,13 @@ ABSTRACT_DIR = os.path.join(EXTERNAL, "abstracts")
 
 CURVE_SOURCE_DRUGS = {"morphine"}          # UGT2B7 curve source (Anand 2008)
 SEARCH_TERM = {"piperacillin_tazobactam": "piperacillin[tiab]",
-               "penicillin_g": '(benzylpenicillin[tiab] OR "penicillin G"[tiab])'}
+               "penicillin_g": '(benzylpenicillin[tiab] OR "penicillin G"[tiab])',
+               "acyclovir": "(acyclovir[tiab] OR aciclovir[tiab])",              # Amendment 2
+               "zidovudine": "(zidovudine[tiab] OR azidothymidine[tiab])"}       # Amendment 2
+# NCBI asks clients to identify themselves. A generic project address only, never a person's.
+NCBI = {"tool": "paedscale", "email": os.environ.get("NCBI_EMAIL", "paedscale@example.com")}
+if os.environ.get("NCBI_API_KEY"):
+    NCBI["api_key"] = os.environ["NCBI_API_KEY"]
 PEDIATRIC = ("(neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR "
              "paediatric*[tiab])")
 ADULT = "(healthy[tiab] OR volunteer*[tiab] OR adult*[tiab])"
@@ -36,7 +42,7 @@ COMMON = "AND humans[mh] AND english[la] AND hasabstract"
 
 
 def drugs() -> list[str]:
-    with open(REFSET) as f:
+    with open(REFSET, encoding="utf-8") as f:
         ref = json.load(f)["drugs"]
     return sorted(k for k, d in ref.items() if d.get("included") and k not in CURVE_SOURCE_DRUGS)
 
@@ -47,36 +53,72 @@ def queries(drug: str) -> tuple[str, str]:
     return f"{stem} {PEDIATRIC} {COMMON}", f"{stem} {ADULT} {COMMON}"
 
 
-def _esearch(term: str) -> list[str]:
-    ids, start = [], 0
-    while True:
-        r = httpx.get(f"{EUTILS}/esearch.fcgi", params={"db": "pubmed", "term": term, "retmode": "json",
-                                                       "retmax": 500, "retstart": start}, timeout=60)
-        r.raise_for_status()
-        res = r.json()["esearchresult"]
-        ids += res["idlist"]
-        start += 500
-        if start >= int(res["count"]):
-            return sorted(set(ids), key=int)
-        time.sleep(0.4)
+def _request(method: str, url: str, **kw) -> httpx.Response:
+    """NCBI request with backoff on 429 and 5xx (five tries)."""
+    for attempt in range(5):
+        r = httpx.request(method, url, timeout=120, **kw)
+        if r.status_code != 429 and r.status_code < 500:
+            r.raise_for_status()
+            return r
+        time.sleep(2 ** attempt)
+    r.raise_for_status()
+    return r
 
 
-def _abstracts(pmids: list[str]) -> dict[str, str]:
-    """Title + abstract text per PMID, as PubMed returns it in XML."""
+def checked_ids(res: dict) -> list[str]:
+    """PMIDs of one esearch result, ascending. Errors, warnings and counts esearch cannot page
+    in one call stop the snapshot rather than silently shrinking it."""
+    if res.get("errorlist") or res.get("ERROR"):
+        raise RuntimeError(f"esearch error: {res.get('errorlist') or res.get('ERROR')}")
+    if res.get("warninglist"):
+        raise RuntimeError(f"esearch warning: {res['warninglist']}")
+    if int(res["count"]) >= 10000:
+        raise RuntimeError(f"esearch count {res['count']} reaches the 10000 retrieval limit")
+    if len(res["idlist"]) != int(res["count"]):
+        raise RuntimeError(f"esearch returned {len(res['idlist'])} of {res['count']} ids")
+    return sorted(set(res["idlist"]), key=int)
+
+
+def _esearch(term: str) -> tuple[list[str], str]:
+    r = _request("GET", f"{EUTILS}/esearch.fcgi",
+                 params={**NCBI, "db": "pubmed", "term": term, "retmode": "json", "retmax": 9999})
+    res = r.json()["esearchresult"]
+    return checked_ids(res), res.get("querytranslation", "")
+
+
+def parse_efetch(xml: bytes) -> dict[str, dict]:
+    """Per journal-article PMID: the hashed text and the publication year.
+
+    The text is the title, a blank line, then each English abstract section on its own line as
+    "LABEL: text" (or the text alone when unlabelled). Inline markup is flattened. Abstracts in
+    other languages (OtherAbstract) and book records are left out."""
+    out = {}
+    for art in ET.fromstring(xml).iter("PubmedArticle"):
+        pmid = art.findtext("MedlineCitation/PMID")
+        title_el = art.find("MedlineCitation/Article/ArticleTitle")
+        title = "".join(title_el.itertext()).strip() if title_el is not None else ""
+        parts = []
+        for a in art.findall("MedlineCitation/Article/Abstract/AbstractText"):
+            text = " ".join("".join(a.itertext()).split())
+            parts.append(f"{a.get('Label')}: {text}" if a.get("Label") else text)
+        year = (art.findtext("MedlineCitation/Article/Journal/JournalIssue/PubDate/Year")
+                or (art.findtext("MedlineCitation/Article/Journal/JournalIssue/PubDate/MedlineDate") or "")[:4])
+        out[pmid] = {"text": (title + "\n\n" + "\n".join(parts)).strip(), "year": year}
+    return out
+
+
+def require_all(pmids: list[str], recs: dict) -> None:
+    missing = [p for p in pmids if p not in recs or not recs[p]["text"]]
+    if missing:
+        raise RuntimeError(f"efetch returned no journal abstract for PMIDs: {', '.join(missing)}")
+
+
+def _abstracts(pmids: list[str]) -> dict[str, dict]:
     out = {}
     for i in range(0, len(pmids), 150):
-        r = httpx.post(f"{EUTILS}/efetch.fcgi", data={"db": "pubmed", "id": ",".join(pmids[i:i + 150]),
-                                                      "retmode": "xml"}, timeout=120)
-        r.raise_for_status()
-        for art in ET.fromstring(r.content).iter("PubmedArticle"):
-            pmid = art.findtext(".//MedlineCitation/PMID")
-            title = "".join(art.find(".//ArticleTitle").itertext()) if art.find(".//ArticleTitle") is not None else ""
-            parts = []
-            for a in art.iter("AbstractText"):
-                label = a.get("Label")
-                text = "".join(a.itertext()).strip()
-                parts.append(f"{label}: {text}" if label else text)
-            out[pmid] = (title.strip() + "\n\n" + "\n".join(parts)).strip()
+        r = _request("POST", f"{EUTILS}/efetch.fcgi",
+                     data={**NCBI, "db": "pubmed", "id": ",".join(pmids[i:i + 150]), "retmode": "xml"})
+        out.update(parse_efetch(r.content))
         time.sleep(0.4)
     return out
 
@@ -86,16 +128,18 @@ def snapshot(drug: str, today: str) -> dict:
     record = {"drug": drug, "retrieved": today, "queries": {"pediatric": ped_q, "adult": adult_q}}
     os.makedirs(os.path.join(ABSTRACT_DIR, drug), exist_ok=True)
     for kind, q in (("pediatric", ped_q), ("adult", adult_q)):
-        pmids = _esearch(q)
-        texts = _abstracts(pmids)
+        pmids, translation = _esearch(q)
+        recs = _abstracts(pmids)
+        require_all(pmids, recs)
         rows = []
         for p in pmids:
-            t = texts.get(p, "")
-            with open(os.path.join(ABSTRACT_DIR, drug, f"{p}.txt"), "w") as f:
+            t = recs[p]["text"]
+            with open(os.path.join(ABSTRACT_DIR, drug, f"{p}.txt"), "w", encoding="utf-8") as f:
                 f.write(t)
-            rows.append({"pmid": p, "sha256": hashlib.sha256(t.encode()).hexdigest(),
+            rows.append({"pmid": p, "year": recs[p]["year"], "sha256": hashlib.sha256(t.encode()).hexdigest(),
                          "prefilter": has_clearance_value(t)})
         record[kind] = rows
+        record.setdefault("query_translation", {})[kind] = translation
     return record
 
 
@@ -104,7 +148,7 @@ if __name__ == "__main__":
     today = dt.date.today().isoformat()
     for d in drugs():
         rec = snapshot(d, today)
-        with open(os.path.join(SEARCH_DIR, f"{d}.json"), "w") as f:
+        with open(os.path.join(SEARCH_DIR, f"{d}.json"), "w", encoding="utf-8") as f:
             json.dump(rec, f, indent=1)
         print(d, "pediatric", len(rec["pediatric"]), sum(r["prefilter"] for r in rec["pediatric"]),
               "adult", len(rec["adult"]), sum(r["prefilter"] for r in rec["adult"]))

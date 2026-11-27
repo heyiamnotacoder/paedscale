@@ -219,3 +219,22 @@ This answers an internal methods review of the protocol above. These rules overr
 
     The cases are in `tests/test_external_prefilter.py`. Infusion rates, creatinine clearance and similar false positives only add screening work, and screening removes them.
 11. **Added sensitivity analysis E8.** Exclude studies published before 1995. Older assays and neonatal care differ.
+
+### Amendment 2 — 2026-11-27, before any search was run, any abstract was screened or any value was extracted
+
+This answers a code review of the search script and of Amendment 1. These rules override the text above where the two conflict.
+
+1. **Synonyms.** The search term for acyclovir is `(acyclovir[tiab] OR aciclovir[tiab])`, and for zidovudine `(zidovudine[tiab] OR azidothymidine[tiab])`.
+2. **Snapshot integrity.**
+   * Each query is one `esearch` call with retmax 9,999. Any esearch error or warning, or a count of 10,000 or more, stops the snapshot.
+   * Every PMID must come back from `efetch` as a journal article with abstract text, or the snapshot stops.
+   * The query translation and each record's publication year are saved. E8 needs the year.
+   * Requests identify the tool as `paedscale` with a generic project address, and retry with backoff on 429 or 5xx responses.
+3. **Hashed text.** The title, a blank line, then each English abstract section on its own line as `LABEL: text` (or the text alone when unlabelled), with inline markup flattened and runs of whitespace collapsed. Abstracts in other languages are not included.
+4. **Shuffle.** For each drug and each list (pediatric, adult), the pre-filtered PMIDs are sorted numerically ascending, then shuffled with a fresh `random.Random(20261127)`.
+5. **Adult abstracts with several groups.** The qualifying groups' values are converted to 70 kg and their median is that abstract's value. Healthy volunteers with no stated age count as adults, flagged `adult_age_unstated`.
+6. **Circularity flags come from the abstract only.** Amendment 1 §4's use of full text is withdrawn, so that both screening passes see the same information. A model that fixed a maturation function without saying so in its abstract is missed; this is a stated limitation.
+7. **Age grid.** The grid runs from max(lower bound, 1 day) to the upper bound. A stated central weight is used at every grid age. Without one, each grid age takes the growth-table weight for that age.
+8. **κ** is computed over the abstracts that both passes read.
+9. **Pre-filter.** Whitespace is collapsed before matching, which removes a slow-matching case. It also accepts en-dash exponents ("kg–1"), per-day "d" ("L/kg/d") and dL. The cases are in `tests/test_external_prefilter.py`.
+10. **Workload.** When a stratum never fills, the whole pre-filtered list for that drug is read. This is accepted, because stopping early on effort would make inclusion depend on reading order beyond the seeded shuffle.

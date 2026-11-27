@@ -46,3 +46,19 @@ def test_a_clearance_with_units_passes(text):
 ])
 def test_text_without_a_clearance_value_is_screened_out(text):
     assert not has_clearance_value(text)
+
+
+@pytest.mark.parametrize("text", [
+    "clearance 4 ml kg–1 min–1",       # en dash exponent
+    "CL 0.5 L/kg/d",
+    "clearance 30 dL/h",
+])
+def test_amendment_2_units_pass(text):
+    assert has_clearance_value(text)
+
+
+def test_long_runs_of_whitespace_do_not_stall_the_filter():
+    import time
+    t = time.perf_counter()
+    has_clearance_value("1 l" + " " * 5000 + "x")
+    assert time.perf_counter() - t < 0.5
