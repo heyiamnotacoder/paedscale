@@ -1,4 +1,4 @@
-"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-10).
+"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-11).
 
 An extraction record lists, per drug and per screening pass, every screened abstract with its
 decision and, when included, its observations. Each observation is:
@@ -123,7 +123,7 @@ def problems(obs: dict, abstract: str, study_flags=()) -> list[str]:
         if c is not None and not (_is_num(c) or _is_range(c)):
             out.append(f"{central_key} {c!r} is not a non-negative number or [low, high] range")
         if r is not None and c is None:            # Amendment 11 §2
-            out.append(f"{range_key} is given without its central field {central_key}; a range-only age goes in {central_key}")
+            out.append(f"{range_key} is given without its main field {central_key}; a range-only age goes in {central_key}")
         if r is not None:
             if not _is_range(r):
                 out.append(f"{range_key} {r!r} is not a [low, high] range")
@@ -209,7 +209,7 @@ def _default_ga_cap(obs: dict) -> float | None:
 
 def ga_problem(obs: dict) -> str | None:
     """Stated ages must allow some GA of 20-45 weeks, and a stated GA must not exceed the
-    largest PMA minus the smallest postnatal age by more than half a week (Amendments 8 §2, 9 §2)."""
+    largest PMA minus the smallest postnatal age by more than half a week (Amendments 8 §2, 9 §2, 10 §2)."""
     pma, pna, ga = _bounds(obs, "pma"), _bounds(obs, "pna"), _bounds(obs, "ga")
     if pma is None:
         return None

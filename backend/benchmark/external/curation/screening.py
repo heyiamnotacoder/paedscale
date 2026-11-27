@@ -69,6 +69,18 @@ def next_up(snap: dict, record: dict) -> tuple[str | None, list[str]]:
     return None, []
 
 
+def snapshot_text(abstract_dir: str, drug: str, pmid: str, snap: dict) -> str:
+    """The abstract text, only if it matches the committed snapshot hash (Literature search)."""
+    import hashlib
+    import os
+    want = {r["pmid"]: r["sha256"] for kind in ("pediatric", "adult") for r in snap[kind]}
+    with open(os.path.join(abstract_dir, drug, f"{pmid}.txt"), encoding="utf-8") as f:
+        text = f.read()
+    if hashlib.sha256(text.encode()).hexdigest() != want.get(pmid):
+        raise SystemExit(f"abstract {pmid} differs from the snapshot: run search restore")
+    return text
+
+
 def _cli():
     """python3 -m benchmark.external.curation.screening next <pass> <drug> [n]
     Prints the next unscreened abstracts in the seeded order: pediatric while a stratum is open,
@@ -93,7 +105,7 @@ def _cli():
     print(f"-- {kind}: {len(todo)} unscreened of {len(order(snap[kind]))} pre-filtered")
     for p in todo[:n]:
         print(f"\n=== {kind} PMID {p} ===")
-        print(open(os.path.join(ABSTRACT_DIR, drug, f"{p}.txt"), encoding="utf-8").read())
+        print(snapshot_text(ABSTRACT_DIR, drug, p, snap))
 
 if __name__ == "__main__":
     _cli()

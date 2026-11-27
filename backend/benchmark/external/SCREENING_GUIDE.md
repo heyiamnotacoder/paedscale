@@ -5,6 +5,7 @@ This guide says *how* to record screening decisions. The rules themselves are in
 ## Commands (from `backend/`)
 
 ```bash
+python3 -m benchmark.external.curation.search restore                    # once per fresh checkout: re-fetch the abstracts, hash-checked
 python3 -m benchmark.external.curation.screening next <pass> <drug> 3   # next abstracts in the seeded order
 python3 -m benchmark.external.curation.check <pass> [<drug>]            # validate a pass's records
 ```

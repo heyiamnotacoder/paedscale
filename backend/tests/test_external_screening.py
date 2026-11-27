@@ -52,3 +52,17 @@ def test_the_queue_moves_to_adult_abstracts_once_every_stratum_is_full():
         {"pna_days": ages[i // 2], "ga_weeks": 30 if i < 2 else 40, "pma_weeks": None}]}
         for i, p in enumerate(first_ten)]
     assert screening.next_up(snap, {"pediatric": studies, "adult": []}) == ("adult", ["90"])
+
+
+def test_next_shows_only_an_abstract_that_matches_its_committed_hash(tmp_path, monkeypatch):
+    import hashlib
+    import pytest
+    from benchmark.external.curation import screening as sc
+    (tmp_path / "d").mkdir()
+    (tmp_path / "d" / "1.txt").write_text("ok", encoding="utf-8")
+    (tmp_path / "d" / "2.txt").write_text("changed", encoding="utf-8")
+    snap = {"pediatric": [{"pmid": "1", "sha256": hashlib.sha256(b"ok").hexdigest()},
+                          {"pmid": "2", "sha256": hashlib.sha256(b"orig").hexdigest()}], "adult": []}
+    assert sc.snapshot_text(str(tmp_path), "d", "1", snap) == "ok"
+    with pytest.raises(SystemExit, match="2"):
+        sc.snapshot_text(str(tmp_path), "d", "2", snap)

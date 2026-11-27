@@ -97,3 +97,17 @@ def test_restored_abstracts_must_match_the_committed_hashes():
     del recs["1"]
     with pytest.raises(RuntimeError, match="1"):
         search.matching_texts(rows, recs)
+
+
+def test_the_cli_never_rewrites_the_snapshot_without_its_explicit_subcommand(monkeypatch):
+    import pytest
+    calls = []
+    monkeypatch.setattr(search, "snapshot", lambda *a: calls.append("snapshot"))
+    monkeypatch.setattr(search, "restore", lambda d: calls.append(("restore", d)) or 0)
+    monkeypatch.setattr(search, "drugs", lambda: ["acyclovir"])
+    for argv in ([], ["restore", "acyclovir"], ["restor"], ["--help"]):
+        with pytest.raises(SystemExit):
+            search.main(argv)
+    assert calls == []
+    search.main(["restore"])
+    assert calls == [("restore", "acyclovir")]

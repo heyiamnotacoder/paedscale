@@ -1,7 +1,8 @@
 """External validation, step 1 (network): snapshot the PubMed searches fixed in PROTOCOL.md.
 
-Usage (from backend/): python3 -m benchmark.external.curation.search [restore]
-`restore` re-fetches the committed snapshot's abstracts and checks them against its hashes.
+Usage (from backend/): python3 -m benchmark.external.curation.search restore|snapshot
+`restore` re-fetches the committed snapshot's abstracts and checks them against its hashes;
+`snapshot` re-runs the searches and overwrites the committed snapshot (done once, 2026-11-27).
 Writes benchmark/external/search/<drug>.json (committed): the queries, the retrieval date, every
 PMID returned (ascending), and per PMID the SHA-256 of the abstract text and whether the
 mechanical pre-filter matched. Abstract texts go to benchmark/external/abstracts/ (gitignored,
@@ -182,12 +183,15 @@ def snapshot(drug: str, today: str) -> dict:
     return record
 
 
-if __name__ == "__main__":
-    import sys
-    if sys.argv[1:] == ["restore"]:         # re-fetch the committed snapshot's abstracts
+def main(argv: list[str]) -> None:
+    """`restore` re-fetches the committed snapshot's abstracts; `snapshot` re-runs the searches
+    and overwrites the committed snapshot. Anything else stops, so a typo never re-searches."""
+    if argv == ["restore"]:
         for d in drugs():
             print(d, restore(d))
-        sys.exit()
+        return
+    if argv != ["snapshot"]:
+        raise SystemExit("usage: python3 -m benchmark.external.curation.search restore|snapshot")
     os.makedirs(SEARCH_DIR, exist_ok=True)
     today = dt.date.today().isoformat()
     for d in drugs():
@@ -196,3 +200,8 @@ if __name__ == "__main__":
             json.dump(rec, f, indent=1)
         print(d, "pediatric", len(rec["pediatric"]), sum(r["prefilter"] for r in rec["pediatric"]),
               "adult", len(rec["adult"]), sum(r["prefilter"] for r in rec["adult"]))
+
+
+if __name__ == "__main__":
+    import sys
+    main(sys.argv[1:])

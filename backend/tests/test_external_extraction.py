@@ -200,4 +200,4 @@ def test_a_range_without_its_central_field_is_a_problem():
     # Amendment 11 §2: a range-only age goes in the main field
     for kw in ({"pma_weeks": None, "pma_range_weeks": [28, 40], "pna_days": 3},
                {"pna_days": None, "pna_range_days": [0, 200], "pma_weeks": 40}):
-        assert any("without its central field" in p for p in ex.problems(_obs(**kw), ABSTRACT))
+        assert any("without its main field" in p for p in ex.problems(_obs(**kw), ABSTRACT))
