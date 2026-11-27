@@ -123,7 +123,7 @@ def test_a_per_day_only_final_dose_is_checked_per_kg_using_the_weight():
     assert any("ABOVE TOXIC THRESHOLD" in f and "40" in f for f in out["flags"])
     no_wt = apply_final_dose_safety_flags(
         {"final_dose_mg_per_kg_per_day": None, "final_dose_mg_per_day": 800.0, "flags": []}, dossier)
-    assert no_wt["flags"] == []
+    assert not any("THRESHOLD" in f for f in no_wt["flags"])
 
 
 def test_both_dose_fields_are_checked_and_a_derived_value_is_labelled():
@@ -144,4 +144,24 @@ def test_an_unusable_weight_does_not_produce_a_derived_check():
         out = apply_final_dose_safety_flags(
             {"final_dose_mg_per_kg_per_day": None, "final_dose_mg_per_day": 800.0, "flags": []},
             dossier, weight_kg=wt)
-        assert out["flags"] == [], wt
+        assert not any("THRESHOLD" in f for f in out["flags"]), wt
+
+
+def test_a_numeric_string_bound_is_read_and_a_bad_bound_is_ignored():
+    from agents.agent import apply_final_dose_safety_flags
+    out = apply_final_dose_safety_flags({"final_dose_mg_per_kg_per_day": 5.0, "flags": []},
+                                        {"effective_dose_mg_per_kg_per_day": "10"})
+    assert any("BELOW EFFECTIVE THRESHOLD" in f for f in out["flags"])
+    for bad in ("n/a", float("nan"), True):
+        out = apply_final_dose_safety_flags({"final_dose_mg_per_kg_per_day": 5.0, "flags": []},
+                                            {"toxic_dose_mg_per_kg_per_day": bad})
+        assert out["flags"] == [], bad
+
+
+def test_a_dose_that_cannot_be_checked_against_a_cited_bound_says_so():
+    """mg/day stated, no usable per-kg dose or weight, and a bound is cited: flag it."""
+    from agents.agent import apply_final_dose_safety_flags
+    out = apply_final_dose_safety_flags(
+        {"final_dose_mg_per_kg_per_day": None, "final_dose_mg_per_day": 800.0, "flags": []},
+        {"toxic_dose_mg_per_kg_per_day": 30.0}, weight_kg=None)
+    assert any("NOT CHECKED AGAINST SAFETY BOUNDS" in f for f in out["flags"])

@@ -1942,7 +1942,7 @@ function renderResult(data){
   const flags = r.flags||[];
   if(flags.length){
     h += `<div class="sec"><h3>Flags &amp; warnings</h3>`;
-    flags.forEach(f=>{ const stop=/exceed|toxic|do not|below|sub-therapeutic|safety stop|contraindicat/i.test(f);
+    flags.forEach(f=>{ const stop=/exceed|toxic|do not|below|sub-therapeutic|safety (stop|bound)|contraindicat/i.test(f);
       h += `<div class="flag ${stop?"stop":""}">${esc(f)}</div>`; });
     h += `</div>`;
   }

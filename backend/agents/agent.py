@@ -374,8 +374,18 @@ def _run_adult_hi_case(case: dict, on_step=None) -> dict:
     }
 
 
-def _number(x) -> bool:
+def _is_finite_number(x) -> bool:
     return isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x)
+
+
+def _bound(x) -> Optional[float]:
+    """A cited mg/kg/day bound as a finite float, or None. Numeric strings are read."""
+    if isinstance(x, str):
+        try:
+            x = float(x)
+        except ValueError:
+            return None
+    return float(x) if _is_finite_number(x) else None
 
 
 def apply_final_dose_safety_flags(rec: dict, dossier: Optional[dict],
@@ -390,23 +400,27 @@ def apply_final_dose_safety_flags(rec: dict, dossier: Optional[dict],
     """
     doses = []   # (mg/kg/day, how it reads in the flag)
     dpk = rec.get("final_dose_mg_per_kg_per_day")
-    if _number(dpk):
+    if _is_finite_number(dpk):
         doses.append((dpk, f"{dpk:g} mg/kg/day"))
     per_day = rec.get("final_dose_mg_per_day")
-    if _number(per_day) and _number(weight_kg) and weight_kg > 0:
+    if _is_finite_number(per_day) and _is_finite_number(weight_kg) and weight_kg > 0:
         derived = per_day / weight_kg
         doses.append((derived, f"{per_day:g} mg/day for {weight_kg:g} kg (= {derived:.3g} mg/kg/day)"))
     dossier = dossier or {}
-    toxic = dossier.get("toxic_dose_mg_per_kg_per_day")
-    effective = dossier.get("effective_dose_mg_per_kg_per_day")
+    toxic = _bound(dossier.get("toxic_dose_mg_per_kg_per_day"))
+    effective = _bound(dossier.get("effective_dose_mg_per_kg_per_day"))
     flags = list(rec.get("flags") or [])
+    stated = rec.get("final_dose_mg_per_kg_per_day") is not None or per_day is not None
+    if not doses and stated and (toxic is not None or effective is not None):
+        flags.append("NOT CHECKED AGAINST SAFETY BOUNDS: the final dose could not be expressed "
+                     "in mg/kg/day, so it was not compared with the cited thresholds.")
     if doses and toxic is not None:
-        value, text = max(doses)
+        value, text = max(doses, key=lambda d: d[0])
         if value > toxic:
             flags.append(f"ABOVE TOXIC THRESHOLD: recommended {text} exceeds the cited "
                          f"toxic threshold {toxic:g} mg/kg/day.")
     if doses and effective is not None:
-        value, text = min(doses)
+        value, text = min(doses, key=lambda d: d[0])
         if value < effective:
             flags.append(f"BELOW EFFECTIVE THRESHOLD: recommended {text} is below the cited "
                          f"effective threshold {effective:g} mg/kg/day.")
