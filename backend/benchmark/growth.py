@@ -6,8 +6,10 @@ Term infants and children: sex-averaged median weight-for-age, WHO Child Growth 
 Preterm infants (gestational age < 37 wk) whose postmenstrual age is still below 40 wk:
 APPROXIMATE sex-averaged 50th centile of the Fenton 2013 preterm growth chart, read from the
 published charts at 2-week steps (Fenton & Kim, BMC Pediatr 2013;13:59). Precision is about
-±10%; the benchmark's weight sensitivity analysis (±20%) covers it. Once a preterm infant
-passes 40 wk PMA it moves to the WHO curve at corrected age.
+±10%; the benchmark's weight sensitivity analysis (±20%) covers it. Fenton's charts join the
+WHO standard at 50 wk PMA; between 40 and 50 wk we interpolate linearly from the Fenton
+40-wk value to the WHO median at 10 weeks corrected age (avoiding the WHO first-days
+weight dip, which belongs to term newborns). From 50 wk PMA on: WHO at corrected age.
 """
 
 from __future__ import annotations
@@ -48,11 +50,14 @@ def _interp(xs: list[float], ys: list[float], x: float) -> float:
 
 def median_weight_kg(age_days: float, gestational_age_weeks: float = 40.0) -> float:
     """Median weight (kg) at a postnatal age, for an infant born at a gestational age."""
+    days, kg = _table()
     if gestational_age_weeks < 37:
         pma = gestational_age_weeks + age_days / 7.0
         if pma < 40:
             xs = sorted(FENTON_2013_P50_APPROX)
             return _interp([float(x) for x in xs], [FENTON_2013_P50_APPROX[x] for x in xs], pma)
+        if pma < 50:
+            w40, w50 = FENTON_2013_P50_APPROX[40], _interp(days, kg, 70.0)
+            return w40 + (w50 - w40) * (pma - 40.0) / 10.0
         age_days = (pma - 40.0) * 7.0  # corrected age on the term reference
-    days, kg = _table()
     return _interp(days, kg, age_days)

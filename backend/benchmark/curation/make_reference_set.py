@@ -12,13 +12,13 @@ def band(id, label, pna, dose, rng=None, quote="", ga=None, flags=()):
             "quote": quote, "flags": list(flags)}
 
 def drug(label, cls, metric, fe, fe_quote, adult, adult_rng, adult_ind, adult_quote, bands,
-         enzyme=None, enzyme_evidence=None, fe_flags=(), unit="mg", notes=""):
+         enzyme=None, enzyme_evidence=None, fe_flags=(), unit="mg", notes="", adult_flags=()):
     return {"included": True, "label": label, "class": cls, "target_metric": metric,
             "unit": unit,
             "fe": {"value": fe, "quote": fe_quote, "flags": list(fe_flags)},
             "nonrenal_enzyme": enzyme, "enzyme_evidence": enzyme_evidence,
             "adult": {"indication": adult_ind, "daily": adult, "range_daily": adult_rng,
-                      "quote": adult_quote},
+                      "quote": adult_quote, "flags": list(adult_flags)},
             "bands": bands, "notes": notes}
 
 D = {}
@@ -51,10 +51,10 @@ D["tobramycin"] = drug("tobramycin.json", "aminoglycoside", "cmax",
     [band("child", "Pediatric patients >1 week of age", [7, OPEN_UPPER], 6.75, [6, 7.5],
           quote="Pediatric Patients (Greater Than 1 Week of Age): 6 to 7.5 mg/kg/day in 3 or 4 equally divided doses"),
      band("neo_wk1", "Premature or full-term neonates ≤1 week", [0, 7], 4, [0, 4],
-          quote="Premature or Full-Term Neonates 1 Week of Age or Less: Up to 4 mg/kg/day", flags=["up_to"])])
+          quote="Premature or Full-Term Neonates 1 Week of Age or Less: Up to 4 mg/kg/day", flags=["up_to", "mgkg_shared"])])
 
 D["amikacin"] = drug("amikacin.json", "aminoglycoside", "cmax",
-    0.982, "98.2% within 24 hours",
+    0.94, "about 94% within 24 hours",
     1050, [1050, 1050], "normal renal function (15 mg/kg/day × 70 kg)",
     "The recommended dosage for adults, children and older infants (see WARNINGS box) with normal renal function is 15 mg/kg/day",
     [band("child", "Children and older infants (1 month–16 y)", [M, OPEN_UPPER], 15,
@@ -67,9 +67,9 @@ D["amikacin"] = drug("amikacin.json", "aminoglycoside", "cmax",
 D["ampicillin"] = drug("ampicillin.json", "beta-lactam", "time_mic",
     0.90, "Ampicillin is excreted largely unchanged in the urine",
     12250, [10500, 14000], "septicemia (150–200 mg/kg/day × 70 kg)",
-    "Septicemia Adults and children – 150 to 200 mg/kg/day.",
+    "Septicemia Adults and children: 150 to 200 mg/kg/day.",
     [band("child", "Children (>28 days)", [28, OPEN_UPPER], 175, [150, 200],
-          quote="Septicemia Adults and children – 150 to 200 mg/kg/day.", flags=["mgkg_shared"]),
+          quote="Septicemia Adults and children: 150 to 200 mg/kg/day.", flags=["mgkg_shared"]),
      band("neo_term", "Neonates GA >34 wk, PNA ≤28 days", [0, 28], 150, ga=37,
           quote="greater than 34 less than or equal to 28 150 mg/kg/day in equally divided doses every 8 hours"),
      band("neo_pre_wk1", "Neonates GA ≤34 wk, PNA ≤7 days", [0, 7], 100, ga=32,
@@ -82,20 +82,21 @@ D["ceftazidime"] = drug("ceftazidime.json", "beta-lactam", "time_mic",
     0.85, "Approximately 80% to 90% of an IM or IV dose of ceftazidime is excreted unchanged by the kidneys over a 24-hour period.",
     2500, [2000, 3000], "usual recommended adult dosage (1 g q8–12h)",
     "Usual recommended dosage 1 gram intravenous or intramuscular every 8 to 12 hours",
-    [band("child", "Infants and children (1 month–12 y)", [M, 12 * Y], 120, [90, 150],
+    [band("child", "Infants and children (1 month–12 y)", [M, 12 * Y], 90, [90, 150],
           quote="Infants and children (1 month to 12 years) 30 to 50 mg/kg intravenous to a maximum of 6 grams per day** every 8 hours"),
      band("neo", "Neonates (0–4 weeks)", [0, 28], 60,
-          quote="Neonates (0 to 4 weeks) 30 mg/kg intravenous every 12 hours")])
+          quote="Neonates (0 to 4 weeks) 30 mg/kg intravenous every 12 hours")],
+    notes="Child scored at the usual 30 mg/kg q8h to match the adult 'usual' regimen; label: the higher dose should be reserved for immunocompromised pediatric patients or pediatric patients with cystic fibrosis or meningitis.")
 
 D["cefepime"] = drug("cefepime.json", "beta-lactam", "time_mic",
     0.85, "Urinary recovery of unchanged cefepime accounts for approximately 85% of the administered dose.",
-    4000, [2000, 6000], "moderate to severe pneumonia (1–2 g q8–12h)",
-    "Moderate to Severe Pneumonia § 1 to 2 g IV Every 8 to 12 hours",
-    [band("child", "Pediatric patients 2 months–16 y", [2 * M, OPEN_UPPER], 100,
-          quote="The usual recommended dosage in pediatric patients is 50 mg per kg per dose administered every 12 hours")])
+    6000, [6000, 6000], "empiric therapy for febrile neutropenia (most severe indication with a pediatric row)",
+    "Empiric therapy for febrile neutropenic patients 2 g IV Every 8 hours",
+    [band("child", "Pediatric patients 2 months–16 y (febrile neutropenia)", [2 * M, OPEN_UPPER], 150,
+          quote="50 mg per kg per dose, every 8 hours for febrile neutropenic patients.")])
 
 D["meropenem"] = drug("meropenem.json", "beta-lactam", "time_mic",
-    0.70, "Approximately 70% (50% - 75%) of the dose is excreted unchanged within 12 hours.",
+    0.625, "Approximately 70% (50% - 75%) of the dose is excreted unchanged within 12 hours.",
     3000, [3000, 3000], "complicated intra-abdominal infection (1 g q8h)",
     "1 gram every 8 hours by intravenous infusion over 15 minutes to 30 minutes for intra-abdominal infections for adult patients.",
     [band("child", "Pediatric patients ≥3 months (intra-abdominal)", [3 * M, OPEN_UPPER], 60,
@@ -111,13 +112,13 @@ D["meropenem"] = drug("meropenem.json", "beta-lactam", "time_mic",
 
 D["piperacillin_tazobactam"] = drug("piperacillin_and_tazobactam.json", "beta-lactam", "time_mic",
     0.68, "Piperacillin is excreted rapidly as unchanged drug with 68% of the administered dose excreted in the urine.",
-    12000, [12000, 12000], "indications other than nosocomial pneumonia (piperacillin component)",
-    "The usual daily dosage of piperacillin and tazobactam for injection for adults is 3.375 g every six hours totaling 13.5 g (12 g piperacillin and 1.5 g tazobactam).",
-    [band("infant", "2–9 months (appendicitis/peritonitis)", [2 * M, 9 * M], 240,
-          quote="2 months to 9 months 90 mg/kg (80 mg piperacillin and 10 mg tazobactam) every 8 ( eight ) hours"),
-     band("child", ">9 months, ≤40 kg (appendicitis/peritonitis)", [9 * M, 12 * Y], 300,
-          quote="Older than 9 months 112.5 mg/kg (100 mg piperacillin and 12.5 mg tazobactam) every 8 ( eight) hours")],
-    notes="Doses scored as the piperacillin component. Upper age bound 12 y stands in for the label's 40 kg cap.")
+    16000, [16000, 16000], "nosocomial pneumonia (piperacillin component; most severe indication with pediatric rows)",
+    "should start with piperacillin and tazobactam for injection at a dosage of 4.5 g every six hours plus an aminoglycoside, [totaling 18 g (16 g piperacillin and 2 g tazobactam)]",
+    [band("infant", "2–9 months (nosocomial pneumonia)", [2 * M, 9 * M], 320,
+          quote="90 mg/kg (80 mg piperacillin and 10 mg tazobactam) every 6 ( six ) hours"),
+     band("child", ">9 months (nosocomial pneumonia)", [9 * M, OPEN_UPPER], 400,
+          quote="112.5 mg/kg (100 mg piperacillin and 12.5 mg tazobactam) every 6 ( six) hours")],
+    notes="Doses scored as the piperacillin component. The label's 40 kg weight cap is not applied (Amendment 1 §15).")
 
 D["acyclovir"] = drug("acyclovir.json", "antiviral", "css",
     0.765, "Renal excretion of unchanged drug is the major route of acyclovir elimination accounting for 62% to 91% of the dose.",
@@ -131,15 +132,16 @@ D["acyclovir"] = drug("acyclovir.json", "antiviral", "css",
 
 D["fluconazole"] = drug("fluconazole.json", "azole", "css",
     0.80, "with approximately 80% of the administered dose appearing in the urine as unchanged drug.",
-    200, [200, 200], "dose-equivalency scheme (adult 200 mg ↔ pediatric 6 mg/kg)",
-    "Pediatric Patients Adults 3 mg/kg 100 mg 6 mg/kg 200 mg 12* mg/kg 400 mg",
-    [band("child", "Pediatric patients (beyond the neonatal period)", [28, OPEN_UPPER], 6,
-          quote="Pediatric Patients Adults 3 mg/kg 100 mg 6 mg/kg 200 mg 12* mg/kg 400 mg"),
-     band("pre_lt2w", "Premature newborns GA 26–29 wk, first 2 weeks (q72h)", [0, 14], 2, ga=27.5,
-          quote="these children, in the first two weeks of life, should receive the same dosage (mg/ kg) as in older children, but administered every 72 hours."),
-     band("pre_2_4w", "Premature newborns GA 26–29 wk, after the first 2 weeks", [14, 28], 6, ga=27.5,
-          quote="After the first two weeks, these children should be dosed once daily.")],
-    notes="Neonatal bands score the 6 mg/kg row: 6 mg/kg q72h = 2 mg/kg/day.")
+    400, [400, 400], "systemic Candida infections (adults: doses of up to 400 mg daily)",
+    "doses of up to 400 mg daily have been used",
+    [band("child", "3 months and older (systemic Candida)", [3 * M, OPEN_UPPER], 12,
+          quote="3 months and older A loading dose of 25-mg/kg on the first day (not to exceed 800 mg), followed by 12-mg/kg once daily (not to exceed 400 mg)."),
+     band("neo_ge30", "Birth to 3 months, GA ≥30 weeks", [0, 3 * M], 12, ga=35,
+          quote="Birth to 3 months postnatal age and gestational age 30 weeks and above 25-mg/kg on the first day, followed by 12- mg/kg once daily"),
+     band("neo_lt30", "Birth to 3 months, GA <30 weeks", [0, 3 * M], 9, ga=28,
+          quote="Birth to 3 months postnatal age and gestational age less than 30 weeks 25-mg/kg on the first day, followed by 9- mg/kg once daily")],
+    adult_flags=["adult_up_to"],
+    notes="Indication with the most pediatric bands (systemic Candida; label: pediatric regimens chosen to match adult AUC). Adult reference is the label's 'up to 400 mg daily'.")
 
 D["levetiracetam"] = drug("levetiracetam.json", "anticonvulsant", "css",
     0.66, "Sixty-six percent (66%) of the dose is renally excreted unchanged.",
@@ -157,7 +159,7 @@ D["famotidine"] = drug("famotidine.json", "H2 antagonist", "css",
     0.675, "Sixty-five to 70% of an intravenous dose are recovered in the urine as unchanged compound.",
     40, [40, 40], "adults: 20 mg every 12 hours",
     "Adults: 20 mg every 12 hours.",
-    [band("child", "Pediatric patients 1–16 y (starting dose)", [Y, OPEN_UPPER], 0.5, [0.5, 1.0],
+    [band("child", "Pediatric patients 1–16 y (0.25 q12h titrated to 0.5 q12h)", [Y, OPEN_UPPER], 0.75, [0.5, 1.0],
           quote="Pediatric Patients 1 year of age and older: 0.25 mg/kg every 12 hours; titrate to a maximum of 0.5 mg/kg every 12 hours")])
 
 D["daptomycin"] = drug("daptomycin.json", "lipopeptide", "css",
@@ -183,18 +185,18 @@ D["cefoxitin"] = drug("cefoxitin.json", "beta-lactam", "time_mic",
 
 D["aztreonam"] = drug("aztreonam.json", "beta-lactam", "time_mic",
     0.65, "Approximately 60% to 70% of an intravenous or intramuscular dose was recovered in the urine by 8 hours.",
-    4000, [2000, 6000], "moderately severe systemic infections (1–2 g q8–12h)",
-    "Moderately severe systemic infections 1 g or 2 g 8 or 12",
+    5000, [2000, 8000], "moderately severe to severe systemic infections (union of tiers 1 g q12h–2 g q6h)",
+    "Moderately severe systemic infections 1 g or 2 g 8 or 12 Severe systemic or life-threatening infections 2 g 6 or 8",
     [band("child", "Pediatric patients 9 months–16 y (moderate to severe)", [9 * M, 16 * Y], 105, [90, 120],
           quote="Moderate to severe infections 30 mg/kg 6 or 8")],
     notes="Age band from Pediatric Use: established in the age groups 9 months to 16 years.")
 
 D["penicillin_g"] = drug("penicillin_g_potassium.json", "beta-lactam", "time_mic",
     0.60, "Approximately 60 percent of the total dose of 300,000 units is excreted in the urine within this 5-hour period.",
-    18_000_000, [12_000_000, 24_000_000], "serious streptococcal infections (12–24 million units/day)",
-    "septicemia, empyema, pneumonia, pericarditis, endocarditis and meningitis 12 to 24 million units/day depending on the infection and its severity",
-    [band("child", "Pediatric patients (serious streptococcal/meningococcal infections)", [28, OPEN_UPPER], 225_000, [150_000, 300_000],
-          quote="150,000 to 300,000 units/kg/day divided in equal doses every 4 to 6 hours")],
+    24_000_000, [24_000_000, 24_000_000], "meningococcal meningitis (most severe indication with a pediatric row)",
+    "Meningococcal meningitis and/or septicemia 24 million units/day as 2 million units every 2 hours",
+    [band("child", "Pediatric patients, pneumococcal/meningococcal meningitis", [28, OPEN_UPPER], 250_000,
+          quote="Meningitis caused by susceptible strains of pneumococcus and meningococcus 250,000 units/kg/day divided in equal doses every 4 hours")],
     unit="units", notes="Urinary fraction is the label's 5-hour collection (the only quantitative value).")
 
 D["cefuroxime"] = drug("cefuroxime.json", "beta-lactam", "time_mic",
@@ -205,32 +207,15 @@ D["cefuroxime"] = drug("cefuroxime.json", "beta-lactam", "time_mic",
           quote="Administration of 50 to 100 mg/kg/day in equally divided doses every 6 to 8 hours")])
 
 D["clindamycin"] = drug("clindamycin.json", "lincosamide", "css",
-    0.0, "Clindamycin is metabolized predominantly by CYP3A4",
+    0.0, "predominantly metabolized by Cytochrome P450 3A4 (CYP3A4)",
     1650, [600, 2700], "serious to more severe infections (union of tiers 600–2700 mg/day)",
-    "600–1200 mg/day in 2, 3 or 4 equal doses by intraveno",
+    "600–1200 mg/day in 2, 3 or 4 equal doses.",
     [band("child", "1 month–16 years", [M, 16 * Y], 30, [20, 40],
-          quote="Dosage in Pediatric Patients (1 Month of Age to 16 Years): 20 to 40 mg/kg/day in 3 or 4 equal doses by intravenous infusion."),
-     band("neo", "Neonates (<1 month)", [0, M], 17.5, [15, 20],
-          quote="Dosage in Neonates (Less than 1 Month of Age): 15 to 20 mg/kg/day in 3 to 4 equal doses by intravenous infusion."),
-     band("neo_pma_le32", "PMA ≤32 weeks", [14, 14], 15, ga=28,
-          quote="Less than or equal to 32 5 8"),
-     band("neo_pma_32_40", "PMA >32 to ≤40 weeks", [21, 21], 21, ga=33,
-          quote="Greater than or equal to 32 weeks to less than or equal to 40 7 8")],
+          quote="Pediatric Patients 1 month of age to 16 years Parenteral (IM or IV) Administration 20 to 40 mg/kg/day in 3 or 4 equal doses."),
+     band("neo", "Pediatric patients less than 1 month", [0, M], 17.5, [15, 20],
+          quote="Pediatric Patients less than 1 month The recommended dosage is 15 to 20 mg/kg/day in 3 to 4 equal doses.")],
     enzyme="cyp3a4", enzyme_evidence="label", fe_flags=["fe_not_in_label"],
-    notes="PMA-defined bands: representative PMA 30 wk (GA 28 + 2 wk) and 36 wk (GA 33 + 3 wk). Adult tier quote continues: 1200–2700 mg/day for more severe infections.")
-
-D["midazolam"] = drug("midazolam.json", "benzodiazepine", "css",
-    0.005, "The amount of midazolam excreted unchanged in the urine after a single IV dose is less than 0.5% (n=5).",
-    100.8, [33.6, 168.0], "ICU sedation, maintenance infusion 0.02–0.10 mg/kg/hr × 70 kg",
-    "For maintenance of sedation, the usual initial infusion rate is 0.02 to 0.10 mg/kg/hr (1 to 7 mg/hr).",
-    [band("child", "Pediatric (non-neonatal), intubated", [M, OPEN_UPPER], 2.16, [1.44, 2.88],
-          quote="continuous intravenous infusions of midazolam should be initiated at a rate of 0.06 to 0.12 mg/kg/hr (1 to 2 mcg/kg/min)."),
-     band("neo_lt32", "Neonates <32 weeks, intubated", [0, 28], 0.72, ga=30,
-          quote="0.03 mg/kg/hr (0.5 mcg/kg/min) in neonates <32 weeks"),
-     band("neo_gt32", "Neonates >32 weeks, intubated", [0, 28], 1.44, ga=36,
-          quote="0.06 mg/kg/hr (1 mcg/kg/min) in neonates >32 weeks")],
-    enzyme="cyp3a4", enzyme_evidence="label",
-    notes="'<32 weeks' read as gestational age. fe 'less than 0.5%' scored as 0.005.")
+    notes="Label Table 3 (PMA-based neonatal regimens) is not machine-readable text, so those bands are not scored (E1/E2 text rule). Adult tier quote continues with 1200–2700 mg/day for more severe infections.")
 
 D["morphine"] = drug("morphine.json", "opioid", "css",
     0.07, "Morphine is also eliminated by the kidneys, 2 to 12% being excreted unchang",
@@ -248,13 +233,14 @@ D["zidovudine"] = drug("zidovudine.json", "NRTI", "css",
     420, [420, 420], "adult IV dosing (1 mg/kg q4h × 70 kg)",
     "The recommended intravenous dose is 1 mg per kg infused at a constant rate over 1 hour every 4 hours.",
     [band("neo", "Neonates, birth to 6 weeks (IV)", [0, 42], 6,
-          quote="Intravenous 6 mg/kg/day 1.5 mg/kg infused over 30 minutes, every 6 hours", flags=["mgkg_shared"])],
+          quote="Intravenous 6 mg/kg/day 1.5 mg/kg infused over 30 minutes, every 6 hours", flags=["mgkg_shared", "indication_mismatch"])],
     enzyme="ugt2b7", enzyme_evidence="literature: zidovudine glucuronidation by UGT2B7 (Barbier et al., Drug Metab Dispos 2000;28:497-502)",
     notes="Label: major route is metabolism to GZDV (the glucuronide).")
 
 EXCLUDED = {
-    "cefazolin": ("E1", "Adult treatment dosage table is an image in the selected label; only the perioperative prophylaxis regimen is text."),
-    "digoxin": ("E2", "Selected label defers pediatric dosing to a separate pediatric product label (not available from this manufacturer)."),
+    "midazolam": ("E1", "Selected label (rule: pediatric mention, latest effective_time) has no continuous-infusion or other maintenance regimen in its machine-readable Dosage and Administration text."),
+    "cefazolin": ("E1", "Adult treatment dosage table is an image in the selected label; only the perioperative prophylaxis regimen is text, so no adult regimen can be paired to the pediatric 25–100 mg/kg/day treatment text."),
+    "digoxin": ("E2", "Selected label defers pediatric dosing under 10 years to a separate pediatric product label (not available from this manufacturer). It also fails E1: the adult and over-10-year maintenance doses are in image tables (Tables 2–3)."),
     "fentanyl": ("E1", "Label gives only induction/premedication bolus doses (adult 50–100 mcg; children 2–3 mcg/kg), not a maintenance regimen."),
 }
 for k, (crit, why) in EXCLUDED.items():

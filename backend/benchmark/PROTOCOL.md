@@ -215,3 +215,41 @@ These changes answer an internal methodological review of the first version of t
     * One command regenerates every number, table and figure: `python3 -m benchmark.run` from `backend/`. It writes to `benchmark/output/`.
     * CI runs the benchmark tests.
 18. **Rationale for GA X − 2.** It places the representative infant inside the band, just below the cut-off. S5 varies it by ±2 weeks.
+
+### Amendment 2 — 2026-11-27, before any prediction was scored
+
+An internal standards and data audit of the curated reference set found that the label-selection code did not follow Amendment 1 §10, and found curation and harness errors. Every change below was made before `benchmark/run.py` was first executed. No fold error, AAFE or test statistic had been computed for any method. These changes override the text above where they conflict.
+
+1. **Label selection rule as implemented.**
+   * The openFDA query is `openfda.generic_name` AND `openfda.route:INTRAVENOUS`, paged through every result (100 per page). There is no route-less fallback.
+   * Among the results, the label is the one where the Amendment 1 regex matches the Dosage and Administration text, then the latest `effective_time`. The regex match is a yes/no test, not a score.
+   * Applying this rule changed the selected label for six drugs: ampicillin, clindamycin, daptomycin, fluconazole, levetiracetam and midazolam. Their snapshots in `labels/` were replaced and their bands recurated from the new text.
+2. **Exclusions after recuration.**
+   * **Midazolam** is excluded under E1. Its newly selected label gives no continuous-infusion or other maintenance regimen in machine-readable text. Midazolam is also the CYP3A4 curve-source drug, so S7 now removes only morphine.
+   * **Clindamycin** keeps its child and under-1-month bands. Its PMA-based neonatal bands are dropped because that table is an image in the selected label (E1 text rule).
+   * **Cefazolin** stays excluded under E1. The adult treatment table is an image; only perioperative prophylaxis is text, so no adult regimen can be paired with the pediatric treatment text.
+   * **Digoxin** stays excluded under E2, and it also fails E1: the adult and over-10-year maintenance doses are in image tables.
+   * **Fentanyl** stays excluded under E1 (bolus doses only).
+   * The reference set is now 21 drugs and 46 bands.
+3. **Indication and severity pairing fixes.** The audit applied one tie-break rule throughout: pair the adult and pediatric regimens of the same indication at the same severity tier. Where the label gives several tiers for one severity, use the union of those tiers.
+   * **Fluconazole:** paired on systemic *Candida* infection. That is the indication with the most pediatric bands, and the label says its pediatric regimens were chosen to match adult AUC. The adult reference is "up to 400 mg daily" (flag `adult_up_to`). Bands are ≥3 months 12 mg/kg/day, plus two newborn bands to 3 months: GA ≥30 wk at 12 and GA <30 wk at 9 mg/kg/day.
+   * **Ceftazidime:** the child reference is the "usual" 30 mg/kg q8h (90 mg/kg/day), matching the adult "usual" regimen. The label's higher dose is reserved for immunocompromised children, cystic fibrosis and meningitis.
+   * **Cefepime:** paired on empiric therapy for febrile neutropenia (adult 2 g q8h, child 50 mg/kg q8h).
+   * **Piperacillin–tazobactam:** paired on nosocomial pneumonia, the most severe indication with pediatric rows (adult 16 g/day piperacillin; children 2–9 months 320 and over 9 months 400 mg/kg/day, piperacillin component). The child band's upper bound is 16 years, per the label.
+   * **Penicillin G:** paired on meningococcal meningitis, the most severe indication with a pediatric row (adult 24 MU/day; children 250,000 U/kg/day).
+   * **Aztreonam:** the adult reference is the union of the moderately severe to severe tiers (5 g/day, range 2–8 g/day).
+   * **Famotidine:** the reference is the midpoint of the labeled titration (0.25 mg/kg q12h, titrated to 0.5 mg/kg q12h), which is 0.75 mg/kg/day. Famotidine is added to the S8 titrated-drug set.
+4. **Excretion fractions corrected to the label's text.**
+   * Meropenem fe = 0.625.
+   * Amikacin fe = 0.94.
+5. **Flags added.**
+   * Tobramycin newborn band: `mgkg_shared`, in addition to `up_to`.
+   * Zidovudine newborn band: `indication_mismatch`, in addition to `mgkg_shared`.
+6. **Growth reference.**
+   * WHO medians are used for 0–1826 days (5 years exactly), not 0–1856 days, and the CDC 2000 medians from there on.
+   * For preterm infants between 40 and 50 weeks PMA, weight is a linear bridge from the Fenton 40-week value to the WHO median at 10 weeks corrected age. This removes a 5% weight drop at the Fenton→WHO handover.
+7. **S5 varies GA only for preterm bands.** Term bands (GA ≥ 37 weeks, or no GA) keep GA 40 under S5.
+8. **The concordance band is 0.67–1.5 everywhere.** The harness had used 1/1.5 as the lower bound in one place.
+9. **BCa details.** Ties between a bootstrap replicate and the point estimate count half when estimating the bias correction z0. The interval falls back to the percentile method when there are fewer than 3 drug clusters, when z0 is undefined, or when the acceleration adjustment is undefined.
+10. **S3 and the primary comparator.** Under S3 every drug uses `css`, so A1 becomes plain allometry for aminoglycosides. This follows from the definition of A1 in Amendment 1 §2.
+11. **S9 is applied literally.** The `renal_mechanism` regex finds "tubular secretion" in the levetiracetam label, in a sentence about its metabolite ucb L057. The parent drug is filtered and partly reabsorbed. Under the Amendment 1 §14 wording, the label mentions tubular secretion, so levetiracetam is left out of S9. This makes S9 smaller and more conservative, and it is reported as a known limitation of the text rule.

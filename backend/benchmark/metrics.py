@@ -39,7 +39,8 @@ def summarize(rows: list[dict], weight: str = "drug") -> dict:
         "n_drugs": len(_by_drug(rows)),
         "aafe": 10 ** _weighted(rows, lambda r: abs(lg(r)), weight),
         "afe": 10 ** _weighted(rows, lg, weight),
-        "within_1_5": _weighted(rows, lambda r: float(1 / 1.5 - 1e-12 <= r["fe"] <= 1.5 + 1e-12), weight),
+        # concordance band as documented in CLAUDE.md / PROTOCOL.md: 0.67–1.5
+        "within_1_5": _weighted(rows, lambda r: float(0.67 - 1e-12 <= r["fe"] <= 1.5 + 1e-12), weight),
         "within_2": _weighted(rows, lambda r: float(0.5 - 1e-12 <= r["fe"] <= 2.0 + 1e-12), weight),
     }
     if all("in_range" in r for r in rows):
@@ -72,9 +73,10 @@ def cluster_bootstrap_ci(rows: list[dict], stat: Callable[[list[dict]], float], 
 
     method = "bca"
     try:
-        below = sum(b < theta for b in boots) / n_boot
-        if below in (0.0, 1.0):
-            raise ValueError("degenerate")
+        # ties count half, so a lumpy bootstrap distribution does not bias z0
+        below = (sum(b < theta for b in boots) + 0.5 * sum(b == theta for b in boots)) / n_boot
+        if below in (0.0, 1.0) or k < 3:
+            raise ValueError("degenerate or too few clusters for a jackknife")
         z0 = nd.inv_cdf(below)
         jack = [stat([r for j, g in enumerate(groups) if j != i for r in g]) for i in range(k)]
         jm = _mean(jack)
@@ -85,9 +87,12 @@ def cluster_bootstrap_ci(rows: list[dict], stat: Callable[[list[dict]], float], 
         a = num / den
         def adj(q):
             z = nd.inv_cdf(q)
-            return nd.cdf(z0 + (z0 + z) / (1 - a * (z0 + z)))
+            denom = 1 - a * (z0 + z)
+            if denom <= 0:
+                raise ValueError("BCa adjustment undefined")
+            return nd.cdf(z0 + (z0 + z) / denom)
         lo, hi = pct(adj(alpha)), pct(adj(1 - alpha))
-    except ValueError:
+    except (ValueError, ZeroDivisionError, ArithmeticError):
         method = "percentile"
         lo, hi = pct(alpha), pct(1 - alpha)
     return {"estimate": theta, "lo": lo, "hi": hi, "level": level, "method": method,

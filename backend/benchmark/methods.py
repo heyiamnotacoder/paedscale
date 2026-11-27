@@ -31,7 +31,7 @@ def virtual_patients(band: dict, *, weight_scale: float = 1.0, ga_shift: float =
         a, b = math.log(max(lo, 1.0)), math.log(hi)
         ages = [math.exp(a + (b - a) * i / (GRID_POINTS - 1)) for i in range(GRID_POINTS)]
     ga = (band.get("ga_weeks") or 40.0)
-    if band.get("ga_weeks") is not None:
+    if ga < 37:            # S5 varies the representative GA of preterm bands only
         ga += ga_shift
     return [
         {"pna_days": t, "ga_weeks": ga, "pma_weeks": ga + t / 7.0,

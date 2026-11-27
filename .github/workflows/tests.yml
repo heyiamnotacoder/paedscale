@@ -28,8 +28,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-          cache-dependency-path: backend/requirements*.txt
+          cache-dependency-path: |
+            backend/requirements*.txt
+            backend/benchmark/requirements.txt
       - name: Install
-        run: pip install -r requirements.txt -r requirements-dev.txt
+        run: pip install -r requirements.txt -r requirements-dev.txt -r benchmark/requirements.txt
       - name: Deterministic tests (engine, scorers, safety stops, uncertainty, HI facades)
         run: python -m pytest -q tests --ignore=tests/test_agent.py

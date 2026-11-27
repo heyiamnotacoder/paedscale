@@ -154,3 +154,89 @@ def test_cluster_bootstrap_is_seeded_and_brackets_the_estimate():
     a = cluster_bootstrap_ci(rows, stat, n_boot=2000, seed=3)
     b = cluster_bootstrap_ci(rows, stat, n_boot=2000, seed=3)
     assert a == b and a["lo"] <= stat(rows) <= a["hi"] and a["n_clusters"] == 8
+
+
+# ---------------------------------------------------------------------------
+# Scoring + analysis pipeline on a synthetic reference set (independent truth).
+# ---------------------------------------------------------------------------
+from benchmark.run import analyze, ich_stratum, score
+
+SYNTH = {
+    # reference doses set to exactly weight-linear (10 mg/kg/day) -> linear FE = 1
+    "linear_truth": {"included": True, "label": "-", "class": "x", "target_metric": "css", "unit": "mg",
+                     "fe": {"value": 0.9, "flags": []}, "nonrenal_enzyme": None,
+                     "adult": {"daily": 700.0}, "renal_mechanism": {"value": "glomerular_filtration"},
+                     "bands": [{"id": "neo", "pna_days": [0, 7], "ga_weeks": None, "ref_per_kg_daily": 10.0,
+                                "range_per_kg_daily": [8, 12], "flags": []},
+                               {"id": "child", "pna_days": [365.25, 5844], "ga_weeks": None,
+                                "ref_per_kg_daily": 10.0, "range_per_kg_daily": [10, 10], "flags": []}]},
+    "skip_me": {"included": False, "excluded_by": "E1", "reason": "test"},
+}
+
+
+def test_ich_strata_follow_e11():
+    assert ich_stratum({"pna_days": [0, 7], "ga_weeks": 30}) == "preterm_newborn"
+    assert ich_stratum({"pna_days": [0, 7], "ga_weeks": None}) == "term_newborn"
+    assert ich_stratum({"pna_days": [30.4375, 365.25], "ga_weeks": None}) == "infant_toddler"
+    assert ich_stratum({"pna_days": [2 * 365.25, 11 * 365.25], "ga_weeks": None}) == "child"
+    assert ich_stratum({"pna_days": [12 * 365.25, 17 * 365.25], "ga_weeks": None}) == "adolescent"
+
+
+def test_score_emits_one_row_per_method_band_and_skips_exclusions():
+    rows = score(SYNTH)
+    assert len(rows) == 2 * 5 and {r["drug"] for r in rows} == {"linear_truth"}
+    lin = [r for r in rows if r["method"] == "weight_linear"]
+    assert all(abs(r["fe"] - 1.0) < 1e-12 for r in lin)
+    assert [r["in_range"] for r in lin] == [True, True]
+
+
+def test_analyze_reports_hypotheses_with_cluster_counts():
+    res = analyze(score(SYNTH), n_boot=200)
+    h1 = res["hypotheses"]["H1"]
+    assert h1["comparator"] == "allometry_class" and h1["n_clusters"] == 1
+    assert abs(res["by_method"]["all"]["weight_linear"]["aafe"] - 1.0) < 1e-12
+
+
+# ---------------------------------------------------------------------------
+# Review fixes (pre-scoring).
+# ---------------------------------------------------------------------------
+from benchmark.methods import _fm
+
+
+def test_preterm_weight_has_no_drop_at_the_term_handover():
+    prev = median_weight_kg(0, gestational_age_weeks=30)
+    for day in range(1, 200):
+        w = median_weight_kg(day, gestational_age_weeks=30)
+        assert w >= prev * 0.999, (day, prev, w)
+        prev = w
+
+
+def test_ga_shift_moves_preterm_bands_only():
+    pre = {"pna_days": [0, 7], "ga_weeks": 32}
+    term_defined = {"pna_days": [0, 28], "ga_weeks": 37}
+    assert virtual_patients(pre, ga_shift=2)[0]["ga_weeks"] == 34
+    assert virtual_patients(term_defined, ga_shift=2)[0]["ga_weeks"] == 37
+    assert virtual_patients(BAND_NEO, ga_shift=2)[0]["ga_weeks"] == 40
+
+
+def test_fm_maps_fe_to_gfr_and_the_rest_to_the_named_enzyme():
+    assert _fm({"fe": {"value": 0.29}, "nonrenal_enzyme": "ugt2b7"}) == {"renal_gfr": 0.29, "ugt2b7": 0.71}
+    assert _fm({"fe": {"value": 0.0}, "nonrenal_enzyme": "cyp3a4"}) == {"cyp3a4": 1.0}
+    assert _fm({"fe": {"value": 0.66}, "nonrenal_enzyme": None}) == {"renal_gfr": 0.66}
+
+
+def test_concordance_band_uses_the_documented_0_67_bound():
+    assert summarize([{"drug": "a", "fe": 0.67}])["within_1_5"] == 1.0
+    assert summarize([{"drug": "a", "fe": 0.669}])["within_1_5"] == 0.0
+
+
+def test_bca_agrees_with_scipy_when_each_cluster_is_one_row():
+    import numpy as np
+    from scipy.stats import bootstrap
+    vals = [0.12, -0.30, 0.05, 0.41, -0.08, 0.22, 0.17, -0.15, 0.33, 0.02, 0.27, -0.21]
+    rows = [{"drug": str(i), "x": v} for i, v in enumerate(vals)]
+    ours = cluster_bootstrap_ci(rows, lambda rs: sum(r["x"] for r in rs) / len(rs), n_boot=20000, seed=5)
+    ref = bootstrap((np.array(vals),), np.mean, method="BCa", n_resamples=20000,
+                    random_state=np.random.default_rng(5)).confidence_interval
+    assert ours["method"] == "bca"
+    assert abs(ours["lo"] - ref.low) < 0.02 and abs(ours["hi"] - ref.high) < 0.02, (ours, ref)

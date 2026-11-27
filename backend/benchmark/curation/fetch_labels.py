@@ -1,32 +1,61 @@
 """Curation step 1 (network): fetch one FDA SPL per candidate from openFDA by the PROTOCOL.md rule.
 
+Rule (Amendment 1 §10): among labels whose openfda.generic_name matches and whose
+openfda.route includes INTRAVENOUS, prefer those whose Dosage and Administration text
+matches /pediatric|neonat/i; break ties by the latest effective_time. All pages are read.
+
 Usage (from backend/): python3 benchmark/curation/fetch_labels.py vancomycin gentamicin ...
-Writes raw label JSON to ./labels_raw/. Snapshots in benchmark/labels/ were trimmed from these
-(set_id, effective_time, version, openfda names, and the D&A / pediatric use / clinical
-pharmacology / pharmacokinetics sections). Retrieved 2026-11-27.
+Writes raw label JSON to ./labels_raw/ and prints the selected set_id per drug.
+Snapshots in benchmark/labels/ keep set_id, effective_time, version, openfda names and the
+D&A / pediatric use / clinical pharmacology / pharmacokinetics sections. Retrieved 2026-11-27.
 """
-import json, sys, time, urllib.parse, httpx
+import json
 import os
-os.makedirs("labels_raw", exist_ok=True)
-drugs = sys.argv[1:]
-for d in drugs:
-    q = f'openfda.generic_name:"{d}" AND openfda.route:"INTRAVENOUS"'
-    url = "https://api.fda.gov/drug/label.json?search=" + urllib.parse.quote(q) + "&limit=20"
-    r = httpx.get(url, timeout=30)
-    if r.status_code != 200:
-        q = f'openfda.generic_name:"{d}"'
-        r = httpx.get("https://api.fda.gov/drug/label.json?search=" + urllib.parse.quote(q) + "&limit=20", timeout=30)
-    res = r.json().get("results", [])
-    # prefer labels with pediatric dosing text and most recent
-    def score(x):
-        t = json.dumps(x.get("dosage_and_administration", "")).lower()
-        return (("pediatric" in t) + ("neonat" in t), x.get("effective_time", ""))
-    res.sort(key=score, reverse=True)
-    if not res:
-        print(d, "NONE"); continue
-    x = res[0]
-    keep = {k: x.get(k) for k in ["set_id","id","effective_time","version","openfda","dosage_and_administration","dosage_and_administration_table","pediatric_use","clinical_pharmacology","pharmacokinetics","indications_and_usage"]}
-    keep["openfda"] = {k: (x.get("openfda") or {}).get(k) for k in ["generic_name","brand_name","manufacturer_name","route","spl_set_id"]}
-    json.dump(keep, open(f"labels_raw/{d.replace(' ','_').replace('/','_')}.json","w"), indent=1)
-    print(d, len(res), x.get("effective_time"), (x.get("openfda") or {}).get("manufacturer_name"), score(x)[0])
-    time.sleep(0.3)
+import re
+import sys
+import time
+import urllib.parse
+
+import httpx
+
+API = "https://api.fda.gov/drug/label.json"
+PEDS = re.compile(r"pediatric|neonat", re.I)
+
+
+def candidates(generic: str) -> list[dict]:
+    q = f'openfda.generic_name:"{generic}" AND openfda.route:"INTRAVENOUS"'
+    out, skip = [], 0
+    while True:
+        r = httpx.get(f"{API}?search={urllib.parse.quote(q)}&limit=100&skip={skip}", timeout=30)
+        if r.status_code == 404:          # openFDA: no (more) matches
+            break
+        r.raise_for_status()
+        page = r.json()
+        out += page.get("results", [])
+        total = page["meta"]["results"]["total"]
+        skip += 100
+        if skip >= total:
+            break
+        time.sleep(0.3)
+    return out
+
+
+def select(results: list[dict]) -> dict | None:
+    def key(x):
+        da = " ".join(x.get("dosage_and_administration") or [])
+        return (bool(PEDS.search(da)), x.get("effective_time", ""))
+    return max(results, key=key) if results else None
+
+
+if __name__ == "__main__":
+    os.makedirs("labels_raw", exist_ok=True)
+    for d in sys.argv[1:]:
+        res = candidates(d)
+        x = select(res)
+        if x is None:
+            print(d, "NONE")
+            continue
+        fn = d.replace(" ", "_").replace("/", "_")
+        json.dump(x, open(f"labels_raw/{fn}.json", "w"), indent=1)
+        print(d, len(res), x.get("set_id"), x.get("effective_time"))
+        time.sleep(0.3)

@@ -21,7 +21,8 @@
      2100,
      2100
     ],
-    "quote": "HERPES SIMPLEX ENCEPHALITIS Adults and Adolescents (12 years of age and older) 10 mg/kg infused at a constant rate over 1 hour, every 8 hours for 10 days."
+    "quote": "HERPES SIMPLEX ENCEPHALITIS Adults and Adolescents (12 years of age and older) 10 mg/kg infused at a constant rate over 1 hour, every 8 hours for 10 days.",
+    "flags": []
    },
    "bands": [
     {
@@ -74,8 +75,8 @@
    "target_metric": "cmax",
    "unit": "mg",
    "fe": {
-    "value": 0.982,
-    "quote": "98.2% within 24 hours",
+    "value": 0.94,
+    "quote": "about 94% within 24 hours",
     "flags": []
    },
    "nonrenal_enzyme": null,
@@ -87,7 +88,8 @@
      1050,
      1050
     ],
-    "quote": "The recommended dosage for adults, children and older infants (see WARNINGS box) with normal renal function is 15 mg/kg/day"
+    "quote": "The recommended dosage for adults, children and older infants (see WARNINGS box) with normal renal function is 15 mg/kg/day",
+    "flags": []
    },
    "bands": [
     {
@@ -156,7 +158,8 @@
      10500,
      14000
     ],
-    "quote": "Septicemia Adults and children – 150 to 200 mg/kg/day."
+    "quote": "Septicemia Adults and children: 150 to 200 mg/kg/day.",
+    "flags": []
    },
    "bands": [
     {
@@ -172,7 +175,7 @@
       150,
       200
      ],
-     "quote": "Septicemia Adults and children – 150 to 200 mg/kg/day.",
+     "quote": "Septicemia Adults and children: 150 to 200 mg/kg/day.",
      "flags": [
       "mgkg_shared"
      ]
@@ -247,13 +250,14 @@
    "nonrenal_enzyme": null,
    "enzyme_evidence": null,
    "adult": {
-    "indication": "moderately severe systemic infections (1–2 g q8–12h)",
-    "daily": 4000,
+    "indication": "moderately severe to severe systemic infections (union of tiers 1 g q12h–2 g q6h)",
+    "daily": 5000,
     "range_daily": [
      2000,
-     6000
+     8000
     ],
-    "quote": "Moderately severe systemic infections 1 g or 2 g 8 or 12"
+    "quote": "Moderately severe systemic infections 1 g or 2 g 8 or 12 Severe systemic or life-threatening infections 2 g 6 or 8",
+    "flags": []
    },
    "bands": [
     {
@@ -284,7 +288,7 @@
    "included": false,
    "label": "cefazolin.json",
    "excluded_by": "E1",
-   "reason": "Adult treatment dosage table is an image in the selected label; only the perioperative prophylaxis regimen is text."
+   "reason": "Adult treatment dosage table is an image in the selected label; only the perioperative prophylaxis regimen is text, so no adult regimen can be paired to the pediatric 25–100 mg/kg/day treatment text."
   },
   "cefepime": {
    "included": true,
@@ -300,29 +304,30 @@
    "nonrenal_enzyme": null,
    "enzyme_evidence": null,
    "adult": {
-    "indication": "moderate to severe pneumonia (1–2 g q8–12h)",
-    "daily": 4000,
+    "indication": "empiric therapy for febrile neutropenia (most severe indication with a pediatric row)",
+    "daily": 6000,
     "range_daily": [
-     2000,
+     6000,
      6000
     ],
-    "quote": "Moderate to Severe Pneumonia § 1 to 2 g IV Every 8 to 12 hours"
+    "quote": "Empiric therapy for febrile neutropenic patients 2 g IV Every 8 hours",
+    "flags": []
    },
    "bands": [
     {
      "id": "child",
-     "label": "Pediatric patients 2 months–16 y",
+     "label": "Pediatric patients 2 months–16 y (febrile neutropenia)",
      "pna_days": [
       60.88,
       5844.0
      ],
      "ga_weeks": null,
-     "ref_per_kg_daily": 100,
+     "ref_per_kg_daily": 150,
      "range_per_kg_daily": [
-      100,
-      100
+      150,
+      150
      ],
-     "quote": "The usual recommended dosage in pediatric patients is 50 mg per kg per dose administered every 12 hours",
+     "quote": "50 mg per kg per dose, every 8 hours for febrile neutropenic patients.",
      "flags": []
     }
    ],
@@ -353,7 +358,8 @@
      3000,
      8000
     ],
-    "quote": "The usual adult dosage range is 1 gram to 2 grams every 6 to 8 hours."
+    "quote": "The usual adult dosage range is 1 gram to 2 grams every 6 to 8 hours.",
+    "flags": []
    },
    "bands": [
     {
@@ -400,7 +406,8 @@
      2000,
      3000
     ],
-    "quote": "Usual recommended dosage 1 gram intravenous or intramuscular every 8 to 12 hours"
+    "quote": "Usual recommended dosage 1 gram intravenous or intramuscular every 8 to 12 hours",
+    "flags": []
    },
    "bands": [
     {
@@ -411,7 +418,7 @@
       4383.0
      ],
      "ga_weeks": null,
-     "ref_per_kg_daily": 120,
+     "ref_per_kg_daily": 90,
      "range_per_kg_daily": [
       90,
       150
@@ -436,7 +443,7 @@
      "flags": []
     }
    ],
-   "notes": "",
+   "notes": "Child scored at the usual 30 mg/kg q8h to match the adult 'usual' regimen; label: the higher dose should be reserved for immunocompromised pediatric patients or pediatric patients with cystic fibrosis or meningitis.",
    "renal_mechanism": {
     "value": "glomerular_filtration",
     "matched": "glomerular filtration",
@@ -463,7 +470,8 @@
      2250,
      4500
     ],
-    "quote": "The usual adult dosage range for Cefuroxime for Injection is 750 mg to 1.5 grams every 8 hours"
+    "quote": "The usual adult dosage range for Cefuroxime for Injection is 750 mg to 1.5 grams every 8 hours",
+    "flags": []
    },
    "bands": [
     {
@@ -498,7 +506,7 @@
    "unit": "mg",
    "fe": {
     "value": 0.0,
-    "quote": "Clindamycin is metabolized predominantly by CYP3A4",
+    "quote": "predominantly metabolized by Cytochrome P450 3A4 (CYP3A4)",
     "flags": [
      "fe_not_in_label"
     ]
@@ -512,7 +520,8 @@
      600,
      2700
     ],
-    "quote": "600–1200 mg/day in 2, 3 or 4 equal doses by intraveno"
+    "quote": "600–1200 mg/day in 2, 3 or 4 equal doses.",
+    "flags": []
    },
    "bands": [
     {
@@ -528,12 +537,12 @@
       20,
       40
      ],
-     "quote": "Dosage in Pediatric Patients (1 Month of Age to 16 Years): 20 to 40 mg/kg/day in 3 or 4 equal doses by intravenous infusion.",
+     "quote": "Pediatric Patients 1 month of age to 16 years Parenteral (IM or IV) Administration 20 to 40 mg/kg/day in 3 or 4 equal doses.",
      "flags": []
     },
     {
      "id": "neo",
-     "label": "Neonates (<1 month)",
+     "label": "Pediatric patients less than 1 month",
      "pna_days": [
       0,
       30.44
@@ -544,43 +553,11 @@
       15,
       20
      ],
-     "quote": "Dosage in Neonates (Less than 1 Month of Age): 15 to 20 mg/kg/day in 3 to 4 equal doses by intravenous infusion.",
-     "flags": []
-    },
-    {
-     "id": "neo_pma_le32",
-     "label": "PMA ≤32 weeks",
-     "pna_days": [
-      14,
-      14
-     ],
-     "ga_weeks": 28,
-     "ref_per_kg_daily": 15,
-     "range_per_kg_daily": [
-      15,
-      15
-     ],
-     "quote": "Less than or equal to 32 5 8",
-     "flags": []
-    },
-    {
-     "id": "neo_pma_32_40",
-     "label": "PMA >32 to ≤40 weeks",
-     "pna_days": [
-      21,
-      21
-     ],
-     "ga_weeks": 33,
-     "ref_per_kg_daily": 21,
-     "range_per_kg_daily": [
-      21,
-      21
-     ],
-     "quote": "Greater than or equal to 32 weeks to less than or equal to 40 7 8",
+     "quote": "Pediatric Patients less than 1 month The recommended dosage is 15 to 20 mg/kg/day in 3 to 4 equal doses.",
      "flags": []
     }
    ],
-   "notes": "PMA-defined bands: representative PMA 30 wk (GA 28 + 2 wk) and 36 wk (GA 33 + 3 wk). Adult tier quote continues: 1200–2700 mg/day for more severe infections.",
+   "notes": "Label Table 3 (PMA-based neonatal regimens) is not machine-readable text, so those bands are not scored (E1/E2 text rule). Adult tier quote continues with 1200–2700 mg/day for more severe infections.",
    "renal_mechanism": {
     "value": "not_renal_predominant",
     "matched": null,
@@ -607,7 +584,8 @@
      280,
      280
     ],
-    "quote": "≥30 mL/min 4 mg/kg once every 24 hours 6 mg/kg once every 24 hours"
+    "quote": "≥30 mL/min 4 mg/kg once every 24 hours 6 mg/kg once every 24 hours",
+    "flags": []
    },
    "bands": [
     {
@@ -686,7 +664,7 @@
    "included": false,
    "label": "digoxin.json",
    "excluded_by": "E2",
-   "reason": "Selected label defers pediatric dosing to a separate pediatric product label (not available from this manufacturer)."
+   "reason": "Selected label defers pediatric dosing under 10 years to a separate pediatric product label (not available from this manufacturer). It also fails E1: the adult and over-10-year maintenance doses are in image tables (Tables 2–3)."
   },
   "famotidine": {
    "included": true,
@@ -708,18 +686,19 @@
      40,
      40
     ],
-    "quote": "Adults: 20 mg every 12 hours."
+    "quote": "Adults: 20 mg every 12 hours.",
+    "flags": []
    },
    "bands": [
     {
      "id": "child",
-     "label": "Pediatric patients 1–16 y (starting dose)",
+     "label": "Pediatric patients 1–16 y (0.25 q12h titrated to 0.5 q12h)",
      "pna_days": [
       365.25,
       5844.0
      ],
      "ga_weeks": null,
-     "ref_per_kg_daily": 0.5,
+     "ref_per_kg_daily": 0.75,
      "range_per_kg_daily": [
       0.5,
       1.0
@@ -755,65 +734,68 @@
    "nonrenal_enzyme": null,
    "enzyme_evidence": null,
    "adult": {
-    "indication": "dose-equivalency scheme (adult 200 mg ↔ pediatric 6 mg/kg)",
-    "daily": 200,
+    "indication": "systemic Candida infections (adults: doses of up to 400 mg daily)",
+    "daily": 400,
     "range_daily": [
-     200,
-     200
+     400,
+     400
     ],
-    "quote": "Pediatric Patients Adults 3 mg/kg 100 mg 6 mg/kg 200 mg 12* mg/kg 400 mg"
+    "quote": "doses of up to 400 mg daily have been used",
+    "flags": [
+     "adult_up_to"
+    ]
    },
    "bands": [
     {
      "id": "child",
-     "label": "Pediatric patients (beyond the neonatal period)",
+     "label": "3 months and older (systemic Candida)",
      "pna_days": [
-      28,
+      91.31,
       5844.0
      ],
      "ga_weeks": null,
-     "ref_per_kg_daily": 6,
+     "ref_per_kg_daily": 12,
      "range_per_kg_daily": [
-      6,
-      6
+      12,
+      12
      ],
-     "quote": "Pediatric Patients Adults 3 mg/kg 100 mg 6 mg/kg 200 mg 12* mg/kg 400 mg",
+     "quote": "3 months and older A loading dose of 25-mg/kg on the first day (not to exceed 800 mg), followed by 12-mg/kg once daily (not to exceed 400 mg).",
      "flags": []
     },
     {
-     "id": "pre_lt2w",
-     "label": "Premature newborns GA 26–29 wk, first 2 weeks (q72h)",
+     "id": "neo_ge30",
+     "label": "Birth to 3 months, GA ≥30 weeks",
      "pna_days": [
       0,
-      14
+      91.31
      ],
-     "ga_weeks": 27.5,
-     "ref_per_kg_daily": 2,
+     "ga_weeks": 35,
+     "ref_per_kg_daily": 12,
      "range_per_kg_daily": [
-      2,
-      2
+      12,
+      12
      ],
-     "quote": "these children, in the first two weeks of life, should receive the same dosage (mg/ kg) as in older children, but administered every 72 hours.",
+     "quote": "Birth to 3 months postnatal age and gestational age 30 weeks and above 25-mg/kg on the first day, followed by 12- mg/kg once daily",
      "flags": []
     },
     {
-     "id": "pre_2_4w",
-     "label": "Premature newborns GA 26–29 wk, after the first 2 weeks",
+     "id": "neo_lt30",
+     "label": "Birth to 3 months, GA <30 weeks",
      "pna_days": [
-      14,
-      28
+      0,
+      91.31
      ],
-     "ga_weeks": 27.5,
-     "ref_per_kg_daily": 6,
+     "ga_weeks": 28,
+     "ref_per_kg_daily": 9,
      "range_per_kg_daily": [
-      6,
-      6
+      9,
+      9
      ],
-     "quote": "After the first two weeks, these children should be dosed once daily.",
+     "quote": "Birth to 3 months postnatal age and gestational age less than 30 weeks 25-mg/kg on the first day, followed by 9- mg/kg once daily",
      "flags": []
     }
    ],
-   "notes": "Neonatal bands score the 6 mg/kg row: 6 mg/kg q72h = 2 mg/kg/day.",
+   "notes": "Indication with the most pediatric bands (systemic Candida; label: pediatric regimens chosen to match adult AUC). Adult reference is the label's 'up to 400 mg daily'.",
    "renal_mechanism": {
     "value": "unspecified",
     "matched": null,
@@ -840,7 +822,8 @@
      210,
      350
     ],
-    "quote": "The recommended dosage of gentamicin injection for patients with serious infections and normal renal function is 3 mg/kg/day, administered in three equal doses every eight hours ( Table 3 ). For patients with life-threatening infections, dosages up to 5 mg/kg/day may be ad"
+    "quote": "The recommended dosage of gentamicin injection for patients with serious infections and normal renal function is 3 mg/kg/day, administered in three equal doses every eight hours ( Table 3 ). For patients with life-threatening infections, dosages up to 5 mg/kg/day may be ad",
+    "flags": []
    },
    "bands": [
     {
@@ -919,7 +902,8 @@
      3000,
      3000
     ],
-    "quote": "Adults 16 Years and Older: 500 mg twice daily; increase by 500 mg twice daily every 2 weeks to a recommended dose of 1500 mg twice daily"
+    "quote": "Adults 16 Years and Older: 500 mg twice daily; increase by 500 mg twice daily every 2 weeks to a recommended dose of 1500 mg twice daily",
+    "flags": []
    },
    "bands": [
     {
@@ -985,7 +969,7 @@
    "target_metric": "time_mic",
    "unit": "mg",
    "fe": {
-    "value": 0.7,
+    "value": 0.625,
     "quote": "Approximately 70% (50% - 75%) of the dose is excreted unchanged within 12 hours.",
     "flags": []
    },
@@ -998,7 +982,8 @@
      3000,
      3000
     ],
-    "quote": "1 gram every 8 hours by intravenous infusion over 15 minutes to 30 minutes for intra-abdominal infections for adult patients."
+    "quote": "1 gram every 8 hours by intravenous infusion over 15 minutes to 30 minutes for intra-abdominal infections for adult patients.",
+    "flags": []
    },
    "bands": [
     {
@@ -1090,83 +1075,10 @@
    }
   },
   "midazolam": {
-   "included": true,
+   "included": false,
    "label": "midazolam.json",
-   "class": "benzodiazepine",
-   "target_metric": "css",
-   "unit": "mg",
-   "fe": {
-    "value": 0.005,
-    "quote": "The amount of midazolam excreted unchanged in the urine after a single IV dose is less than 0.5% (n=5).",
-    "flags": []
-   },
-   "nonrenal_enzyme": "cyp3a4",
-   "enzyme_evidence": "label",
-   "adult": {
-    "indication": "ICU sedation, maintenance infusion 0.02–0.10 mg/kg/hr × 70 kg",
-    "daily": 100.8,
-    "range_daily": [
-     33.6,
-     168.0
-    ],
-    "quote": "For maintenance of sedation, the usual initial infusion rate is 0.02 to 0.10 mg/kg/hr (1 to 7 mg/hr)."
-   },
-   "bands": [
-    {
-     "id": "child",
-     "label": "Pediatric (non-neonatal), intubated",
-     "pna_days": [
-      30.44,
-      5844.0
-     ],
-     "ga_weeks": null,
-     "ref_per_kg_daily": 2.16,
-     "range_per_kg_daily": [
-      1.44,
-      2.88
-     ],
-     "quote": "continuous intravenous infusions of midazolam should be initiated at a rate of 0.06 to 0.12 mg/kg/hr (1 to 2 mcg/kg/min).",
-     "flags": []
-    },
-    {
-     "id": "neo_lt32",
-     "label": "Neonates <32 weeks, intubated",
-     "pna_days": [
-      0,
-      28
-     ],
-     "ga_weeks": 30,
-     "ref_per_kg_daily": 0.72,
-     "range_per_kg_daily": [
-      0.72,
-      0.72
-     ],
-     "quote": "0.03 mg/kg/hr (0.5 mcg/kg/min) in neonates <32 weeks",
-     "flags": []
-    },
-    {
-     "id": "neo_gt32",
-     "label": "Neonates >32 weeks, intubated",
-     "pna_days": [
-      0,
-      28
-     ],
-     "ga_weeks": 36,
-     "ref_per_kg_daily": 1.44,
-     "range_per_kg_daily": [
-      1.44,
-      1.44
-     ],
-     "quote": "0.06 mg/kg/hr (1 mcg/kg/min) in neonates >32 weeks",
-     "flags": []
-    }
-   ],
-   "notes": "'<32 weeks' read as gestational age. fe 'less than 0.5%' scored as 0.005.",
-   "renal_mechanism": {
-    "value": "not_renal_predominant",
-    "matched": null,
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
-   }
+   "excluded_by": "E1",
+   "reason": "Selected label (rule: pediatric mention, latest effective_time) has no continuous-infusion or other maintenance regimen in its machine-readable Dosage and Administration text."
   },
   "morphine": {
    "included": true,
@@ -1188,7 +1100,8 @@
      33.6,
      168.0
     ],
-    "quote": "Adults: Initiate treatment in a dosing range of 0.02 mg/kg/hour to 0.1 mg/kg/hour as needed."
+    "quote": "Adults: Initiate treatment in a dosing range of 0.02 mg/kg/hour to 0.1 mg/kg/hour as needed.",
+    "flags": []
    },
    "bands": [
     {
@@ -1245,29 +1158,30 @@
    "nonrenal_enzyme": null,
    "enzyme_evidence": null,
    "adult": {
-    "indication": "serious streptococcal infections (12–24 million units/day)",
-    "daily": 18000000,
+    "indication": "meningococcal meningitis (most severe indication with a pediatric row)",
+    "daily": 24000000,
     "range_daily": [
-     12000000,
+     24000000,
      24000000
     ],
-    "quote": "septicemia, empyema, pneumonia, pericarditis, endocarditis and meningitis 12 to 24 million units/day depending on the infection and its severity"
+    "quote": "Meningococcal meningitis and/or septicemia 24 million units/day as 2 million units every 2 hours",
+    "flags": []
    },
    "bands": [
     {
      "id": "child",
-     "label": "Pediatric patients (serious streptococcal/meningococcal infections)",
+     "label": "Pediatric patients, pneumococcal/meningococcal meningitis",
      "pna_days": [
       28,
       5844.0
      ],
      "ga_weeks": null,
-     "ref_per_kg_daily": 225000,
+     "ref_per_kg_daily": 250000,
      "range_per_kg_daily": [
-      150000,
-      300000
+      250000,
+      250000
      ],
-     "quote": "150,000 to 300,000 units/kg/day divided in equal doses every 4 to 6 hours",
+     "quote": "Meningitis caused by susceptible strains of pneumococcus and meningococcus 250,000 units/kg/day divided in equal doses every 4 hours",
      "flags": []
     }
    ],
@@ -1292,49 +1206,50 @@
    "nonrenal_enzyme": null,
    "enzyme_evidence": null,
    "adult": {
-    "indication": "indications other than nosocomial pneumonia (piperacillin component)",
-    "daily": 12000,
+    "indication": "nosocomial pneumonia (piperacillin component; most severe indication with pediatric rows)",
+    "daily": 16000,
     "range_daily": [
-     12000,
-     12000
+     16000,
+     16000
     ],
-    "quote": "The usual daily dosage of piperacillin and tazobactam for injection for adults is 3.375 g every six hours totaling 13.5 g (12 g piperacillin and 1.5 g tazobactam)."
+    "quote": "should start with piperacillin and tazobactam for injection at a dosage of 4.5 g every six hours plus an aminoglycoside, [totaling 18 g (16 g piperacillin and 2 g tazobactam)]",
+    "flags": []
    },
    "bands": [
     {
      "id": "infant",
-     "label": "2–9 months (appendicitis/peritonitis)",
+     "label": "2–9 months (nosocomial pneumonia)",
      "pna_days": [
       60.88,
       273.94
      ],
      "ga_weeks": null,
-     "ref_per_kg_daily": 240,
+     "ref_per_kg_daily": 320,
      "range_per_kg_daily": [
-      240,
-      240
+      320,
+      320
      ],
-     "quote": "2 months to 9 months 90 mg/kg (80 mg piperacillin and 10 mg tazobactam) every 8 ( eight ) hours",
+     "quote": "90 mg/kg (80 mg piperacillin and 10 mg tazobactam) every 6 ( six ) hours",
      "flags": []
     },
     {
      "id": "child",
-     "label": ">9 months, ≤40 kg (appendicitis/peritonitis)",
+     "label": ">9 months (nosocomial pneumonia)",
      "pna_days": [
       273.94,
-      4383.0
+      5844.0
      ],
      "ga_weeks": null,
-     "ref_per_kg_daily": 300,
+     "ref_per_kg_daily": 400,
      "range_per_kg_daily": [
-      300,
-      300
+      400,
+      400
      ],
-     "quote": "Older than 9 months 112.5 mg/kg (100 mg piperacillin and 12.5 mg tazobactam) every 8 ( eight) hours",
+     "quote": "112.5 mg/kg (100 mg piperacillin and 12.5 mg tazobactam) every 6 ( six) hours",
      "flags": []
     }
    ],
-   "notes": "Doses scored as the piperacillin component. Upper age bound 12 y stands in for the label's 40 kg cap.",
+   "notes": "Doses scored as the piperacillin component. The label's 40 kg weight cap is not applied (Amendment 1 §15).",
    "renal_mechanism": {
     "value": "secretion",
     "matched": "tubular secretion",
@@ -1361,7 +1276,8 @@
      210,
      350
     ],
-    "quote": "Adults with Serious Infections: 3 mg/kg/day in 3 equal doses every 8 hours (see Table 1). Adults with Life-Threatening Infections: Up to 5 mg/kg/day may be administered"
+    "quote": "Adults with Serious Infections: 3 mg/kg/day in 3 equal doses every 8 hours (see Table 1). Adults with Life-Threatening Infections: Up to 5 mg/kg/day may be administered",
+    "flags": []
    },
    "bands": [
     {
@@ -1395,7 +1311,8 @@
      ],
      "quote": "Premature or Full-Term Neonates 1 Week of Age or Less: Up to 4 mg/kg/day",
      "flags": [
-      "up_to"
+      "up_to",
+      "mgkg_shared"
      ]
     }
    ],
@@ -1426,7 +1343,8 @@
      2000,
      2000
     ],
-    "quote": "The usual daily intravenous dose is 2 g divided either as 500 mg every 6 hours or 1 g every 12 hours."
+    "quote": "The usual daily intravenous dose is 2 g divided either as 500 mg every 6 hours or 1 g every 12 hours.",
+    "flags": []
    },
    "bands": [
     {
@@ -1505,7 +1423,8 @@
      420,
      420
     ],
-    "quote": "The recommended intravenous dose is 1 mg per kg infused at a constant rate over 1 hour every 4 hours."
+    "quote": "The recommended intravenous dose is 1 mg per kg infused at a constant rate over 1 hour every 4 hours.",
+    "flags": []
    },
    "bands": [
     {
@@ -1523,7 +1442,8 @@
      ],
      "quote": "Intravenous 6 mg/kg/day 1.5 mg/kg infused over 30 minutes, every 6 hours",
      "flags": [
-      "mgkg_shared"
+      "mgkg_shared",
+      "indication_mismatch"
      ]
     }
    ],
