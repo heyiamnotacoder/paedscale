@@ -238,3 +238,10 @@ This answers a code review of the search script and of Amendment 1. These rules 
 8. **κ** is computed over the abstracts that both passes read.
 9. **Pre-filter.** Whitespace is collapsed before matching, which removes a slow-matching case. It also accepts en-dash exponents ("kg–1"), per-day "d" ("L/kg/d") and dL. The cases are in `tests/test_external_prefilter.py`.
 10. **Workload.** When a stratum never fills, the whole pre-filtered list for that drug is read. This is accepted, because stopping early on effort would make inclusion depend on reading order beyond the seeded shuffle.
+
+### Amendment 3 — 2026-11-27, after the search snapshot was committed, before any abstract was screened or any value was extracted
+
+Setting up the screening tools showed two gaps. These rules override the text above where the two conflict.
+
+1. **Per-square-metre clearance.** Older pediatric studies report clearance per m² of BSA (for example "ml/min per m(2)"), not per 1.73 m². Such a value is converted to L/h as value × BSA, with BSA chosen as in Amendment 1 §7. The units are `mL/min/m2` and `L/h/m2`.
+2. **Screening order between the lists.** A drug's adult list is screened once every pediatric stratum is full or the pediatric list is exhausted, whichever comes first. Screening of the drug ends when five adult abstracts qualify or the adult list is exhausted. `curation/screening.py` applies this, and `curation/check.py` checks each pass's records against the seeded order and the committed hashes.

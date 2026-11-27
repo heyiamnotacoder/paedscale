@@ -58,6 +58,8 @@ def test_central_values_use_the_geometric_midpoint_for_postnatal_age():
     (8.0, "L/h/70kg", {"weight_kg": 70 / 16}, 1.0),            # 8 × (1/16)^0.75 = 1.0
     (86.5, "mL/min/1.73m2", {"weight_kg": 20, "bsa_m2": 0.865}, 86.5 * 0.06 * 0.5),
     (24, "L/day", {}, 1.0),
+    (100, "mL/min/m2", {"weight_kg": 20, "bsa_m2": 0.8}, 100 * 0.06 * 0.8),   # Amendment 3
+    (2.5, "L/h/m2", {"weight_kg": 20, "bsa_m2": 0.8}, 2.0),
 ])
 def test_clearance_converts_to_litres_per_hour(value, unit, kw, expected):
     assert ex.to_l_per_h(value, unit, **kw) == pytest.approx(expected)

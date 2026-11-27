@@ -17,7 +17,7 @@ import math
 import re
 
 UNITS = {"L/h", "mL/min", "L/h/kg", "mL/min/kg", "mL/h/kg", "L/h/70kg", "mL/min/1.73m2",
-         "L/h/1.73m2", "L/day"}
+         "L/h/1.73m2", "mL/min/m2", "L/h/m2", "L/day"}
 SUMMARIES = {"mean", "median", "geometric_mean", "typical"}
 DAYS_PER_MONTH = 30.4375
 DAYS_PER_YEAR = 365.25
@@ -77,7 +77,7 @@ def stratum(pna_days: float, ga_weeks: float | None) -> str:
 
 
 def to_l_per_h(value: float, unit: str, weight_kg: float | None = None, bsa_m2: float | None = None) -> float:
-    """Total clearance in L/h (PROTOCOL.md 'Extraction'; Amendment 1 §3, §7)."""
+    """Total clearance in L/h (PROTOCOL.md 'Extraction'; Amendment 1 §3, §7; Amendment 3 §1)."""
     if unit == "L/h":
         return value
     if unit == "mL/min":
@@ -96,4 +96,8 @@ def to_l_per_h(value: float, unit: str, weight_kg: float | None = None, bsa_m2: 
         return value * 0.06 * bsa_m2 / 1.73
     if unit == "L/h/1.73m2":
         return value * bsa_m2 / 1.73
+    if unit == "mL/min/m2":                   # Amendment 3 §1
+        return value * 0.06 * bsa_m2
+    if unit == "L/h/m2":
+        return value * bsa_m2
     raise ValueError(f"unknown clearance unit {unit!r}")
