@@ -457,3 +457,27 @@ def test_uncertainty_coverage_survives_every_band_blocked(monkeypatch):
     monkeypatch.setattr(engine.uncertainty, "dose_uncertainty_interval", lambda **kw: None)
     c = uncertainty_coverage({"a": SYNTH["linear_truth"]}, n_boot=20)
     assert c["n_bands"] == 0 and c["n_bands_blocked"] == 2 and c["coverage_90"] is None
+
+
+def test_figures_keep_every_point_visible_and_use_plain_ratio_ticks(tmp_path, monkeypatch):
+    """Fig 2: the legend sits outside the plot and the y range holds every fold error.
+    Fig 3: the ratio axis is labelled with plain numbers, not powers of ten."""
+    from benchmark import figures
+    saved = {}
+    monkeypatch.setattr(figures, "_save", lambda fig, out, name, prov=None: saved.__setitem__(name, fig))
+    rows = score(_three_drug_set())
+    rows.append({**rows[0], "fe": 7.5})            # a far outlier must stay in view
+    res = analyze(rows, n_boot=40)
+    figures.fold_error_by_stratum(rows, str(tmp_path))
+    figures.paired_difference_forest(res, str(tmp_path))
+    ax2 = saved["fig2_fold_error_by_stratum"].axes[0]
+    lo, hi = ax2.get_ylim()
+    assert lo <= min(r["fe"] for r in rows) and hi >= 7.5
+    leg = ax2.get_legend()
+    fig2 = saved["fig2_fold_error_by_stratum"]
+    fig2.canvas.draw()
+    assert leg.get_window_extent().y1 <= ax2.get_window_extent().y0   # legend below the axes
+    ax3 = saved["fig3_paired_difference_by_drug"].axes[0]
+    saved["fig3_paired_difference_by_drug"].canvas.draw()
+    labels = [t.get_text() for t in ax3.get_xticklabels() + ax3.get_xticklabels(minor=True) if t.get_text()]
+    assert labels and not any("10^" in s or "times" in s or "{" in s for s in labels)

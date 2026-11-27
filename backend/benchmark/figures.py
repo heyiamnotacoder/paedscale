@@ -14,6 +14,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+from matplotlib.ticker import NullFormatter  # noqa: E402
 
 from benchmark.metrics import CONCORDANCE_BAND  # noqa: E402
 from benchmark.methods import STRATA  # noqa: E402
@@ -61,13 +62,18 @@ def fold_error_by_stratum(rows, out, prov=None):
         ax.scatter(xs, ys, s=22, marker=mk, color=col, edgecolors="white", linewidths=0.6,
                    label=lab, zorder=3)
     ax.set_yscale("log")
-    ticks = [0.25, 0.5, 0.67, 1, 1.5, 2, 4]
+    fes = [r["fe"] for r in rows if r["method"] in {m for m, *_ in SHOWN} and r.get("fe")]
+    ymin, ymax = min([0.25] + fes) / 1.15, max([4.0] + fes) * 1.15
+    ax.set_ylim(ymin, ymax)
+    ticks = [t for t in (0.125, 0.25, 0.5, 0.67, 1, 1.5, 2, 4, 8, 16) if ymin <= t <= ymax]
     ax.set_yticks(ticks)
     ax.set_yticklabels([f"{t:g}×" for t in ticks])
+    ax.yaxis.set_minor_formatter(NullFormatter())
     ax.set_xticks(range(len(STRATA)))
     ax.set_xticklabels([STRATUM_LABEL[s] for s in STRATA])
     ax.set_ylabel("Fold error (predicted ÷ labeled dose)", color=INK)
-    ax.legend(frameon=False, fontsize=8, loc="upper left", ncol=2)
+    # Below the axes, so no data point is ever hidden behind it.
+    ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=2)
     _save(fig, out, "fig2_fold_error_by_stratum", prov)
 
 
@@ -94,6 +100,11 @@ def paired_difference_forest(results, out, prov=None):
     ax.text(max(hi, est), y0, "  all drugs, 95% CI", va="center", fontsize=8, color=INK)
     ax.axvline(1.0, color=INK2, linewidth=0.8)
     ax.set_xscale("log")
+    xs = [10 ** d for d, _ in items] + [lo, hi, est]
+    ticks = [t for t in (0.25, 0.33, 0.5, 0.67, 0.8, 1, 1.25, 1.5, 2, 3, 4) if min(xs) / 1.1 <= t <= max(xs) * 1.1]
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([f"{t:g}" for t in ticks])
+    ax.xaxis.set_minor_formatter(NullFormatter())
     ax.set_xlabel("Ratio of typical fold error, PaedScale ÷ allometry + class rule\n(<1 favours PaedScale)", color=INK)
     ax.set_ylim(-2, len(items))
     _save(fig, out, "fig3_paired_difference_by_drug", prov)
