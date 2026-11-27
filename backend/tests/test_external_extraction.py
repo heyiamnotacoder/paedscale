@@ -111,10 +111,10 @@ def test_adult_and_pediatric_flags_are_separate():
     assert ex.flag_problems(["adult_age_unstated"], "pediatric")
 
 
-def test_ga_is_not_inferred_from_group_pma_and_postnatal_age():
-    # group summaries of PMA and postnatal age do not subtract to a group GA (Amendment 8 §1)
-    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 45, "pna_days": [1, 121],
-                                 "preterm": False}) == 40
+def test_ga_is_the_default_when_pma_minus_age_does_not_cap_it():
+    # Amendments 8 §1 and 10 §1
+    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 50, "pna_days": [1, 121],
+                                 "preterm": False}) == 40          # cap 50 - 61/7 = 41.3 leaves the default
     assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 33, "pna_days": 7, "preterm": True}) == 32
 
 
