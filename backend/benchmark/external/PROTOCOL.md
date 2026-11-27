@@ -161,4 +161,61 @@ study team with AI assistance; every value carries a verbatim quote that is chec
 
 ## Amendments
 
-None yet.
+### Amendment 1 — 2026-11-27, before any search was run, any abstract was screened or any value was extracted
+
+This answers an internal methods review of the protocol above. These rules override the text above where the two conflict.
+
+1. **Screening order.** The ascending-PMID order is replaced, because it would pick the oldest studies first.
+   * Each drug's pre-filtered pediatric PMIDs are shuffled with Python's `random.Random(20261127)` after being sorted ascending. Screening follows that order.
+   * A study is included if it adds at least one eligible observation to a stratum that has fewer than two included studies for that drug.
+   * It contributes its eligible observations in every such stratum, and it counts toward the cap of each stratum it contributes to.
+   * Its observations in strata that are already full are not used.
+2. **Adult reference.** The single oldest adult abstract is replaced with a pooled value, because one adult study would control the comparison.
+   * Adult abstracts that pass the pre-filter are screened in the same seeded order. Up to the first five qualifying ones are kept.
+   * A qualifying abstract reports the mean or typical total IV clearance in adults aged 18–65 years who are healthy or have normal renal function, without probenecid.
+   * Each value is converted to a 70 kg adult:
+     * per-kg values × 70;
+     * absolute values with a stated mean weight × (70/WT)^0.75;
+     * absolute values without a weight are used as reported and flagged `adult_weight_missing`.
+   * The adult reference is the median of the kept values.
+   * E4 now uses only the first qualifying adult abstract instead of the median.
+3. **Values standardized per 70 kg** are accepted only when the abstract states the age (PMA, or PNA with GA) at which the value applies. The value is the study model's typical value at that age, so it is converted with (WT/70)^0.75 at that age's weight. Otherwise it is not extracted.
+4. **Circularity.** Two flags are added.
+   * `fixed_maturation` applies when the abstract, or the open-access full text in PubMed Central where one exists, says the model fixed a maturation function or fixed its maturation parameters from the literature.
+   * `fixed_allometry` applies when the model fixed the allometric exponent.
+   * E3 now excludes `allometric_standardized`, `fixed_maturation` and `fixed_allometry` observations.
+   * E7 names the curve-source authors exactly: Anderson BJ, Holford NHG (NH), Rhodin MM, Anand KJ (KJS), Larsson P.
+5. **Eligibility clarifications.**
+   * When an abstract gives both a group summary (the mean or median of individual or non-compartmental estimates) and a model typical value, the group summary is used.
+   * A clearance given only as a range has no central value and is not extracted.
+   * CL/F, and values from models that pool oral or intramuscular with IV data without an IV-only value, are not extracted.
+   * Studies that coadminister probenecid are excluded.
+   * Piperacillin clearance is accepted with or without tazobactam, flagged `with_tazobactam` when given together.
+   * Bolus and infusion are both accepted, because clearance is linear at labeled doses.
+6. **Age rules.**
+   * When an abstract gives PMA, the engine uses PMA directly. GA then matters only for weight imputation, which uses the Fenton chart at that PMA below 50 weeks, as in the label benchmark.
+   * "Conceptional" and "postconceptional" age are read as PMA, flagged `pca_as_pma`.
+   * When an age range is stated, predictions are made at 7 ages log-spaced across it, and the prediction is their geometric mean, as in the label benchmark. When only a central age is stated, one age is used.
+   * The stratum and the under-2 split use the central postnatal age. When only a range is stated, the geometric midpoint is used.
+7. **BSA.** A stated BSA, or Mosteller BSA from a stated height and weight, is used for per-1.73 m² conversion. Costeff BSA is used only when neither is given, flagged `bsa_costeff`.
+8. **Statistics.**
+   * HE1 and HE2 succeed only if the upper bound of the 95% interval for PaedScale minus allometry is below zero. An interval entirely above zero is reported as evidence against PaedScale.
+   * HE1 is confirmatory only if at least 8 drugs contribute observations under 2 years. Otherwise HE1 and HE2 are reported as descriptive.
+   * An exact sign-flip permutation test on the drug-level paired differences is added as a secondary test. It enumerates every sign assignment when there are 20 or fewer drugs.
+   * Per-stratum intervals are reported only for strata with at least 5 drugs.
+9. **Duplicate screening and extraction.**
+   * A second, independent pass screens and extracts every pre-filtered abstract up to each stratum's cap. It works blind to the first pass's decisions.
+   * Both passes are AI-assisted (Claude, Anthropic). The second runs in a fresh context with only this protocol and the abstract texts.
+   * Inclusion agreement is reported as Cohen's κ. Extracted numbers are compared value by value.
+   * A disagreement is resolved by re-reading the abstract against the protocol, and each resolution and its reason are recorded.
+   * The authors must verify the final dataset before submission.
+   * A PRISMA-style flow of records (retrieved, pre-filtered, screened, included, by reason excluded) is reported.
+10. **Pre-filter widened.** It now matches:
+    * a body-size unit before the time unit ("mL/kg/h");
+    * a bracketed denominator ("L/(h·kg)");
+    * up to 40 characters of bracketed text between the number and the unit ("3.2 (95% CI 2.9–3.5) L/h");
+    * the unit before the number ("CL (L/h) was 3.2");
+    * dot and "x" separators, spelled-out units, and per-day units.
+
+    The cases are in `tests/test_external_prefilter.py`. Infusion rates, creatinine clearance and similar false positives only add screening work, and screening removes them.
+11. **Added sensitivity analysis E8.** Exclude studies published before 1995. Older assays and neonatal care differ.
