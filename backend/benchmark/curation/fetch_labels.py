@@ -24,24 +24,29 @@ API = "https://api.fda.gov/drug/label.json"
 PEDS = re.compile(r"pediatric|neonat", re.I)
 
 
-DILUENTS = re.compile(r"^(dextrose|sodium chloride|water)\b", re.I)
-# Components made only of these words are dosage-form qualifiers, not ingredients.
-QUALIFIERS = {"usp", "nf", "injection", "injectable", "for", "solution", "powder", "premix",
-              "in", "plastic", "container", "single", "dose", "vial", "bulk", "package", "pharmacy"}
+DILUENTS = re.compile(r"^(in\s+)?(dextrose|sodium chloride|water)\b", re.I)
+# A component made only of these words (or of numbers) is a dosage form, package or strength,
+# not an ingredient. Listed in PROTOCOL.md Amendment 3 §1.
+QUALIFIERS = {"usp", "nf", "sterile", "injection", "injectable", "for", "solution", "powder", "premix",
+              "in", "plastic", "container", "single", "dose", "vial", "bulk", "package", "pharmacy",
+              "units", "unit", "mg", "g", "mcg", "ml", "meq"}
+
+
+def _is_qualifier(component: str) -> bool:
+    return set(re.findall(r"[a-z]+", component.lower())) <= QUALIFIERS   # numbers-only too
 
 
 def same_active_ingredient(generic: str, label: dict) -> bool:
     """Amendment 3: the label's active ingredients are exactly the candidate's (salts allowed;
     premix diluents such as dextrose are not active ingredients). Drops combination products
     that the openFDA phrase query also matches, e.g. ampicillin AND sulbactam for ampicillin.
-    Components split on the word "and" and on commas; a component made only of dosage-form
-    words ("INJECTION", "USP") is dropped. Each wanted ingredient must match a different
+    Components split on the word "and" and on commas; a component made only of dosage-form,
+    package or strength words or numbers ("INJECTION", "USP", "1,000 UNITS") is dropped. Each wanted ingredient must match a different
     component as whole words."""
     wanted = [w.strip().lower() for w in re.split(r"\band\b", generic, flags=re.I)]
     for name in label.get("openfda", {}).get("generic_name") or []:
         parts = [p.strip() for p in re.split(r"\band\b|,", name, flags=re.I) if p.strip()]
-        actives = [p for p in parts if not DILUENTS.match(p)
-                   and not set(re.findall(r"[a-z]+", p.lower())) <= QUALIFIERS]
+        actives = [p for p in parts if not DILUENTS.match(p) and not _is_qualifier(p)]
         if len(actives) != len(wanted):
             continue
         free = list(actives)

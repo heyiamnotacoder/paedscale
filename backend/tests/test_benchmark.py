@@ -417,3 +417,27 @@ def test_uncertainty_coverage_is_drug_weighted_with_a_clustered_ci(monkeypatch):
     assert c["n_bands"] == 3 and c["n_drugs"] == 2 and c["coverage_90"] == 0.5
     lo, hi = c["coverage_90_ci95"]
     assert 0.0 <= lo <= hi <= 1.0
+
+
+def test_active_ingredient_match_drops_strength_and_premix_components():
+    from benchmark.curation.fetch_labels import same_active_ingredient
+    assert same_active_ingredient("heparin", _label("HEPARIN SODIUM, 1,000 UNITS"))
+    assert same_active_ingredient("cefazolin", _label("CEFAZOLIN, IN DEXTROSE"))
+    assert same_active_ingredient("vancomycin", _label("VANCOMYCIN INJECTION, STERILE"))
+    assert not same_active_ingredient("cefazolin", _label("CEFAZOLIN, LIDOCAINE"))
+
+
+def test_uncertainty_coverage_counts_blocked_bands_and_reports_a_true_median(monkeypatch):
+    import engine.uncertainty
+    from benchmark.run import uncertainty_coverage
+    widths = iter([1.1, 1.3, None])   # third band: blocked point estimate -> no interval
+    def fake(**kw):
+        w = next(widths)
+        return None if w is None else {"dose_mg_per_kg_per_day": {"p05": 10.0, "p50": 10.0 * w ** 0.5, "p95": 10.0 * w}}
+    monkeypatch.setattr(engine.uncertainty, "dose_uncertainty_interval", fake)
+    d = json.loads(json.dumps(SYNTH["linear_truth"]))
+    d["bands"].append(dict(d["bands"][0], id="extra"))
+    c = uncertainty_coverage({"a": d}, n_boot=20)
+    assert c["n_bands"] == 2 and c["n_bands_blocked"] == 1
+    assert abs(c["median_fold_width"] - 1.2) < 1e-9
+    assert c["coverage_90_ci_method"] in ("bca", "percentile")

@@ -73,6 +73,9 @@ def _var(xs: list[float]) -> float:
     return sum((x - m) ** 2 for x in xs) / max(1, len(xs) - 1)
 
 
+SAFETY_BOUNDS = ("toxic_dose_mg_per_kg_per_day", "effective_dose_mg_per_kg_per_day")
+
+
 def dose_uncertainty_interval(
     *,
     n_draws: int = DEFAULT_DRAWS,
@@ -93,10 +96,8 @@ def dose_uncertainty_interval(
     maturing = [p for p in (case.get("fm") or {}) if p in MATURATION]
     # Draws describe the engine dose, so safety bounds must not truncate them: they are
     # removed for sampling and reported as the share of draws past each bound instead.
-    toxic = case.get("toxic_dose_mg_per_kg_per_day")
-    effective = case.get("effective_dose_mg_per_kg_per_day")
-    unbounded = {k: v for k, v in case.items()
-                 if k not in ("toxic_dose_mg_per_kg_per_day", "effective_dose_mg_per_kg_per_day")}
+    toxic, effective = (case.get(k) for k in SAFETY_BOUNDS)
+    unbounded = {k: v for k, v in case.items() if k not in SAFETY_BOUNDS}
 
     def run(vary: set[str], rng: random.Random):
         curves = {k: (sample_curve(v, rng) if k in vary else v) for k, v in MATURATION.items()}
@@ -145,6 +146,8 @@ def dose_uncertainty_interval(
         "half_life_h": _quantiles(hls),
         "fold_width_90": (dq["p95"] / dq["p05"]) if dq and dq["p05"] > 0 else None,
         "variance_share": share,
+        "toxic_dose_mg_per_kg_per_day": toxic,
+        "effective_dose_mg_per_kg_per_day": effective,
         "share_above_toxic": share_past(toxic, lambda x, t: x > t),
         "share_below_effective": share_past(effective, lambda x, e: x < e),
     }

@@ -12,6 +12,7 @@ import csv
 import json
 import math
 import os
+import statistics
 import subprocess
 from typing import Callable, Optional
 
@@ -224,7 +225,7 @@ def uncertainty_coverage(refset: dict, n_boot: int) -> dict:
     a drug-clustered CI like every other summary."""
     from benchmark.methods import NOMINAL_CL_L_H, NOMINAL_VD_L
     from engine.uncertainty import dose_uncertainty_interval
-    rows = []
+    rows, n_blocked = [], 0
     for name, d in sorted(refset.items()):
         if not d.get("included"):
             continue
@@ -234,18 +235,22 @@ def uncertainty_coverage(refset: dict, n_boot: int) -> dict:
                 drug=name, weight_kg=p["weight_kg"], cl_adult_l_h=NOMINAL_CL_L_H, vd_adult_l=NOMINAL_VD_L,
                 fm=pathway_fractions(d), target_metric=d["target_metric"], pma_weeks=p["pma_weeks"],
                 adult_dose_mg_per_day=d["adult"]["daily"], n_draws=1000)
-            if pi is None:      # blocked point estimate: no interval to score
+            if pi is None:      # blocked point estimate: no interval to score (counted)
+                n_blocked += 1
                 continue
             q = pi["dose_mg_per_kg_per_day"]
             rows.append({"drug": name, "hit": float(q["p05"] <= b["ref_per_kg_daily"] <= q["p95"]),
-                         "width": q["p95"] / q["p05"] if q["p05"] > 0 else math.inf})
+                         "width": q["p95"] / q["p05"] if q["p05"] > 0 else None})
     drug_weighted = lambda rs: weighted(rs, lambda r: r["hit"], "drug")
     ci = _ci(rows, drug_weighted, n_boot)
-    widths = sorted(r["width"] for r in rows)
-    return {"n_bands": len(rows), "n_drugs": len(by_drug(rows)), "coverage_90": drug_weighted(rows),
+    widths = [r["width"] for r in rows if r["width"] is not None]
+    return {"n_bands": len(rows), "n_bands_blocked": n_blocked, "n_drugs": len(by_drug(rows)),
+            "coverage_90": drug_weighted(rows),
             "coverage_90_ci95": [ci["lo"], ci["hi"]] if ci else None,
+            "coverage_90_ci_method": ci["method"] if ci else None,
             # descriptive only (no interval): how wide the 90% intervals are
-            "median_fold_width": widths[len(widths) // 2], "max_fold_width": widths[-1]}
+            "median_fold_width": statistics.median(widths) if widths else None,
+            "max_fold_width": max(widths) if widths else None}
 
 
 def _git(*args: str) -> Optional[str]:
