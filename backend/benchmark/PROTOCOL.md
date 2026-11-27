@@ -281,3 +281,16 @@ A code review of the Amendment 2 commit found the defects below. This amendment 
     * Under S5 +2 weeks, the fluconazole GA ≥ 30 band moves from GA 35 to 37 and so uses the term growth curve.
     * Meropenem fe is the midpoint of the label's stated range, 50–75% (0.625), per the protocol's range rule, even though the same sentence says "approximately 70%".
 12. **Erratum to Amendment 2 §3.** The piperacillin–tazobactam child band's upper bound of 16 years comes from the protocol's rule for an open upper bound (21 CFR 201.57). The label itself says only "older than 9 months", not 16 years.
+
+## Scoring record
+
+- **2026-11-27, first scoring.** `python3 -m benchmark.run` (10,000 bootstrap replicates, seed
+  20261127) was first run at commit `6830639`, after Amendment 3 and with no further change to
+  label selection, the reference set, the growth table or the analysis.
+- Looking at that run's figures showed a presentation fault: Figure 2 used fixed y ticks up to
+  4×, so a 15.8× point (morphine, infant band, allometry + class rule) sat at the plot edge behind
+  the legend, and Figure 3 used powers-of-ten tick labels. Commit `6e46766` changed only
+  `figures.py`. The scoring was re-run at that commit and every number in `results.json` was
+  identical. The committed `benchmark/output/` comes from that re-run.
+- From here on, any change to label selection, the reference set, the growth table or the
+  analysis is a post-scoring amendment and must say so.
