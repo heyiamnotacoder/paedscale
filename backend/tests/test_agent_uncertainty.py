@@ -111,3 +111,16 @@ def test_final_dose_past_a_cited_safety_bound_is_flagged_without_the_interval():
     assert ok["flags"] == ["x"]
     none = apply_final_dose_safety_flags({"final_dose_mg_per_kg_per_day": None, "flags": []}, dossier)
     assert none["flags"] == []
+
+
+def test_a_per_day_only_final_dose_is_checked_per_kg_using_the_weight():
+    """A recommendation may give only mg/day; the known weight turns it into mg/kg/day for
+    the safety check (20 kg × 40 mg/kg/day = 800 mg/day is past a 30 mg/kg/day bound)."""
+    from agents.agent import apply_final_dose_safety_flags
+    dossier = {"toxic_dose_mg_per_kg_per_day": 30.0}
+    rec = {"final_dose_mg_per_kg_per_day": None, "final_dose_mg_per_day": 800.0, "flags": []}
+    out = apply_final_dose_safety_flags(rec, dossier, weight_kg=20.0)
+    assert any("ABOVE TOXIC THRESHOLD" in f and "40" in f for f in out["flags"])
+    no_wt = apply_final_dose_safety_flags(
+        {"final_dose_mg_per_kg_per_day": None, "final_dose_mg_per_day": 800.0, "flags": []}, dossier)
+    assert no_wt["flags"] == []

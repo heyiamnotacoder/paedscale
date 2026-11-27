@@ -373,13 +373,18 @@ def _run_adult_hi_case(case: dict, on_step=None) -> dict:
     }
 
 
-def apply_final_dose_safety_flags(rec: dict, dossier: Optional[dict]) -> dict:
+def apply_final_dose_safety_flags(rec: dict, dossier: Optional[dict],
+                                  weight_kg: Optional[float] = None) -> dict:
     """Flag a final dose past a cited toxic/effective bound (CLAUDE.md safety-bounds rule).
 
     The engine checks its own dose; the final dose may be guideline-anchored, so it is
     checked again here, independently of the optional parameter-uncertainty interval.
+    A mg/day-only dose is converted with the patient's weight.
     """
     dpk = rec.get("final_dose_mg_per_kg_per_day")
+    per_day = rec.get("final_dose_mg_per_day")
+    if not isinstance(dpk, (int, float)) and isinstance(per_day, (int, float)) and weight_kg:
+        dpk = per_day / weight_kg
     dossier = dossier or {}
     toxic = dossier.get("toxic_dose_mg_per_kg_per_day")
     effective = dossier.get("effective_dose_mg_per_kg_per_day")
@@ -865,7 +870,7 @@ def run_case(case: dict, on_step=None, max_turns: int = 12) -> dict:
                             or "SAFETY STOP — no cited applicable hepatic-impairment adjustment; abstain.",
                         )
                     merge_pediatric_hi_into_recommendation(rec, ped_hi)
-                apply_final_dose_safety_flags(rec, state.get("last_dossier"))
+                apply_final_dose_safety_flags(rec, state.get("last_dossier"), case.get("weight_kg"))
                 attach_parameter_uncertainty(rec, state)
                 attach_administration(rec, case)
                 return {
