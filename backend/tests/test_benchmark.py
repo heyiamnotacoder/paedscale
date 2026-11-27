@@ -200,7 +200,7 @@ def test_analyze_reports_hypotheses_with_cluster_counts():
 # ---------------------------------------------------------------------------
 # Review fixes (pre-scoring).
 # ---------------------------------------------------------------------------
-from benchmark.methods import _fm
+from benchmark.methods import pathway_fractions
 
 
 def test_preterm_weight_has_no_drop_at_the_term_handover():
@@ -220,9 +220,9 @@ def test_ga_shift_moves_preterm_bands_only():
 
 
 def test_fm_maps_fe_to_gfr_and_the_rest_to_the_named_enzyme():
-    assert _fm({"fe": {"value": 0.29}, "nonrenal_enzyme": "ugt2b7"}) == {"renal_gfr": 0.29, "ugt2b7": 0.71}
-    assert _fm({"fe": {"value": 0.0}, "nonrenal_enzyme": "cyp3a4"}) == {"cyp3a4": 1.0}
-    assert _fm({"fe": {"value": 0.66}, "nonrenal_enzyme": None}) == {"renal_gfr": 0.66}
+    assert pathway_fractions({"fe": {"value": 0.29}, "nonrenal_enzyme": "ugt2b7"}) == {"renal_gfr": 0.29, "ugt2b7": 0.71}
+    assert pathway_fractions({"fe": {"value": 0.0}, "nonrenal_enzyme": "cyp3a4"}) == {"cyp3a4": 1.0}
+    assert pathway_fractions({"fe": {"value": 0.66}, "nonrenal_enzyme": None}) == {"renal_gfr": 0.66}
 
 
 def test_concordance_band_uses_the_documented_0_67_bound():
@@ -240,3 +240,140 @@ def test_bca_agrees_with_scipy_when_each_cluster_is_one_row():
                     random_state=np.random.default_rng(5)).confidence_interval
     assert ours["method"] == "bca"
     assert abs(ours["lo"] - ref.low) < 0.02 and abs(ours["hi"] - ref.high) < 0.02, (ours, ref)
+
+
+# ---------------------------------------------------------------------------
+# Review fixes for 541ed77 (pre-scoring).
+# ---------------------------------------------------------------------------
+def test_cluster_bootstrap_keeps_a_drug_drawn_twice_as_two_clusters():
+    # Every resample draws k clusters with replacement; duplicates must stay separate,
+    # so a drug-count statistic is exactly k in every replicate.
+    rows = [{"drug": d, "fe": 1.0} for d in "abcde" for _ in range(2)]
+    n_drugs = lambda rs: float(summarize(rs)["n_drugs"])
+    ci = cluster_bootstrap_ci(rows, n_drugs, n_boot=300, seed=1)
+    assert ci["lo"] == ci["hi"] == 5.0
+
+
+def _cmax_drug():
+    d = json.loads(json.dumps(SYNTH["linear_truth"]))
+    d["target_metric"] = "cmax"
+    return d
+
+
+def test_compare_reports_volume_matched_ties_instead_of_dropping_them():
+    from benchmark.run import compare
+    rows = score({"amg": _cmax_drug(), "lin": SYNTH["linear_truth"]}, methods=("paedscale", "allometry_class"))
+    c = compare(rows, "paedscale", "allometry_class", n_boot=50)
+    assert c["n_tied_drugs"] == 1 and c["n_tied_pairs"] == 2
+
+
+def _drug_with(mech=None, band_flags=(), fe_flags=(), adult_flags=()):
+    d = json.loads(json.dumps(SYNTH["linear_truth"]))
+    d["renal_mechanism"] = {"value": mech}
+    d["fe"]["flags"], d["adult"]["flags"] = list(fe_flags), list(adult_flags)
+    for b in d["bands"]:
+        b["flags"] = list(band_flags)
+    return d
+
+
+def test_s9_keeps_only_drugs_whose_label_names_filtration_without_secretion():
+    from benchmark.run import SUBSETS
+    keep = SUBSETS["S9_gfr_only_renal"]
+    b = {"flags": []}
+    assert keep("x", _drug_with("glomerular_filtration"), b)
+    for mech in ("secretion", "unspecified", "not_renal_predominant"):
+        assert not keep("x", _drug_with(mech), b), mech
+
+
+def test_s2_excludes_exactly_the_flags_the_protocol_lists():
+    from benchmark.run import SUBSETS
+    keep = SUBSETS["S2_exclude_mismatch_qualitative_upto"]
+    d = _drug_with()
+    for flag_kw in ({"band_flags": ["indication_mismatch"]}, {"fe_flags": ["fe_qualitative"]},
+                    {"band_flags": ["up_to"]}, {"adult_flags": ["adult_up_to"]}):
+        dd = _drug_with(**flag_kw)
+        assert not keep("x", dd, dd["bands"][0]), flag_kw
+    dd = _drug_with(fe_flags=["fe_not_in_label"])
+    assert keep("x", dd, dd["bands"][0])
+
+
+def _three_drug_set():
+    neo_only = json.loads(json.dumps(SYNTH["linear_truth"]))
+    neo_only["fe"]["value"] = 0.5
+    return {"a": SYNTH["linear_truth"], "b": _drug_with("secretion"), "c": neo_only}
+
+
+def test_s6_leave_one_out_covers_the_newborn_primary_and_all_ages():
+    from benchmark.run import sensitivity
+    s6 = sensitivity(_three_drug_set(), n_boot=50)["S6_leave_one_drug_out"]
+    for pop in ("newborn", "all"):
+        assert set(s6[pop]["by_left_out_drug"]) == {"a", "b", "c"}
+        assert s6[pop]["min"] <= s6[pop]["max"]
+
+
+def test_every_reported_summary_gets_a_full_bootstrap_ci():
+    res = analyze(score(_three_drug_set()), n_boot=60)
+    tables = [res["by_method"][pop] for pop in ("all", "under2", "newborn")] + list(res["by_stratum"].values())
+    for t in tables:
+        for s in t.values():
+            assert s["ci_n_boot"] == 60
+            for k in ("aafe", "afe", "within_1_5", "within_2", "within_label_range"):
+                lo, hi = s[k + "_ci95"]
+                assert lo <= hi, k
+
+
+def test_provenance_records_commit_tree_state_settings_and_versions():
+    from benchmark.run import SEED, provenance
+    p = provenance(n_boot=123)
+    assert re.fullmatch(r"[0-9a-f]{40}", p["engine_commit"])
+    assert isinstance(p["working_tree_dirty"], bool)
+    assert p["n_boot"] == 123 and p["seed"] == SEED
+    assert {"python", "scipy", "matplotlib"} <= set(p["versions"])
+
+
+def test_pairs_csv_carries_the_provenance_line(tmp_path):
+    from benchmark.run import write_pairs_csv
+    path = tmp_path / "pairs.csv"
+    write_pairs_csv(score(SYNTH), str(path), {"engine_commit": "abc", "working_tree_dirty": False})
+    first, header = path.read_text().splitlines()[:2]
+    assert first.startswith("# ") and "engine_commit=abc" in first and header.startswith("drug,band")
+
+
+def test_figures_render_even_when_a_bca_interval_excludes_its_estimate(tmp_path):
+    from benchmark import figures
+    rows = score(_three_drug_set())
+    res = analyze(rows, n_boot=40)
+    h3 = res["hypotheses"]["H3"]
+    h3["ci95"] = [h3["mean_abs_log10_diff"] + 0.01, h3["mean_abs_log10_diff"] + 0.02]  # BCa can do this
+    figures.make_all(rows, res, str(tmp_path))
+    names = {p.name for p in tmp_path.iterdir()}
+    for n in ("fig1_maturation_curves", "fig2_fold_error_by_stratum", "fig3_paired_difference_by_drug"):
+        assert {n + ".png", n + ".pdf"} <= names
+
+
+def test_concordance_band_is_one_constant_shared_by_metrics_and_figures():
+    from benchmark import figures, metrics
+    assert metrics.CONCORDANCE_BAND == (0.67, 1.5)
+    assert figures.CONCORDANCE_BAND is metrics.CONCORDANCE_BAND
+
+
+def _label(*names, version="1", set_id="s", eff="20260101", da="pediatric patients"):
+    return {"openfda": {"generic_name": list(names)}, "version": version, "set_id": set_id,
+            "effective_time": eff, "dosage_and_administration": [da]}
+
+
+def test_label_selection_drops_combination_products_but_keeps_salts_and_diluents():
+    from benchmark.curation.fetch_labels import same_active_ingredient
+    assert same_active_ingredient("ampicillin", _label("AMPICILLIN SODIUM"))
+    assert same_active_ingredient("cefazolin", _label("CEFAZOLIN SODIUM AND DEXTROSE"))
+    assert same_active_ingredient("piperacillin and tazobactam", _label("PIPERACILLIN AND TAZOBACTAM"))
+    assert not same_active_ingredient("ampicillin", _label("AMPICILLIN AND SULBACTAM"))
+    assert not same_active_ingredient("fentanyl", _label("FENTANYL CITRATE AND BUPIVACAINE"))
+
+
+def test_label_selection_breaks_effective_time_ties_by_version_then_set_id():
+    from benchmark.curation.fetch_labels import select
+    a = _label("X", version="9", set_id="a")
+    b = _label("X", version="10", set_id="b")   # numeric, not string, comparison of version
+    c = _label("X", version="10", set_id="c")
+    assert select([a, b, c])["set_id"] == "c" and select([a, b])["set_id"] == "b"

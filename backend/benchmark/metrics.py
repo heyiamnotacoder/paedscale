@@ -12,6 +12,15 @@ from statistics import NormalDist
 from typing import Callable
 
 
+CONCORDANCE_BAND = (0.67, 1.5)  # CLAUDE.md / PROTOCOL.md; Amendment 2 §8
+TWOFOLD_BAND = (0.5, 2.0)
+_EPS = 1e-12
+
+
+def _within(fe: float, band: tuple[float, float]) -> float:
+    return float(band[0] - _EPS <= fe <= band[1] + _EPS)
+
+
 def _by_drug(rows: list[dict]) -> dict[str, list[dict]]:
     g: dict[str, list[dict]] = {}
     for r in rows:
@@ -39,9 +48,8 @@ def summarize(rows: list[dict], weight: str = "drug") -> dict:
         "n_drugs": len(_by_drug(rows)),
         "aafe": 10 ** _weighted(rows, lambda r: abs(lg(r)), weight),
         "afe": 10 ** _weighted(rows, lg, weight),
-        # concordance band as documented in CLAUDE.md / PROTOCOL.md: 0.67–1.5
-        "within_1_5": _weighted(rows, lambda r: float(0.67 - 1e-12 <= r["fe"] <= 1.5 + 1e-12), weight),
-        "within_2": _weighted(rows, lambda r: float(0.5 - 1e-12 <= r["fe"] <= 2.0 + 1e-12), weight),
+        "within_1_5": _weighted(rows, lambda r: _within(r["fe"], CONCORDANCE_BAND), weight),  # 0.67–1.5
+        "within_2": _weighted(rows, lambda r: _within(r["fe"], TWOFOLD_BAND), weight),
     }
     if all("in_range" in r for r in rows):
         out["within_label_range"] = _weighted(rows, lambda r: float(r["in_range"]), weight)
@@ -61,7 +69,8 @@ def cluster_bootstrap_ci(rows: list[dict], stat: Callable[[list[dict]], float], 
     rng = random.Random(seed)
     boots = []
     for _ in range(n_boot):
-        sample = [r for _ in range(k) for r in groups[rng.randrange(k)]]
+        # relabel each draw so a drug drawn twice counts as two clusters downstream
+        sample = [{**r, "drug": f"{r['drug']}#{j}"} for j in range(k) for r in groups[rng.randrange(k)]]
         boots.append(stat(sample))
     boots.sort()
     alpha = (1 - level) / 2
@@ -92,7 +101,7 @@ def cluster_bootstrap_ci(rows: list[dict], stat: Callable[[list[dict]], float], 
                 raise ValueError("BCa adjustment undefined")
             return nd.cdf(z0 + (z0 + z) / denom)
         lo, hi = pct(adj(alpha)), pct(adj(1 - alpha))
-    except (ValueError, ZeroDivisionError, ArithmeticError):
+    except (ValueError, ArithmeticError):
         method = "percentile"
         lo, hi = pct(alpha), pct(1 - alpha)
     return {"estimate": theta, "lo": lo, "hi": hi, "level": level, "method": method,

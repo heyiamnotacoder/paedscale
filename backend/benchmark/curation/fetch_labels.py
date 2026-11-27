@@ -2,7 +2,8 @@
 
 Rule (Amendment 1 §10): among labels whose openfda.generic_name matches and whose
 openfda.route includes INTRAVENOUS, prefer those whose Dosage and Administration text
-matches /pediatric|neonat/i; break ties by the latest effective_time. All pages are read.
+matches /pediatric|neonat/i; break ties by the latest effective_time, then (Amendment 3) the
+highest SPL version, then the highest set_id. All pages are read.
 
 Usage (from backend/): python3 benchmark/curation/fetch_labels.py vancomycin gentamicin ...
 Writes raw label JSON to ./labels_raw/ and prints the selected set_id per drug.
@@ -22,6 +23,22 @@ API = "https://api.fda.gov/drug/label.json"
 PEDS = re.compile(r"pediatric|neonat", re.I)
 
 
+DILUENTS = re.compile(r"^(dextrose|sodium chloride|water)\b", re.I)
+
+
+def same_active_ingredient(generic: str, label: dict) -> bool:
+    """Amendment 3: the label's active ingredients are exactly the candidate's (salts allowed;
+    premix diluents such as dextrose are not active ingredients). Drops combination products
+    that the openFDA phrase query also matches, e.g. ampicillin AND sulbactam for ampicillin."""
+    wanted = [w.strip().lower() for w in re.split(r"\band\b", generic, flags=re.I)]
+    for name in label.get("openfda", {}).get("generic_name") or []:
+        parts = [p.strip().lower() for p in re.split(r"\band\b|,", name, flags=re.I) if p.strip()]
+        actives = [p for p in parts if not DILUENTS.match(p)]
+        if len(actives) == len(wanted) and all(any(w in a for a in actives) for w in wanted):
+            return True
+    return False
+
+
 def candidates(generic: str) -> list[dict]:
     q = f'openfda.generic_name:"{generic}" AND openfda.route:"INTRAVENOUS"'
     out, skip = [], 0
@@ -37,14 +54,29 @@ def candidates(generic: str) -> list[dict]:
         if skip >= total:
             break
         time.sleep(0.3)
-    return out
+    return [x for x in out if same_active_ingredient(generic, x)]
 
 
 def select(results: list[dict]) -> dict | None:
     def key(x):
         da = " ".join(x.get("dosage_and_administration") or [])
-        return (bool(PEDS.search(da)), x.get("effective_time", ""))
+        # Amendment 3: openFDA result order is not guaranteed, so ties on effective_time go to
+        # the most-revised SPL (highest version), then the highest set_id.
+        return (bool(PEDS.search(da)), x.get("effective_time", ""), int(x.get("version") or 0),
+                x.get("set_id", ""))
     return max(results, key=key) if results else None
+
+
+SECTIONS = ("dosage_and_administration", "pediatric_use", "clinical_pharmacology", "pharmacokinetics")
+
+
+def snapshot(x: dict) -> dict:
+    """The committed form of a selected label (benchmark/labels/<drug>.json)."""
+    return {"source": "openFDA /drug/label.json (FDA SPL); retrieved 2026-11-27",
+            "set_id": x.get("set_id"), "effective_time": x.get("effective_time"), "version": x.get("version"),
+            "generic_name": x.get("openfda", {}).get("generic_name"),
+            "manufacturer_name": x.get("openfda", {}).get("manufacturer_name"),
+            "sections": {s: " ".join(x[s]) for s in SECTIONS if x.get(s)}}
 
 
 if __name__ == "__main__":
@@ -56,6 +88,7 @@ if __name__ == "__main__":
             print(d, "NONE")
             continue
         fn = d.replace(" ", "_").replace("/", "_")
-        json.dump(x, open(f"labels_raw/{fn}.json", "w"), indent=1)
+        with open(f"labels_raw/{fn}.json", "w") as f:
+            json.dump(x, f, indent=1)
         print(d, len(res), x.get("set_id"), x.get("effective_time"))
         time.sleep(0.3)

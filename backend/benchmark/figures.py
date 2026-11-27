@@ -7,7 +7,6 @@ and the numbers behind each figure are in output/results.json and output/pairs.c
 
 from __future__ import annotations
 
-import math
 import os
 import random
 
@@ -16,8 +15,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
+from benchmark.metrics import CONCORDANCE_BAND  # noqa: E402
+from benchmark.methods import STRATA  # noqa: E402
+
 BLUE, ORANGE, AQUA, GRAY, INK, INK2 = "#257de0", "#f47230", "#00b894", "#9a9a9a", "#191919", "#666666"
-STRATA = ["preterm_newborn", "term_newborn", "infant_toddler", "child", "adolescent"]
 STRATUM_LABEL = {"preterm_newborn": "Preterm\nnewborn", "term_newborn": "Term\nnewborn",
                  "infant_toddler": "Infant/\ntoddler", "child": "Child\n2–11 y", "adolescent": "Adolescent\n12–16 y"}
 SHOWN = [("weight_linear", "Weight-linear", GRAY, "s"),
@@ -36,16 +37,18 @@ def _style(ax):
     ax.set_axisbelow(True)
 
 
-def _save(fig, out, name):
-    for ext in ("png", "pdf"):
-        fig.savefig(os.path.join(out, f"{name}.{ext}"), dpi=300, bbox_inches="tight")
+def _save(fig, out, name, prov=None):
+    note = f"PaedScale label benchmark; engine_commit={(prov or {}).get('engine_commit', 'n/a')}"
+    for ext, meta in (("png", {"Description": note}), ("pdf", {"Subject": note})):
+        fig.savefig(os.path.join(out, f"{name}.{ext}"), dpi=300, bbox_inches="tight", metadata=meta)
     plt.close(fig)
 
 
-def fold_error_by_stratum(rows, out):
+def fold_error_by_stratum(rows, out, prov=None):
     fig, ax = plt.subplots(figsize=(7.2, 4.2))
     _style(ax)
-    ax.axhspan(1 / 1.5, 1.5, color="#eef4fc", zorder=0, label="Concordance band 0.67–1.5×")
+    lo, hi = CONCORDANCE_BAND
+    ax.axhspan(lo, hi, color="#eef4fc", zorder=0, label=f"Concordance band {lo:g}–{hi:g}×")
     ax.axhline(1.0, color=INK2, linewidth=0.8)
     rng = random.Random(0)
     for j, (m, lab, col, mk) in enumerate(SHOWN):
@@ -65,40 +68,40 @@ def fold_error_by_stratum(rows, out):
     ax.set_xticklabels([STRATUM_LABEL[s] for s in STRATA])
     ax.set_ylabel("Fold error (predicted ÷ labeled dose)", color=INK)
     ax.legend(frameon=False, fontsize=8, loc="upper left", ncol=2)
-    _save(fig, out, "fig2_fold_error_by_stratum")
+    _save(fig, out, "fig2_fold_error_by_stratum", prov)
 
 
-def paired_difference_forest(rows, results, out):
-    from benchmark.run import PRIMARY_COMPARATOR, _paired
-    prs = _paired(rows, "paedscale", PRIMARY_COMPARATOR)
-    per_drug = {}
-    for p in prs:
-        per_drug.setdefault(p["drug"], []).append(p["d"])
-    items = sorted(((sum(v) / len(v), k, len(v)) for k, v in per_drug.items()))
+def _xerr(est: float, lo: float, hi: float) -> list[list[float]]:
+    """Error-bar half-widths; a BCa interval need not contain its estimate, so clip at 0."""
+    return [[max(0.0, est - lo)], [max(0.0, hi - est)]]
+
+
+def paired_difference_forest(results, out, prov=None):
+    """Per drug: 10^mean(d), the ratio of typical fold errors, PaedScale / A1 (all ages)."""
+    h3 = results["hypotheses"]["H3"]
+    if not h3.get("n_pairs"):
+        return
+    items = sorted((d, k) for k, d in h3["per_drug_mean_d"].items())
     fig, ax = plt.subplots(figsize=(6.4, 0.26 * len(items) + 1.4))
     _style(ax)
     ax.grid(axis="y", visible=False)
     ax.grid(axis="x", color="#e6e6e6", linewidth=0.6)
     ys = list(range(len(items)))
-    ax.axvline(0, color=INK2, linewidth=0.8)
-    ax.scatter([10 ** d for d, _, _ in items], ys, s=26, color=BLUE, edgecolors="white", linewidths=0.6, zorder=3)
+    ax.scatter([10 ** d for d, _ in items], ys, s=26, color=BLUE, edgecolors="white", linewidths=0.6, zorder=3)
     ax.set_yticks(ys)
-    ax.set_yticklabels([f"{k.replace('_', ' ')} ({n})" for _, k, n in items], fontsize=8)
-    h3 = results["hypotheses"]["H3"]
+    ax.set_yticklabels([k.replace("_", " ") for _, k in items], fontsize=8)
+    est, (lo, hi) = 10 ** h3["mean_abs_log10_diff"], [10 ** x for x in h3["ci95"]]
     y0 = -1.2
-    ax.errorbar([10 ** h3["mean_abs_log10_diff"]], [y0],
-                xerr=[[10 ** h3["mean_abs_log10_diff"] - 10 ** h3["ci95"][0]],
-                      [10 ** h3["ci95"][1] - 10 ** h3["mean_abs_log10_diff"]]],
-                fmt="D", color=INK, markersize=6, capsize=3, linewidth=1.2)
-    ax.text(10 ** h3["ci95"][1], y0, "  all drugs, 95% CI", va="center", fontsize=8, color=INK)
+    ax.errorbar([est], [y0], xerr=_xerr(est, lo, hi), fmt="D", color=INK, markersize=6, capsize=3, linewidth=1.2)
+    ax.text(max(hi, est), y0, "  all drugs, 95% CI", va="center", fontsize=8, color=INK)
     ax.axvline(1.0, color=INK2, linewidth=0.8)
     ax.set_xscale("log")
     ax.set_xlabel("Ratio of typical fold error, PaedScale ÷ allometry + class rule\n(<1 favours PaedScale)", color=INK)
     ax.set_ylim(-2, len(items))
-    _save(fig, out, "fig3_paired_difference_by_drug")
+    _save(fig, out, "fig3_paired_difference_by_drug", prov)
 
 
-def maturation_curves(out):
+def maturation_curves(out, prov=None):
     from engine.constants import MATURATION
     from engine.pk_engine import maturation_factor
     from engine.uncertainty import sample_curve
@@ -113,8 +116,8 @@ def maturation_curves(out):
         lo, hi, mid = [], [], []
         for p in pma:
             v = sorted(maturation_factor(p, d["tm50_weeks"], d["hill"]) for d in draws)
-            lo.append(v[int(0.05 * len(v))])
-            hi.append(v[int(0.95 * len(v)) - 1])
+            lo.append(v[round(0.05 * (len(v) - 1))])   # symmetric 5th/95th order statistics
+            hi.append(v[round(0.95 * (len(v) - 1))])
             mid.append(maturation_factor(p, params["tm50_weeks"], params["hill"]))
         ax.fill_between(pma, lo, hi, color=colours[key], alpha=0.18, linewidth=0)
         ax.plot(pma, mid, color=colours[key], linewidth=2, label=f"{params['label']} (TM50 {params['tm50_weeks']} wk, Hill {params['hill']})")
@@ -127,11 +130,12 @@ def maturation_curves(out):
     ax.set_ylabel("Fraction of adult clearance\n(maturation factor)", color=INK)
     ax.set_xlabel("Postmenstrual age (log scale)", color=INK)
     ax.legend(frameon=False, fontsize=8, loc="lower right")
-    _save(fig, out, "fig1_maturation_curves")
+    _save(fig, out, "fig1_maturation_curves", prov)
 
 
-def make_all(rows, results, refset, out):
+def make_all(rows, results, out):
     os.makedirs(out, exist_ok=True)
-    maturation_curves(out)
-    fold_error_by_stratum(rows, out)
-    paired_difference_forest(rows, results, out)
+    prov = results.get("provenance")
+    maturation_curves(out, prov)
+    fold_error_by_stratum(rows, out, prov)
+    paired_difference_forest(results, out, prov)

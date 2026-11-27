@@ -1,7 +1,7 @@
 """Representative body weight for a virtual patient (benchmark harness only).
 
 Term infants and children: sex-averaged median weight-for-age, WHO Child Growth Standards
-(2006) for 0–1856 days and CDC 2000 growth charts above that (data/weight_median.csv).
+(2006) for 0–1826 days and CDC 2000 growth charts above that (data/weight_median.csv).
 
 Preterm infants (gestational age < 37 wk) whose postmenstrual age is still below 40 wk:
 APPROXIMATE sex-averaged 50th centile of the Fenton 2013 preterm growth chart, read from the

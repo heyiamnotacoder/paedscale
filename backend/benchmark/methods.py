@@ -19,6 +19,29 @@ NOMINAL_CL_L_H = 10.0
 NOMINAL_VD_L = 50.0
 
 
+STRATA = ("preterm_newborn", "term_newborn", "infant_toddler", "child", "adolescent")  # ICH E11
+NEWBORN_STRATA = STRATA[:2]
+UNDER2_STRATA = STRATA[:3]
+
+
+def representative_ga(band: dict) -> float:
+    """The band's representative gestational age (weeks); term (40) when the band has none."""
+    return band.get("ga_weeks") or 40.0
+
+
+def ich_stratum(band: dict) -> str:
+    """ICH E11 category from the band's arithmetic-midpoint patient."""
+    pna = sum(band["pna_days"]) / 2.0
+    ga = representative_ga(band)
+    if pna < 28:
+        return "preterm_newborn" if ga < 37 else "term_newborn"
+    if pna < 2 * 365.25:
+        return "infant_toddler"
+    if pna < 12 * 365.25:
+        return "child"
+    return "adolescent"
+
+
 def virtual_patients(band: dict, *, weight_scale: float = 1.0, ga_shift: float = 0.0,
                      grid: bool = True) -> list[dict]:
     """Patients spanning a label age band: log-spaced postnatal ages, median weights."""
@@ -30,7 +53,7 @@ def virtual_patients(band: dict, *, weight_scale: float = 1.0, ga_shift: float =
     else:
         a, b = math.log(max(lo, 1.0)), math.log(hi)
         ages = [math.exp(a + (b - a) * i / (GRID_POINTS - 1)) for i in range(GRID_POINTS)]
-    ga = (band.get("ga_weeks") or 40.0)
+    ga = representative_ga(band)
     if ga < 37:            # S5 varies the representative GA of preterm bands only
         ga += ga_shift
     return [
@@ -44,7 +67,7 @@ def _bsa_costeff(w: float) -> float:
     return (4.0 * w + 7.0) / (w + 90.0)
 
 
-def _fm(drug: dict) -> dict:
+def pathway_fractions(drug: dict) -> dict:
     fe = drug["fe"]["value"]
     fm = {}
     if fe > 0:
@@ -70,7 +93,7 @@ def _per_kg(method: str, drug: dict, p: dict, force_css: bool) -> float:
     if method == "paedscale":
         r = compute_pediatric_dose(
             drug="benchmark", weight_kg=w, cl_adult_l_h=NOMINAL_CL_L_H, vd_adult_l=NOMINAL_VD_L,
-            fm=_fm(drug), target_metric=metric, pma_weeks=p["pma_weeks"],
+            fm=pathway_fractions(drug), target_metric=metric, pma_weeks=p["pma_weeks"],
             adult_dose_mg_per_day=adult,
         )
         if r.blocked or r.recommended_dose_mg_per_kg_per_day is None:

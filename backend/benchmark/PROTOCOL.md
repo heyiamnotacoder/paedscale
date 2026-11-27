@@ -253,3 +253,30 @@ An internal standards and data audit of the curated reference set found that the
 9. **BCa details.** Ties between a bootstrap replicate and the point estimate count half when estimating the bias correction z0. The interval falls back to the percentile method when there are fewer than 3 drug clusters, when z0 is undefined, or when the acceleration adjustment is undefined.
 10. **S3 and the primary comparator.** Under S3 every drug uses `css`, so A1 becomes plain allometry for aminoglycosides. This follows from the definition of A1 in Amendment 1 §2.
 11. **S9 is applied literally.** The `renal_mechanism` regex finds "tubular secretion" in the levetiracetam label, in a sentence about its metabolite ucb L057. The parent drug is filtered and partly reabsorbed. Under the Amendment 1 §14 wording, the label mentions tubular secretion, so levetiracetam is left out of S9. This makes S9 smaller and more conservative, and it is reported as a known limitation of the text rule.
+
+### Amendment 3 — 2026-11-27, before any prediction was scored
+
+A code review of the Amendment 2 commit found the defects below. They were fixed before `benchmark/run.py` was first executed; no fold error, AAFE or test statistic had yet been computed on the reference set. These changes override the text above where they conflict.
+
+1. **Combination products are not candidates.** The openFDA phrase query for a single drug also matches combination products (for example, "ampicillin" matches ampicillin and sulbactam). A label is a candidate only if its active ingredients are exactly the candidate's. Salt forms are allowed (ampicillin sodium), and premix diluents (dextrose, sodium chloride, water) are not active ingredients.
+2. **Deterministic tie-break.** openFDA does not guarantee result order, and six drugs had several candidates with the same regex result and the same latest `effective_time`. Ties now go to the highest SPL `version` (the most-revised document), then to the highest `set_id`. The rule was chosen before the tied labels' doses were read.
+   * Under rules 1 and 2, the selected label changed for meropenem, cefazolin, midazolam and fentanyl. Ampicillin keeps its Amendment 2 label once the combination products are removed, and fluconazole keeps its label under the tie-break.
+   * Meropenem's new label has the same regimens, fe text and quotes, so its reference values do not change.
+   * Cefazolin, midazolam and fentanyl remain excluded under E1 for the reasons recorded in `reference_set.json`. On their new labels the adult regimens are still image tables or induction doses only.
+   * The reference set stays at 21 drugs and 46 bands.
+3. **Cluster bootstrap.** A drug drawn more than once in a bootstrap resample counts as separate clusters. Each draw is relabelled before the statistic is computed. Without this, duplicated drugs were merged, and every interval was too narrow.
+4. **Every reported summary gets a full interval.** Every summary has a 95% BCa interval from 10,000 drug-clustered replicates. That covers each method's AAFE, AFE, share in 0.67–1.5, share in 0.5–2 and share within the labeled range, for all ages, under 2 years, newborns and each ICH stratum. It also covers every sensitivity analysis.
+5. **Multiplicity.** The Holm adjustment for the three secondary comparisons applies to their drug-level Wilcoxon p-values. Their bootstrap intervals are reported unadjusted at 95%.
+6. **Ties are counted.** Each comparison reports the number of tied pairs and tied drugs, meaning a mean difference with absolute value ≤ 10⁻¹². For the Wilcoxon test, tied drugs are dropped and counted. They stay in the bootstrap estimate.
+7. **S2** excludes exactly the flags listed for it: `indication_mismatch`, `fe_qualitative`, `up_to` and `adult_up_to`. It no longer also drops `fe_not_in_label`.
+8. **S9 as implemented.**
+   * S9 keeps only drugs whose `renal_mechanism` is `glomerular_filtration`. Non-renal drugs are not part of S9.
+   * The rule reads the clinical pharmacology and pharmacokinetics sections, where labels state the renal mechanism.
+   * "Tubular excretion" is treated as tubular secretion.
+9. **S6** reports the leave-one-drug-out range for both the newborn comparison (H1) and the all-ages comparison (H3).
+10. **Provenance.** `results.json` records the engine commit, whether the working tree was dirty, the bootstrap settings and the library versions. `pairs.csv` starts with a provenance comment line, and the figures carry the commit in their metadata. CI runs `python -m benchmark.run` with 200 replicates as a smoke test. The manuscript numbers come from the committed run with 10,000 replicates.
+11. **Known consequences of the pre-specified rules, stated here so they are not post hoc.**
+    * The two fluconazole newborn bands span birth to 3 months. Their midpoint (about 46 days) puts them in the infant/toddler stratum, so they count toward H2 and H3 but not H1.
+    * Under S5 +2 weeks, the fluconazole GA ≥ 30 band moves from GA 35 to 37 and so uses the term growth curve.
+    * Meropenem fe is the midpoint of the label's stated range, 50–75% (0.625), per the protocol's range rule, even though the same sentence says "approximately 70%".
+12. **Erratum to Amendment 2 §3.** The piperacillin–tazobactam child band's upper bound of 16 years comes from the protocol's rule for an open upper bound (21 CFR 201.57). The label itself says only "older than 9 months", not 16 years.
