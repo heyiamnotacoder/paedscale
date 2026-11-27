@@ -49,6 +49,8 @@
   .brand-mark{width:28px;height:28px;border-radius:7px;display:block;flex-shrink:0}
   .brand b{color:var(--ink)}
   .topnav{display:flex;align-items:center;gap:8px}
+  @media (max-width:640px){.topbar .inner{padding:0 16px;gap:10px}.brand{flex-shrink:0}
+    .topnav{min-width:0;overflow-x:auto;scrollbar-width:none}.topnav>*{flex-shrink:0}}
   .topnav .link{background:none;border:0;font:inherit;font-size:.85rem;color:var(--ink-2);cursor:pointer;padding:8px 12px;border-radius:8px}
   .topnav .link:hover{color:var(--teal);background:var(--teal-wash)}
   .btn{font:inherit;cursor:pointer;border:0;border-radius:10px;font-weight:600;
@@ -331,7 +333,7 @@
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:560px){.grid2{grid-template-columns:1fr}}
   .seg{display:flex;gap:8px}
-  .seg label{flex:1;margin:0}
+  .seg label{flex:1;margin:0;position:relative}
   .seg input{position:absolute;opacity:0;pointer-events:none}
   .seg .opt{display:block;text-align:center;padding:11px;border:1px solid var(--line);border-radius:11px;
     font-size:.92rem;font-weight:500;color:var(--ink-2);cursor:pointer;transition:.12s;background:#fff}
@@ -502,6 +504,15 @@
   .stopbanner b{font-size:1.02rem;color:var(--red)}
   .stopbanner .msg{font-size:.9rem;margin-top:3px;color:#7a2a2a}
   .conc{font-size:.94rem;padding:14px 16px;border-radius:12px;background:var(--teal-wash);color:var(--teal-deep)}
+  .pu-strip{position:relative;height:30px;margin:10px 0 4px}
+  .pu-strip .track{position:absolute;left:0;right:0;top:14px;height:2px;background:var(--line)}
+  .pu-strip .band{position:absolute;top:9px;height:12px;border-radius:6px;background:var(--teal-wash);border:1px solid var(--teal)}
+  .pu-strip .mark{position:absolute;top:5px;width:2px;height:20px;margin-left:-1px;border-radius:1px}
+  .pu-strip .mark.mid{background:var(--teal-deep)}
+  .pu-strip .mark.final{background:var(--amber)}
+  .pu-axis{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.78rem;color:var(--ink-3)}
+  .pu-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem;color:var(--ink-2);margin-top:6px}
+  .pu-legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
   .conc.fail{background:var(--red-wash);color:#7a2a2a}
   .conc .ratio{font-family:var(--mono);font-weight:600}
   .md{font-size:.96rem;color:var(--ink);line-height:1.65}
@@ -1757,6 +1768,35 @@ function mdToHtml(s){
 function linkify(s){ return esc(s).replace(/(https?:\/\/[^\s)]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>'); }
 function fmtList(a){ return (a&&a.length)? a.join(", ") : null; }
 
+function fmtDose(x){ return x>=100 ? x.toFixed(0) : x>=10 ? x.toFixed(1) : x.toPrecision(2); }
+const PATHWAY_LABEL = {renal_gfr:"renal (GFR) maturation", cyp3a4:"CYP3A4 maturation", ugt2b7:"UGT2B7 maturation"};
+function paramUncertaintyHtml(pu, finalDpk){
+  const q = pu && pu.dose_mg_per_kg_per_day;
+  if(!q || q.p05==null || q.p95==null) return "";
+  // log-scaled strip spanning the interval (and the final dose, if shown) with 15% padding
+  const pts = [q.p05, q.p95].concat(finalDpk!=null ? [finalDpk] : []);
+  const lo = Math.log(Math.min(...pts)/1.15), hi = Math.log(Math.max(...pts)*1.15);
+  const pos = x => (100*(Math.log(x)-lo)/(hi-lo)).toFixed(2)+"%";
+  let h = `<div class="sec" id="param-uncertainty"><h3>Parameter uncertainty</h3>`;
+  h += `<div class="md" style="font-size:.92rem">Engine dose, 90% parameter-uncertainty interval: <b>${fmtDose(q.p05)}–${fmtDose(q.p95)} mg/kg/day</b> (median ${fmtDose(q.p50)}).</div>`;
+  h += `<div class="pu-strip" role="img" aria-label="Interval ${fmtDose(q.p05)} to ${fmtDose(q.p95)} mg/kg/day${finalDpk!=null?`; recommended ${fmtDose(finalDpk)}`:""}">`
+     + `<div class="track"></div><div class="band" style="left:${pos(q.p05)};width:calc(${pos(q.p95)} - ${pos(q.p05)})"></div>`
+     + `<div class="mark mid" style="left:${pos(q.p50)}"></div>`
+     + (finalDpk!=null ? `<div class="mark final" style="left:${pos(finalDpk)}"></div>` : "")
+     + `</div>`;
+  h += `<div class="pu-legend"><span><span class="sw" style="background:var(--teal-wash);border:1px solid var(--teal)"></span>90% interval</span>`
+     + `<span><span class="sw" style="background:var(--teal-deep)"></span>Engine median</span>`
+     + (finalDpk!=null ? `<span><span class="sw" style="background:var(--amber)"></span>Recommended dose</span>` : "") + `</div>`;
+  const shares = Object.entries(pu.variance_share||{}).sort((a,b)=>b[1]-a[1]);
+  const notes = [];
+  if(pu.fold_width_90!=null) notes.push(`The interval spans ${pu.fold_width_90.toFixed(2)}-fold.`);
+  if(shares.length) notes.push(`Spread comes from ` + shares.map(([k,v])=>`${esc(PATHWAY_LABEL[k]||k)} (${Math.round(v*100)}%)`).join(", ") + `.`);
+  if(finalDpk!=null && (finalDpk < q.p05 || finalDpk > q.p95)) notes.push(`The recommended dose lies outside this interval, so it is not the engine estimate (for example, it is guideline-anchored).`);
+  notes.push(`This covers uncertainty in the published maturation-curve parameters only. It is not the range of doses that suit different children.`);
+  h += `<div class="hint" style="margin-top:8px">${notes.join(" ")}</div></div>`;
+  return h;
+}
+
 function renderResult(data){
   currentRec = data.recommendation || {};
   const r = currentRec;
@@ -1847,6 +1887,9 @@ function renderResult(data){
        + `</div></div></div>`;
   }
   if(r.grade_rationale) h += `<div class="md" style="color:var(--ink-2);font-size:.92rem;margin-bottom:6px">${esc(r.grade_rationale)}</div>`;
+
+  // parameter uncertainty (engine dose; prescribable cases only)
+  if(!blocked && !adultHi) h += paramUncertaintyHtml(r.parameter_uncertainty, dpk);
 
   // concordance
   if(r.concordance && (r.concordance.ratio!=null || r.concordance.verdict)){
