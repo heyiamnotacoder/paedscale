@@ -113,8 +113,9 @@ def test_adult_and_pediatric_flags_are_separate():
 
 def test_ga_is_not_inferred_from_group_pma_and_postnatal_age():
     # group summaries of PMA and postnatal age do not subtract to a group GA (Amendment 8 §1)
-    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 40, "pna_days": [1, 121], "preterm": False}) == 40
-    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 32, "pna_days": 14, "preterm": True}) == 32
+    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 40, "pna_days": [1, 121],
+                                 "preterm": False}) == pytest.approx(40 - 1 / 7)
+    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 33, "pna_days": 7, "preterm": True}) == 32
 
 
 def test_a_per_70kg_value_needs_its_flag_and_an_age_that_fixes_maturation():
@@ -148,17 +149,30 @@ def test_a_truncated_number_does_not_match_its_quote():
 
 def test_preterm_must_be_a_boolean_and_pma_must_agree_with_postnatal_age():
     assert any("preterm" in p for p in ex.problems(_obs(preterm="false"), ABSTRACT))
-    assert any("imply a GA" in p for p in ex.problems(_obs(pma_weeks=30, pna_days=400, ga_weeks=None), ABSTRACT))
+    assert any("allow no GA" in p for p in ex.problems(_obs(pma_weeks=30, pna_days=400, ga_weeks=None), ABSTRACT))
 
 
 def test_pma_and_postnatal_age_are_consistent_when_their_ranges_allow_a_ga_of_20_to_45_weeks():
     ok = [_obs(pma_weeks=[26, 100], pna_days=[1, 500], ga_weeks=None),
           _obs(pma_weeks=28, pma_range_weeks=[24, 41], pna_days=[2, 120], ga_weeks=None)]
     for o in ok:
-        assert not any("imply a GA" in p for p in ex.problems(o, ABSTRACT))
+        assert not any("allow no GA" in p for p in ex.problems(o, ABSTRACT))
 
 
 def test_every_pediatric_observation_says_whether_the_group_is_preterm():
     o = _obs()
     del o["preterm"]
     assert any("preterm" in p for p in ex.problems(o, ABSTRACT))
+
+
+def test_default_ga_is_capped_by_pma_minus_the_youngest_postnatal_age():
+    o = {"ga_weeks": None, "pma_weeks": 38, "pna_days": 21, "preterm": False}
+    assert ex.gestational_weeks(o) == 35 and ex.ga_imputed(o)
+    term = {"ga_weeks": None, "pma_weeks": 40, "pna_days": [1, 121], "preterm": False}
+    assert ex.gestational_weeks(term) == pytest.approx(40 - 1 / 7) and not ex.ga_imputed(term)
+    assert ex.ga_imputed({"ga_weeks": None, "preterm": True})
+    assert not ex.ga_imputed({"ga_weeks": 30, "preterm": True})
+
+
+def test_a_stated_ga_above_the_pma_is_a_problem():
+    assert any("GA" in p for p in ex.problems(_obs(ga_weeks=36, pma_weeks=30, pna_days=14), ABSTRACT))

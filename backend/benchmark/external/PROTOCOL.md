@@ -295,3 +295,13 @@ This answers a fifth code review. These rules override the text above where the 
 1. **GA is not inferred from PMA and postnatal age.** Group summaries of PMA and postnatal age do not subtract to the group's GA: a term group at PMA 40 weeks with postnatal age 1–121 days would come out as 31 weeks and be filed as preterm. Amendment 5 §2 (first sentence) and Amendment 7 §1 are withdrawn. GA is as stated; otherwise 32 weeks for a group described as preterm and 40 weeks for any other group, capped at the stated PMA. The engine uses PMA directly whenever it is stated (Amendment 1 §6), so this GA affects only the stratum and weight imputation.
 2. **Consistency of PMA and postnatal age.** When both are stated, an observation is reported as a recording error only if no GA of 20–45 weeks fits both: the largest stated PMA minus the smallest postnatal age is below 20 weeks, or the smallest PMA minus the largest postnatal age is above 45 weeks.
 3. **Inputs to each pass.** Both passes work from this protocol, `SCREENING_GUIDE.md` (the record format that `curation/check.py` enforces, which defers to this protocol) and the abstract texts. This is what Amendment 1 §9 means by "only this protocol and the abstract texts".
+
+### Amendment 9 — 2026-11-27, at the same point as Amendment 5 (nothing more seen), before any abstract was screened or any value was extracted
+
+This answers a sixth code review. These rules override the text above where the two conflict.
+
+1. **Default GA cap.** The default GA of Amendment 8 §1 is capped at the largest stated PMA minus the smallest stated postnatal age, not at the PMA alone. A group at PMA 38 weeks and postnatal age 21 days has a GA of at most 35 weeks, so it is a preterm newborn even without the word "preterm". Amendment 6 §4 is withdrawn with Amendment 7 §1, except as restated in Amendment 8 §2 and below.
+2. **Stated GA.** An observation whose stated GA exceeds the largest PMA minus the smallest postnatal age by more than half a week is reported as a recording error.
+3. **`ga_imputed`** is set when no GA is stated and either the group is described as preterm (the 32-week default) or the cap puts the GA below 37 weeks. A term default of 40 weeks, or a cap that leaves it at 37 weeks or more, is not flagged, as in the body. E1 excludes flagged observations.
+4. **Scope of the GA default.** It sets the stratum and weight imputation. Without a stated PMA, the engine is also given GA plus postnatal age, so the default then enters the prediction too.
+5. **Stated limitation.** A group described neither as preterm nor by GA, with PMA 37 weeks or more and postnatal age under 28 days, is treated as term even if some of its members were preterm.
