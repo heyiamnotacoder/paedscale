@@ -1,4 +1,4 @@
-"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-9).
+"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-10).
 
 An extraction record lists, per drug and per screening pass, every screened abstract with its
 decision and, when included, its observations. Each observation is:
@@ -196,24 +196,23 @@ def _bounds(obs: dict, age: str) -> tuple[float, float] | None:
 
 
 def _ga_ceiling(obs: dict) -> float | None:
-    """The largest GA the stated PMA and youngest postnatal age allow, or None without a PMA."""
-    pma = _bounds(obs, "pma")
+    """Central PMA minus central postnatal age (arithmetic midpoints of ranges), or None without
+    a PMA. GA cannot exceed it (Amendment 10 §1)."""
+    pma = central(obs.get("pma_weeks"), geometric=False)
     if pma is None:
         return None
-    pna = _bounds(obs, "pna") or (0, 0)
-    return pma[1] - pna[0] / 7
+    return pma - (central(obs.get("pna_days"), geometric=False) or 0) / 7
 
 
 def ga_problem(obs: dict) -> str | None:
-    """PMA, postnatal age and any stated GA must allow some GA of 20-45 weeks (Amendments 8 §2, 9 §2)."""
-    pma, pna = _bounds(obs, "pma"), _bounds(obs, "pna")
+    """Stated ages must allow some GA of 20-45 weeks, and a stated GA must not exceed the
+    largest PMA minus the smallest postnatal age by more than half a week (Amendments 8 §2, 9 §2)."""
+    pma, pna, ga = _bounds(obs, "pma"), _bounds(obs, "pna"), _bounds(obs, "ga")
     if pma is None:
         return None
-    pna = pna or (0, 0)
-    lowest, highest = pma[0] - pna[1] / 7, pma[1] - pna[0] / 7
-    if highest < 20 or lowest > 45:
+    if pna is not None and (pma[1] - pna[0] / 7 < 20 or pma[0] - pna[1] / 7 > 45):
         return f"PMA {list(pma)} weeks and postnatal age {list(pna)} days allow no GA of 20-45 weeks"
-    ga = _bounds(obs, "ga")
+    highest = pma[1] - (pna or (0, 0))[0] / 7
     if ga is not None and ga[0] > highest + 0.5:
         return f"stated GA {list(ga)} weeks exceeds PMA minus postnatal age ({highest:.1f} weeks)"
     return None
@@ -221,8 +220,8 @@ def ga_problem(obs: dict) -> str | None:
 
 def gestational_weeks(obs: dict) -> float:
     """GA in weeks: as stated; else 32 weeks for a group described as preterm and 40 otherwise,
-    capped at the stated PMA minus the youngest postnatal age (PROTOCOL.md 'Missing gestational
-    age'; Amendments 8 §1, 9 §1)."""
+    capped at central PMA minus central postnatal age (PROTOCOL.md 'Missing gestational age';
+    Amendments 8 §1, 10 §1)."""
     ga = central(obs.get("ga_weeks"), geometric=False)
     if ga is not None:
         return ga

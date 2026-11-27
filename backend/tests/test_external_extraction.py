@@ -113,8 +113,8 @@ def test_adult_and_pediatric_flags_are_separate():
 
 def test_ga_is_not_inferred_from_group_pma_and_postnatal_age():
     # group summaries of PMA and postnatal age do not subtract to a group GA (Amendment 8 §1)
-    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 40, "pna_days": [1, 121],
-                                 "preterm": False}) == pytest.approx(40 - 1 / 7)
+    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 45, "pna_days": [1, 121],
+                                 "preterm": False}) == 40
     assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 33, "pna_days": 7, "preterm": True}) == 32
 
 
@@ -165,14 +165,21 @@ def test_every_pediatric_observation_says_whether_the_group_is_preterm():
     assert any("preterm" in p for p in ex.problems(o, ABSTRACT))
 
 
-def test_default_ga_is_capped_by_pma_minus_the_youngest_postnatal_age():
+def test_default_ga_is_capped_by_central_pma_minus_central_postnatal_age():
     o = {"ga_weeks": None, "pma_weeks": 38, "pna_days": 21, "preterm": False}
     assert ex.gestational_weeks(o) == 35 and ex.ga_imputed(o)
-    term = {"ga_weeks": None, "pma_weeks": 40, "pna_days": [1, 121], "preterm": False}
-    assert ex.gestational_weeks(term) == pytest.approx(40 - 1 / 7) and not ex.ga_imputed(term)
+    term = {"ga_weeks": None, "pma_weeks": 41, "pna_days": 7, "preterm": False}
+    assert ex.gestational_weeks(term) == 40 and not ex.ga_imputed(term)
+    pma_only = {"ga_weeks": None, "pma_weeks": 34, "pma_range_weeks": [28, 40], "preterm": False}
+    assert ex.gestational_weeks(pma_only) == 34 and ex.ga_imputed(pma_only)     # central PMA caps it
     assert ex.ga_imputed({"ga_weeks": None, "preterm": True})
     assert not ex.ga_imputed({"ga_weeks": 30, "preterm": True})
 
 
 def test_a_stated_ga_above_the_pma_is_a_problem():
     assert any("GA" in p for p in ex.problems(_obs(ga_weeks=36, pma_weeks=30, pna_days=14), ABSTRACT))
+
+
+def test_a_pma_without_a_postnatal_age_is_not_a_consistency_error():
+    assert not any("allow no GA" in p for p in ex.problems(
+        _obs(pna_days=None, ga_weeks=None, pma_weeks=50, pma_range_weeks=[46, 60]), ABSTRACT))

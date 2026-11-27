@@ -305,3 +305,11 @@ This answers a sixth code review. These rules override the text above where the 
 3. **`ga_imputed`** is set when no GA is stated and either the group is described as preterm (the 32-week default) or the cap puts the GA below 37 weeks. A term default of 40 weeks, or a cap that leaves it at 37 weeks or more, is not flagged, as in the body. E1 excludes flagged observations.
 4. **Scope of the GA default.** It sets the stratum and weight imputation. Without a stated PMA, the engine is also given GA plus postnatal age, so the default then enters the prediction too.
 5. **Stated limitation.** A group described neither as preterm nor by GA, with PMA 37 weeks or more and postnatal age under 28 days, is treated as term even if some of its members were preterm.
+
+### Amendment 10 — 2026-11-27, at the same point as Amendment 5 (nothing more seen), before any abstract was screened or any value was extracted
+
+This answers a seventh code review and corrects Amendment 9. These rules override the text above where the two conflict.
+
+1. **Default GA cap, corrected.** Amendment 9 §1 capped the default at the *largest* PMA minus the *smallest* postnatal age. That let a PMA-only group at a central PMA of 34 weeks (range 28–40) take the term default of 40 weeks. The cap is instead the central PMA minus the central postnatal age (a stated central value, else the arithmetic midpoint of the range), or the central PMA when no postnatal age is stated. A group at PMA 38 weeks and 21 days still caps to 35 weeks and is preterm. Amendment 9 §3 applies unchanged with this cap.
+2. **Consistency check scope.** The 20–45-week test of Amendment 8 §2 runs only when both PMA and postnatal age are stated. The stated-GA test of Amendment 9 §2 also runs with PMA alone, taking the postnatal age as 0.
+3. **Amendment 9 §5 corrected.** The stated limitation applies to a group described neither as preterm nor by GA whose central PMA minus central postnatal age is 37 weeks or more. Such a group is treated as term even if some of its members were born preterm.
