@@ -1,0 +1,118 @@
+{
+ "drug": "penicillin_g",
+ "retrieved": "2026-11-27",
+ "queries": {
+  "pediatric": "(benzylpenicillin[tiab] OR \"penicillin G\"[tiab]) AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "(benzylpenicillin[tiab] OR \"penicillin G\"[tiab]) AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "2208898",
+   "year": "1990",
+   "sha256": "ef5c953969e54b2f39ab2268afffe70204bc20548386d1b982db37f54cdd306f",
+   "prefilter": false
+  },
+  {
+   "pmid": "17371819",
+   "year": "2007",
+   "sha256": "f39070cb0e6341f6fa4508bb9a41079951e6ec6cd4936b09b44639a678880edd",
+   "prefilter": false
+  },
+  {
+   "pmid": "17646418",
+   "year": "2007",
+   "sha256": "762da9450ee619364baa1b8ddd5c64b8a0c2c4aed54752ae8967a5b2862c5aa5",
+   "prefilter": true
+  },
+  {
+   "pmid": "29084754",
+   "year": "2018",
+   "sha256": "03b3e2e563c3ae11d06e98900b174298b3124a3d1273815f123fea5be66c8cba",
+   "prefilter": false
+  },
+  {
+   "pmid": "29378710",
+   "year": "2018",
+   "sha256": "720241ee00ef3797e40beb5d53fa47c16e5f3d326f0e91f38839f007ff21acf8",
+   "prefilter": true
+  },
+  {
+   "pmid": "29463540",
+   "year": "2018",
+   "sha256": "c247a1fc3a3a123c4ab601cb6ca8a12ae73b333efdff16ce47ff72cb2e8e440f",
+   "prefilter": true
+  },
+  {
+   "pmid": "32463940",
+   "year": "2020",
+   "sha256": "9c686cb9df0d2aa4d2c109c80716d274294178e67c8f6ef9c58088a2005049bf",
+   "prefilter": false
+  },
+  {
+   "pmid": "32989452",
+   "year": "2020",
+   "sha256": "5e865cbece0a77c183489751ca795225745b61d7d66e6ba45c90a515b77f72b0",
+   "prefilter": false
+  },
+  {
+   "pmid": "40629558",
+   "year": "2025",
+   "sha256": "bbaeb8332f7f9dd2aa6e88bf06dcfd4bfdec22b681cd0819dfc5a93817492819",
+   "prefilter": true
+  }
+ ],
+ "query_translation": {
+  "pediatric": "(\"benzylpenicillin\"[Title/Abstract] OR \"penicillin G\"[Title/Abstract]) AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "(\"benzylpenicillin\"[Title/Abstract] OR \"penicillin G\"[Title/Abstract]) AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "984783",
+   "year": "1976",
+   "sha256": "46a922bb807c6e23bb0766111e6362876f53d85c4d4c25bfe5188921b293295e",
+   "prefilter": false
+  },
+  {
+   "pmid": "17371819",
+   "year": "2007",
+   "sha256": "f39070cb0e6341f6fa4508bb9a41079951e6ec6cd4936b09b44639a678880edd",
+   "prefilter": false
+  },
+  {
+   "pmid": "22216505",
+   "year": "1976",
+   "sha256": "9b8e2b9c59b079b639dcd8e4a8bf536da32f4f554fde48e561f8d2489ab5a3d7",
+   "prefilter": false
+  },
+  {
+   "pmid": "24487120",
+   "year": "2014",
+   "sha256": "3404721017c778b86de687e4b43d23c03cf01cadbb0f02197d3c23fccfd2c3a6",
+   "prefilter": true
+  },
+  {
+   "pmid": "29112711",
+   "year": "2018",
+   "sha256": "2bc710ad667f1620eb41e2a84b44ff02e8a8b13258d83789609eb139c4b68ff6",
+   "prefilter": true
+  },
+  {
+   "pmid": "32989452",
+   "year": "2020",
+   "sha256": "5e865cbece0a77c183489751ca795225745b61d7d66e6ba45c90a515b77f72b0",
+   "prefilter": false
+  },
+  {
+   "pmid": "36838982",
+   "year": "2023",
+   "sha256": "0442a641ab9e6a209b7c77e2fbef1017e8679eb877b052373d15ec3f235095ea",
+   "prefilter": false
+  },
+  {
+   "pmid": "40391929",
+   "year": "2025",
+   "sha256": "c6b120514467cca9cde215bbc55233a8595b342cc5bdbd405028a95200e55836",
+   "prefilter": false
+  }
+ ]
+}

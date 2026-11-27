@@ -1,0 +1,592 @@
+{
+ "drug": "levetiracetam",
+ "retrieved": "2026-11-27",
+ "queries": {
+  "pediatric": "levetiracetam[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "levetiracetam[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "11564125",
+   "year": "2001",
+   "sha256": "3554dd54b94312db56735e0e33bc780bd3a73682b73a1bae0f913d2a05287eee",
+   "prefilter": false
+  },
+  {
+   "pmid": "11879369",
+   "year": "2001",
+   "sha256": "b890aad15535499769a7f32c26599960b803ebcfc3dfbfe0eefce974bc8ccedf",
+   "prefilter": true
+  },
+  {
+   "pmid": "14504308",
+   "year": "2003",
+   "sha256": "be5c6def0e71358d912a9c1bd70f2cb07625376aa75931fdfd4d55de0070baf8",
+   "prefilter": false
+  },
+  {
+   "pmid": "14639055",
+   "year": "2003",
+   "sha256": "833636c555e9b14a6e32ea5518ef4deb6bfd8849f6234fbdcfa68cddd4c1ac3e",
+   "prefilter": false
+  },
+  {
+   "pmid": "15301575",
+   "year": "2004",
+   "sha256": "4421fc189f6ecaf6dc63c3aa6816504485c42bf480bdbcb284148bafa7869b5f",
+   "prefilter": false
+  },
+  {
+   "pmid": "15335297",
+   "year": "2004",
+   "sha256": "58ec01368ee2484d8bfb47666d98fddec1b7151fb76a90b491766afbcad5884c",
+   "prefilter": false
+  },
+  {
+   "pmid": "15961984",
+   "year": "2005",
+   "sha256": "0fd7a25af144b3ef178b7293f57707b63a9954c01efa97dd199f2583c0085ebf",
+   "prefilter": false
+  },
+  {
+   "pmid": "16404801",
+   "year": "2005",
+   "sha256": "ccbd25e7751fc0efee58c2b4c1302ccdd44cfce6c4c3362338daafdc92845329",
+   "prefilter": false
+  },
+  {
+   "pmid": "16404803",
+   "year": "2005",
+   "sha256": "9e047cd3f0f3da53920a2627c88a4ab59b80a638c3728ca74a69b1425f4926d6",
+   "prefilter": false
+  },
+  {
+   "pmid": "16584283",
+   "year": "2006",
+   "sha256": "cb35d86a3bbba9fb1bf5be4d25d011346020e30957734b5fce12905b5a6a2f0b",
+   "prefilter": false
+  },
+  {
+   "pmid": "17270398",
+   "year": "2007",
+   "sha256": "fad503917a1b6fb2c7a16abbb9e38b5bf2efc386a0e014e407f9874ca796da01",
+   "prefilter": false
+  },
+  {
+   "pmid": "17442002",
+   "year": "2007",
+   "sha256": "89bd65468558966906deee56107bdf6f07d4084b9513a2af22ddc5753a6ed26e",
+   "prefilter": true
+  },
+  {
+   "pmid": "18399714",
+   "year": "2008",
+   "sha256": "ad6cfa9484aa18b8697010d0d0e0c37551151f038a55c05b544f6052076e6d9a",
+   "prefilter": false
+  },
+  {
+   "pmid": "19175400",
+   "year": "2009",
+   "sha256": "db39f391751c75191246d38b5dd799564034230cd4ec1d3cc26f454f715e5936",
+   "prefilter": false
+  },
+  {
+   "pmid": "19532039",
+   "year": "2009",
+   "sha256": "303f96cc915a1f6a14736c4d921e774584dc9d5cc93e4a89ac8c426290a46a74",
+   "prefilter": false
+  },
+  {
+   "pmid": "20837299",
+   "year": "2010",
+   "sha256": "94924756866b60dc1923ad0132e5b1543c7eeb1ec720a369a32102e0938e818c",
+   "prefilter": false
+  },
+  {
+   "pmid": "21549563",
+   "year": "2011",
+   "sha256": "68e67869ca7cfc606b22712be2fb6a13dc14c6fa9509080dc1195cc108747d92",
+   "prefilter": false
+  },
+  {
+   "pmid": "21592494",
+   "year": "2011",
+   "sha256": "df36191ba6cf1d0ec31f3ddeb312dbf929ab6a4589b2db9b5d2422eca59e2528",
+   "prefilter": false
+  },
+  {
+   "pmid": "22495532",
+   "year": "2012",
+   "sha256": "971d38ef17f586aad97b0ca2f83e18e534c2684edb30634e951b11d29a6475f5",
+   "prefilter": true
+  },
+  {
+   "pmid": "22669118",
+   "year": "2012",
+   "sha256": "240c8eaad3fc797ff0611b23564cf0fb244a665261429e588865fcc9325511bc",
+   "prefilter": true
+  },
+  {
+   "pmid": "22777154",
+   "year": "2012",
+   "sha256": "067a75f462cf821ba3916c3762d2d09a0da37a7e27bf657797085de1679d4b46",
+   "prefilter": false
+  },
+  {
+   "pmid": "23640503",
+   "year": "2013",
+   "sha256": "68feaa74f16d07303d1aca7b817ae8eec77f267cccce410a17e91e5b5b0cf578",
+   "prefilter": false
+  },
+  {
+   "pmid": "24807683",
+   "year": "2014",
+   "sha256": "a6d8a7fed7b497ba4135b8eaa2667047047e3d75b9f09d84b7ab2d3b12ca3423",
+   "prefilter": false
+  },
+  {
+   "pmid": "26913593",
+   "year": "2016",
+   "sha256": "1257e094d267fbe722fbc8a9b641f31b231714a1e127a70fa25c6b7dfa86226a",
+   "prefilter": true
+  },
+  {
+   "pmid": "29265480",
+   "year": "2018",
+   "sha256": "14ba1ab6b40eb829ebb479abc6bbe6def541f43069f9aa7868a9e40b6438433e",
+   "prefilter": false
+  },
+  {
+   "pmid": "29393846",
+   "year": "2018",
+   "sha256": "2b62cf7643cac67b6850006bf81bcc1c5ea983ed4ed779d2f8359fae7e19d4a9",
+   "prefilter": true
+  },
+  {
+   "pmid": "29948795",
+   "year": "2018",
+   "sha256": "e949ec413a1878cca620cf08360966011a5cf82b407e8115266c628b940706f5",
+   "prefilter": false
+  },
+  {
+   "pmid": "30052270",
+   "year": "2018",
+   "sha256": "4957ea0c1c3d9070138b7097d202663a4adfd502f223c5e5d0898b9e42a4a8c4",
+   "prefilter": false
+  },
+  {
+   "pmid": "30096051",
+   "year": "2018",
+   "sha256": "fd116244f67f578cbcfcb769c3cc67eaac25187ad0cb1e3f3537082db5a9390e",
+   "prefilter": false
+  },
+  {
+   "pmid": "30237016",
+   "year": "2018",
+   "sha256": "59b33814139ae87efacb781b013be3199dc049224e0a6703240d358eaa4a1195",
+   "prefilter": false
+  },
+  {
+   "pmid": "31033858",
+   "year": "2019",
+   "sha256": "0447a5fa5dc279866e0d7c2f04f529dcb44370bb0b10999c03b5afc1769f825a",
+   "prefilter": false
+  },
+  {
+   "pmid": "31672143",
+   "year": "2019",
+   "sha256": "a80432b5dd3802154a897d6f6987055efe77b293091d67a3ccabe1b418364eeb",
+   "prefilter": false
+  },
+  {
+   "pmid": "33447943",
+   "year": "2021",
+   "sha256": "12c41bc1e861a2e616b0a1d0219d29963b63ae793a538ee01602fad923aefff8",
+   "prefilter": true
+  },
+  {
+   "pmid": "33622228",
+   "year": "2022",
+   "sha256": "cf3445e860540bb689b6c68d5cc388dbf54b8cf01dedff74f53a0a7b1ad96172",
+   "prefilter": false
+  },
+  {
+   "pmid": "34247386",
+   "year": "2021",
+   "sha256": "dca2df49dfbaec184593120532904b347c667a4fed227ec92ecf6173d6fbec53",
+   "prefilter": true
+  },
+  {
+   "pmid": "34753796",
+   "year": "2023",
+   "sha256": "30ac5e234338249d894c2697810a0276bb65e33c5bd743c7903c1cb1cf924d65",
+   "prefilter": true
+  },
+  {
+   "pmid": "34816634",
+   "year": "2022",
+   "sha256": "1bbc58f213b546097ace2e721be79e898ea531576b7baf8423b849af4d2a3366",
+   "prefilter": false
+  },
+  {
+   "pmid": "38194771",
+   "year": "2024",
+   "sha256": "7006cc76cd3e36d10d712157c23df586bd7bbee3da89b54fe2731a5fc4400d4b",
+   "prefilter": true
+  },
+  {
+   "pmid": "38748860",
+   "year": "2024",
+   "sha256": "676a8587d85249fd04f6d89d50bcd1d7d63a32f19f8761d097ef3939d196c030",
+   "prefilter": false
+  },
+  {
+   "pmid": "38902005",
+   "year": "2024",
+   "sha256": "9a04ce5fd033a68a7b348fb69948051633479d8128b68c954f2a3b11e6dca785",
+   "prefilter": true
+  },
+  {
+   "pmid": "39909846",
+   "year": "2025",
+   "sha256": "ef9e231d270b129bf17240e2aac63102a96743e33383515c0c61a735bff70519",
+   "prefilter": false
+  },
+  {
+   "pmid": "40313172",
+   "year": "2025",
+   "sha256": "f03115493cfb17df1a474020d06f206207ab1cfb987eb7b5837dfbb957ba1d57",
+   "prefilter": false
+  },
+  {
+   "pmid": "40632507",
+   "year": "2025",
+   "sha256": "f291b4242bf8c3c06eed85a2e2e3d4757e5e213512525292fa31c2ba672d3571",
+   "prefilter": false
+  }
+ ],
+ "query_translation": {
+  "pediatric": "\"levetiracetam\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "\"levetiracetam\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "11673021",
+   "year": "2001",
+   "sha256": "0beb34fdf9a9fd43b9179578b22107883544d10806ff4a914c89fb4a51f89c60",
+   "prefilter": false
+  },
+  {
+   "pmid": "11879369",
+   "year": "2001",
+   "sha256": "b890aad15535499769a7f32c26599960b803ebcfc3dfbfe0eefce974bc8ccedf",
+   "prefilter": true
+  },
+  {
+   "pmid": "14530892",
+   "year": "2003",
+   "sha256": "5300927b8d65228675d67e704130f6d03e60bee6f22e5435c8eded2285b1a832",
+   "prefilter": true
+  },
+  {
+   "pmid": "14639055",
+   "year": "2003",
+   "sha256": "833636c555e9b14a6e32ea5518ef4deb6bfd8849f6234fbdcfa68cddd4c1ac3e",
+   "prefilter": false
+  },
+  {
+   "pmid": "15301575",
+   "year": "2004",
+   "sha256": "4421fc189f6ecaf6dc63c3aa6816504485c42bf480bdbcb284148bafa7869b5f",
+   "prefilter": false
+  },
+  {
+   "pmid": "15961984",
+   "year": "2005",
+   "sha256": "0fd7a25af144b3ef178b7293f57707b63a9954c01efa97dd199f2583c0085ebf",
+   "prefilter": false
+  },
+  {
+   "pmid": "16404801",
+   "year": "2005",
+   "sha256": "ccbd25e7751fc0efee58c2b4c1302ccdd44cfce6c4c3362338daafdc92845329",
+   "prefilter": false
+  },
+  {
+   "pmid": "16584283",
+   "year": "2006",
+   "sha256": "cb35d86a3bbba9fb1bf5be4d25d011346020e30957734b5fce12905b5a6a2f0b",
+   "prefilter": false
+  },
+  {
+   "pmid": "17199019",
+   "year": "2007",
+   "sha256": "fbd904991b6b8fec4d7a3cc6c6cc4f10e8c85226578320f00ec2c74a8b3f049e",
+   "prefilter": false
+  },
+  {
+   "pmid": "17270398",
+   "year": "2007",
+   "sha256": "fad503917a1b6fb2c7a16abbb9e38b5bf2efc386a0e014e407f9874ca796da01",
+   "prefilter": false
+  },
+  {
+   "pmid": "17442002",
+   "year": "2007",
+   "sha256": "89bd65468558966906deee56107bdf6f07d4084b9513a2af22ddc5753a6ed26e",
+   "prefilter": true
+  },
+  {
+   "pmid": "17518509",
+   "year": "2007",
+   "sha256": "b8aac0901dd0a554e6877d94ac535d4a5d29a0ff495836c6845a9efce65b9e4b",
+   "prefilter": false
+  },
+  {
+   "pmid": "17573925",
+   "year": "2007",
+   "sha256": "eb56820c519aa3399f98f63d794bdc4656212f2364c3e8c2b93bef4cb5643981",
+   "prefilter": true
+  },
+  {
+   "pmid": "18399714",
+   "year": "2008",
+   "sha256": "ad6cfa9484aa18b8697010d0d0e0c37551151f038a55c05b544f6052076e6d9a",
+   "prefilter": false
+  },
+  {
+   "pmid": "19054418",
+   "year": "2009",
+   "sha256": "dd8dc66cc6f8223a2ee0f7851283f8d8baa0f8bc165c66df7e9f318a4367138b",
+   "prefilter": true
+  },
+  {
+   "pmid": "19175400",
+   "year": "2009",
+   "sha256": "db39f391751c75191246d38b5dd799564034230cd4ec1d3cc26f454f715e5936",
+   "prefilter": false
+  },
+  {
+   "pmid": "20837299",
+   "year": "2010",
+   "sha256": "94924756866b60dc1923ad0132e5b1543c7eeb1ec720a369a32102e0938e818c",
+   "prefilter": false
+  },
+  {
+   "pmid": "21592494",
+   "year": "2011",
+   "sha256": "df36191ba6cf1d0ec31f3ddeb312dbf929ab6a4589b2db9b5d2422eca59e2528",
+   "prefilter": false
+  },
+  {
+   "pmid": "21944894",
+   "year": "2012",
+   "sha256": "bf91586f7a420efae82e58dd594f72a7748cc8439411ec02cf40f42ff40b0371",
+   "prefilter": false
+  },
+  {
+   "pmid": "21950640",
+   "year": "2011",
+   "sha256": "1222e4376f665e25ea5c3df093f2607b52d9890822b1847731dacc1a67a7eeaa",
+   "prefilter": true
+  },
+  {
+   "pmid": "22171585",
+   "year": "2012",
+   "sha256": "24c44e595cbefc7a595c36660b04f3cec3ffaed1830bad25054f3b29aa2dd76c",
+   "prefilter": true
+  },
+  {
+   "pmid": "22495532",
+   "year": "2012",
+   "sha256": "971d38ef17f586aad97b0ca2f83e18e534c2684edb30634e951b11d29a6475f5",
+   "prefilter": true
+  },
+  {
+   "pmid": "22777154",
+   "year": "2012",
+   "sha256": "067a75f462cf821ba3916c3762d2d09a0da37a7e27bf657797085de1679d4b46",
+   "prefilter": false
+  },
+  {
+   "pmid": "23640503",
+   "year": "2013",
+   "sha256": "68feaa74f16d07303d1aca7b817ae8eec77f267cccce410a17e91e5b5b0cf578",
+   "prefilter": false
+  },
+  {
+   "pmid": "23891703",
+   "year": "2013",
+   "sha256": "596ee2042a584eac6fe835f3e09bb1226fc61bb72cc365d0afbe5f8382054d23",
+   "prefilter": true
+  },
+  {
+   "pmid": "24807683",
+   "year": "2014",
+   "sha256": "a6d8a7fed7b497ba4135b8eaa2667047047e3d75b9f09d84b7ab2d3b12ca3423",
+   "prefilter": false
+  },
+  {
+   "pmid": "25312351",
+   "year": "2014",
+   "sha256": "f60159b8df4d57cc91c2e0f7db79e7c96ed0a15342fb1b69e89dcd0fbb193a29",
+   "prefilter": true
+  },
+  {
+   "pmid": "25384117",
+   "year": "2015",
+   "sha256": "84558dc748d33144ac658182caaa39f9fb852963f42d055711258149c4ac998f",
+   "prefilter": false
+  },
+  {
+   "pmid": "26242293",
+   "year": "2015",
+   "sha256": "0572d138fa40437dcd6378a4622f28fd1f9329d44fb629e5fa19685af823b8ad",
+   "prefilter": false
+  },
+  {
+   "pmid": "26800696",
+   "year": "2016",
+   "sha256": "c7ac2dd9fd5113cd7d902dbfacaf368cfe43be012cb43d259be75658efa9c83c",
+   "prefilter": false
+  },
+  {
+   "pmid": "26908152",
+   "year": "2016",
+   "sha256": "1f7e2d3d9de56ac47f891beb0b23338f257340492a6e96308367362562b3408c",
+   "prefilter": true
+  },
+  {
+   "pmid": "26913593",
+   "year": "2016",
+   "sha256": "1257e094d267fbe722fbc8a9b641f31b231714a1e127a70fa25c6b7dfa86226a",
+   "prefilter": true
+  },
+  {
+   "pmid": "27146213",
+   "year": "2016",
+   "sha256": "c5b5e818d8dd48f8e61bfe3dfcd3ca0b6864a02ce3a741c1b7de9adb60aedf83",
+   "prefilter": false
+  },
+  {
+   "pmid": "28279893",
+   "year": "2017",
+   "sha256": "f415b900d57bcadff29848e9385a8b376d74a8932ad190ad2d85d2403805ab7b",
+   "prefilter": true
+  },
+  {
+   "pmid": "29948795",
+   "year": "2018",
+   "sha256": "e949ec413a1878cca620cf08360966011a5cf82b407e8115266c628b940706f5",
+   "prefilter": false
+  },
+  {
+   "pmid": "29965883",
+   "year": "2018",
+   "sha256": "b7b42a9490920b51c7ded639b716bde695f027bc0a5f6572e2de7eea50258a33",
+   "prefilter": true
+  },
+  {
+   "pmid": "30096051",
+   "year": "2018",
+   "sha256": "fd116244f67f578cbcfcb769c3cc67eaac25187ad0cb1e3f3537082db5a9390e",
+   "prefilter": false
+  },
+  {
+   "pmid": "30237016",
+   "year": "2018",
+   "sha256": "59b33814139ae87efacb781b013be3199dc049224e0a6703240d358eaa4a1195",
+   "prefilter": false
+  },
+  {
+   "pmid": "31033858",
+   "year": "2019",
+   "sha256": "0447a5fa5dc279866e0d7c2f04f529dcb44370bb0b10999c03b5afc1769f825a",
+   "prefilter": false
+  },
+  {
+   "pmid": "31977751",
+   "year": "2020",
+   "sha256": "1a1d30a01bd6de1bdf39fa1dea327207283467016b7f39bda6cafca0e71c1ac6",
+   "prefilter": false
+  },
+  {
+   "pmid": "32113977",
+   "year": "2020",
+   "sha256": "440fee17c4c8b9494c3cc66ab13d9a43f6377b526aae036b7d0f7b4f8a99fed9",
+   "prefilter": true
+  },
+  {
+   "pmid": "32208795",
+   "year": "2020",
+   "sha256": "3e7c54f97d4a4934614b8be3effefad4491b499467e7ee93975ad8995906658a",
+   "prefilter": true
+  },
+  {
+   "pmid": "33217623",
+   "year": "2021",
+   "sha256": "0d52e45e8686eea96190965c00c0a0ea14a90dd4270da635789e01970c80d569",
+   "prefilter": true
+  },
+  {
+   "pmid": "33428169",
+   "year": "2021",
+   "sha256": "4348e802f6cd09c02ea81728d14dd31b7ac633d48c096ee8646bd0ba79d56c80",
+   "prefilter": true
+  },
+  {
+   "pmid": "33447943",
+   "year": "2021",
+   "sha256": "12c41bc1e861a2e616b0a1d0219d29963b63ae793a538ee01602fad923aefff8",
+   "prefilter": true
+  },
+  {
+   "pmid": "34247386",
+   "year": "2021",
+   "sha256": "dca2df49dfbaec184593120532904b347c667a4fed227ec92ecf6173d6fbec53",
+   "prefilter": true
+  },
+  {
+   "pmid": "37429218",
+   "year": "2023",
+   "sha256": "01eb3aa894e1cbc10999a704f6b1b579b7df2d3e82de2c48d68e4c1ab23a1a45",
+   "prefilter": false
+  },
+  {
+   "pmid": "38166710",
+   "year": "2024",
+   "sha256": "2d185c833598d2bd4de5cd12fe21e8ebc87189a400dc50696dd1e06dd9d4fae0",
+   "prefilter": true
+  },
+  {
+   "pmid": "38932723",
+   "year": "2024",
+   "sha256": "2c0499f2106140876c373a8d3860cd98626587d34a3deff674ec55ffc2a80db8",
+   "prefilter": false
+  },
+  {
+   "pmid": "39909846",
+   "year": "2025",
+   "sha256": "ef9e231d270b129bf17240e2aac63102a96743e33383515c0c61a735bff70519",
+   "prefilter": false
+  },
+  {
+   "pmid": "39928152",
+   "year": "2025",
+   "sha256": "d44027d534d36c215d6f8d757831360c5fcf0de29b2064c672b3fe3ba86bdb11",
+   "prefilter": true
+  },
+  {
+   "pmid": "39932425",
+   "year": "2025",
+   "sha256": "75eab154f5b42e6106dd45d20eea80214910adbf2812c5b4604742df7e3c5219",
+   "prefilter": true
+  },
+  {
+   "pmid": "39969140",
+   "year": "2025",
+   "sha256": "3b66f9dde063f81de6d95fffd1a47ed0fdafa0c564689b80f53007df98929c1d",
+   "prefilter": true
+  }
+ ]
+}
