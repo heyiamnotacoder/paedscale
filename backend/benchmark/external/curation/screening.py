@@ -1,4 +1,4 @@
-"""External validation, step 2: the screening queue (PROTOCOL.md, Amendments 1-2).
+"""External validation, step 2: the screening queue (PROTOCOL.md, Amendments 1-4).
 
 Gives the seeded screening order of each drug's pre-filtered PMIDs and which strata, or the
 adult list, are still open. The decisions themselves are made by reading abstracts and are
@@ -20,15 +20,6 @@ def order(rows: list[dict]) -> list[str]:
     return pmids
 
 
-def open_strata(decisions: list[dict]) -> set[str]:
-    counts = {s: 0 for s in STRATA}
-    for d in decisions:
-        if d["decision"] == "include":
-            for s in set(d["strata"]):
-                counts[s] += 1
-    return {s for s, n in counts.items() if n < STUDIES_PER_STRATUM}
-
-
 def adult_open(decisions: list[dict]) -> bool:
     return sum(d["decision"] == "include" for d in decisions) < ADULT_ABSTRACTS
 
@@ -36,7 +27,7 @@ def adult_open(decisions: list[dict]) -> bool:
 def replay(record: dict) -> list[dict]:
     """The observations the analysis uses, in screening order: an included study adds its
     observations in strata that were still open when it was read (Amendment 1 §1)."""
-    from benchmark.external.curation.extraction import central, stratum
+    from benchmark.external.curation.extraction import central, gestational_weeks, stratum
     counts = {s: 0 for s in STRATA}
     used = []
     for study in record["pediatric"]:
@@ -44,11 +35,14 @@ def replay(record: dict) -> list[dict]:
             continue
         open_now = {s for s, n in counts.items() if n < STUDIES_PER_STRATUM}
         contributed = set()
-        for o in study["observations"]:
+        for o in study.get("observations") or []:
+            ga = gestational_weeks(o)
             pna = central(o.get("pna_days"), geometric=True)
-            if pna is None:                       # PMA only: postnatal age from PMA − GA
-                pna = max((central(o["pma_weeks"], False) - (central(o.get("ga_weeks"), False) or 40)) * 7, 0)
-            st = stratum(pna, central(o.get("ga_weeks"), geometric=False))
+            if pna is None and o.get("pma_weeks") is not None:   # PMA only: PNA from PMA − GA
+                pna = max((central(o["pma_weeks"], False) - ga) * 7, 0)
+            if pna is None:                       # no usable age: check.py reports it
+                continue
+            st = stratum(pna, ga)
             if st in open_now:
                 used.append({"pmid": study["pmid"], "obs": o, "stratum": st})
                 contributed.add(st)
@@ -83,6 +77,8 @@ def _cli():
     import os
     import sys
     from benchmark.external.curation.search import ABSTRACT_DIR, SEARCH_DIR
+    if len(sys.argv) < 4 or sys.argv[1] != "next":
+        sys.exit("usage: python3 -m benchmark.external.curation.screening next <pass> <drug> [n]")
     _, cmd, pass_name, drug, *rest = sys.argv
     n = int(rest[0]) if rest else 3
     snap = json.load(open(os.path.join(SEARCH_DIR, f"{drug}.json"), encoding="utf-8"))

@@ -58,8 +58,32 @@ def test_central_values_use_the_geometric_midpoint_for_postnatal_age():
     (8.0, "L/h/70kg", {"weight_kg": 70 / 16}, 1.0),            # 8 × (1/16)^0.75 = 1.0
     (86.5, "mL/min/1.73m2", {"weight_kg": 20, "bsa_m2": 0.865}, 86.5 * 0.06 * 0.5),
     (24, "L/day", {}, 1.0),
+    (500, "mL/h", {}, 0.5),                                      # Amendment 4
+    (0.05, "L/min", {}, 3.0),
+    (2.4, "L/day/kg", {"weight_kg": 10}, 1.0),
+    (100, "mL/h/1.73m2", {"weight_kg": 20, "bsa_m2": 0.865}, 0.05),
     (100, "mL/min/m2", {"weight_kg": 20, "bsa_m2": 0.8}, 100 * 0.06 * 0.8),   # Amendment 3
     (2.5, "L/h/m2", {"weight_kg": 20, "bsa_m2": 0.8}, 2.0),
 ])
 def test_clearance_converts_to_litres_per_hour(value, unit, kw, expected):
     assert ex.to_l_per_h(value, unit, **kw) == pytest.approx(expected)
+
+
+def test_flags_must_come_from_the_protocol_list():
+    assert ex.problems(_obs(flags=["critically_ill", "pca_as_pma"]), ABSTRACT) == []
+    assert any("flag" in p for p in ex.problems(_obs(flags=["sick"]), ABSTRACT))
+    assert any("flag" in p for p in ex.problems(_obs(flags=["weight_imputed"]), ABSTRACT))   # the scorer adds it
+
+
+def test_a_stated_age_range_beside_a_central_age_is_kept_and_checked():
+    o = _obs(pna_days=8, pna_range_days=[3, 20])
+    assert ex.problems(o, ABSTRACT) == []
+    assert ex.problems(_obs(pna_days=8, pna_range_days=[20, 3]), ABSTRACT)
+    assert ex.age_range(o, "pna") == [3, 20] and ex.age_range(_obs(pna_days=8), "pna") is None
+    assert ex.age_range(_obs(), "pna") == [3, 20]
+
+
+def test_gestational_age_defaults_to_40_weeks_or_32_when_described_as_preterm():
+    assert ex.gestational_weeks({"ga_weeks": [25, 33]}) == 29
+    assert ex.gestational_weeks({"ga_weeks": None}) == 40
+    assert ex.gestational_weeks({"ga_weeks": None, "preterm": True}) == 32

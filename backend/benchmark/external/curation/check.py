@@ -1,8 +1,9 @@
-"""Validate a screening pass's records (SCREENING_GUIDE.md).
+"""Validate a screening pass's records (SCREENING_GUIDE.md; PROTOCOL.md, Amendments 3-4).
 
-Usage (from backend/): python3 -m benchmark.external.curation.check <pass> [<drug>]
-Checks that decisions follow the seeded order with no gaps, that every abstract read still has
-the committed hash, and that every included study's observations pass extraction.problems.
+Usage (from backend/): python3 -m benchmark.external.curation.check <pass> [<drug> ...]
+Checks that decisions follow the seeded order with no gaps and stop where the queue stops, that
+every abstract read still has the committed hash, and that every included study's observations
+pass extraction.problems. Problems are reported, never raised.
 """
 from __future__ import annotations
 
@@ -15,6 +16,7 @@ from benchmark.external.curation import extraction, screening
 from benchmark.external.curation.search import ABSTRACT_DIR, SEARCH_DIR
 
 EXTRACTION_DIR = os.path.join(os.path.dirname(SEARCH_DIR), "extraction")
+ITEMS = {"pediatric": "observations", "adult": "values"}
 
 
 def order_problems(screened: list[str], seeded: list[str]) -> list[str]:
@@ -23,50 +25,87 @@ def order_problems(screened: list[str], seeded: list[str]) -> list[str]:
     return []
 
 
-def study_problems(study: dict, abstract: str, kind: str) -> list[str]:
+def stop_problems(record: dict, snap: dict) -> list[str]:
+    """Screening ran no further than the queue (screening.next_up) would have shown."""
     out = []
-    if study["decision"] not in ("include", "exclude"):
-        out.append(f"{study['pmid']}: decision {study['decision']!r}")
-    if study["decision"] == "exclude" and not study.get("reason"):
-        out.append(f"{study['pmid']}: an exclusion needs a reason")
-    items = study.get("observations" if kind == "pediatric" else "values") or []
-    if study["decision"] == "include" and not items:
-        out.append(f"{study['pmid']}: included with no {('observations' if kind == 'pediatric' else 'values')}")
+    ped, adult = record["pediatric"], record["adult"]
+    for j in range(len(ped)):
+        if screening.next_up(snap, {"pediatric": ped[:j], "adult": []})[0] != "pediatric":
+            out.append(f"pediatric {ped[j]['pmid']}: screened after every stratum was full")
+            break
+    if adult and screening.next_up(snap, {"pediatric": ped, "adult": []})[0] == "pediatric":
+        out.append("adult screening began while a pediatric stratum was open and abstracts remained")
+    for j in range(len(adult)):
+        if not screening.adult_open(adult[:j]):
+            out.append(f"adult {adult[j]['pmid']}: screened after five adult abstracts qualified")
+            break
+    return out
+
+
+def _adult_problems(o: dict, abstract: str) -> list[str]:
+    flags = o.get("flags") or []
+    out = []
+    stated = o.get("age_quote") is not None
+    if not stated and "adult_age_unstated" not in flags:
+        out.append("no age quote and no adult_age_unstated flag")
+    absolute = (o.get("cl") or {}).get("unit") in extraction.ABSOLUTE_UNITS
+    if absolute and o.get("weight_kg") is None and "adult_weight_missing" not in flags:
+        out.append("absolute clearance with no weight and no adult_weight_missing flag")
+    o = {**o, "pna_days": 0, "pma_weeks": None}          # adults need no age range
+    return out + [p for p in extraction.problems(o, abstract) if stated or not p.startswith("age quote")]
+
+
+def study_problems(study: dict, abstract: str, kind: str) -> list[str]:
+    pmid = study.get("pmid")
+    decision = study.get("decision")
+    if decision not in ("include", "exclude"):
+        return [f"{pmid}: decision {decision!r} is not include or exclude"]
+    out = []
+    if decision == "exclude" and not study.get("reason"):
+        out.append(f"{pmid}: an exclusion needs a reason")
+    bad_flags = sorted(set(study.get("flags") or []) - extraction.FLAGS)
+    if bad_flags:
+        out.append(f"{pmid}: study flag(s) {bad_flags} are not screener flags")
+    items = study.get(ITEMS[kind]) or []
+    if decision == "include" and not items:
+        out.append(f"{pmid}: included with no {ITEMS[kind]}")
     for i, o in enumerate(items):
-        found = []
-        if kind == "adult":
-            # Adults need no age range, only the stated text or the adult_age_unstated flag.
-            stated = o.get("age_quote") is not None
-            if not stated and "adult_age_unstated" not in (o.get("flags") or []):
-                found.append("no age quote and no adult_age_unstated flag")
-            o = {**o, "pna_days": 0, "pma_weeks": None}
-            found += [p for p in extraction.problems(o, abstract)
-                      if stated or not p.startswith("age quote")]
-        else:
-            found = extraction.problems(o, abstract)
-        out += [f"{study['pmid']}[{i}]: {p}" for p in found]
+        found = _adult_problems(o, abstract) if kind == "adult" else extraction.problems(o, abstract)
+        out += [f"{pmid}[{i}]: {p}" for p in found]
     return out
 
 
 def check_drug(pass_name: str, drug: str) -> list[str]:
     path = os.path.join(EXTRACTION_DIR, pass_name, f"{drug}.json")
     if not os.path.exists(path):
-        return []
-    rec = json.load(open(path, encoding="utf-8"))
-    snap = json.load(open(os.path.join(SEARCH_DIR, f"{drug}.json"), encoding="utf-8"))
-    hashes = {r["pmid"]: r["sha256"] for kind in ("pediatric", "adult") for r in snap[kind]}
+        return [f"no record file {path}"]
+    with open(path, encoding="utf-8") as f:
+        rec = json.load(f)
+    with open(os.path.join(SEARCH_DIR, f"{drug}.json"), encoding="utf-8") as f:
+        snap = json.load(f)
+    hashes = {r["pmid"]: r["sha256"] for kind in ITEMS for r in snap[kind]}
     out = []
-    for kind in ("pediatric", "adult"):
-        out += [f"{kind}: {p}" for p in order_problems([s["pmid"] for s in rec[kind]], screening.order(snap[kind]))]
+    for kind in ITEMS:
+        rec.setdefault(kind, [])
+        out += [f"{kind}: {p}" for p in order_problems([s.get("pmid") for s in rec[kind]],
+                                                        screening.order(snap[kind]))]
         for s in rec[kind]:
-            text = open(os.path.join(ABSTRACT_DIR, drug, f"{s['pmid']}.txt"), encoding="utf-8").read()
-            if hashlib.sha256(text.encode()).hexdigest() != hashes.get(s["pmid"]):
+            if s.get("pmid") not in hashes:
+                out.append(f"{kind} {s.get('pmid')}: not in the search snapshot")
+                continue
+            with open(os.path.join(ABSTRACT_DIR, drug, f"{s['pmid']}.txt"), encoding="utf-8") as f:
+                text = f.read()
+            if hashlib.sha256(text.encode()).hexdigest() != hashes[s["pmid"]]:
                 out.append(f"{kind} {s['pmid']}: abstract text differs from the committed hash")
             out += [f"{kind} {p}" for p in study_problems(s, text, kind)]
+    if not any(p.startswith(("pediatric: ", "adult: ")) for p in out):
+        out += stop_problems(rec, snap)
     return out
 
 
 if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        sys.exit("usage: python3 -m benchmark.external.curation.check <pass> [<drug> ...]")
     pass_name = sys.argv[1]
     drugs = sys.argv[2:] or sorted(f[:-5] for f in os.listdir(SEARCH_DIR) if f.endswith(".json"))
     bad = 0

@@ -1,4 +1,4 @@
-"""Screening order and caps of the external validation (PROTOCOL.md, Amendments 1-2)."""
+"""Screening order and caps of the external validation (PROTOCOL.md, Amendments 1-4)."""
 import random
 
 from benchmark.external.curation import screening
@@ -10,15 +10,6 @@ def test_order_is_the_seeded_shuffle_of_numerically_sorted_prefiltered_pmids():
     expected = ["20", "100", "4000"]
     random.Random(20261127).shuffle(expected)
     assert screening.order(rows) == expected
-
-
-def test_a_stratum_closes_after_two_included_studies():
-    decisions = [
-        {"pmid": "1", "decision": "include", "strata": ["term_newborn", "infant_toddler"]},
-        {"pmid": "2", "decision": "exclude", "strata": []},
-        {"pmid": "3", "decision": "include", "strata": ["term_newborn"]},
-    ]
-    assert screening.open_strata(decisions) == {"preterm_newborn", "infant_toddler", "child", "adolescent"}
 
 
 def test_the_adult_list_closes_after_five_qualifying_abstracts():
@@ -38,3 +29,26 @@ def test_replay_uses_only_observations_in_strata_that_were_open_when_the_study_w
     used = screening.replay(record)
     assert [(u["pmid"], ex.stratum(u["obs"]["pna_days"], 40)) for u in used] == [
         ("1", "term_newborn"), ("1", "infant_toddler"), ("2", "term_newborn"), ("3", "infant_toddler")]
+
+
+def test_a_group_described_as_preterm_without_a_ga_is_a_preterm_newborn():
+    record = {"pediatric": [{"pmid": "1", "decision": "include", "observations": [
+        {"pna_days": None, "ga_weeks": None, "pma_weeks": [24, 34], "preterm": True}]}]}
+    assert [u["stratum"] for u in screening.replay(record)] == ["preterm_newborn"]
+
+
+def test_replay_skips_an_observation_with_no_age_instead_of_crashing():
+    record = {"pediatric": [{"pmid": "1", "decision": "include", "observations": [
+        {"pna_days": None, "ga_weeks": 30, "pma_weeks": None}]}]}
+    assert screening.replay(record) == []
+
+
+def test_the_queue_moves_to_adult_abstracts_once_every_stratum_is_full():
+    ages = [5, 5, 60, 3 * 365, 14 * 365]
+    snap = {"pediatric": [{"pmid": str(i), "prefilter": True} for i in range(1, 12)],
+            "adult": [{"pmid": "90", "prefilter": True}]}
+    first_ten = screening.order(snap["pediatric"])[:10]
+    studies = [{"pmid": p, "decision": "include", "observations": [
+        {"pna_days": ages[i // 2], "ga_weeks": 30 if i < 2 else 40, "pma_weeks": None}]}
+        for i, p in enumerate(first_ten)]
+    assert screening.next_up(snap, {"pediatric": studies, "adult": []}) == ("adult", ["90"])

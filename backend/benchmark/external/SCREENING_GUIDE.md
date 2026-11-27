@@ -1,6 +1,6 @@
 # Screening and extraction guide (operational)
 
-This guide says *how* to record screening decisions. The rules themselves are in `PROTOCOL.md`, Amendments 1 to 3. Where the two differ, PROTOCOL.md wins. Each pass works only from PROTOCOL.md, this guide and the abstract texts. A pass never opens another pass's folder.
+This guide says *how* to record screening decisions. The rules themselves are in `PROTOCOL.md`, Amendments 1 to 4. Where the two differ, PROTOCOL.md wins. Each pass works only from PROTOCOL.md, this guide and the abstract texts. A pass never opens another pass's folder.
 
 ## Commands (from `backend/`)
 
@@ -18,9 +18,9 @@ python3 -m benchmark.external.curation.check <pass> [<drug>]            # valida
  "pediatric": [
   {"pmid": "123", "decision": "include", "reason": "", "flags": ["critically_ill"],
    "observations": [
-    {"label": "preterm, PMA 24-34 wk",
+    {"label": "preterm, PMA 24-34 wk", "preterm": true,
      "cl": {"value": 0.05, "unit": "L/h/kg", "summary": "mean", "quote": "clearance was 0.05 L/h/kg"},
-     "pna_days": [1, 27], "ga_weeks": null, "pma_weeks": [24, 34],
+     "pna_days": 11.9, "pna_range_days": [1, 27], "ga_weeks": null, "pma_weeks": 30.4, "pma_range_weeks": [24, 34],
      "age_quote": "PMA 30.4 weeks, range 24-34 weeks; postnatal age 11.9 days, range 1-27 days",
      "weight_kg": 1.3, "weight_quote": "weight 1.30 kg",
      "bsa_m2": null, "height_cm": null, "flags": []}]},
@@ -32,11 +32,14 @@ python3 -m benchmark.external.curation.check <pass> [<drug>]            # valida
 ```
 
 - **decision** is `include` or `exclude`. An exclusion's `reason` starts with the criterion (P1–P4, or "not total IV CL", "range only", "CL/F", "probenecid", "adult criteria", "no age") and a few words.
-- **Ages.** Postnatal age is in days and GA and PMA are in weeks. Each is a number (central value) or a `[low, high]` range, or null. When both a central value and a range are reported, give the central value. Convert with year = 365.25 d, month = 30.4375 d, week = 7 d. `age_quote` holds the text as reported.
-- **Units.** Use exactly one of: `L/h`, `mL/min`, `L/h/kg`, `mL/min/kg`, `mL/h/kg`, `L/h/70kg`, `mL/min/1.73m2`, `L/h/1.73m2`, `mL/min/m2`, `L/h/m2`, `L/day`. "l h-1 kg-1" is `L/h/kg`, "mL/kg/min" is `mL/min/kg`, "L/h per 70 kg" is `L/h/70kg`, and "ml/min per m(2)" (per square metre, not per 1.73 m²) is `mL/min/m2`. Record a stated BSA in `bsa_m2` and a stated height in `height_cm`.
+- **Ages.** Postnatal age (`pna_days`) is in days; GA (`ga_weeks`) and PMA (`pma_weeks`) are in weeks. Each is a number (the stated central value), a `[low, high]` range when only a range is stated, or null. When both a central value and a range are stated, put the central value in the field and the range in `pna_range_days`, `ga_range_weeks` or `pma_range_weeks`. Convert with year = 365.25 d, month = 30.4375 d, week = 7 d. `age_quote` holds the text as reported.
+  - A group needs a postnatal age or a PMA. GA alone does not say when clearance was measured: exclude with "no age" (Amendment 4 §3).
+  - "Conceptional" or "postconceptional" age goes in `pma_weeks`, flagged `pca_as_pma`.
+  - Set `"preterm": true` when the abstract describes the group as preterm or premature, even without a numeric GA; otherwise false. The scorer uses it to impute GA.
+- **Units.** Use exactly one of: `L/h`, `mL/min`, `mL/h`, `L/min`, `L/day`, `L/h/kg`, `mL/min/kg`, `mL/h/kg`, `L/day/kg`, `L/h/70kg`, `mL/min/1.73m2`, `L/h/1.73m2`, `mL/h/1.73m2`, `mL/min/m2`, `L/h/m2`. A value in any other unit is excluded with "not total IV CL: unit". "l h-1 kg-1" is `L/h/kg`, "mL/kg/min" is `mL/min/kg`, "L/h per 70 kg" is `L/h/70kg`, and "ml/min per m(2)" (per square metre, not per 1.73 m²) is `mL/min/m2`. Record a stated BSA in `bsa_m2` and a stated height in `height_cm`.
 - **summary** is `mean`, `median`, `geometric_mean` or `typical` (a population model's typical value).
 - **Quotes** are copied exactly from the printed abstract text. Each number must appear inside its own quote.
-- **Adult values** need no age range. Give `age_quote` when the abstract states an age; otherwise leave it null and flag `adult_age_unstated` (healthy volunteers only, Amendment 2 §5).
-- **Flags** are from PROTOCOL.md: `critically_ill`, `weight_imputed` (leave weight null instead; the scorer adds this flag), `ga_imputed`, `allometric_standardized`, `fixed_maturation`, `fixed_allometry`, `with_tazobactam`, `pca_as_pma`, `adult_weight_missing`, `adult_age_unstated`.
+- **Adults** qualify when aged 18–65 years (or healthy volunteers with no stated age), healthy or with normal renal function, given the drug IV without probenecid (Amendment 1 §2). Give `age_quote` when an age is stated; otherwise leave it null and flag `adult_age_unstated`. An absolute clearance (L/h, mL/min, mL/h, L/min, L/day) with no stated weight is flagged `adult_weight_missing`.
+- **Flags** you record are: `critically_ill`, `allometric_standardized`, `fixed_maturation`, `fixed_allometry`, `with_tazobactam`, `pca_as_pma`, `adult_weight_missing`, `adult_age_unstated` (definitions in PROTOCOL.md). A study-level flag applies to all its observations, an observation-level flag to that one only. The scorer adds `weight_imputed`, `ga_imputed` and `bsa_costeff` itself, so leave the weight, GA or BSA null instead of guessing.
 - **Observations.** Record one per age group or covariate point the abstract reports. When an abstract gives both a group summary and a model typical value for the same group, record only the group summary.
 - **Stop rule.** Stop when `next` prints "NOTHING OPEN".
