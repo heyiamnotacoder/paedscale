@@ -39,3 +39,36 @@ def test_the_manuscript_fills_from_the_committed_benchmark_outputs():
     with open(os.path.join(build.HERE, "manuscript.md")) as f:
         text = build.render(f.read(), build.values(results, refset))
     assert "{{" not in text and "0.77 (95% CI 0.58–0.96)" in text
+
+
+def _committed():
+    import json
+    import os
+    with open(os.path.join(build.OUTPUT, "results.json")) as f:
+        results = json.load(f)
+    with open(os.path.join(build.BENCH, "reference_set.json")) as f:
+        refset = json.load(f)
+    return results, refset
+
+
+def test_fractions_excreted_keep_three_decimals_and_say_when_imputed():
+    results, refset = _committed()
+    table = build.drug_table(refset)
+    assert "| meropenem |" in table and "0.625" in table
+    assert "0.900 (qualitative)" in table          # ampicillin: protocol default for a qualitative label
+
+
+def test_the_method_tables_report_every_prespecified_secondary_endpoint():
+    results, refset = _committed()
+    head = build.method_table(results, "newborn").splitlines()[0]
+    assert "Within labeled range" in head and "Pair-weighted AAFE" in head
+
+
+def test_a_sensitivity_analysis_without_a_label_stops_the_build():
+    import copy
+    import pytest
+    results, refset = _committed()
+    r = copy.deepcopy(results)
+    r["sensitivity"]["S11_new"] = r["sensitivity"]["S1_exclude_mgkg_shared"]
+    with pytest.raises(KeyError, match="S11_new"):
+        build.sensitivity_table(r)

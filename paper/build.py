@@ -65,7 +65,7 @@ def ratio_with_ci(h: dict, label: bool = True) -> str:
     return f"{_ratio(10 ** h['mean_abs_log10_diff'])} ({'95% CI ' if label else ''}{_ratio(lo)}–{_ratio(hi)})"
 
 
-def _fe(x: float, ci: list | None) -> str:
+def _fold(x: float, ci: list | None) -> str:
     return f"{x:.2f} ({ci[0]:.2f}–{ci[1]:.2f})" if ci else f"{x:.2f}"
 
 
@@ -78,13 +78,16 @@ def _p(p: float | None) -> str:
 
 
 def method_table(results: dict, population: str) -> str:
-    rows = ["| Method | AAFE (95% CI) | AFE (95% CI) | Within 0.67–1.5× | Within 0.5–2× |",
-            "|---|---|---|---|---|"]
+    rows = ["| Method | AAFE (95% CI) | AFE (95% CI) | Within 0.67–1.5× (95% CI) | Within 0.5–2× (95% CI) | "
+            "Within labeled range (95% CI) | Pair-weighted AAFE (95% CI) |",
+            "|---|---|---|---|---|---|---|"]
     for m in METHOD_ORDER:
         s = results["by_method"][population][m]
-        rows.append(f"| {METHOD_LABEL[m]} | {_fe(s['aafe'], s.get('aafe_ci95'))} | "
-                    f"{_fe(s['afe'], s.get('afe_ci95'))} | {_pct(s['within_1_5'], s.get('within_1_5_ci95'))} | "
-                    f"{_pct(s['within_2'], s.get('within_2_ci95'))} |")
+        rows.append(f"| {METHOD_LABEL[m]} | {_fold(s['aafe'], s.get('aafe_ci95'))} | "
+                    f"{_fold(s['afe'], s.get('afe_ci95'))} | {_pct(s['within_1_5'], s.get('within_1_5_ci95'))} | "
+                    f"{_pct(s['within_2'], s.get('within_2_ci95'))} | "
+                    f"{_pct(s['within_label_range'], s.get('within_label_range_ci95'))} | "
+                    f"{_fold(s['pair_weighted_aafe'], s.get('pair_weighted_aafe_ci95'))} |")
     return "\n".join(rows)
 
 
@@ -113,6 +116,9 @@ def sensitivity_table(results: dict) -> str:
     rows = ["| Analysis | Newborns: drugs, ratio (95% CI) | All ages: drugs, ratio (95% CI) |",
             "|---|---|---|"]
     sens = results["sensitivity"]
+    unknown = sorted(set(sens) - set(SENSITIVITY_LABEL) - {"S6_leave_one_drug_out"})
+    if unknown:
+        raise KeyError(f"no label for sensitivity analysis: {', '.join(unknown)}")
     for k, label in SENSITIVITY_LABEL.items():
         if k not in sens:
             continue
@@ -121,11 +127,14 @@ def sensitivity_table(results: dict) -> str:
             h = sens[k].get(pop) or {}
             cells.append(f"{h['n_clusters']}, {ratio_with_ci(h, label=False)}" if h.get("n_pairs") else "not estimable")
         rows.append(f"| {label} | {cells[0]} | {cells[1]} |")
-    s6 = sens.get("S6_leave_one_drug_out", {})
-    if s6:
-        rng = {p: f"{_ratio(10 ** s6[p]['min'])} to {_ratio(10 ** s6[p]['max'])}" for p in ("newborn", "all")}
-        rows.append(f"| S6 Leave one drug out (range of point estimates) | {rng['newborn']} | {rng['all']} |")
+    rows.append(f"| S6 Leave one drug out (range of point estimates) | {s6_range(results, 'newborn')} | "
+                f"{s6_range(results, 'all')} |")
     return "\n".join(rows)
+
+
+def s6_range(results: dict, population: str) -> str:
+    s6 = results["sensitivity"]["S6_leave_one_drug_out"][population]
+    return f"{_ratio(10 ** s6['min'])} to {_ratio(10 ** s6['max'])}"
 
 
 def drug_table(refset: dict) -> str:
@@ -136,8 +145,10 @@ def drug_table(refset: dict) -> str:
             continue
         fe = d.get("fe") or {}
         fev = fe.get("value")
+        note = {"fe_qualitative": " (qualitative)", "fe_not_in_label": " (not in label)"}
+        tag = "".join(note[f] for f in fe.get("flags", []) if f in note)
         rows.append(f"| {name.replace('_', ' ')} | {d.get('class', '')} | {d['target_metric']} | "
-                    f"{'—' if fev is None else f'{fev:.2f}'} | {d.get('nonrenal_enzyme') or '—'} | "
+                    f"{'—' if fev is None else f'{fev:.3f}{tag}'} | {d.get('nonrenal_enzyme') or '—'} | "
                     f"{len(d.get('bands') or [])} |")
     return "\n".join(rows)
 
@@ -164,7 +175,7 @@ def stratum_table(results: dict) -> str:
 def values(results: dict, refset: dict) -> dict:
     hyp, bm, cov, prov = results["hypotheses"], results["by_method"], results["uncertainty_coverage"], results["provenance"]
     v = {
-        "n_candidates": sum(1 for _ in refset["drugs"]),
+        "n_candidates": len(refset["drugs"]),
         "n_drugs": results["n_included_drugs"], "n_bands": results["n_bands"],
         "n_excluded": len(results["excluded"]),
         "excluded_list": ", ".join(sorted(results["excluded"])),
@@ -182,8 +193,8 @@ def values(results: dict, refset: dict) -> dict:
         v[f"table_methods_{pop}"] = method_table(results, pop)
         for m in METHOD_ORDER:
             s = bm[pop][m]
-            v[f"{pop}_{m}_aafe"] = _fe(s["aafe"], s.get("aafe_ci95"))
-            v[f"{pop}_{m}_afe"] = _fe(s["afe"], s.get("afe_ci95"))
+            v[f"{pop}_{m}_aafe"] = _fold(s["aafe"], s.get("aafe_ci95"))
+            v[f"{pop}_{m}_afe"] = _fold(s["afe"], s.get("afe_ci95"))
             v[f"{pop}_{m}_w15"] = _pct(s["within_1_5"], s.get("within_1_5_ci95"))
             v[f"{pop}_{m}_w2"] = _pct(s["within_2"], s.get("within_2_ci95"))
     for k in ("H1", "H2", "H3"):
@@ -195,9 +206,8 @@ def values(results: dict, refset: dict) -> dict:
     for m in ("weight_linear", "bsa", "allometry"):
         v[f"sec_{m}"] = ratio_with_ci(results["secondary"][m])
         v[f"sec_{m}_holm"] = _p(results["secondary"][m].get("wilcoxon_p_holm"))
-    s6 = results["sensitivity"]["S6_leave_one_drug_out"]
     for pop in ("newborn", "all"):
-        v[f"s6_{pop}"] = f"{_ratio(10 ** s6[pop]['min'])} to {_ratio(10 ** s6[pop]['max'])}"
+        v[f"s6_{pop}"] = s6_range(results, pop)
     return v
 
 
