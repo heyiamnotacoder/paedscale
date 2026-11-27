@@ -185,6 +185,7 @@ def compute_pediatric_dose(
     oral_bioavailability: Optional[float] = None,
     routes_allowed: Optional[list[str]] = None,  # explicit viable routes; None = infer from F
     assume_term: bool = True,
+    maturation: Optional[dict] = None,     # override MATURATION (uncertainty sampling only)
 ) -> DoseResult:
     """Scale adult PK to a pediatric dose via allometry × pathway-wise maturation.
 
@@ -239,17 +240,18 @@ def compute_pediatric_dose(
             "incomplete or inconsistent; treat clearance estimate as uncertain."
         )
 
+    curves = MATURATION if maturation is None else maturation
     cl_scale = allometric_scale(weight_kg, CL_EXPONENT)
     pathways: list[PathwayResult] = []
     cl_child = 0.0
 
     for pathway, fraction in fm.items():
-        if pathway not in MATURATION:
+        if pathway not in curves:
             raise ValueError(
                 f"No maturation curve for pathway '{pathway}'. Refusing to invent one — "
-                f"known pathways: {sorted(MATURATION)}. Flag as a data gap instead."
+                f"known pathways: {sorted(curves)}. Flag as a data gap instead."
             )
-        params = MATURATION[pathway]
+        params = curves[pathway]
         mf = maturation_factor(pma, params["tm50_weeks"], params["hill"])
         of = renal_function_fraction if pathway.startswith("renal") else hepatic_function_fraction
         cl_pathway = cl_adult_l_h * fraction * cl_scale * mf * of

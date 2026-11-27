@@ -1,0 +1,39 @@
+name: tests
+
+# Deterministic core only: no API key, no network. The live agent eval
+# (tests.test_agent) needs ANTHROPIC_API_KEY + PubMed/openFDA and is not run here.
+on:
+  push:
+  pull_request:
+
+jobs:
+  deterministic:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: |
+            backend/requirements.txt
+            benchmark/requirements.txt
+      - name: Install
+        run: pip install -r requirements.txt
+      - name: Engine, scorers, safety stops
+        run: python -m tests.test_pk
+      - name: Uncertainty layer
+        run: python -m tests.test_uncertainty
+      - name: Hepatic-impairment facades
+        run: |
+          python -m tests.test_hi_table
+          python -m tests.test_hi_gate
+          python -m tests.test_pediatric_hi
+          python -m tests.test_adult_hi
