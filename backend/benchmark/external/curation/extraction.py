@@ -1,4 +1,4 @@
-"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-7).
+"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-8).
 
 An extraction record lists, per drug and per screening pass, every screened abstract with its
 decision and, when included, its observations. Each observation is:
@@ -131,9 +131,8 @@ def problems(obs: dict, abstract: str, study_flags=()) -> list[str]:
         out.append("no postnatal or postmenstrual age")
     if out:                                   # the age rules below need well-formed ages
         return out
-    ga = _ga_from_pma(obs)
-    if ga is not None and not 20 <= ga <= 45:
-        out.append(f"PMA {obs['pma_weeks']} weeks and postnatal age {obs['pna_days']} days imply a GA of {ga:.1f} weeks")
+    if ga_problem(obs):
+        out.append(ga_problem(obs))
     if _cl(obs).get("unit") == "L/h/70kg":         # Amendment 1 §3, Amendments 5 §3, 6 §2
         if "allometric_standardized" not in set(flags) | set(study_flags or []):
             out.append("a per-70 kg value needs the allometric_standardized flag")
@@ -189,23 +188,31 @@ def age_range(obs: dict, age: str) -> list | None:
     return v if isinstance(v, list) else None
 
 
-def _ga_from_pma(obs: dict) -> float | None:
-    """PMA − postnatal age, both at their arithmetic midpoints (Amendment 7 §1), or None."""
-    pma = central(obs.get("pma_weeks"), geometric=False)
-    pna = central(obs.get("pna_days"), geometric=False)
-    return None if pma is None or pna is None else pma - pna / 7
+def _bounds(obs: dict, age: str) -> tuple[float, float] | None:
+    rng = age_range(obs, age)
+    if rng:
+        return rng[0], rng[1]
+    v = obs.get(RANGE_FIELDS[age][0])
+    return None if v is None else (v, v)
+
+
+def ga_problem(obs: dict) -> str | None:
+    """PMA and postnatal age agree when their ranges allow some GA of 20-45 weeks (Amendment 8 §2)."""
+    pma, pna = _bounds(obs, "pma"), _bounds(obs, "pna")
+    if pma is None or pna is None:
+        return None
+    lowest, highest = pma[0] - pna[1] / 7, pma[1] - pna[0] / 7
+    if highest < 20 or lowest > 45:
+        return f"PMA {obs['pma_weeks']} weeks and postnatal age {obs['pna_days']} days imply a GA outside 20-45 weeks"
+    return None
 
 
 def gestational_weeks(obs: dict) -> float:
-    """GA in weeks: as stated; else PMA − postnatal age when both are stated; else 32 weeks for
-    a group described as preterm and 40 otherwise, never above the stated PMA (PROTOCOL.md
-    'Missing gestational age'; Amendments 5 §2, 7 §1)."""
+    """GA in weeks: as stated; else 32 weeks for a group described as preterm and 40 otherwise,
+    never above the stated PMA (PROTOCOL.md 'Missing gestational age'; Amendment 8 §1)."""
     ga = central(obs.get("ga_weeks"), geometric=False)
     if ga is not None:
         return ga
-    inferred = _ga_from_pma(obs)
-    if inferred is not None:
-        return inferred
     pma = central(obs.get("pma_weeks"), geometric=False)
     default = 32 if obs.get("preterm") else 40
     return min(default, pma) if pma is not None else default

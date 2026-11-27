@@ -1,6 +1,6 @@
 # Screening and extraction guide (operational)
 
-This guide says *how* to record screening decisions. The rules themselves are in `PROTOCOL.md`, Amendments 1 to 7. Where the two differ, PROTOCOL.md wins. Each pass works only from PROTOCOL.md, this guide and the abstract texts. A pass never opens another pass's folder.
+This guide says *how* to record screening decisions. The rules themselves are in `PROTOCOL.md`, Amendments 1 to 8. Where the two differ, PROTOCOL.md wins. Each pass works only from PROTOCOL.md, this guide and the abstract texts. A pass never opens another pass's folder.
 
 ## Commands (from `backend/`)
 
@@ -36,8 +36,8 @@ python3 -m benchmark.external.curation.check <pass> [<drug>]            # valida
 - **Ages.** Postnatal age (`pna_days`) is in days; GA (`ga_weeks`) and PMA (`pma_weeks`) are in weeks. Each is a number (the stated central value), a `[low, high]` range when only a range is stated, or null. When both a central value and a range are stated, put the central value in the field and the range in `pna_range_days`, `ga_range_weeks` or `pma_range_weeks`. Convert with year = 365.25 d, month = 30.4375 d, week = 7 d. `age_quote` holds the text as reported.
   - A group needs a postnatal age or a PMA. GA alone does not say when clearance was measured: exclude with "no age" (Amendment 4 §3).
   - "Conceptional" or "postconceptional" age goes in `pma_weeks`, flagged `pca_as_pma`.
-  - Every pediatric observation has `"preterm"`: true when the abstract describes the group as preterm or premature, even without a numeric GA; otherwise false. The scorer uses it to impute GA.
-  - When both PMA and postnatal age are given, they must imply a GA of 20–45 weeks; otherwise re-read the abstract, because one of them is recorded wrongly.
+  - Every pediatric observation has `"preterm"`: true when the abstract describes the group as preterm or premature, even without a numeric GA; otherwise false. The scorer uses it to impute GA (Amendment 7 §2, Amendment 8 §1).
+  - When both PMA and postnatal age are given, their stated values or ranges must allow some GA of 20–45 weeks; otherwise re-read the abstract, because one of them is recorded wrongly (Amendment 8 §2).
 - **Units.** Use exactly one of: `L/h`, `mL/min`, `mL/h`, `L/min`, `L/day`, `L/h/kg`, `mL/min/kg`, `mL/h/kg`, `L/day/kg`, `L/h/70kg`, `mL/min/1.73m2`, `L/h/1.73m2`, `mL/h/1.73m2`, `mL/min/m2`, `L/h/m2`. A value in any other unit is excluded with "not total IV CL: unit". "l h-1 kg-1" is `L/h/kg`, "mL/kg/min" is `mL/min/kg`, "L/h per 70 kg" is `L/h/70kg`, and "ml/min per m(2)" (per square metre, not per 1.73 m²) is `mL/min/m2`. Record a stated BSA in `bsa_m2` with `bsa_quote`, and a stated height in `height_cm` with `height_quote`.
 - **Weight** is a number (the stated mean or median) or a `[low, high]` range when only a range is stated, with `weight_quote`. Leave it null when no weight is stated.
 - **Per-70 kg values** (`L/h/70kg`) need the `allometric_standardized` flag and the age the typical value applies at: a PMA, a postnatal age with GA, or a postnatal age whose whole stated range is 2 years or older (Amendment 1 §3, Amendment 6 §2). Otherwise exclude with "not total IV CL: per 70 kg without age".

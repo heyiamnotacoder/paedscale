@@ -287,3 +287,11 @@ This answers a fourth code review and corrects Amendment 6. These rules override
 1. **GA from PMA and postnatal age** subtracts the arithmetic midpoints of both, because a GA is a difference of two ages on the same scale. Amendment 6 §4 used the geometric midpoint of the postnatal range here, which made consistent wide-range infant groups (for example PMA 26–100 weeks with postnatal age 1–500 days) look like recording errors. The geometric midpoint is still used for the stratum and the under-2 split (Amendment 1 §6).
 2. **Preterm status is always recorded.** Every pediatric observation states whether the abstract describes the group as preterm, so a missing answer cannot silently default to term.
 3. **Wording.** Unit-first tally forms (Amendment 6 §1) also keep up to 20 unmasked characters inside the brackets.
+
+### Amendment 8 — 2026-11-27, at the same point as Amendment 5 (nothing more seen), before any abstract was screened or any value was extracted
+
+This answers a fifth code review. These rules override the text above where the two conflict.
+
+1. **GA is not inferred from PMA and postnatal age.** Group summaries of PMA and postnatal age do not subtract to the group's GA: a term group at PMA 40 weeks with postnatal age 1–121 days would come out as 31 weeks and be filed as preterm. Amendment 5 §2 (first sentence) and Amendment 7 §1 are withdrawn. GA is as stated; otherwise 32 weeks for a group described as preterm and 40 weeks for any other group, capped at the stated PMA. The engine uses PMA directly whenever it is stated (Amendment 1 §6), so this GA affects only the stratum and weight imputation.
+2. **Consistency of PMA and postnatal age.** When both are stated, an observation is reported as a recording error only if no GA of 20–45 weeks fits both: the largest stated PMA minus the smallest postnatal age is below 20 weeks, or the smallest PMA minus the largest postnatal age is above 45 weeks.
+3. **Inputs to each pass.** Both passes work from this protocol, `SCREENING_GUIDE.md` (the record format that `curation/check.py` enforces, which defers to this protocol) and the abstract texts. This is what Amendment 1 §9 means by "only this protocol and the abstract texts".
