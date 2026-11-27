@@ -1,6 +1,7 @@
 """External validation, step 1 (network): snapshot the PubMed searches fixed in PROTOCOL.md.
 
-Usage (from backend/): python3 -m benchmark.external.curation.search
+Usage (from backend/): python3 -m benchmark.external.curation.search [restore]
+`restore` re-fetches the committed snapshot's abstracts and checks them against its hashes.
 Writes benchmark/external/search/<drug>.json (committed): the queries, the retrieval date, every
 PMID returned (ascending), and per PMID the SHA-256 of the abstract text and whether the
 mechanical pre-filter matched. Abstract texts go to benchmark/external/abstracts/ (gitignored,
@@ -131,6 +132,36 @@ def _abstracts(pmids: list[str]) -> dict[str, dict]:
     return out
 
 
+def matching_texts(rows: list[dict], recs: dict) -> dict[str, str]:
+    """The abstract text of every snapshot row, re-fetched. A text whose SHA-256 differs from
+    the committed one, or a PMID that no longer returns, stops the restore: screening reads
+    only the snapshot (PROTOCOL.md, Literature search)."""
+    out, bad = {}, []
+    for r in rows:
+        t = (recs.get(r["pmid"]) or {}).get("text")
+        if t is None or hashlib.sha256(t.encode()).hexdigest() != r["sha256"]:
+            bad.append(r["pmid"])
+        else:
+            out[r["pmid"]] = t
+    if bad:
+        raise RuntimeError(f"re-fetched abstracts differ from the snapshot for PMIDs: {', '.join(bad)}")
+    return out
+
+
+def restore(drug: str) -> int:
+    """Re-fetch the abstract texts of a committed snapshot into ABSTRACT_DIR (gitignored),
+    checking each against its committed hash. Returns the number of texts written."""
+    with open(os.path.join(SEARCH_DIR, f"{drug}.json"), encoding="utf-8") as f:
+        snap = json.load(f)
+    os.makedirs(os.path.join(ABSTRACT_DIR, drug), exist_ok=True)
+    rows = snap["pediatric"] + snap["adult"]
+    texts = matching_texts(rows, _abstracts(sorted({r["pmid"] for r in rows}, key=int)))
+    for p, t in texts.items():
+        with open(os.path.join(ABSTRACT_DIR, drug, f"{p}.txt"), "w", encoding="utf-8") as f:
+            f.write(t)
+    return len(texts)
+
+
 def snapshot(drug: str, today: str) -> dict:
     ped_q, adult_q = queries(drug)
     record = {"drug": drug, "retrieved": today, "queries": {"pediatric": ped_q, "adult": adult_q}}
@@ -152,6 +183,11 @@ def snapshot(drug: str, today: str) -> dict:
 
 
 if __name__ == "__main__":
+    import sys
+    if sys.argv[1:] == ["restore"]:         # re-fetch the committed snapshot's abstracts
+        for d in drugs():
+            print(d, restore(d))
+        sys.exit()
     os.makedirs(SEARCH_DIR, exist_ok=True)
     today = dt.date.today().isoformat()
     for d in drugs():

@@ -77,3 +77,23 @@ def test_empty_warning_lists_are_harmless():
     ok = {"count": "1", "idlist": ["1"], "warninglist": {"phrasesignored": [], "quotedphrasesnotfound": [],
                                                        "outputmessages": []}}
     assert search.checked_ids(ok) == ["1"]
+
+
+def _row(pmid, text, prefilter=True):
+    import hashlib
+    return {"pmid": pmid, "year": "2001", "sha256": hashlib.sha256(text.encode()).hexdigest(),
+            "prefilter": prefilter}
+
+
+def test_restored_abstracts_must_match_the_committed_hashes():
+    import pytest
+    rows = [_row("1", "T\n\nclearance 3 L/h"), _row("2", "U\n\nnone")]
+    recs = {"1": {"text": "T\n\nclearance 3 L/h", "has_abstract": True},
+            "2": {"text": "U\n\nnone", "has_abstract": True}}
+    assert search.matching_texts(rows, recs) == {"1": "T\n\nclearance 3 L/h", "2": "U\n\nnone"}
+    recs["2"]["text"] = "U\n\nnone (corrected)"
+    with pytest.raises(RuntimeError, match="2"):
+        search.matching_texts(rows, recs)
+    del recs["1"]
+    with pytest.raises(RuntimeError, match="1"):
+        search.matching_texts(rows, recs)

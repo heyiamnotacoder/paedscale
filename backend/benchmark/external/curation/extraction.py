@@ -122,6 +122,8 @@ def problems(obs: dict, abstract: str, study_flags=()) -> list[str]:
         c, r = obs.get(central_key), obs.get(range_key)
         if c is not None and not (_is_num(c) or _is_range(c)):
             out.append(f"{central_key} {c!r} is not a non-negative number or [low, high] range")
+        if r is not None and c is None:            # Amendment 11 §2
+            out.append(f"{range_key} is given without its central field {central_key}; a range-only age goes in {central_key}")
         if r is not None:
             if not _is_range(r):
                 out.append(f"{range_key} {r!r} is not a [low, high] range")
@@ -195,13 +197,14 @@ def _bounds(obs: dict, age: str) -> tuple[float, float] | None:
     return None if v is None else (tuple(v) if isinstance(v, list) else (v, v))
 
 
-def _ga_ceiling(obs: dict) -> float | None:
-    """Central PMA minus central postnatal age (arithmetic midpoints of ranges), or None without
-    a PMA. GA cannot exceed it (Amendment 10 §1)."""
+def _default_ga_cap(obs: dict) -> float | None:
+    """Central PMA minus the smallest stated postnatal age, or None without a PMA. A member at
+    the central PMA was born no later than this (Amendment 11 §1)."""
     pma = central(obs.get("pma_weeks"), geometric=False)
     if pma is None:
         return None
-    return pma - (central(obs.get("pna_days"), geometric=False) or 0) / 7
+    pna = _bounds(obs, "pna")
+    return pma - (pna[0] if pna else 0) / 7
 
 
 def ga_problem(obs: dict) -> str | None:
@@ -220,14 +223,14 @@ def ga_problem(obs: dict) -> str | None:
 
 def gestational_weeks(obs: dict) -> float:
     """GA in weeks: as stated; else 32 weeks for a group described as preterm and 40 otherwise,
-    capped at central PMA minus central postnatal age (PROTOCOL.md 'Missing gestational age';
-    Amendments 8 §1, 10 §1)."""
+    capped at central PMA minus the smallest postnatal age (PROTOCOL.md 'Missing gestational age';
+    Amendments 8 §1, 11 §1)."""
     ga = central(obs.get("ga_weeks"), geometric=False)
     if ga is not None:
         return ga
     default = 32 if obs.get("preterm") else 40
-    ceiling = _ga_ceiling(obs)
-    return default if ceiling is None else min(default, ceiling)
+    cap = _default_ga_cap(obs)
+    return default if cap is None else min(default, cap)
 
 
 def ga_imputed(obs: dict) -> bool:

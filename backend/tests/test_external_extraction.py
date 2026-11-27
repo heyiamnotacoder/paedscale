@@ -183,3 +183,21 @@ def test_a_stated_ga_above_the_pma_is_a_problem():
 def test_a_pma_without_a_postnatal_age_is_not_a_consistency_error():
     assert not any("allow no GA" in p for p in ex.problems(
         _obs(pna_days=None, ga_weeks=None, pma_weeks=50, pma_range_weeks=[46, 60]), ABSTRACT))
+
+
+def test_default_ga_cap_uses_the_smallest_postnatal_age_so_wide_term_groups_stay_term():
+    # Amendment 11 §1: the A8 §1 example is term again; the A10 §1 examples are unchanged
+    wide = {"ga_weeks": None, "pma_weeks": 40, "pna_days": [1, 121], "preterm": False}
+    assert ex.gestational_weeks(wide) == pytest.approx(40 - 1 / 7) and not ex.ga_imputed(wide)
+    assert ex.stratum(ex.central(wide["pna_days"], geometric=True), ex.gestational_weeks(wide)) == "term_newborn"
+    ranged = {"ga_weeks": None, "pma_weeks": 44, "pna_days": 30, "pna_range_days": [7, 90], "preterm": False}
+    assert ex.gestational_weeks(ranged) == 40                       # 44 - 1 = 43 leaves the default
+    narrow = {"ga_weeks": None, "pma_weeks": 36, "pna_days": 30, "pna_range_days": [14, 60], "preterm": False}
+    assert ex.gestational_weeks(narrow) == 34 and ex.ga_imputed(narrow)   # 36 - 2 = 34
+
+
+def test_a_range_without_its_central_field_is_a_problem():
+    # Amendment 11 §2: a range-only age goes in the main field
+    for kw in ({"pma_weeks": None, "pma_range_weeks": [28, 40], "pna_days": 3},
+               {"pna_days": None, "pna_range_days": [0, 200], "pma_weeks": 40}):
+        assert any("without its central field" in p for p in ex.problems(_obs(**kw), ABSTRACT))
