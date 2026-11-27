@@ -11,6 +11,7 @@ Detail lives in lean skills (backend/skills/) via load_skill — keep SYSTEM sho
 from __future__ import annotations
 
 import json
+import math
 from typing import Optional
 import os
 
@@ -373,28 +374,41 @@ def _run_adult_hi_case(case: dict, on_step=None) -> dict:
     }
 
 
+def _number(x) -> bool:
+    return isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x)
+
+
 def apply_final_dose_safety_flags(rec: dict, dossier: Optional[dict],
                                   weight_kg: Optional[float] = None) -> dict:
     """Flag a final dose past a cited toxic/effective bound (CLAUDE.md safety-bounds rule).
 
     The engine checks its own dose; the final dose may be guideline-anchored, so it is
     checked again here, independently of the optional parameter-uncertainty interval.
-    A mg/day-only dose is converted with the patient's weight.
+    Both stated doses are checked: mg/kg/day directly, and mg/day divided by the patient's
+    weight (when the weight is a positive finite number). Each bound flags at most once,
+    on the dose furthest past it, and a derived value says how it was derived.
     """
+    doses = []   # (mg/kg/day, how it reads in the flag)
     dpk = rec.get("final_dose_mg_per_kg_per_day")
+    if _number(dpk):
+        doses.append((dpk, f"{dpk:g} mg/kg/day"))
     per_day = rec.get("final_dose_mg_per_day")
-    if not isinstance(dpk, (int, float)) and isinstance(per_day, (int, float)) and weight_kg:
-        dpk = per_day / weight_kg
+    if _number(per_day) and _number(weight_kg) and weight_kg > 0:
+        derived = per_day / weight_kg
+        doses.append((derived, f"{per_day:g} mg/day for {weight_kg:g} kg (= {derived:.3g} mg/kg/day)"))
     dossier = dossier or {}
     toxic = dossier.get("toxic_dose_mg_per_kg_per_day")
     effective = dossier.get("effective_dose_mg_per_kg_per_day")
     flags = list(rec.get("flags") or [])
-    if isinstance(dpk, (int, float)):
-        if toxic is not None and dpk > toxic:
-            flags.append(f"ABOVE TOXIC THRESHOLD: recommended {dpk:g} mg/kg/day exceeds the cited "
+    if doses and toxic is not None:
+        value, text = max(doses)
+        if value > toxic:
+            flags.append(f"ABOVE TOXIC THRESHOLD: recommended {text} exceeds the cited "
                          f"toxic threshold {toxic:g} mg/kg/day.")
-        if effective is not None and dpk < effective:
-            flags.append(f"BELOW EFFECTIVE THRESHOLD: recommended {dpk:g} mg/kg/day is below the cited "
+    if doses and effective is not None:
+        value, text = min(doses)
+        if value < effective:
+            flags.append(f"BELOW EFFECTIVE THRESHOLD: recommended {text} is below the cited "
                          f"effective threshold {effective:g} mg/kg/day.")
     rec["flags"] = flags
     return rec

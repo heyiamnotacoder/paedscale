@@ -124,3 +124,24 @@ def test_a_per_day_only_final_dose_is_checked_per_kg_using_the_weight():
     no_wt = apply_final_dose_safety_flags(
         {"final_dose_mg_per_kg_per_day": None, "final_dose_mg_per_day": 800.0, "flags": []}, dossier)
     assert no_wt["flags"] == []
+
+
+def test_both_dose_fields_are_checked_and_a_derived_value_is_labelled():
+    """A per-kg value that disagrees with mg/day must not hide an unsafe mg/day dose:
+    20 kg, 10 mg/kg/day stated, 2000 mg/day stated (= 100 mg/kg/day), toxic 30."""
+    from agents.agent import apply_final_dose_safety_flags
+    dossier = {"toxic_dose_mg_per_kg_per_day": 30.0}
+    rec = {"final_dose_mg_per_kg_per_day": 10.0, "final_dose_mg_per_day": 2000.0, "flags": []}
+    out = apply_final_dose_safety_flags(rec, dossier, weight_kg=20.0)
+    hit = [f for f in out["flags"] if "ABOVE TOXIC THRESHOLD" in f]
+    assert len(hit) == 1 and "2000 mg/day" in hit[0] and "20 kg" in hit[0]
+
+
+def test_an_unusable_weight_does_not_produce_a_derived_check():
+    from agents.agent import apply_final_dose_safety_flags
+    dossier = {"toxic_dose_mg_per_kg_per_day": 30.0, "effective_dose_mg_per_kg_per_day": 10.0}
+    for wt in (0, -5, float("inf"), True, None):
+        out = apply_final_dose_safety_flags(
+            {"final_dose_mg_per_kg_per_day": None, "final_dose_mg_per_day": 800.0, "flags": []},
+            dossier, weight_kg=wt)
+        assert out["flags"] == [], wt
