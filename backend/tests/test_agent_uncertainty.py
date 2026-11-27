@@ -96,3 +96,18 @@ def test_no_interval_when_the_recommendation_withholds_a_dose():
     _build_compute(_neonate(), state)({"drug": "vancomycin", "weight_kg": 3.4, "pma_weeks": 41})
     rec = attach_parameter_uncertainty({"blocked": False, "final_dose_mg_per_kg_per_day": None}, state)
     assert rec["parameter_uncertainty"] is None
+
+
+def test_final_dose_past_a_cited_safety_bound_is_flagged_without_the_interval():
+    """The final (possibly guideline-anchored) dose is checked against the dossier bounds
+    in the backend, so the flag survives a missing parameter-uncertainty interval."""
+    from agents.agent import apply_final_dose_safety_flags
+    dossier = {"toxic_dose_mg_per_kg_per_day": 30.0, "effective_dose_mg_per_kg_per_day": 10.0}
+    high = apply_final_dose_safety_flags({"final_dose_mg_per_kg_per_day": 40.0, "flags": []}, dossier)
+    assert any("ABOVE TOXIC THRESHOLD" in f and "40" in f and "30" in f for f in high["flags"])
+    low = apply_final_dose_safety_flags({"final_dose_mg_per_kg_per_day": 5.0, "flags": []}, dossier)
+    assert any("BELOW EFFECTIVE THRESHOLD" in f for f in low["flags"])
+    ok = apply_final_dose_safety_flags({"final_dose_mg_per_kg_per_day": 20.0, "flags": ["x"]}, dossier)
+    assert ok["flags"] == ["x"]
+    none = apply_final_dose_safety_flags({"final_dose_mg_per_kg_per_day": None, "flags": []}, dossier)
+    assert none["flags"] == []

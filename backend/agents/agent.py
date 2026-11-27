@@ -11,6 +11,7 @@ Detail lives in lean skills (backend/skills/) via load_skill — keep SYSTEM sho
 from __future__ import annotations
 
 import json
+from typing import Optional
 import os
 
 from anthropic import Anthropic
@@ -370,6 +371,28 @@ def _run_adult_hi_case(case: dict, on_step=None) -> dict:
             "source_mode": source_mode,
         },
     }
+
+
+def apply_final_dose_safety_flags(rec: dict, dossier: Optional[dict]) -> dict:
+    """Flag a final dose past a cited toxic/effective bound (CLAUDE.md safety-bounds rule).
+
+    The engine checks its own dose; the final dose may be guideline-anchored, so it is
+    checked again here, independently of the optional parameter-uncertainty interval.
+    """
+    dpk = rec.get("final_dose_mg_per_kg_per_day")
+    dossier = dossier or {}
+    toxic = dossier.get("toxic_dose_mg_per_kg_per_day")
+    effective = dossier.get("effective_dose_mg_per_kg_per_day")
+    flags = list(rec.get("flags") or [])
+    if isinstance(dpk, (int, float)):
+        if toxic is not None and dpk > toxic:
+            flags.append(f"ABOVE TOXIC THRESHOLD: recommended {dpk:g} mg/kg/day exceeds the cited "
+                         f"toxic threshold {toxic:g} mg/kg/day.")
+        if effective is not None and dpk < effective:
+            flags.append(f"BELOW EFFECTIVE THRESHOLD: recommended {dpk:g} mg/kg/day is below the cited "
+                         f"effective threshold {effective:g} mg/kg/day.")
+    rec["flags"] = flags
+    return rec
 
 
 def attach_parameter_uncertainty(rec: dict, state: dict) -> dict:
@@ -842,6 +865,7 @@ def run_case(case: dict, on_step=None, max_turns: int = 12) -> dict:
                             or "SAFETY STOP — no cited applicable hepatic-impairment adjustment; abstain.",
                         )
                     merge_pediatric_hi_into_recommendation(rec, ped_hi)
+                apply_final_dose_safety_flags(rec, state.get("last_dossier"))
                 attach_parameter_uncertainty(rec, state)
                 attach_administration(rec, case)
                 return {

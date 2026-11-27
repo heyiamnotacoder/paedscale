@@ -50,8 +50,9 @@ def same_active_ingredient(generic: str, label: dict) -> bool:
     """Amendment 3: the label's active ingredients are exactly the candidate's (salts allowed;
     premix diluents such as dextrose are not active ingredients). Drops combination products
     that the openFDA phrase query also matches, e.g. ampicillin AND sulbactam for ampicillin.
-    Components split on the word "and" and on commas; a component made only of dosage-form,
-    package or strength words or numbers ("INJECTION", "USP", "1,000 UNITS") is dropped. Each wanted ingredient must match a different
+    Components split on the word "and" and on commas. A component made only of dosage-form,
+    package or strength words or numbers ("INJECTION", "USP", "1,000 UNITS") is dropped, and so
+    is a premix diluent ("IN 0.9% SODIUM CHLORIDE", "5% DEXTROSE"). Each wanted ingredient must match a different
     component as whole words."""
     wanted = [w.strip().lower() for w in re.split(r"\band\b", generic, flags=re.I)]
     for name in label.get("openfda", {}).get("generic_name") or []:
