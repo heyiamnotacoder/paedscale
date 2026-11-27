@@ -1,0 +1,24 @@
+:root { --ink: #1a1a1a; --ink2: #555; --rule: #d9d9d9; --wash: #f5f7fa; }
+html { background: #fff; }
+body { font-family: "Charter", "Georgia", "Times New Roman", serif; color: var(--ink); background: #fff;
+       max-width: 44em; margin: 0 auto; padding: 1.5em 16px; font-size: 10.5pt; line-height: 1.5; }
+header#title-block-header { text-align: left; border-bottom: 1px solid var(--rule); margin-bottom: 1.5em; }
+h1.title { font-size: 1.6em; line-height: 1.25; margin-bottom: .3em; }
+p.subtitle { color: #9a3412; font-weight: 600; margin: .2em 0; }
+p.author, p.date { color: var(--ink2); margin: .2em 0; }
+h1 { font-size: 1.25em; margin-top: 1.6em; border-bottom: 1px solid var(--rule); padding-bottom: .15em; }
+h2 { font-size: 1.05em; margin-top: 1.3em; }
+table { border-collapse: collapse; width: 100%; font-family: "Helvetica Neue", Arial, sans-serif;
+        font-size: 8.3pt; margin: .6em 0 1.2em; page-break-inside: avoid; }
+th, td { border-bottom: 1px solid var(--rule); padding: 3px 6px; text-align: left; vertical-align: top; }
+th { background: var(--wash); font-weight: 600; }
+figure { margin: 1.2em 0; page-break-inside: avoid; }
+figure img { max-width: 100%; }
+figcaption { font-size: 9pt; color: var(--ink2); margin-top: .3em; }
+code { font-size: .9em; }
+ol li { margin-bottom: .25em; font-size: 9.5pt; }
+/* Keep a table's caption on the same page as the table. */
+p:has(+ table) { break-after: avoid; page-break-after: avoid; }
+figure img { max-width: 88%; display: block; margin: 0 auto; }
+caption { caption-side: top; text-align: left; font-family: "Charter", "Georgia", serif; font-size: 9.5pt;
+          color: var(--ink); padding-bottom: .35em; }

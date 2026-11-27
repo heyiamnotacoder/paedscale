@@ -16,3 +16,6 @@ demo video/
 /result_eval.md
 /eval.md
 /validation_set/
+
+# Manuscript build output (regenerate with: python3 -m paper.build --pdf)
+/paper/build/

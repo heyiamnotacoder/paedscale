@@ -138,6 +138,12 @@ doses for 21 IV drugs (46 age bands).
   every change since then is a dated amendment.
 - **Traceability:** every reference dose carries a verbatim label quote that a test checks.
 - **Reproducing it:** `python3 -m benchmark.run` regenerates every number and figure.
+- **Results (first scoring, 10,000 bootstrap replicates):** against allometry + class rule, PaedScale's
+  typical fold error was 0.77× in newborns and 0.78× under 2 years, both with 95% CIs below 1. Across all
+  ages it was 0.91× and the CI reached 1.0004, so that hypothesis was not supported. Weight-linear scaling
+  matched newborn labels at least as well. Full numbers: `backend/benchmark/output/results.json`.
+- **Manuscript:** `paper/manuscript.md`. Every number is filled in from the committed outputs. Build it
+  from the repo root with `python3 -m paper.build --pdf` (needs pandoc and Node Playwright).
 
 ## Run
 

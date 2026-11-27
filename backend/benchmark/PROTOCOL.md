@@ -290,7 +290,7 @@ A code review of the Amendment 2 commit found the defects below. This amendment 
 - Looking at that run's figures showed a presentation fault: Figure 2 used fixed y ticks up to
   4×, so a 15.8× point (morphine, infant band, allometry + class rule) sat at the plot edge behind
   the legend, and Figure 3 used powers-of-ten tick labels. Commit `6e46766` changed only
-  `figures.py`. The scoring was re-run at that commit and every number in `results.json` was
+  `figures.py` and added a test for it. The scoring was re-run at that commit and every number in `results.json` was
   identical. The committed `benchmark/output/` comes from that re-run.
 - From here on, any change to label selection, the reference set, the growth table or the
   analysis is a post-scoring amendment and must say so.
