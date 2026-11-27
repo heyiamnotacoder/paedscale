@@ -54,9 +54,15 @@ def queries(drug: str) -> tuple[str, str]:
 
 
 def _request(method: str, url: str, **kw) -> httpx.Response:
-    """NCBI request with backoff on 429 and 5xx (five tries)."""
+    """NCBI request with backoff on 429, 5xx and transport errors (five tries)."""
     for attempt in range(5):
-        r = httpx.request(method, url, timeout=120, **kw)
+        try:
+            r = httpx.request(method, url, timeout=120, **kw)
+        except httpx.TransportError:          # connection reset, timeout: retry like a 5xx
+            if attempt == 4:
+                raise
+            time.sleep(2 ** attempt)
+            continue
         if r.status_code != 429 and r.status_code < 500:
             r.raise_for_status()
             return r
@@ -70,8 +76,9 @@ def checked_ids(res: dict) -> list[str]:
     in one call stop the snapshot rather than silently shrinking it."""
     if res.get("errorlist") or res.get("ERROR"):
         raise RuntimeError(f"esearch error: {res.get('errorlist') or res.get('ERROR')}")
-    if res.get("warninglist"):
-        raise RuntimeError(f"esearch warning: {res['warninglist']}")
+    warnings = {k: v for k, v in (res.get("warninglist") or {}).items() if v}
+    if warnings:
+        raise RuntimeError(f"esearch warning: {warnings}")
     if int(res["count"]) >= 10000:
         raise RuntimeError(f"esearch count {res['count']} reaches the 10000 retrieval limit")
     if len(res["idlist"]) != int(res["count"]):
@@ -96,19 +103,20 @@ def parse_efetch(xml: bytes) -> dict[str, dict]:
     for art in ET.fromstring(xml).iter("PubmedArticle"):
         pmid = art.findtext("MedlineCitation/PMID")
         title_el = art.find("MedlineCitation/Article/ArticleTitle")
-        title = "".join(title_el.itertext()).strip() if title_el is not None else ""
+        title = " ".join("".join(title_el.itertext()).split()) if title_el is not None else ""
         parts = []
         for a in art.findall("MedlineCitation/Article/Abstract/AbstractText"):
             text = " ".join("".join(a.itertext()).split())
             parts.append(f"{a.get('Label')}: {text}" if a.get("Label") else text)
         year = (art.findtext("MedlineCitation/Article/Journal/JournalIssue/PubDate/Year")
                 or (art.findtext("MedlineCitation/Article/Journal/JournalIssue/PubDate/MedlineDate") or "")[:4])
-        out[pmid] = {"text": (title + "\n\n" + "\n".join(parts)).strip(), "year": year}
+        out[pmid] = {"text": (title + "\n\n" + "\n".join(parts)).strip(), "year": year,
+                     "has_abstract": any(p.strip() for p in parts)}
     return out
 
 
 def require_all(pmids: list[str], recs: dict) -> None:
-    missing = [p for p in pmids if p not in recs or not recs[p]["text"]]
+    missing = [p for p in pmids if p not in recs or not recs[p].get("has_abstract")]
     if missing:
         raise RuntimeError(f"efetch returned no journal abstract for PMIDs: {', '.join(missing)}")
 

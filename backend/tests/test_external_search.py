@@ -49,7 +49,7 @@ def test_efetch_parsing_keeps_title_and_labelled_sections_only():
 def test_a_missing_abstract_stops_the_snapshot():
     import pytest
     with pytest.raises(RuntimeError, match="333"):
-        search.require_all(["111", "333"], {"111": {"text": "x", "year": "1998"}})
+        search.require_all(["111", "333"], {"111": {"text": "x", "year": "1998", "has_abstract": True}})
 
 
 def test_an_esearch_warning_stops_the_snapshot():
@@ -60,3 +60,20 @@ def test_an_esearch_warning_stops_the_snapshot():
         search.checked_ids({**ok, "warninglist": {"phrasesnotfound": ["x"]}})
     with pytest.raises(RuntimeError, match="10000"):
         search.checked_ids({**ok, "count": "12000"})
+
+
+def test_a_title_without_abstract_text_counts_as_missing_and_titles_are_collapsed():
+    import pytest
+    xml = b"""<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>5</PMID><Article>
+<ArticleTitle>Two
+ lines</ArticleTitle></Article></MedlineCitation></PubmedArticle></PubmedArticleSet>"""
+    recs = search.parse_efetch(xml)
+    assert recs["5"]["text"] == "Two lines"
+    with pytest.raises(RuntimeError, match="5"):
+        search.require_all(["5"], recs)
+
+
+def test_empty_warning_lists_are_harmless():
+    ok = {"count": "1", "idlist": ["1"], "warninglist": {"phrasesignored": [], "quotedphrasesnotfound": [],
+                                                       "outputmessages": []}}
+    assert search.checked_ids(ok) == ["1"]
