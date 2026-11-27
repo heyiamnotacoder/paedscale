@@ -8,7 +8,8 @@ ABSTRACT = ("Vancomycin in neonates.\n\nMETHODS: 40 neonates (postnatal age 3-20
 
 
 def _obs(**kw):
-    o = {"cl": {"value": 0.05, "unit": "L/h/kg", "summary": "mean", "quote": "Clearance was 0.05 L/h/kg"},
+    o = {"preterm": True,
+         "cl": {"value": 0.05, "unit": "L/h/kg", "summary": "mean", "quote": "Clearance was 0.05 L/h/kg"},
          "pna_days": [3, 20], "ga_weeks": [25, 32], "pma_weeks": None,
          "age_quote": "postnatal age 3-20 days, gestational age 25-32 weeks",
          "weight_kg": 1.2, "weight_quote": "weight 1.2 kg", "flags": []}
@@ -148,5 +149,13 @@ def test_preterm_must_be_a_boolean_and_pma_must_agree_with_postnatal_age():
     assert any("imply a GA" in p for p in ex.problems(_obs(pma_weeks=30, pna_days=400, ga_weeks=None), ABSTRACT))
 
 
-def test_ga_from_pma_uses_the_geometric_midpoint_of_a_postnatal_range():
-    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 40, "pna_days": [1, 121]}) == pytest.approx(40 - 11 / 7)
+def test_ga_from_pma_subtracts_arithmetic_midpoints():
+    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 40, "pna_days": [1, 121]}) == pytest.approx(40 - 61 / 7)
+    wide = _obs(pma_weeks=[26, 100], pna_days=[1, 500], ga_weeks=None, preterm=True)
+    assert not any("imply a GA" in p for p in ex.problems(wide, ABSTRACT))
+
+
+def test_every_pediatric_observation_says_whether_the_group_is_preterm():
+    o = _obs()
+    del o["preterm"]
+    assert any("preterm" in p for p in ex.problems(o, ABSTRACT))

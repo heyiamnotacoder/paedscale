@@ -279,3 +279,11 @@ This answers a third code review of the screening tools and corrects Amendment 5
 3. **Flags by list.** Pediatric records carry only `critically_ill`, `allometric_standardized`, `fixed_maturation`, `fixed_allometry`, `with_tazobactam` and `pca_as_pma`. Adult records carry only `with_tazobactam`, `adult_weight_missing` and `adult_age_unstated`. This refines Amendment 4 §5.
 4. **GA from PMA and postnatal age** uses the geometric midpoint of a postnatal range, as the stratum does (Amendment 1 §6). An observation whose PMA and postnatal age imply a GA outside 20–45 weeks is reported as a recording error.
 5. **Checks report, never raise.** A malformed record is reported as a problem for that study or that drug, and checking goes on.
+
+### Amendment 7 — 2026-11-27, at the same point as Amendment 5 (nothing more seen), before any abstract was screened or any value was extracted
+
+This answers a fourth code review and corrects Amendment 6. These rules override the text above where the two conflict.
+
+1. **GA from PMA and postnatal age** subtracts the arithmetic midpoints of both, because a GA is a difference of two ages on the same scale. Amendment 6 §4 used the geometric midpoint of the postnatal range here, which made consistent wide-range infant groups (for example PMA 26–100 weeks with postnatal age 1–500 days) look like recording errors. The geometric midpoint is still used for the stratum and the under-2 split (Amendment 1 §6).
+2. **Preterm status is always recorded.** Every pediatric observation states whether the abstract describes the group as preterm, so a missing answer cannot silently default to term.
+3. **Wording.** Unit-first tally forms (Amendment 6 §1) also keep up to 20 unmasked characters inside the brackets.

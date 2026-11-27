@@ -1,4 +1,4 @@
-"""Validate a screening pass's records (SCREENING_GUIDE.md; PROTOCOL.md, Amendments 3-5).
+"""Validate a screening pass's records (SCREENING_GUIDE.md; PROTOCOL.md, Amendments 3-7).
 
 Usage (from backend/): python3 -m benchmark.external.curation.check <pass> [<drug> ...]
 Checks that decisions follow the seeded order with no gaps and stop where the queue stops, that

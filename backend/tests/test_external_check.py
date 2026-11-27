@@ -13,7 +13,7 @@ def test_every_included_study_needs_valid_observations():
     abstract = "Title\n\nRESULTS: Clearance was 0.1 L/h/kg at a median age of 5 days in term neonates."
     good = {"pmid": "1", "decision": "include", "reason": "", "flags": [], "observations": [
         {"cl": {"value": 0.1, "unit": "L/h/kg", "summary": "median", "quote": "Clearance was 0.1 L/h/kg"},
-         "pna_days": 5, "ga_weeks": None, "pma_weeks": None, "age_quote": "median age of 5 days",
+         "pna_days": 5, "ga_weeks": None, "pma_weeks": None, "age_quote": "median age of 5 days", "preterm": False,
          "weight_kg": None, "weight_quote": None, "flags": []}]}
     assert check.study_problems(good, abstract, kind="pediatric") == []
     empty = {**good, "observations": []}

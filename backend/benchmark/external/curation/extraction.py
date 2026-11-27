@@ -1,4 +1,4 @@
-"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-6).
+"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-7).
 
 An extraction record lists, per drug and per screening pass, every screened abstract with its
 decision and, when included, its observations. Each observation is:
@@ -111,10 +111,11 @@ def problems(obs: dict, abstract: str, study_flags=()) -> list[str]:
     if out and not isinstance(obs, dict):
         return out
     flags = obs.get("flags") or []
-    out += flag_problems(flags, "pediatric")
-    flags = flags if not flag_problems(flags, "pediatric") else []
-    if "preterm" in obs and not isinstance(obs["preterm"], bool):
-        out.append(f"preterm {obs['preterm']!r} is not true or false")
+    bad_flags = flag_problems(flags, "pediatric")
+    out += bad_flags
+    flags = [] if bad_flags else flags
+    if not isinstance(obs.get("preterm"), bool):
+        out.append(f"preterm {obs.get('preterm')!r} is not true or false")
     if not obs.get("age_quote"):
         out.append("age quote is not in the abstract: None")
     for central_key, range_key in RANGE_FIELDS.values():
@@ -130,14 +131,14 @@ def problems(obs: dict, abstract: str, study_flags=()) -> list[str]:
         out.append("no postnatal or postmenstrual age")
     if out:                                   # the age rules below need well-formed ages
         return out
-    pma, pna = central(obs.get("pma_weeks"), False), central(obs.get("pna_days"), geometric=True)
-    if pma is not None and pna is not None and not 20 <= pma - pna / 7 <= 45:
-        out.append(f"PMA {pma} weeks and postnatal age {pna:g} days imply a GA of {pma - pna / 7:.1f} weeks")
-    if _cl(obs).get("unit") == "L/h/70kg":         # Amendment 1 §3, Amendment 5 §3
+    ga = _ga_from_pma(obs)
+    if ga is not None and not 20 <= ga <= 45:
+        out.append(f"PMA {obs['pma_weeks']} weeks and postnatal age {obs['pna_days']} days imply a GA of {ga:.1f} weeks")
+    if _cl(obs).get("unit") == "L/h/70kg":         # Amendment 1 §3, Amendments 5 §3, 6 §2
         if "allometric_standardized" not in set(flags) | set(study_flags or []):
             out.append("a per-70 kg value needs the allometric_standardized flag")
         if not age_fixes_maturation(obs):
-            out.append("a per-70 kg value needs the age it applies at: PMA, or PNA with GA under 2 years")
+            out.append("a per-70 kg value needs the age it applies at: PMA, PNA with GA, or a PNA range wholly 2 years or older")
     return out
 
 
@@ -147,8 +148,9 @@ def adult_problems(value: dict, abstract: str, study_flags=()) -> list[str]:
     if out and not isinstance(value, dict):
         return out
     own = value.get("flags") or []
-    out += flag_problems(own, "adult")
-    flags = set(own if not flag_problems(own, "adult") else []) | set(study_flags or [])
+    bad_flags = flag_problems(own, "adult")
+    out += bad_flags
+    flags = set([] if bad_flags else own) | set(study_flags or [])
     age = value.get("age_years")
     if age is None:
         if "adult_age_unstated" not in flags:
@@ -187,17 +189,24 @@ def age_range(obs: dict, age: str) -> list | None:
     return v if isinstance(v, list) else None
 
 
+def _ga_from_pma(obs: dict) -> float | None:
+    """PMA − postnatal age, both at their arithmetic midpoints (Amendment 7 §1), or None."""
+    pma = central(obs.get("pma_weeks"), geometric=False)
+    pna = central(obs.get("pna_days"), geometric=False)
+    return None if pma is None or pna is None else pma - pna / 7
+
+
 def gestational_weeks(obs: dict) -> float:
-    """GA in weeks: as stated; else PMA − PNA when both are stated; else 32 weeks for a group
-    described as preterm and 40 otherwise, never above the stated PMA (PROTOCOL.md 'Missing
-    gestational age'; Amendment 5 §2)."""
+    """GA in weeks: as stated; else PMA − postnatal age when both are stated; else 32 weeks for
+    a group described as preterm and 40 otherwise, never above the stated PMA (PROTOCOL.md
+    'Missing gestational age'; Amendments 5 §2, 7 §1)."""
     ga = central(obs.get("ga_weeks"), geometric=False)
     if ga is not None:
         return ga
+    inferred = _ga_from_pma(obs)
+    if inferred is not None:
+        return inferred
     pma = central(obs.get("pma_weeks"), geometric=False)
-    pna = central(obs.get("pna_days"), geometric=True)
-    if pma is not None and pna is not None:
-        return pma - pna / 7
     default = 32 if obs.get("preterm") else 40
     return min(default, pma) if pma is not None else default
 
