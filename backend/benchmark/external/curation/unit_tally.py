@@ -1,4 +1,4 @@
-"""Masked tally of the clearance-unit forms the pre-filter matches (Amendment 4 §1, Amendment 5 §5).
+"""Masked tally of the clearance-unit forms the pre-filter matches (Amendment 4 §1, Amendment 5 §6, Amendment 6 §1).
 
 Usage (from backend/): python3 -m benchmark.external.curation.unit_tally
 Writes benchmark/external/unit_tally.json: each matched form with every number replaced

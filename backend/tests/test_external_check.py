@@ -112,3 +112,10 @@ def test_an_adult_value_must_be_absolute_or_per_kg_and_aged_18_to_65():
     found = check.study_problems({"pmid": "6", "decision": "include", "reason": "", "flags": [],
                                   "values": [v]}, abstract, kind="adult")
     assert any("unit" in p for p in found) and any("18-65" in p for p in found)
+
+
+def test_a_record_of_any_shape_is_reported_not_raised():
+    abstract = "Title\n\nClearance was 0.1 L/h/kg."
+    for bad in ["a string", {"pmid": ["1"], "decision": "include", "observations": [{"cl": [1], "age_quote": 5}]},
+                {"pmid": "1", "decision": "include", "observations": [{"cl": {"unit": ["L/h"]}, "flags": [["x"]]}]}]:
+        assert check.study_problems(bad, abstract, kind="pediatric")

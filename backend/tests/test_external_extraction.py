@@ -128,3 +128,25 @@ def test_a_weight_range_and_a_quoted_bsa_are_accepted():
     assert ex.problems(_obs(weight_kg=[1.0, 1.5], weight_quote="Weight 1.0-1.5 kg",
                             bsa_m2=0.12, bsa_quote="BSA 0.12 m2"), text) == []
     assert ex.problems(_obs(bsa_m2=0.12, bsa_quote=None), text)
+
+
+def test_a_per_70kg_value_from_2_years_needs_the_whole_age_range_past_2_years():
+    o = {**_obs(cl={"value": 0.05, "unit": "L/h/70kg", "summary": "typical", "quote": "Clearance was 0.05 L/h/kg"}),
+         "flags": ["allometric_standardized"], "ga_weeks": None}
+    assert ex.age_fixes_maturation({**o, "pna_days": 3 * 365.25})
+    assert not ex.age_fixes_maturation({**o, "pna_days": [365.25, 5 * 365.25]})      # grid reaches 1 year
+    assert not ex.age_fixes_maturation({**o, "pna_days": 800, "pna_range_days": [365.25, 1200]})
+
+
+def test_a_truncated_number_does_not_match_its_quote():
+    assert not ex._number_in(5, "clearance was 5.1 L/h")
+    assert ex._number_in(5.1, "clearance was 5.1 L/h.")
+
+
+def test_preterm_must_be_a_boolean_and_pma_must_agree_with_postnatal_age():
+    assert any("preterm" in p for p in ex.problems(_obs(preterm="false"), ABSTRACT))
+    assert any("imply a GA" in p for p in ex.problems(_obs(pma_weeks=30, pna_days=400, ga_weeks=None), ABSTRACT))
+
+
+def test_ga_from_pma_uses_the_geometric_midpoint_of_a_postnatal_range():
+    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 40, "pna_days": [1, 121]}) == pytest.approx(40 - 11 / 7)

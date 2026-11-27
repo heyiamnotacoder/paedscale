@@ -43,6 +43,19 @@ def stop_problems(record: dict, snap: dict) -> list[str]:
 
 
 def study_problems(study: dict, abstract: str, kind: str) -> list[str]:
+    """Problems with one screened study; a record of any shape is reported, never raised."""
+    try:
+        return _study_problems(study, abstract, kind)
+    except Exception as e:                 # malformed beyond the field checks
+        pmid = study.get("pmid") if isinstance(study, dict) else None
+        return [f"{pmid}: malformed record ({type(e).__name__}: {e})"]
+
+
+def _study_problems(study: dict, abstract: str, kind: str) -> list[str]:
+    if kind not in ITEMS:
+        raise ValueError(f"kind {kind!r} is not one of {sorted(ITEMS)}")
+    if not isinstance(study, dict):
+        return [f"{study!r}: a study must be an object"]
     pmid = study.get("pmid")
     decision = study.get("decision")
     if decision not in ("include", "exclude"):
@@ -62,6 +75,13 @@ def study_problems(study: dict, abstract: str, kind: str) -> list[str]:
 
 
 def check_drug(pass_name: str, drug: str) -> list[str]:
+    try:
+        return _check_drug(pass_name, drug)
+    except Exception as e:
+        return [f"malformed record file ({type(e).__name__}: {e})"]
+
+
+def _check_drug(pass_name: str, drug: str) -> list[str]:
     path = os.path.join(EXTRACTION_DIR, pass_name, f"{drug}.json")
     if not os.path.exists(path):
         return [f"no record file {path}"]
@@ -73,10 +93,13 @@ def check_drug(pass_name: str, drug: str) -> list[str]:
     out = []
     for kind in ITEMS:
         rec.setdefault(kind, [])
+        if not isinstance(rec[kind], list) or not all(isinstance(s, dict) for s in rec[kind]):
+            out.append(f"{kind}: must be a list of study objects")
+            continue
         out += [f"{kind}: {p}" for p in order_problems([s.get("pmid") for s in rec[kind]],
                                                         screening.order(snap[kind]))]
         for s in rec[kind]:
-            if s.get("pmid") not in hashes:
+            if not isinstance(s.get("pmid"), str) or s["pmid"] not in hashes:
                 out.append(f"{kind} {s.get('pmid')}: not in the search snapshot")
                 continue
             with open(os.path.join(ABSTRACT_DIR, drug, f"{s['pmid']}.txt"), encoding="utf-8") as f:

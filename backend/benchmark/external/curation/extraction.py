@@ -1,4 +1,4 @@
-"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-5).
+"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-6).
 
 An extraction record lists, per drug and per screening pass, every screened abstract with its
 decision and, when included, its observations. Each observation is:
@@ -29,7 +29,6 @@ ADULT_UNITS = ABSOLUTE_UNITS | PER_KG_UNITS          # Amendment 1 §2 converts 
 PEDIATRIC_FLAGS = {"critically_ill", "allometric_standardized", "fixed_maturation", "fixed_allometry",
                    "with_tazobactam", "pca_as_pma"}
 ADULT_FLAGS = {"with_tazobactam", "adult_weight_missing", "adult_age_unstated"}
-FLAGS = PEDIATRIC_FLAGS | ADULT_FLAGS
 RANGE_FIELDS = {"pna": ("pna_days", "pna_range_days"), "pma": ("pma_weeks", "pma_range_weeks"),
                 "ga": ("ga_weeks", "ga_range_weeks")}
 SUMMARIES = {"mean", "median", "geometric_mean", "typical"}
@@ -57,13 +56,13 @@ def _numbers(x) -> list[float]:
 def _number_in(value: float, quote: str) -> bool:
     forms = {f"{value:g}", str(value), f"{value:.1f}", f"{value:.2f}", f"{value:.3f}"}
     q = _norm(quote).replace(",", ".")
-    return any(re.search(rf"(?<![\d.]){re.escape(f)}(?![\d])", q) for f in forms)
+    return any(re.search(rf"(?<![\d.]){re.escape(f)}(?!\.?\d)", q) for f in forms)
 
 
 def flag_problems(flags, kind: str) -> list[str]:
     allowed = PEDIATRIC_FLAGS if kind == "pediatric" else ADULT_FLAGS
-    if not isinstance(flags, list):
-        return [f"flags {flags!r} is not a list"]
+    if not isinstance(flags, list) or not all(isinstance(f, str) for f in flags):
+        return [f"flags {flags!r} is not a list of names"]
     bad = sorted(set(flags) - allowed)
     return [f"flag(s) {bad} are not {kind} screener flags {sorted(allowed)}"] if bad else []
 
@@ -74,9 +73,13 @@ def _quoted(name: str, value, quote, text: str, ranged: bool) -> list[str]:
         return []
     if not (_is_num(value) or (ranged and _is_range(value))):
         return [f"{name} {value!r} is not a non-negative number" + (" or [low, high] range" if ranged else "")]
-    if not quote or _norm(quote) not in _norm(text):
+    if not isinstance(quote, str) or not quote or _norm(quote) not in _norm(text):
         return [f"{name} quote is not in the abstract: {quote!r}"]
     return [f"{name} {v} does not appear in its quote" for v in _numbers(value) if not _number_in(v, quote)]
+
+
+def _cl(obs: dict) -> dict:
+    return obs["cl"] if isinstance(obs.get("cl"), dict) else {}
 
 
 def _common(obs: dict, abstract: str, units: set[str]) -> list[str]:
@@ -84,8 +87,8 @@ def _common(obs: dict, abstract: str, units: set[str]) -> list[str]:
         return [f"{obs!r} is not an object"]
     text = _norm(abstract)
     out = []
-    cl = obs.get("cl") if isinstance(obs.get("cl"), dict) else {}
-    if cl.get("unit") not in units:
+    cl = _cl(obs)
+    if not isinstance(cl.get("unit"), str) or cl["unit"] not in units:
         out.append(f"unit {cl.get('unit')!r} is not one of {sorted(units)}")
     if cl.get("summary") not in SUMMARIES:
         out.append(f"summary {cl.get('summary')!r} is not one of {sorted(SUMMARIES)}")
@@ -97,7 +100,7 @@ def _common(obs: dict, abstract: str, units: set[str]) -> list[str]:
     out += _quoted("BSA", obs.get("bsa_m2"), obs.get("bsa_quote"), text, ranged=False)
     out += _quoted("height", obs.get("height_cm"), obs.get("height_quote"), text, ranged=False)
     q = obs.get("age_quote")
-    if q is not None and _norm(q) not in text:
+    if q is not None and (not isinstance(q, str) or _norm(q) not in text):
         out.append(f"age quote is not in the abstract: {q!r}")
     return out
 
@@ -109,6 +112,9 @@ def problems(obs: dict, abstract: str, study_flags=()) -> list[str]:
         return out
     flags = obs.get("flags") or []
     out += flag_problems(flags, "pediatric")
+    flags = flags if not flag_problems(flags, "pediatric") else []
+    if "preterm" in obs and not isinstance(obs["preterm"], bool):
+        out.append(f"preterm {obs['preterm']!r} is not true or false")
     if not obs.get("age_quote"):
         out.append("age quote is not in the abstract: None")
     for central_key, range_key in RANGE_FIELDS.values():
@@ -122,7 +128,12 @@ def problems(obs: dict, abstract: str, study_flags=()) -> list[str]:
                 out.append(f"{central_key} {c} is outside its stated range {r}")
     if obs.get("pna_days") is None and obs.get("pma_weeks") is None:
         out.append("no postnatal or postmenstrual age")
-    if (obs.get("cl") or {}).get("unit") == "L/h/70kg":         # Amendment 1 §3, Amendment 5 §3
+    if out:                                   # the age rules below need well-formed ages
+        return out
+    pma, pna = central(obs.get("pma_weeks"), False), central(obs.get("pna_days"), geometric=True)
+    if pma is not None and pna is not None and not 20 <= pma - pna / 7 <= 45:
+        out.append(f"PMA {pma} weeks and postnatal age {pna:g} days imply a GA of {pma - pna / 7:.1f} weeks")
+    if _cl(obs).get("unit") == "L/h/70kg":         # Amendment 1 §3, Amendment 5 §3
         if "allometric_standardized" not in set(flags) | set(study_flags or []):
             out.append("a per-70 kg value needs the allometric_standardized flag")
         if not age_fixes_maturation(obs):
@@ -135,8 +146,9 @@ def adult_problems(value: dict, abstract: str, study_flags=()) -> list[str]:
     out = _common(value, abstract, ADULT_UNITS)
     if out and not isinstance(value, dict):
         return out
-    flags = set(value.get("flags") or []) | set(study_flags or [])
-    out += flag_problems(value.get("flags") or [], "adult")
+    own = value.get("flags") or []
+    out += flag_problems(own, "adult")
+    flags = set(own if not flag_problems(own, "adult") else []) | set(study_flags or [])
     age = value.get("age_years")
     if age is None:
         if "adult_age_unstated" not in flags:
@@ -148,20 +160,22 @@ def adult_problems(value: dict, abstract: str, study_flags=()) -> list[str]:
         if not all(lo <= a <= hi for a in _numbers(age)):
             out.append(f"adult age {age} is outside {lo}-{hi} years")
         out += _quoted("adult age", age, value.get("age_quote"), abstract, ranged=True)
-    unit = (value.get("cl") or {}).get("unit")
+    unit = _cl(value).get("unit")
     if unit in ABSOLUTE_UNITS and value.get("weight_kg") is None and "adult_weight_missing" not in flags:
         out.append("absolute clearance with no weight and no adult_weight_missing flag")
     return out
 
 
 def age_fixes_maturation(obs: dict) -> bool:
-    """PMA, or postnatal age with GA when under 2 years (older children are past maturation)."""
+    """PMA, or postnatal age with GA, or a postnatal age whose whole range is 2 years or more
+    (maturation is then near-complete; Amendment 5 §3, Amendment 6 §2)."""
     if obs.get("pma_weeks") is not None:
         return True
-    pna = central(obs.get("pna_days"), geometric=True)
-    if pna is None:
+    rng = age_range(obs, "pna")
+    lowest = rng[0] if rng else central(obs.get("pna_days"), geometric=True)
+    if lowest is None:
         return False
-    return pna >= 24 * DAYS_PER_MONTH or obs.get("ga_weeks") is not None
+    return lowest >= 24 * DAYS_PER_MONTH or obs.get("ga_weeks") is not None
 
 
 def age_range(obs: dict, age: str) -> list | None:
@@ -181,7 +195,7 @@ def gestational_weeks(obs: dict) -> float:
     if ga is not None:
         return ga
     pma = central(obs.get("pma_weeks"), geometric=False)
-    pna = central(obs.get("pna_days"), geometric=False)
+    pna = central(obs.get("pna_days"), geometric=True)
     if pma is not None and pna is not None:
         return pma - pna / 7
     default = 32 if obs.get("preterm") else 40
