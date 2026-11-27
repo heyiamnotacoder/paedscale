@@ -47,7 +47,8 @@ def test_the_queue_moves_to_adult_abstracts_when_the_pediatric_list_runs_out():
 def test_an_absolute_adult_value_without_a_weight_needs_the_flag():
     abstract = "Title\n\nIn healthy adults aged 20-40 years clearance was 5.1 L/h."
     v = {"cl": {"value": 5.1, "unit": "L/h", "summary": "mean", "quote": "clearance was 5.1 L/h"},
-         "weight_kg": None, "weight_quote": None, "age_quote": "aged 20-40 years", "flags": []}
+         "weight_kg": None, "weight_quote": None, "age_years": [20, 40], "age_quote": "aged 20-40 years",
+         "flags": []}
     study = {"pmid": "3", "decision": "include", "reason": "", "flags": [], "values": [v]}
     assert check.study_problems(study, abstract, kind="adult")
     study["values"] = [{**v, "flags": ["adult_weight_missing"]}]
@@ -78,3 +79,36 @@ def test_screening_past_a_stop_point_is_a_problem():
 def test_a_missing_record_file_is_a_problem(tmp_path, monkeypatch):
     monkeypatch.setattr(check, "EXTRACTION_DIR", str(tmp_path))
     assert check.check_drug("nosuchpass", "vancomycin")
+
+
+def test_a_malformed_study_before_others_is_reported_not_raised(tmp_path, monkeypatch):
+    import json, os
+    from benchmark.external.curation import screening
+    from benchmark.external.curation.search import SEARCH_DIR
+    snap = json.load(open(os.path.join(SEARCH_DIR, "vancomycin.json")))
+    first, second = screening.order(snap["pediatric"])[:2]
+    (tmp_path / "p").mkdir()
+    (tmp_path / "p" / "vancomycin.json").write_text(json.dumps({"pediatric": [
+        {"pmid": first, "observations": [{"pma_weeks": [30]}]},
+        {"pmid": second, "decision": "exclude", "reason": "P1", "observations": []}], "adult": []}))
+    monkeypatch.setattr(check, "EXTRACTION_DIR", str(tmp_path))
+    assert check.check_drug("p", "vancomycin")
+
+
+def test_a_study_level_adult_flag_covers_its_values():
+    abstract = "Title\n\nIn healthy volunteers clearance was 5.1 L/h."
+    v = {"cl": {"value": 5.1, "unit": "L/h", "summary": "mean", "quote": "clearance was 5.1 L/h"},
+         "weight_kg": None, "age_years": None, "flags": []}
+    study = {"pmid": "5", "decision": "include", "reason": "",
+             "flags": ["adult_weight_missing", "adult_age_unstated"], "values": [v]}
+    assert check.study_problems(study, abstract, kind="adult") == []
+
+
+def test_an_adult_value_must_be_absolute_or_per_kg_and_aged_18_to_65():
+    abstract = "Title\n\nIn adults aged 70-80 years clearance was 5.1 L/h/70kg, weight 70 kg."
+    v = {"cl": {"value": 5.1, "unit": "L/h/70kg", "summary": "mean", "quote": "clearance was 5.1 L/h/70kg"},
+         "weight_kg": 70, "weight_quote": "weight 70 kg", "age_years": [70, 80],
+         "age_quote": "aged 70-80 years", "flags": []}
+    found = check.study_problems({"pmid": "6", "decision": "include", "reason": "", "flags": [],
+                                  "values": [v]}, abstract, kind="adult")
+    assert any("unit" in p for p in found) and any("18-65" in p for p in found)

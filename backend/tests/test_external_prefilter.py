@@ -62,3 +62,8 @@ def test_long_runs_of_whitespace_do_not_stall_the_filter():
     t = time.perf_counter()
     has_clearance_value("1 l" + " " * 5000 + "x")
     assert time.perf_counter() - t < 0.5
+
+
+def test_the_unit_tally_masks_every_number():
+    from benchmark.external.curation.unit_tally import masked_forms
+    assert masked_forms("Clearance was 3.2 (95% CI 2.9-3.5) L/h and 41 ml/min.") == ["# () l/h", "# ml/min"]

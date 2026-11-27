@@ -1,4 +1,4 @@
-"""Validate a screening pass's records (SCREENING_GUIDE.md; PROTOCOL.md, Amendments 3-4).
+"""Validate a screening pass's records (SCREENING_GUIDE.md; PROTOCOL.md, Amendments 3-5).
 
 Usage (from backend/): python3 -m benchmark.external.curation.check <pass> [<drug> ...]
 Checks that decisions follow the seeded order with no gaps and stop where the queue stops, that
@@ -42,19 +42,6 @@ def stop_problems(record: dict, snap: dict) -> list[str]:
     return out
 
 
-def _adult_problems(o: dict, abstract: str) -> list[str]:
-    flags = o.get("flags") or []
-    out = []
-    stated = o.get("age_quote") is not None
-    if not stated and "adult_age_unstated" not in flags:
-        out.append("no age quote and no adult_age_unstated flag")
-    absolute = (o.get("cl") or {}).get("unit") in extraction.ABSOLUTE_UNITS
-    if absolute and o.get("weight_kg") is None and "adult_weight_missing" not in flags:
-        out.append("absolute clearance with no weight and no adult_weight_missing flag")
-    o = {**o, "pna_days": 0, "pma_weeks": None}          # adults need no age range
-    return out + [p for p in extraction.problems(o, abstract) if stated or not p.startswith("age quote")]
-
-
 def study_problems(study: dict, abstract: str, kind: str) -> list[str]:
     pmid = study.get("pmid")
     decision = study.get("decision")
@@ -63,14 +50,13 @@ def study_problems(study: dict, abstract: str, kind: str) -> list[str]:
     out = []
     if decision == "exclude" and not study.get("reason"):
         out.append(f"{pmid}: an exclusion needs a reason")
-    bad_flags = sorted(set(study.get("flags") or []) - extraction.FLAGS)
-    if bad_flags:
-        out.append(f"{pmid}: study flag(s) {bad_flags} are not screener flags")
+    out += [f"{pmid}: study {p}" for p in extraction.flag_problems(study.get("flags") or [], kind)]
     items = study.get(ITEMS[kind]) or []
     if decision == "include" and not items:
         out.append(f"{pmid}: included with no {ITEMS[kind]}")
     for i, o in enumerate(items):
-        found = _adult_problems(o, abstract) if kind == "adult" else extraction.problems(o, abstract)
+        check_one = extraction.adult_problems if kind == "adult" else extraction.problems
+        found = check_one(o, abstract, study.get("flags") or [])
         out += [f"{pmid}[{i}]: {p}" for p in found]
     return out
 
@@ -98,7 +84,7 @@ def check_drug(pass_name: str, drug: str) -> list[str]:
             if hashlib.sha256(text.encode()).hexdigest() != hashes[s["pmid"]]:
                 out.append(f"{kind} {s['pmid']}: abstract text differs from the committed hash")
             out += [f"{kind} {p}" for p in study_problems(s, text, kind)]
-    if not any(p.startswith(("pediatric: ", "adult: ")) for p in out):
+    if not out:                       # the queue replays only well-formed records
         out += stop_problems(rec, snap)
     return out
 

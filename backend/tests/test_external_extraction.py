@@ -87,3 +87,44 @@ def test_gestational_age_defaults_to_40_weeks_or_32_when_described_as_preterm():
     assert ex.gestational_weeks({"ga_weeks": [25, 33]}) == 29
     assert ex.gestational_weeks({"ga_weeks": None}) == 40
     assert ex.gestational_weeks({"ga_weeks": None, "preterm": True}) == 32
+
+
+@pytest.mark.parametrize("field,value", [("pna_days", "12"), ("pna_days", -5), ("pma_weeks", [30]),
+                                         ("ga_weeks", "30")])
+def test_a_malformed_age_is_a_problem(field, value):
+    assert any(field in p for p in ex.problems(_obs(**{field: value}), ABSTRACT))
+
+
+def test_a_central_age_outside_its_stated_range_is_a_problem():
+    assert ex.problems(_obs(pna_days=50, pna_range_days=[3, 20]), ABSTRACT)
+
+
+def test_gestational_age_cannot_exceed_the_stated_pma():
+    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 30}) == 30
+    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 60}) == 40
+
+
+def test_adult_and_pediatric_flags_are_separate():
+    assert ex.flag_problems(["adult_weight_missing"], "adult") == []
+    assert ex.flag_problems(["pca_as_pma"], "adult")
+    assert ex.flag_problems(["adult_age_unstated"], "pediatric")
+
+
+def test_ga_is_pma_minus_postnatal_age_when_both_are_stated():
+    assert ex.gestational_weeks({"ga_weeks": None, "pma_weeks": 32, "pna_days": 14}) == 30
+
+
+def test_a_per_70kg_value_needs_its_flag_and_an_age_that_fixes_maturation():
+    o = _obs(cl={"value": 0.05, "unit": "L/h/70kg", "summary": "typical", "quote": "Clearance was 0.05 L/h/kg"})
+    found = ex.problems(o, ABSTRACT)
+    assert any("allometric_standardized" in p for p in found)
+    assert ex.problems({**o, "flags": ["allometric_standardized"]}, ABSTRACT) == []      # PNA with GA
+    assert any("age it applies" in p for p in ex.problems(
+        {**o, "flags": ["allometric_standardized"], "ga_weeks": None}, ABSTRACT))
+
+
+def test_a_weight_range_and_a_quoted_bsa_are_accepted():
+    text = ABSTRACT + " Weight 1.0-1.5 kg, BSA 0.12 m2."
+    assert ex.problems(_obs(weight_kg=[1.0, 1.5], weight_quote="Weight 1.0-1.5 kg",
+                            bsa_m2=0.12, bsa_quote="BSA 0.12 m2"), text) == []
+    assert ex.problems(_obs(bsa_m2=0.12, bsa_quote=None), text)
