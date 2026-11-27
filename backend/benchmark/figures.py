@@ -71,11 +71,6 @@ def fold_error_by_stratum(rows, out, prov=None):
     _save(fig, out, "fig2_fold_error_by_stratum", prov)
 
 
-def _xerr(est: float, lo: float, hi: float) -> list[list[float]]:
-    """Error-bar half-widths; a BCa interval need not contain its estimate, so clip at 0."""
-    return [[max(0.0, est - lo)], [max(0.0, hi - est)]]
-
-
 def paired_difference_forest(results, out, prov=None):
     """Per drug: 10^mean(d), the ratio of typical fold errors, PaedScale / A1 (all ages)."""
     h3 = results["hypotheses"]["H3"]
@@ -92,7 +87,10 @@ def paired_difference_forest(results, out, prov=None):
     ax.set_yticklabels([k.replace("_", " ") for _, k in items], fontsize=8)
     est, (lo, hi) = 10 ** h3["mean_abs_log10_diff"], [10 ** x for x in h3["ci95"]]
     y0 = -1.2
-    ax.errorbar([est], [y0], xerr=_xerr(est, lo, hi), fmt="D", color=INK, markersize=6, capsize=3, linewidth=1.2)
+    # Interval and estimate drawn separately: a BCa interval need not contain its estimate.
+    ax.hlines(y0, lo, hi, color=INK, linewidth=1.2)
+    ax.vlines([lo, hi], y0 - 0.25, y0 + 0.25, color=INK, linewidth=1.2)
+    ax.scatter([est], [y0], marker="D", s=36, color=INK, zorder=3)
     ax.text(max(hi, est), y0, "  all drugs, 95% CI", va="center", fontsize=8, color=INK)
     ax.axvline(1.0, color=INK2, linewidth=0.8)
     ax.set_xscale("log")

@@ -377,3 +377,35 @@ def test_label_selection_breaks_effective_time_ties_by_version_then_set_id():
     b = _label("X", version="10", set_id="b")   # numeric, not string, comparison of version
     c = _label("X", version="10", set_id="c")
     assert select([a, b, c])["set_id"] == "c" and select([a, b])["set_id"] == "b"
+
+
+def test_active_ingredient_match_ignores_dosage_form_qualifiers_and_is_one_to_one():
+    from benchmark.curation.fetch_labels import same_active_ingredient
+    assert same_active_ingredient("vancomycin", _label("VANCOMYCIN INJECTION, USP"))
+    assert not same_active_ingredient("sand", _label("SANDOSTATIN"))               # whole words only
+    assert not same_active_ingredient("piperacillin and tazobactam", _label("PIPERACILLIN"))
+
+
+def test_provenance_survives_a_missing_git_checkout(monkeypatch):
+    import subprocess
+    from benchmark import run
+    def boom(*a, **k):
+        raise FileNotFoundError("git")
+    monkeypatch.setattr(subprocess, "check_output", boom)
+    p = run.provenance(n_boot=1)
+    assert p["engine_commit"] == "unknown" and p["working_tree_dirty"] is None
+
+
+def test_by_method_without_bootstrap_reports_no_intervals():
+    from benchmark.run import by_method
+    s = by_method(score(SYNTH), n_boot=0)["paedscale"]
+    assert s["aafe_ci95"] is None and s["ci_n_boot"] == 0
+
+
+def test_uncertainty_coverage_is_drug_weighted_with_a_clustered_ci():
+    from benchmark.run import uncertainty_coverage
+    c = uncertainty_coverage(_three_drug_set(), n_boot=50)
+    assert c["n_bands"] == 6 and c["n_drugs"] == 3
+    lo, hi = c["coverage_90_ci95"]
+    assert 0.0 <= lo <= hi <= 1.0 and 0.0 <= c["coverage_90"] <= 1.0
+    assert 0.0 <= c["pair_weighted_coverage_90"] <= 1.0

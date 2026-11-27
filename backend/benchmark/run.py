@@ -17,7 +17,7 @@ from typing import Callable, Optional
 
 from benchmark.methods import (METHODS, NEWBORN_STRATA, STRATA, UNDER2_STRATA, ich_stratum, predict_band,
                                pathway_fractions, virtual_patients)
-from benchmark.metrics import _by_drug, cluster_bootstrap_ci, summarize
+from benchmark.metrics import by_drug, cluster_bootstrap_ci, summarize
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "output")
@@ -77,18 +77,18 @@ def _paired(rows: list[dict], a: str, b: str) -> list[dict]:
 TIE = 1e-12  # |d| below this is a tie (e.g. volume-matched cmax drugs, Amendment 1 §3)
 
 
-def _drug_means(prs: list[dict]) -> list[float]:
-    return [sum(p["d"] for p in ps) / len(ps) for ps in _by_drug(prs).values()]
+def _drug_means(prs: list[dict]) -> dict[str, float]:
+    return {k: sum(p["d"] for p in ps) / len(ps) for k, ps in sorted(by_drug(prs).items())}
 
 
 def _drug_mean_d(prs: list[dict]) -> float:
-    means = _drug_means(prs)
+    means = _drug_means(prs).values()
     return sum(means) / len(means)
 
 
 def _wilcoxon_p(prs: list[dict]) -> Optional[float]:
     """Wilcoxon signed-rank on drug-level mean differences; tied drugs are dropped (and counted)."""
-    diffs = [x for x in _drug_means(prs) if abs(x) > TIE]
+    diffs = [x for x in _drug_means(prs).values() if abs(x) > TIE]
     if len(diffs) < 2:
         return None
     from scipy.stats import wilcoxon
@@ -103,12 +103,12 @@ def compare(rows: list[dict], a: str, b: str, n_boot: int) -> dict:
     return {
         "comparator": b, "n_pairs": len(prs), "n_clusters": ci["n_clusters"],
         "n_tied_pairs": sum(abs(p["d"]) <= TIE for p in prs),
-        "n_tied_drugs": sum(abs(x) <= TIE for x in _drug_means(prs)),
+        "n_tied_drugs": sum(abs(x) <= TIE for x in _drug_means(prs).values()),
         "mean_abs_log10_diff": ci["estimate"], "ci95": [ci["lo"], ci["hi"]], "ci_method": ci["method"],
         "ci_n_boot": n_boot,
         "aafe_ratio": 10 ** ci["estimate"],  # <1 means PaedScale's typical fold error is smaller
         "wilcoxon_p_drug_level": _wilcoxon_p(prs),
-        "per_drug_mean_d": {k: sum(p["d"] for p in ps) / len(ps) for k, ps in sorted(_by_drug(prs).items())},
+        "per_drug_mean_d": _drug_means(prs),
     }
 
 
@@ -124,18 +124,24 @@ def _holm(ps: dict[str, Optional[float]]) -> dict[str, Optional[float]]:
 SUMMARY_KEYS = ("aafe", "afe", "within_1_5", "within_2", "within_label_range")
 
 
+def _ci(rows: list[dict], stat: Callable[[list[dict]], float], n_boot: int) -> Optional[dict]:
+    return cluster_bootstrap_ci(rows, stat, n_boot=n_boot, seed=SEED) if n_boot and rows else None
+
+
 def by_method(rows: list[dict], n_boot: int) -> dict:
-    """Drug-weighted summary per method, each metric with a drug-clustered 95% CI."""
+    """Drug-weighted summary per method, each metric with a drug-clustered 95% CI (n_boot=0: none)."""
     out = {}
     for m in sorted({r["method"] for r in rows}):
         rs = [r for r in rows if r["method"] == m]
         s = summarize(rs)
-        for key in SUMMARY_KEYS:
-            ci = cluster_bootstrap_ci(rs, lambda x, k=key: summarize(x)[k], n_boot=n_boot, seed=SEED)
-            s[key + "_ci95"] = [ci["lo"], ci["hi"]]
-            s[key + "_ci_method"] = ci["method"]
-        s["ci_n_boot"] = n_boot
         s["pair_weighted_aafe"] = summarize(rs, weight="pair")["aafe"]
+        stats = {k: (lambda x, k=k: summarize(x)[k]) for k in SUMMARY_KEYS}
+        stats["pair_weighted_aafe"] = lambda x: summarize(x, weight="pair")["aafe"]
+        for key, stat in stats.items():
+            ci = _ci(rs, stat, n_boot)
+            s[key + "_ci95"] = [ci["lo"], ci["hi"]] if ci else None
+            s[key + "_ci_method"] = ci["method"] if ci else None
+        s["ci_n_boot"] = n_boot
         out[m] = s
     return out
 
@@ -195,7 +201,7 @@ def sensitivity(refset: dict, n_boot: int) -> dict:
         rows = score(refset, methods=("paedscale", PRIMARY_COMPARATOR), **kw)
         return {"newborn": compare(_newborn(rows), "paedscale", PRIMARY_COMPARATOR, n_boot),
                 "all": compare(rows, "paedscale", PRIMARY_COMPARATOR, n_boot),
-                "paedscale_aafe": summarize([r for r in rows if r["method"] == "paedscale"]).get("aafe")}
+                "paedscale": by_method([r for r in rows if r["method"] == "paedscale"], n_boot)["paedscale"]}
 
     s = {name: run(keep=keep) for name, keep in SUBSETS.items()}
     s.update({name: run(**kw) for name, kw in PERTURBATIONS.items()})
@@ -212,13 +218,14 @@ def sensitivity(refset: dict, n_boot: int) -> dict:
     return dict(sorted(s.items()))
 
 
-def uncertainty_coverage(refset: dict) -> dict:
+def uncertainty_coverage(refset: dict, n_boot: int) -> dict:
     """Exploratory: share of reference doses inside PaedScale's 90% parameter interval
-    (arithmetic-midpoint child, maturation-parameter uncertainty only)."""
+    (arithmetic-midpoint child, maturation-parameter uncertainty only). Drug-weighted, with
+    a drug-clustered CI like every other summary."""
     from benchmark.methods import NOMINAL_CL_L_H, NOMINAL_VD_L
     from engine.uncertainty import dose_uncertainty_interval
-    hits, n, widths = 0, 0, []
-    for name, d in refset.items():
+    rows = []
+    for name, d in sorted(refset.items()):
         if not d.get("included"):
             continue
         for b in d["bands"]:
@@ -228,25 +235,32 @@ def uncertainty_coverage(refset: dict) -> dict:
                 fm=pathway_fractions(d), target_metric=d["target_metric"], pma_weeks=p["pma_weeks"],
                 adult_dose_mg_per_day=d["adult"]["daily"], n_draws=1000)
             q = pi["dose_mg_per_kg_per_day"]
-            n += 1
-            hits += q["p05"] <= b["ref_per_kg_daily"] <= q["p95"]
-            widths.append(q["p95"] / q["p05"])
-    widths.sort()
-    return {"n_bands": n, "coverage_90": hits / n, "median_fold_width": widths[len(widths) // 2],
-            "max_fold_width": widths[-1]}
+            rows.append({"drug": name, "hit": float(q["p05"] <= b["ref_per_kg_daily"] <= q["p95"]),
+                         "width": q["p95"] / q["p05"]})
+    drug_weighted = lambda rs: sum(sum(r["hit"] for r in g) / len(g) for g in by_drug(rs).values()) / len(by_drug(rs))
+    ci = _ci(rows, drug_weighted, n_boot)
+    widths = sorted(r["width"] for r in rows)
+    return {"n_bands": len(rows), "n_drugs": len(by_drug(rows)), "coverage_90": drug_weighted(rows),
+            "coverage_90_ci95": [ci["lo"], ci["hi"]] if ci else None,
+            "pair_weighted_coverage_90": sum(r["hit"] for r in rows) / len(rows),
+            "median_fold_width": widths[len(widths) // 2], "max_fold_width": widths[-1]}
 
 
-def _git(*args: str) -> str:
-    return subprocess.check_output(["git", *args], cwd=HERE, text=True).strip()
+def _git(*args: str) -> Optional[str]:
+    try:
+        return subprocess.check_output(["git", *args], cwd=HERE, text=True, stderr=subprocess.DEVNULL).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None   # not a git checkout, or git missing
 
 
 def provenance(n_boot: int) -> dict:
     """What produced an output: engine commit, whether the tree was dirty, settings, versions."""
     import platform
     from importlib.metadata import version
+    status = _git("status", "--porcelain", "--", "..", ":(exclude)output")
     return {
-        "engine_commit": _git("rev-parse", "HEAD"),
-        "working_tree_dirty": bool(_git("status", "--porcelain", "--", "..", ":(exclude)output")),
+        "engine_commit": _git("rev-parse", "HEAD") or "unknown",
+        "working_tree_dirty": None if status is None else bool(status),
         "n_boot": n_boot, "seed": SEED,
         "versions": {"python": platform.python_version(),
                      **{lib: version(lib) for lib in ("scipy", "numpy", "matplotlib")}},
@@ -278,7 +292,7 @@ def main(n_boot: int = 10000, out: str = OUT) -> dict:
                      for k, v in refset.items() if not v.get("included")},
         **analyze(rows, n_boot=n_boot),
         "sensitivity": sensitivity(refset, n_boot=n_boot),
-        "uncertainty_coverage": uncertainty_coverage(refset),
+        "uncertainty_coverage": uncertainty_coverage(refset, n_boot),
     }
     os.makedirs(out, exist_ok=True)
     with open(os.path.join(out, "results.json"), "w") as f:

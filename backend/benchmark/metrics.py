@@ -21,7 +21,7 @@ def _within(fe: float, band: tuple[float, float]) -> float:
     return float(band[0] - _EPS <= fe <= band[1] + _EPS)
 
 
-def _by_drug(rows: list[dict]) -> dict[str, list[dict]]:
+def by_drug(rows: list[dict]) -> dict[str, list[dict]]:
     g: dict[str, list[dict]] = {}
     for r in rows:
         g.setdefault(r["drug"], []).append(r)
@@ -35,7 +35,7 @@ def _mean(xs):
 def _weighted(rows: list[dict], f: Callable[[dict], float], weight: str) -> float:
     if weight == "pair":
         return _mean([f(r) for r in rows])
-    return _mean([_mean([f(r) for r in rs]) for rs in _by_drug(rows).values()])
+    return _mean([_mean([f(r) for r in rs]) for rs in by_drug(rows).values()])
 
 
 def summarize(rows: list[dict], weight: str = "drug") -> dict:
@@ -45,7 +45,7 @@ def summarize(rows: list[dict], weight: str = "drug") -> dict:
     lg = lambda r: math.log10(r["fe"])
     out = {
         "n_pairs": len(rows),
-        "n_drugs": len(_by_drug(rows)),
+        "n_drugs": len(by_drug(rows)),
         "aafe": 10 ** _weighted(rows, lambda r: abs(lg(r)), weight),
         "afe": 10 ** _weighted(rows, lg, weight),
         "within_1_5": _weighted(rows, lambda r: _within(r["fe"], CONCORDANCE_BAND), weight),  # 0.67–1.5
@@ -63,7 +63,7 @@ def cluster_bootstrap_ci(rows: list[dict], stat: Callable[[list[dict]], float], 
     Falls back to the percentile interval when BCa is undefined (e.g. degenerate
     bootstrap distribution or a jackknife with zero spread).
     """
-    groups = list(_by_drug(rows).values())
+    groups = list(by_drug(rows).values())
     k = len(groups)
     theta = stat(rows)
     rng = random.Random(seed)

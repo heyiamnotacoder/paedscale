@@ -65,7 +65,7 @@
    "renal_mechanism": {
     "value": "unspecified",
     "matched": null,
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "amikacin": {
@@ -133,7 +133,7 @@
    "renal_mechanism": {
     "value": "glomerular_filtration",
     "matched": "glomerular filtration",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "ampicillin": {
@@ -233,7 +233,7 @@
    "renal_mechanism": {
     "value": "unspecified",
     "matched": null,
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "aztreonam": {
@@ -281,7 +281,7 @@
    "renal_mechanism": {
     "value": "secretion",
     "matched": "tubular secretion",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "cefazolin": {
@@ -335,7 +335,7 @@
    "renal_mechanism": {
     "value": "unspecified",
     "matched": null,
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "cefoxitin": {
@@ -383,7 +383,7 @@
    "renal_mechanism": {
     "value": "secretion",
     "matched": "tubular excretion",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "ceftazidime": {
@@ -447,7 +447,7 @@
    "renal_mechanism": {
     "value": "glomerular_filtration",
     "matched": "glomerular filtration",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "cefuroxime": {
@@ -495,7 +495,7 @@
    "renal_mechanism": {
     "value": "secretion",
     "matched": "tubular secretion",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "clindamycin": {
@@ -561,7 +561,7 @@
    "renal_mechanism": {
     "value": "not_renal_predominant",
     "matched": null,
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "daptomycin": {
@@ -657,7 +657,7 @@
    "renal_mechanism": {
     "value": "unspecified",
     "matched": null,
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "digoxin": {
@@ -711,7 +711,7 @@
    "renal_mechanism": {
     "value": "secretion",
     "matched": "tubular excretion",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "fentanyl": {
@@ -799,7 +799,7 @@
    "renal_mechanism": {
     "value": "unspecified",
     "matched": null,
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "gentamicin": {
@@ -879,7 +879,7 @@
    "renal_mechanism": {
     "value": "glomerular_filtration",
     "matched": "glomerular filtration",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "levetiracetam": {
@@ -959,7 +959,7 @@
    "renal_mechanism": {
     "value": "secretion",
     "matched": "tubular secretion",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "meropenem": {
@@ -1071,14 +1071,14 @@
    "renal_mechanism": {
     "value": "secretion",
     "matched": "tubular secretion",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "midazolam": {
    "included": false,
    "label": "midazolam.json",
    "excluded_by": "E1",
-   "reason": "Selected label (rule: pediatric mention, latest effective_time) has no continuous-infusion or other maintenance regimen in its machine-readable Dosage and Administration text."
+   "reason": "Selected label (rule: pediatric mention, latest effective_time, then highest version and set_id) has no continuous-infusion or other maintenance regimen in its machine-readable Dosage and Administration text."
   },
   "morphine": {
    "included": true,
@@ -1141,7 +1141,7 @@
    "renal_mechanism": {
     "value": "not_renal_predominant",
     "matched": null,
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "penicillin_g": {
@@ -1189,7 +1189,7 @@
    "renal_mechanism": {
     "value": "secretion",
     "matched": "tubular secretion",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "piperacillin_tazobactam": {
@@ -1253,7 +1253,7 @@
    "renal_mechanism": {
     "value": "secretion",
     "matched": "tubular secretion",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "tobramycin": {
@@ -1320,7 +1320,7 @@
    "renal_mechanism": {
     "value": "glomerular_filtration",
     "matched": "glomerular filtration",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "vancomycin": {
@@ -1400,7 +1400,7 @@
    "renal_mechanism": {
     "value": "glomerular_filtration",
     "matched": "glomerular filtration",
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   },
   "zidovudine": {
@@ -1451,7 +1451,7 @@
    "renal_mechanism": {
     "value": "not_renal_predominant",
     "matched": null,
-    "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
    }
   }
  }

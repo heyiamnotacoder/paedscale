@@ -18,6 +18,7 @@ from anthropic import Anthropic
 import retrieval
 from engine.formulation import attach_administration
 from engine.pk_cache import CACHE as PK_CACHE
+from engine.uncertainty import dose_uncertainty_interval
 from engine.pk_engine import (
     compute_pediatric_dose,
     estimate_gfr_bedside_schwartz,
@@ -370,6 +371,18 @@ def _run_adult_hi_case(case: dict, on_step=None) -> dict:
     }
 
 
+def attach_parameter_uncertainty(rec: dict, state: dict) -> dict:
+    """Attach the engine's 90% parameter-uncertainty interval to a prescribable recommendation.
+
+    Model-independent: the interval comes from the last successful engine call. It describes
+    the PK-extrapolated engine dose (maturation-parameter uncertainty only), not a
+    guideline-anchored final dose, and it is dropped for blocked recommendations.
+    """
+    pu = state.get("last_parameter_uncertainty")
+    rec["parameter_uncertainty"] = None if (rec.get("blocked") or not pu) else pu
+    return rec
+
+
 def _build_compute(case: dict, state: dict):
     """Return a compute_pediatric_dose tool handler closed over case + retrieval state.
 
@@ -380,6 +393,7 @@ def _build_compute(case: dict, state: dict):
     def _compute(args: dict) -> dict:
         # Live-or-abstain: refuse pediatric compute without core PK. Adult HI is
         # label lookup and does not need CL/Vd.
+        state["last_parameter_uncertainty"] = None  # only the latest successful engine call counts
         try:
             from engine.child_pugh import resolve_calculator_mode as _mode
             try:
@@ -494,6 +508,9 @@ def _build_compute(case: dict, state: dict):
             if out.get("blocked"):
                 state["blocked_reason"] = out.get("block_reason") or "not prescribable"
             else:
+                # Seeded Monte Carlo over the published TM50/Hill CIs (engine/uncertainty.py).
+                out["parameter_uncertainty"] = dose_uncertainty_interval(n_draws=1000, **merged)
+                state["last_parameter_uncertainty"] = out["parameter_uncertainty"]
                 # Successful non-blocked compute clears a prior engine latch only if
                 # this run is prescribable (PK-not-ready never latched blocked_reason).
                 state["blocked_reason"] = None
@@ -817,6 +834,7 @@ def run_case(case: dict, on_step=None, max_turns: int = 12) -> dict:
                             or "SAFETY STOP — no cited applicable hepatic-impairment adjustment; abstain.",
                         )
                     merge_pediatric_hi_into_recommendation(rec, ped_hi)
+                attach_parameter_uncertainty(rec, state)
                 attach_administration(rec, case)
                 return {
                     "recommendation": rec,

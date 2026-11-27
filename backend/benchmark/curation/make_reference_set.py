@@ -238,7 +238,7 @@ D["zidovudine"] = drug("zidovudine.json", "NRTI", "css",
     notes="Label: major route is metabolism to GZDV (the glucuronide).")
 
 EXCLUDED = {
-    "midazolam": ("E1", "Selected label (rule: pediatric mention, latest effective_time) has no continuous-infusion or other maintenance regimen in its machine-readable Dosage and Administration text."),
+    "midazolam": ("E1", "Selected label (rule: pediatric mention, latest effective_time, then highest version and set_id) has no continuous-infusion or other maintenance regimen in its machine-readable Dosage and Administration text."),
     "cefazolin": ("E1", "Adult treatment dosage table is an image in the selected label; only the perioperative prophylaxis regimen is text, so no adult regimen can be paired to the pediatric 25–100 mg/kg/day treatment text."),
     "digoxin": ("E2", "Selected label defers pediatric dosing under 10 years to a separate pediatric product label (not available from this manufacturer). It also fails E1: the adult and over-10-year maintenance doses are in image tables (Tables 2–3)."),
     "fentanyl": ("E1", "Label gives only induction/premedication bolus doses (adult 50–100 mcg; children 2–3 mcg/kg), not a maintenance regimen."),
@@ -264,7 +264,7 @@ for k, v in D.items():
     else:
         mech, ev = "unspecified", None
     v["renal_mechanism"] = {"value": mech, "matched": ev,
-                            "rule": "regex on label clinical pharmacology: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"}
+                            "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"}
 
 out = {"_about": ("PaedScale label benchmark reference set. Curated from FDA SPL text snapshots in "
                   "benchmark/labels/ under benchmark/PROTOCOL.md. Every number carries a verbatim quote "
