@@ -31,3 +31,59 @@ def open_strata(decisions: list[dict]) -> set[str]:
 
 def adult_open(decisions: list[dict]) -> bool:
     return sum(d["decision"] == "include" for d in decisions) < ADULT_ABSTRACTS
+
+
+def replay(record: dict) -> list[dict]:
+    """The observations the analysis uses, in screening order: an included study adds its
+    observations in strata that were still open when it was read (Amendment 1 §1)."""
+    from benchmark.external.curation.extraction import central, stratum
+    counts = {s: 0 for s in STRATA}
+    used = []
+    for study in record["pediatric"]:
+        if study["decision"] != "include":
+            continue
+        open_now = {s for s, n in counts.items() if n < STUDIES_PER_STRATUM}
+        contributed = set()
+        for o in study["observations"]:
+            pna = central(o.get("pna_days"), geometric=True)
+            if pna is None:                       # PMA only: postnatal age from PMA − GA
+                pna = max((central(o["pma_weeks"], False) - (central(o.get("ga_weeks"), False) or 40)) * 7, 0)
+            st = stratum(pna, central(o.get("ga_weeks"), geometric=False))
+            if st in open_now:
+                used.append({"pmid": study["pmid"], "obs": o, "stratum": st})
+                contributed.add(st)
+        for s in contributed:
+            counts[s] += 1
+    return used
+
+
+def _cli():
+    """python3 -m benchmark.external.curation.screening next <pass> <drug> [n]
+    Prints the next unscreened abstracts in the seeded order: pediatric while a stratum is open,
+    then adult while fewer than five adult abstracts qualify."""
+    import json
+    import os
+    import sys
+    from benchmark.external.curation.search import ABSTRACT_DIR, SEARCH_DIR
+    _, cmd, pass_name, drug, *rest = sys.argv
+    n = int(rest[0]) if rest else 3
+    snap = json.load(open(os.path.join(SEARCH_DIR, f"{drug}.json"), encoding="utf-8"))
+    path = os.path.join(os.path.dirname(SEARCH_DIR), "extraction", pass_name, f"{drug}.json")
+    rec = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"drug": drug, "pediatric": [], "adult": []}
+    used = replay(rec)
+    full = {s for s in STRATA if sum(1 for p in {u["pmid"] for u in used if u["stratum"] == s}) >= STUDIES_PER_STRATUM}
+    print(f"{drug} [{pass_name}] full strata: {sorted(full) or 'none'}; "
+          f"adult qualifying: {sum(d['decision'] == 'include' for d in rec['adult'])}/{ADULT_ABSTRACTS}")
+    for kind, still_open in (("pediatric", len(full) < len(STRATA)), ("adult", adult_open(rec["adult"]))):
+        done = {d["pmid"] for d in rec[kind]}
+        todo = [p for p in order(snap[kind]) if p not in done]
+        print(f"-- {kind}: {len(todo)} unscreened of {len(order(snap[kind]))} pre-filtered; open: {still_open}")
+        if still_open:
+            for p in todo[:n]:
+                print(f"\n=== {kind} PMID {p} ===")
+                print(open(os.path.join(ABSTRACT_DIR, drug, f"{p}.txt"), encoding="utf-8").read())
+            return
+
+
+if __name__ == "__main__":
+    _cli()
