@@ -162,4 +162,56 @@ LLM retrieval agent, which is reported separately.
 
 ## Amendments
 
-(none yet)
+### Amendment 1 — 2026-11-27, before any prediction was scored
+
+These changes answer an internal methodological review of the first version of this protocol. They were made after the reference set was curated (`reference_set.json`) and before any scoring code existed. They override the text above wherever the two conflict.
+
+1. **Hypothesis hierarchy, replacing the co-primaries.**
+   * **Primary comparator:** "allometry + class rule" (A1 below). It differs from PaedScale *only* by the maturation term, so the comparison isolates maturation.
+   * **Hypotheses**, tested in a fixed sequence. Each is tested only if the one before it succeeded, at a two-sided α of 0.05:
+     * **H1** (newborns: preterm and term, PNA < 28 d): PaedScale has a lower drug-weighted mean |log10 FE| than A1.
+     * **H2:** the same comparison for all pairs under 2 years.
+     * **H3:** the same comparison for all pairs.
+   * **Other comparators** (weight-linear, BSA, allometry-only): their three all-ages comparisons are secondary and Holm-adjusted.
+   * No power calculation is made: the sample is every eligible label. The number of drug clusters is reported with every estimate.
+2. **Added comparator A1, allometry + class rule.**
+   * Drugs using `cmax` get adult × WT/70 (volume-matched, as in the engine).
+   * All other drugs get adult × (WT/70)^0.75.
+   * Plain allometry-only is kept as a secondary comparator.
+3. **PaedScale equals weight-linear for aminoglycosides, by construction.**
+   * The engine's `cmax` solve is adult × Vd ratio, and Vd scales with WT^1.0, so the two methods give identical predictions for aminoglycosides. These ties are reported as ties.
+   * The engine's interval suggestion is not part of the mg/kg/day endpoint.
+4. **Fixed engine inputs.** `cl_adult_l_h = 10` and `vd_adult_l = 50` for every drug. Both cancel out of the css/auc/time_mic dose ratio (CL_child/CL_adult) and out of the cmax ratio, so they affect only the reported half-life.
+5. **Drug-weighted aggregation.** Each metric is computed per drug (the mean over that drug's bands), then averaged over drugs. Pair-weighted values are reported as a sensitivity analysis.
+6. **Age grid instead of a single child per band.**
+   * Each band is scored at 7 postnatal ages log-spaced between max(lower bound, 1 day) and the upper bound. A band with a single age is scored at that age.
+   * The band's prediction is the geometric mean across the grid; its reference dose is constant.
+   * The single arithmetic-midpoint child is kept as sensitivity analysis S10.
+   * The ICH stratum is assigned from the band's arithmetic midpoint.
+7. **Confidence intervals.**
+   * Every reported metric gets a 95% CI from a cluster bootstrap that resamples drugs (10,000 replicates, seed 20261127).
+   * The CI is BCa, falling back to percentile where BCa is undefined.
+   * The Wilcoxon signed-rank test is run on drug-level mean differences, not on pairs.
+8. **E3 contradiction removed.** E3 now reads: "the label states that the drug is eliminated predominantly unchanged in urine (quantitatively or qualitatively), or names CYP3A4 or UGT2B7 (glucuronidation) as the principal clearance route". A qualitative statement gives fe = 0.90 and the flag `fe_qualitative`.
+9. **Enzyme identity sources are fixed.**
+   * Morphine → UGT2B7: Coffman et al., Drug Metab Dispos 1997;25:1–4.
+   * Zidovudine → UGT2B7: Barbier et al., Drug Metab Dispos 2000;28:497–502.
+   * Midazolam and clindamycin → CYP3A4: their labels.
+10. **Label selection regex.**
+    * "Mentions pediatric dosing" means the regex `pediatric|neonat` (case-insensitive) matches the Dosage and Administration text.
+    * Retrieval date: 2026-11-27.
+    * Generic (ANDA) labels must carry the same labeling as their reference listed drug (21 CFR 314.94(a)(8)), so repackager and ANDA labels are accepted. The SPL `version` is recorded.
+11. **Indication choices are fixed in the data.** Each drug's paired indication, the reason for it and the verbatim quotes are recorded in `reference_set.json` before scoring. Any later change counts as an amendment.
+12. **Titrated infusions.** For midazolam and morphine the label gives a starting infusion rate for adults and children, and that starting rate is the reference. S8 excludes these titrated drugs.
+13. **Circularity.** The CYP3A4 curve was fitted to midazolam clearance and the UGT2B7 curve to morphine clearance. S7 excludes these curve-source drugs (midazolam, morphine).
+14. **Tubular secretion.** S9 keeps only the renally cleared drugs whose selected label names glomerular filtration as the renal mechanism and does not mention tubular secretion. This is decided from the label wording alone and is recorded per drug as `renal_mechanism` in `reference_set.json`.
+15. **Dose caps.** Labeled absolute caps ("not to exceed the adult dose", mg/day maxima) are not applied to the reference or to any prediction, so all methods are treated alike.
+16. **Units.** Penicillin G is in units. It enters only through the dimensionless fold error.
+17. **Reproducibility.**
+    * The growth table (`data/weight_median.csv`) and the label snapshots are committed.
+    * Interpolation is linear in age.
+    * Every output records the git commit of the engine.
+    * Product code must never import `benchmark`, and a test enforces this.
+    * One command regenerates every number, table and figure: `python3 -m benchmark.run` from `backend/`. It writes to `benchmark/output/`.
+    * CI runs the benchmark tests.
+18. **Rationale for GA X − 2.** It places the representative infant inside the band, just below the cut-off. S5 varies it by ±2 weeks.
