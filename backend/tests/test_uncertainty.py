@@ -1,5 +1,5 @@
 """
-Uncertainty layer: Monte Carlo prediction interval over the PUBLISHED 95% CIs of the
+Uncertainty layer: Monte Carlo parameter-uncertainty interval over the PUBLISHED 95% CIs of the
 maturation parameters (TM50, Hill). Deterministic (seeded), no API key.
 
 Run:  python3 -m tests.test_uncertainty
@@ -119,3 +119,22 @@ if __name__ == "__main__":
     test_no_spread_means_no_variance_attribution()
     test_caller_cannot_override_the_published_curves()
     print("All uncertainty tests passed.")
+
+
+def test_draws_past_a_safety_bound_are_counted_not_silently_dropped():
+    point = compute_pediatric_dose(weight_kg=3.5, pma_weeks=42.0, **RENAL).recommended_dose_mg_per_kg_per_day
+    free = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **RENAL)
+    bounded = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, toxic_dose_mg_per_kg_per_day=point * 1.05,
+                                        effective_dose_mg_per_kg_per_day=point * 0.95, **RENAL)
+    # the interval describes the engine dose, so a safety bound must not truncate it
+    assert bounded["dose_mg_per_kg_per_day"] == free["dose_mg_per_kg_per_day"]
+    assert bounded["n_valid"] == bounded["n_draws"]
+    assert 0 < bounded["share_above_toxic"] < 0.5 and 0 < bounded["share_below_effective"] < 0.5
+    assert free["share_above_toxic"] is None and free["share_below_effective"] is None
+
+
+def test_interval_names_the_engine_point_estimate_it_surrounds():
+    point = compute_pediatric_dose(weight_kg=3.5, pma_weeks=42.0, **RENAL).recommended_dose_mg_per_kg_per_day
+    pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **RENAL)
+    assert pi["engine_dose_mg_per_kg_per_day"] == point
+    assert "engine dose" in pi["kind"]

@@ -20,7 +20,7 @@ ADULT_PMA_WEEKS = 40.0 * 52.0  # ~40 years
 # Do not invent new curves. Approximate / "Anderson–Holford style" rows
 # were removed (cite-or-abstain).
 # tm50_ci95 / hill_ci95 are the 95% CIs printed in the same source; they feed the
-# Monte Carlo prediction interval in engine/uncertainty.py (never invented).
+# Monte Carlo parameter-uncertainty interval in engine/uncertainty.py (never invented).
 # ---------------------------------------------------------------------------
 MATURATION = {
     "renal_gfr": {

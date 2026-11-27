@@ -91,10 +91,16 @@ def dose_uncertainty_interval(
     if point.blocked:
         return None
     maturing = [p for p in (case.get("fm") or {}) if p in MATURATION]
+    # Draws describe the engine dose, so safety bounds must not truncate them: they are
+    # removed for sampling and reported as the share of draws past each bound instead.
+    toxic = case.get("toxic_dose_mg_per_kg_per_day")
+    effective = case.get("effective_dose_mg_per_kg_per_day")
+    unbounded = {k: v for k, v in case.items()
+                 if k not in ("toxic_dose_mg_per_kg_per_day", "effective_dose_mg_per_kg_per_day")}
 
     def run(vary: set[str], rng: random.Random):
         curves = {k: (sample_curve(v, rng) if k in vary else v) for k, v in MATURATION.items()}
-        return compute_pediatric_dose(maturation=curves, **case)
+        return compute_pediatric_dose(maturation=curves, **unbounded)
 
     rng = random.Random(seed)
     dose_kg: list[float] = []
@@ -119,8 +125,11 @@ def dose_uncertainty_interval(
     share = {k: v / total for k, v in raw.items()} if total > _NO_SPREAD else None
 
     dq = _quantiles(dose_kg)
+    share_past = lambda bound, past: (sum(past(x, bound) for x in dose_kg) / len(dose_kg)
+                                      if bound is not None and dose_kg else None)
     return {
-        "kind": "parameter-uncertainty interval (maturation TM50/Hill only)",
+        "kind": "parameter-uncertainty interval around the engine dose (maturation TM50/Hill only)",
+        "engine_dose_mg_per_kg_per_day": point.recommended_dose_mg_per_kg_per_day,
         "method": (
             f"Monte Carlo, {n_draws} draws (seed {seed}); TM50 and Hill sampled independently "
             "from split log-normals matching the published 95% CIs; allometric exponent fixed "
@@ -136,4 +145,6 @@ def dose_uncertainty_interval(
         "half_life_h": _quantiles(hls),
         "fold_width_90": (dq["p95"] / dq["p05"]) if dq and dq["p05"] > 0 else None,
         "variance_share": share,
+        "share_above_toxic": share_past(toxic, lambda x, t: x > t),
+        "share_below_effective": share_past(effective, lambda x, e: x < e),
     }

@@ -1791,6 +1791,8 @@ function paramUncertaintyHtml(pu, finalDpk){
   const notes = [];
   if(pu.fold_width_90!=null) notes.push(`The interval spans ${pu.fold_width_90.toFixed(2)}-fold.`);
   if(shares.length) notes.push(`Spread comes from ` + shares.map(([k,v])=>`${esc(PATHWAY_LABEL[k]||k)} (${Math.round(v*100)}%)`).join(", ") + `.`);
+  if(pu.share_above_toxic) notes.push(`<b>${Math.round(pu.share_above_toxic*100)}% of draws exceed the toxic threshold.</b>`);
+  if(pu.share_below_effective) notes.push(`<b>${Math.round(pu.share_below_effective*100)}% of draws fall below the effective threshold.</b>`);
   if(finalDpk!=null && (finalDpk < q.p05 || finalDpk > q.p95)) notes.push(`The recommended dose lies outside this interval, so it is not the engine estimate (for example, it is guideline-anchored).`);
   notes.push(`This covers uncertainty in the published maturation-curve parameters only. It is not the range of doses that suit different children.`);
   h += `<div class="hint" style="margin-top:8px">${notes.join(" ")}</div></div>`;

@@ -384,6 +384,7 @@ def test_active_ingredient_match_ignores_dosage_form_qualifiers_and_is_one_to_on
     assert same_active_ingredient("vancomycin", _label("VANCOMYCIN INJECTION, USP"))
     assert not same_active_ingredient("sand", _label("SANDOSTATIN"))               # whole words only
     assert not same_active_ingredient("piperacillin and tazobactam", _label("PIPERACILLIN"))
+    assert not same_active_ingredient("ampicillin", _label("AMPICILLIN SODIUM, SULBACTAM SODIUM"))
 
 
 def test_provenance_survives_a_missing_git_checkout(monkeypatch):
@@ -402,10 +403,17 @@ def test_by_method_without_bootstrap_reports_no_intervals():
     assert s["aafe_ci95"] is None and s["ci_n_boot"] == 0
 
 
-def test_uncertainty_coverage_is_drug_weighted_with_a_clustered_ci():
+def test_uncertainty_coverage_is_drug_weighted_with_a_clustered_ci(monkeypatch):
+    # Fixed interval [9, 11] mg/kg/day: drug "a" has two bands inside it, drug "b" one outside.
+    # Drug-weighted coverage is (1 + 0) / 2 = 0.5; pair-weighting would give 2/3.
+    import engine.uncertainty
     from benchmark.run import uncertainty_coverage
-    c = uncertainty_coverage(_three_drug_set(), n_boot=50)
-    assert c["n_bands"] == 6 and c["n_drugs"] == 3
+    fixed = {"dose_mg_per_kg_per_day": {"p05": 9.0, "p50": 10.0, "p95": 11.0}}
+    monkeypatch.setattr(engine.uncertainty, "dose_uncertainty_interval", lambda **kw: fixed)
+    a = json.loads(json.dumps(SYNTH["linear_truth"]))
+    b = json.loads(json.dumps(SYNTH["linear_truth"]))
+    b["bands"] = [dict(b["bands"][0], ref_per_kg_daily=100.0)]
+    c = uncertainty_coverage({"a": a, "b": b}, n_boot=50)
+    assert c["n_bands"] == 3 and c["n_drugs"] == 2 and c["coverage_90"] == 0.5
     lo, hi = c["coverage_90_ci95"]
-    assert 0.0 <= lo <= hi <= 1.0 and 0.0 <= c["coverage_90"] <= 1.0
-    assert 0.0 <= c["pair_weighted_coverage_90"] <= 1.0
+    assert 0.0 <= lo <= hi <= 1.0

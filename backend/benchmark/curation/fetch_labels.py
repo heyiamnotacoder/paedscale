@@ -6,8 +6,8 @@ matches /pediatric|neonat/i; break ties by the latest effective_time, then (Amen
 highest SPL version, then the highest set_id. All pages are read.
 
 Usage (from backend/): python3 benchmark/curation/fetch_labels.py vancomycin gentamicin ...
-Writes raw label JSON to ./labels_raw/, the committed snapshot to benchmark/labels/, and prints
-the selected set_id per drug.
+Writes raw label JSON to ./labels_raw/ and prints the selected set_id per drug. With
+--write-snapshots it also overwrites benchmark/labels/<drug>.json (an amendment-level change).
 Snapshots in benchmark/labels/ keep set_id, effective_time, version, openfda names and the
 D&A / pediatric use / clinical pharmacology / pharmacokinetics sections. Retrieved 2026-11-27.
 """
@@ -25,18 +25,23 @@ PEDS = re.compile(r"pediatric|neonat", re.I)
 
 
 DILUENTS = re.compile(r"^(dextrose|sodium chloride|water)\b", re.I)
+# Components made only of these words are dosage-form qualifiers, not ingredients.
+QUALIFIERS = {"usp", "nf", "injection", "injectable", "for", "solution", "powder", "premix",
+              "in", "plastic", "container", "single", "dose", "vial", "bulk", "package", "pharmacy"}
 
 
 def same_active_ingredient(generic: str, label: dict) -> bool:
     """Amendment 3: the label's active ingredients are exactly the candidate's (salts allowed;
     premix diluents such as dextrose are not active ingredients). Drops combination products
     that the openFDA phrase query also matches, e.g. ampicillin AND sulbactam for ampicillin.
-    Components split on the word "and" only, so "INJECTION, USP" qualifiers do not count;
-    each wanted ingredient must match a different component as whole words."""
+    Components split on the word "and" and on commas; a component made only of dosage-form
+    words ("INJECTION", "USP") is dropped. Each wanted ingredient must match a different
+    component as whole words."""
     wanted = [w.strip().lower() for w in re.split(r"\band\b", generic, flags=re.I)]
     for name in label.get("openfda", {}).get("generic_name") or []:
-        parts = [p.strip() for p in re.split(r"\band\b", name, flags=re.I) if p.strip()]
-        actives = [p for p in parts if not DILUENTS.match(p)]
+        parts = [p.strip() for p in re.split(r"\band\b|,", name, flags=re.I) if p.strip()]
+        actives = [p for p in parts if not DILUENTS.match(p)
+                   and not set(re.findall(r"[a-z]+", p.lower())) <= QUALIFIERS]
         if len(actives) != len(wanted):
             continue
         free = list(actives)
@@ -93,7 +98,8 @@ def snapshot(x: dict) -> dict:
 if __name__ == "__main__":
     os.makedirs("labels_raw", exist_ok=True)
     LABELS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "labels")
-    for d in sys.argv[1:]:
+    write_snapshots = "--write-snapshots" in sys.argv
+    for d in [a for a in sys.argv[1:] if not a.startswith("--")]:
         res = candidates(d)
         x = select(res)
         if x is None:
@@ -102,7 +108,8 @@ if __name__ == "__main__":
         fn = d.replace(" ", "_").replace("/", "_")
         with open(f"labels_raw/{fn}.json", "w") as f:
             json.dump(x, f, indent=1)
-        with open(os.path.join(LABELS, f"{fn}.json"), "w") as f:   # committed snapshot
-            json.dump(snapshot(x), f, indent=1, ensure_ascii=False)
+        if write_snapshots:   # replacing a committed snapshot is a protocol amendment
+            with open(os.path.join(LABELS, f"{fn}.json"), "w") as f:
+                json.dump(snapshot(x), f, indent=1, ensure_ascii=False)
         print(d, len(res), x.get("set_id"), x.get("version"), x.get("effective_time"))
         time.sleep(0.3)

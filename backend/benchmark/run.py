@@ -17,7 +17,7 @@ from typing import Callable, Optional
 
 from benchmark.methods import (METHODS, NEWBORN_STRATA, STRATA, UNDER2_STRATA, ich_stratum, predict_band,
                                pathway_fractions, virtual_patients)
-from benchmark.metrics import by_drug, cluster_bootstrap_ci, summarize
+from benchmark.metrics import by_drug, cluster_bootstrap_ci, summarize, weighted
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "output")
@@ -234,15 +234,17 @@ def uncertainty_coverage(refset: dict, n_boot: int) -> dict:
                 drug=name, weight_kg=p["weight_kg"], cl_adult_l_h=NOMINAL_CL_L_H, vd_adult_l=NOMINAL_VD_L,
                 fm=pathway_fractions(d), target_metric=d["target_metric"], pma_weeks=p["pma_weeks"],
                 adult_dose_mg_per_day=d["adult"]["daily"], n_draws=1000)
+            if pi is None:      # blocked point estimate: no interval to score
+                continue
             q = pi["dose_mg_per_kg_per_day"]
             rows.append({"drug": name, "hit": float(q["p05"] <= b["ref_per_kg_daily"] <= q["p95"]),
-                         "width": q["p95"] / q["p05"]})
-    drug_weighted = lambda rs: sum(sum(r["hit"] for r in g) / len(g) for g in by_drug(rs).values()) / len(by_drug(rs))
+                         "width": q["p95"] / q["p05"] if q["p05"] > 0 else math.inf})
+    drug_weighted = lambda rs: weighted(rs, lambda r: r["hit"], "drug")
     ci = _ci(rows, drug_weighted, n_boot)
     widths = sorted(r["width"] for r in rows)
     return {"n_bands": len(rows), "n_drugs": len(by_drug(rows)), "coverage_90": drug_weighted(rows),
             "coverage_90_ci95": [ci["lo"], ci["hi"]] if ci else None,
-            "pair_weighted_coverage_90": sum(r["hit"] for r in rows) / len(rows),
+            # descriptive only (no interval): how wide the 90% intervals are
             "median_fold_width": widths[len(widths) // 2], "max_fold_width": widths[-1]}
 
 

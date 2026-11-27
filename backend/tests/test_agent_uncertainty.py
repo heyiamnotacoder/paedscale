@@ -24,10 +24,10 @@ def test_compute_output_carries_a_90pct_interval_that_brackets_the_engine_dose()
     q = pu["dose_mg_per_kg_per_day"]
     assert pu["level"] == 0.90 and pu["kind"].startswith("parameter-uncertainty")
     assert q["p05"] < out["recommended_dose_mg_per_kg_per_day"] < q["p95"]
-    assert state["last_parameter_uncertainty"] is pu
+    assert state["last_parameter_uncertainty"] == pu
 
 
-def test_blocked_compute_clears_any_earlier_interval():
+def test_failed_compute_clears_any_earlier_interval():
     state = _state()
     _build_compute(_neonate(), state)({"drug": "vancomycin", "weight_kg": 3.4, "pma_weeks": 41})
     assert state["last_parameter_uncertainty"]
@@ -41,7 +41,7 @@ def test_recommendation_gets_the_interval_only_when_prescribable():
     state = _state()
     _build_compute(_neonate(), state)({"drug": "vancomycin", "weight_kg": 3.4, "pma_weeks": 41})
     ok = attach_parameter_uncertainty({"blocked": False, "final_dose_mg_per_kg_per_day": 30}, state)
-    assert ok["parameter_uncertainty"] is state["last_parameter_uncertainty"]
+    assert ok["parameter_uncertainty"] == state["last_parameter_uncertainty"]
     stop = attach_parameter_uncertainty({"blocked": True, "final_dose_mg_per_kg_per_day": None}, state)
     assert stop["parameter_uncertainty"] is None
 
@@ -71,3 +71,28 @@ def test_run_case_attaches_the_engine_interval_to_the_final_recommendation():
     assert rec and not rec.get("blocked"), out
     q = rec["parameter_uncertainty"]["dose_mg_per_kg_per_day"]
     assert q["p05"] < q["p50"] < q["p95"]
+
+
+def test_engine_hard_stop_gets_no_interval():
+    state = _state()
+    _build_compute(_neonate(), state)({"drug": "vancomycin", "weight_kg": 3.4, "pma_weeks": 41})
+    state["last_dossier"]["toxic_dose_mg_per_kg_per_day"] = 1.0       # engine dose is far above this
+    out = _build_compute(_neonate(), state)({"drug": "vancomycin", "weight_kg": 3.4, "pma_weeks": 41})
+    assert out.get("blocked") is True and "parameter_uncertainty" not in out
+    assert state["last_parameter_uncertainty"] is None
+
+
+def test_an_interval_failure_never_discards_a_valid_engine_dose():
+    from unittest.mock import patch
+    state = _state()
+    with patch("agents.agent.dose_uncertainty_interval", side_effect=RuntimeError("boom")):
+        out = _build_compute(_neonate(), state)({"drug": "vancomycin", "weight_kg": 3.4, "pma_weeks": 41})
+    assert out.get("recommended_dose_mg_per_kg_per_day") and "error" not in out, out
+    assert out["parameter_uncertainty"] is None and state["last_parameter_uncertainty"] is None
+
+
+def test_no_interval_when_the_recommendation_withholds_a_dose():
+    state = _state()
+    _build_compute(_neonate(), state)({"drug": "vancomycin", "weight_kg": 3.4, "pma_weeks": 41})
+    rec = attach_parameter_uncertainty({"blocked": False, "final_dose_mg_per_kg_per_day": None}, state)
+    assert rec["parameter_uncertainty"] is None

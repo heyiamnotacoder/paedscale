@@ -32,7 +32,7 @@ def _mean(xs):
     return sum(xs) / len(xs)
 
 
-def _weighted(rows: list[dict], f: Callable[[dict], float], weight: str) -> float:
+def weighted(rows: list[dict], f: Callable[[dict], float], weight: str) -> float:
     if weight == "pair":
         return _mean([f(r) for r in rows])
     return _mean([_mean([f(r) for r in rs]) for rs in by_drug(rows).values()])
@@ -46,13 +46,13 @@ def summarize(rows: list[dict], weight: str = "drug") -> dict:
     out = {
         "n_pairs": len(rows),
         "n_drugs": len(by_drug(rows)),
-        "aafe": 10 ** _weighted(rows, lambda r: abs(lg(r)), weight),
-        "afe": 10 ** _weighted(rows, lg, weight),
-        "within_1_5": _weighted(rows, lambda r: _within(r["fe"], CONCORDANCE_BAND), weight),  # 0.67–1.5
-        "within_2": _weighted(rows, lambda r: _within(r["fe"], TWOFOLD_BAND), weight),
+        "aafe": 10 ** weighted(rows, lambda r: abs(lg(r)), weight),
+        "afe": 10 ** weighted(rows, lg, weight),
+        "within_1_5": weighted(rows, lambda r: _within(r["fe"], CONCORDANCE_BAND), weight),  # 0.67–1.5
+        "within_2": weighted(rows, lambda r: _within(r["fe"], TWOFOLD_BAND), weight),
     }
     if all("in_range" in r for r in rows):
-        out["within_label_range"] = _weighted(rows, lambda r: float(r["in_range"]), weight)
+        out["within_label_range"] = weighted(rows, lambda r: float(r["in_range"]), weight)
     return out
 
 
