@@ -1,8 +1,8 @@
 """External validation, step 1 (network): snapshot the PubMed searches fixed in PROTOCOL.md.
 
-Usage (from backend/): python3 -m benchmark.external.curation.search restore|snapshot
+Usage (from backend/): python3 -m benchmark.external.curation.search restore|authors|snapshot
 `restore` re-fetches the committed snapshot's abstracts and checks them against its hashes;
-`snapshot` re-runs the searches and overwrites the committed snapshot (done once, 2026-11-27).
+`authors` writes dataset/authors.json for the frozen dataset (E7); `snapshot` re-runs the searches and overwrites the committed snapshot (done once, 2026-11-27).
 Writes benchmark/external/search/<drug>.json (committed): the queries, the retrieval date, every
 PMID returned (ascending), and per PMID the SHA-256 of the abstract text and whether the
 mechanical pre-filter matched. Abstract texts go to benchmark/external/abstracts/ (gitignored,
@@ -117,6 +117,27 @@ def parse_efetch(xml: bytes) -> dict[str, dict]:
     return out
 
 
+def parse_authors(xml: bytes) -> dict[str, list[str]]:
+    """Per PMID, its personal authors as "LastName Initials" (for sensitivity analysis E7)."""
+    out = {}
+    for art in ET.fromstring(xml).iter("PubmedArticle"):
+        pmid = art.findtext("MedlineCitation/PMID")
+        out[pmid] = [f"{a.findtext('LastName')} {a.findtext('Initials') or ''}".strip()
+                     for a in art.findall("MedlineCitation/Article/AuthorList/Author")
+                     if a.findtext("LastName")]
+    return out
+
+
+def fetch_authors(pmids: list[str]) -> dict[str, list[str]]:
+    out = {}
+    for i in range(0, len(pmids), 150):
+        r = _request("POST", f"{EUTILS}/efetch.fcgi",
+                     data={**NCBI, "db": "pubmed", "id": ",".join(pmids[i:i + 150]), "retmode": "xml"})
+        out.update(parse_authors(r.content))
+        time.sleep(0.4)
+    return out
+
+
 def require_all(pmids: list[str], recs: dict) -> None:
     missing = [p for p in pmids if p not in recs or not recs[p].get("has_abstract")]
     if missing:
@@ -184,14 +205,23 @@ def snapshot(drug: str, today: str) -> dict:
 
 
 def main(argv: list[str]) -> None:
-    """`restore` re-fetches the committed snapshot's abstracts; `snapshot` re-runs the searches
+    """`restore` re-fetches the committed snapshot's abstracts; `authors` writes dataset/authors.json for the frozen dataset (E7); `snapshot` re-runs the searches
     and overwrites the committed snapshot. Anything else stops, so a typo never re-searches."""
     if argv == ["restore"]:
         for d in drugs():
             print(d, restore(d))
         return
+    if argv == ["authors"]:                # E7: authors of the frozen dataset's pediatric studies
+        final = os.path.join(EXTERNAL, "extraction", "final")
+        pmids = sorted({s["pmid"] for fn in os.listdir(final) if fn.endswith(".json")
+                        for s in json.load(open(os.path.join(final, fn), encoding="utf-8"))["pediatric"]
+                        if s["decision"] == "include"}, key=int)
+        os.makedirs(os.path.join(EXTERNAL, "dataset"), exist_ok=True)
+        with open(os.path.join(EXTERNAL, "dataset", "authors.json"), "w", encoding="utf-8") as f:
+            json.dump(fetch_authors(pmids), f, indent=1, sort_keys=True)
+        return
     if argv != ["snapshot"]:
-        raise SystemExit("usage: python3 -m benchmark.external.curation.search restore|snapshot")
+        raise SystemExit("usage: python3 -m benchmark.external.curation.search restore|authors|snapshot")
     os.makedirs(SEARCH_DIR, exist_ok=True)
     today = dt.date.today().isoformat()
     for d in drugs():

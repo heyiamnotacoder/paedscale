@@ -111,3 +111,12 @@ def test_the_cli_never_rewrites_the_snapshot_without_its_explicit_subcommand(mon
     assert calls == []
     search.main(["restore"])
     assert calls == [("restore", "acyclovir")]
+
+
+def test_author_names_are_parsed_as_last_name_and_initials():
+    xml = b"""<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>9</PMID><Article>
+    <AuthorList><Author><LastName>Anderson</LastName><Initials>BJ</Initials></Author>
+    <Author><CollectiveName>Study Group</CollectiveName></Author>
+    <Author><LastName>Holford</LastName><Initials>NH</Initials></Author></AuthorList>
+    </Article></MedlineCitation></PubmedArticle></PubmedArticleSet>"""
+    assert search.parse_authors(xml) == {"9": ["Anderson BJ", "Holford NH"]}
