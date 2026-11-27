@@ -441,3 +441,19 @@ def test_uncertainty_coverage_counts_blocked_bands_and_reports_a_true_median(mon
     assert c["n_bands"] == 2 and c["n_bands_blocked"] == 1
     assert abs(c["median_fold_width"] - 1.2) < 1e-9
     assert c["coverage_90_ci_method"] in ("bca", "percentile")
+
+
+def test_active_ingredient_match_handles_strengths_before_diluents_and_hyphens():
+    from benchmark.curation.fetch_labels import same_active_ingredient
+    assert same_active_ingredient("gentamicin", _label("GENTAMICIN SULFATE, IN 0.9% SODIUM CHLORIDE"))
+    assert same_active_ingredient("cefazolin", _label("CEFAZOLIN SODIUM, 5% DEXTROSE"))
+    assert same_active_ingredient("heparin", _label("HEPARIN SODIUM, 5,000 USP UNITS PER ML"))
+    assert not same_active_ingredient("cefazolin", _label("CEFAZOLIN, DEXTROSE-FREE LIDOCAINE"))
+
+
+def test_uncertainty_coverage_survives_every_band_blocked(monkeypatch):
+    import engine.uncertainty
+    from benchmark.run import uncertainty_coverage
+    monkeypatch.setattr(engine.uncertainty, "dose_uncertainty_interval", lambda **kw: None)
+    c = uncertainty_coverage({"a": SYNTH["linear_truth"]}, n_boot=20)
+    assert c["n_bands"] == 0 and c["n_bands_blocked"] == 2 and c["coverage_90"] is None

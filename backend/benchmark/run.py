@@ -235,13 +235,13 @@ def uncertainty_coverage(refset: dict, n_boot: int) -> dict:
                 drug=name, weight_kg=p["weight_kg"], cl_adult_l_h=NOMINAL_CL_L_H, vd_adult_l=NOMINAL_VD_L,
                 fm=pathway_fractions(d), target_metric=d["target_metric"], pma_weeks=p["pma_weeks"],
                 adult_dose_mg_per_day=d["adult"]["daily"], n_draws=1000)
-            if pi is None:      # blocked point estimate: no interval to score (counted)
+            if pi is None or pi["dose_mg_per_kg_per_day"] is None:   # blocked: no interval (counted)
                 n_blocked += 1
                 continue
             q = pi["dose_mg_per_kg_per_day"]
             rows.append({"drug": name, "hit": float(q["p05"] <= b["ref_per_kg_daily"] <= q["p95"]),
                          "width": q["p95"] / q["p05"] if q["p05"] > 0 else None})
-    drug_weighted = lambda rs: weighted(rs, lambda r: r["hit"], "drug")
+    drug_weighted = lambda rs: weighted(rs, lambda r: r["hit"], "drug") if rs else None
     ci = _ci(rows, drug_weighted, n_boot)
     widths = [r["width"] for r in rows if r["width"] is not None]
     return {"n_bands": len(rows), "n_bands_blocked": n_blocked, "n_drugs": len(by_drug(rows)),

@@ -24,16 +24,26 @@ API = "https://api.fda.gov/drug/label.json"
 PEDS = re.compile(r"pediatric|neonat", re.I)
 
 
-DILUENTS = re.compile(r"^(in\s+)?(dextrose|sodium chloride|water)\b", re.I)
-# A component made only of these words (or of numbers) is a dosage form, package or strength,
-# not an ingredient. Listed in PROTOCOL.md Amendment 3 §1.
+DILUENT_WORDS = {"dextrose", "water", "sodium", "chloride"}
+# Dosage-form, package and strength words. Listed in PROTOCOL.md Amendment 3 §1.
 QUALIFIERS = {"usp", "nf", "sterile", "injection", "injectable", "for", "solution", "powder", "premix",
               "in", "plastic", "container", "single", "dose", "vial", "bulk", "package", "pharmacy",
-              "units", "unit", "mg", "g", "mcg", "ml", "meq"}
+              "units", "unit", "iu", "mg", "g", "mcg", "ml", "meq", "per"}
+
+
+def _words(component: str) -> set[str]:
+    return set(re.findall(r"[a-z]+", component.lower()))   # numbers and punctuation ignored
 
 
 def _is_qualifier(component: str) -> bool:
-    return set(re.findall(r"[a-z]+", component.lower())) <= QUALIFIERS   # numbers-only too
+    return _words(component) <= QUALIFIERS
+
+
+def _is_diluent(component: str) -> bool:
+    """A premix diluent, possibly with a strength: "IN 0.9% SODIUM CHLORIDE", "5% DEXTROSE"."""
+    w = _words(component)
+    named = "dextrose" in w or "water" in w or {"sodium", "chloride"} <= w
+    return named and w <= DILUENT_WORDS | QUALIFIERS
 
 
 def same_active_ingredient(generic: str, label: dict) -> bool:
@@ -46,7 +56,7 @@ def same_active_ingredient(generic: str, label: dict) -> bool:
     wanted = [w.strip().lower() for w in re.split(r"\band\b", generic, flags=re.I)]
     for name in label.get("openfda", {}).get("generic_name") or []:
         parts = [p.strip() for p in re.split(r"\band\b|,", name, flags=re.I) if p.strip()]
-        actives = [p for p in parts if not DILUENTS.match(p) and not _is_qualifier(p)]
+        actives = [p for p in parts if not _is_diluent(p) and not _is_qualifier(p)]
         if len(actives) != len(wanted):
             continue
         free = list(actives)
