@@ -54,9 +54,11 @@ def _numbers(x) -> list[float]:
 
 
 def _number_in(value: float, quote: str) -> bool:
-    forms = {f"{value:g}", str(value), f"{value:.1f}", f"{value:.2f}", f"{value:.3f}"}
+    """The value is one of the quote's numbers, compared as numbers so that "0.0340" is 0.034
+    (Amendment 13 §1). A decimal comma counts as a point."""
     q = _norm(quote).replace(",", ".")
-    return any(re.search(rf"(?<![\d.]){re.escape(f)}(?!\.?\d)", q) for f in forms)
+    nums = re.findall(r"(?<![\d.])\d+(?:\.\d+)?(?!\.?\d)", q)
+    return any(math.isclose(float(n), value, rel_tol=1e-9, abs_tol=1e-12) for n in nums)
 
 
 def flag_problems(flags, kind: str) -> list[str]:

@@ -201,3 +201,11 @@ def test_a_range_without_its_central_field_is_a_problem():
     for kw in ({"pma_weeks": None, "pma_range_weeks": [28, 40], "pna_days": 3},
                {"pna_days": None, "pna_range_days": [0, 200], "pma_weeks": 40}):
         assert any("without its main field" in p for p in ex.problems(_obs(**kw), ABSTRACT))
+
+
+def test_a_number_matches_its_quote_with_trailing_zeros():
+    # Amendment 13 §1: "0.0340" in the abstract is the value 0.034
+    assert ex._number_in(0.034, "clearance 0.0340 L/h/kg")
+    assert ex._number_in(1.2, "1,20 l/h")
+    assert not ex._number_in(0.034, "clearance 0.0341 L/h/kg")
+    assert not ex._number_in(34, "clearance 0.034 L/h/kg")

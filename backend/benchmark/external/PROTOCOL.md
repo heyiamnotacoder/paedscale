@@ -336,3 +336,9 @@ The scoring code (`score.py`), the agreement code (`curation/agreement.py`) and 
 7. **Statistics.** Each observation is paired with itself across methods. The sign-flip test is two-sided: the share of the 2^k sign assignments of the drug-level differences whose absolute sum is at least the observed one. HE2 is always reported, and it is marked as tested only when HE1 succeeds. Per-stratum comparisons and intervals are reported only for strata with at least 5 drugs; smaller strata get the per-drug differences without an interval.
 8. **E7 author match.** An author matches when the PubMed "LastName Initials" equals Anderson BJ, Holford NH or NHG, Rhodin MM, Anand KJ or KJS, or Larsson P.
 9. **Adjudication.** The final record follows the seeded order. A decision both passes agree on is kept. A disagreement, and any abstract only one pass read, is decided by the adjudicator re-reading the abstract against the protocol. An abstract neither pass read but that the final queue opens is screened by the adjudicator. Each adjudicated decision and value is recorded in `extraction/adjudication.json` with its reason. The final record must pass `curation/check.py`.
+
+### Amendment 13 — 2026-11-27, during the first screening pass, before any agreement was computed or any prediction was made
+
+An error in the record checker was found while screening (Amendment 11 §3).
+
+1. **Number matching.** The check that each recorded number appears in its quote compared text forms and missed trailing zeros: a clearance printed "0.0340" and recorded as 0.034 was reported as absent. Numbers in a quote are now compared numerically. This also removes a leniency of the old check, which accepted a value that rounded to a printed number (5.12 against "5.1"). The pass-1 records finished at this point (amikacin, cefoxitin, daptomycin, famotidine, gentamicin, meropenem, penicillin G) were re-checked and pass. No decision or value changed.
