@@ -6,7 +6,10 @@ Run:  python3 -m tests.test_uncertainty
 """
 
 from engine.pk_engine import compute_pediatric_dose
-from engine.uncertainty import dose_prediction_interval
+import random
+
+from engine.constants import MATURATION
+from engine.uncertainty import dose_uncertainty_interval, sample_curve
 
 # A renally cleared drug (vancomycin-like) — absolute CL/Vd do not drive the css ratio.
 RENAL = dict(
@@ -17,7 +20,7 @@ RENAL = dict(
 
 def test_interval_brackets_point_estimate_for_term_neonate():
     point = compute_pediatric_dose(weight_kg=3.5, pma_weeks=42.0, **RENAL)
-    pi = dose_prediction_interval(weight_kg=3.5, pma_weeks=42.0, **RENAL)
+    pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **RENAL)
     lo, hi = pi["dose_mg_per_kg_per_day"]["p05"], pi["dose_mg_per_kg_per_day"]["p95"]
     assert lo < point.recommended_dose_mg_per_kg_per_day < hi, (lo, point, hi)
     # A term neonate sits on the steep part of the GFR curve: the interval is non-trivial.
@@ -26,23 +29,23 @@ def test_interval_brackets_point_estimate_for_term_neonate():
 
 
 def test_interval_narrows_as_maturation_completes():
-    neo = dose_prediction_interval(weight_kg=3.5, pma_weeks=42.0, **RENAL)
-    teen = dose_prediction_interval(weight_kg=50.0, age_years=14.0, **RENAL)
+    neo = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **RENAL)
+    teen = dose_uncertainty_interval(weight_kg=50.0, age_years=14.0, **RENAL)
     assert teen["fold_width_90"] < neo["fold_width_90"], (teen["fold_width_90"], neo["fold_width_90"])
     assert teen["fold_width_90"] < 1.02, teen["fold_width_90"]
     print(f"  PI narrows with age: neonate ×{neo['fold_width_90']:.2f} → 14 yr ×{teen['fold_width_90']:.3f}  OK")
 
 
 def test_seeded_and_reproducible():
-    a = dose_prediction_interval(weight_kg=3.5, pma_weeks=42.0, seed=7, **RENAL)
-    b = dose_prediction_interval(weight_kg=3.5, pma_weeks=42.0, seed=7, **RENAL)
+    a = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, seed=7, **RENAL)
+    b = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, seed=7, **RENAL)
     assert a == b
     print("  PI reproducible under a fixed seed  OK")
 
 
 def test_sensitivity_attributes_variance_to_the_maturing_pathway():
     mixed = dict(RENAL, fm={"renal_gfr": 0.5, "cyp3a4": 0.5})
-    pi = dose_prediction_interval(weight_kg=3.5, pma_weeks=42.0, **mixed)
+    pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **mixed)
     shares = pi["variance_share"]
     assert set(shares) == {"renal_gfr", "cyp3a4"}, shares
     assert abs(sum(shares.values()) - 1.0) < 1e-6, shares
@@ -51,7 +54,7 @@ def test_sensitivity_attributes_variance_to_the_maturing_pathway():
 
 def test_cmax_dose_is_volume_matched_so_dose_interval_is_degenerate():
     cmax = dict(RENAL, target_metric="cmax")
-    pi = dose_prediction_interval(weight_kg=3.5, pma_weeks=42.0, **cmax)
+    pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **cmax)
     d = pi["dose_mg_per_kg_per_day"]
     assert abs(d["p95"] / d["p05"] - 1.0) < 1e-9, d
     # ...but maturation uncertainty still moves the half-life, which sets the interval.
@@ -61,9 +64,46 @@ def test_cmax_dose_is_volume_matched_so_dose_interval_is_degenerate():
 
 
 def test_blocked_case_returns_none():
-    pi = dose_prediction_interval(weight_kg=3.5, pma_weeks=42.0, **dict(RENAL, fm={}))
+    pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **dict(RENAL, fm={}))
     assert pi is None
     print("  blocked case → no interval  OK")
+
+
+def test_sampled_curves_reproduce_the_published_95_cis():
+    """Each sampled TM50 / Hill must land on the CI printed in its source, both tails."""
+    rng = random.Random(1)
+    for key, params in MATURATION.items():
+        draws = [sample_curve(params, rng) for _ in range(40000)]
+        for field, ci in (("tm50_weeks", params["tm50_ci95"]), ("hill", params["hill_ci95"])):
+            xs = sorted(d[field] for d in draws)
+            lo, med, hi = xs[int(0.025 * len(xs))], xs[len(xs) // 2], xs[int(0.975 * len(xs))]
+            assert abs(lo / ci[0] - 1) < 0.01, (key, field, lo, ci)
+            assert abs(hi / ci[1] - 1) < 0.01, (key, field, hi, ci)
+            assert abs(med / params[field] - 1) < 0.01, (key, field, med, params[field])
+    print("  sampled TM50/Hill reproduce published 95% CIs (both tails)  OK")
+
+
+def test_absolute_daily_dose_also_gets_an_interval():
+    pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **RENAL)
+    d, dk = pi["dose_mg_per_day"], pi["dose_mg_per_kg_per_day"]
+    assert abs(d["p50"] / 3.5 - dk["p50"]) < 1e-9, (d, dk)
+    assert pi["n_valid"] == pi["n_draws"]
+    print("  absolute mg/day interval reported, all draws valid  OK")
+
+
+def test_no_spread_means_no_variance_attribution():
+    adult = dose_uncertainty_interval(weight_kg=70.0, age_years=40.0, **RENAL)
+    assert adult["variance_share"] is None, adult["variance_share"]
+    print("  adult (no spread) → no invented variance attribution  OK")
+
+
+def test_caller_cannot_override_the_published_curves():
+    try:
+        dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, maturation={}, **RENAL)
+    except TypeError:
+        print("  maturation override rejected  OK")
+        return
+    raise AssertionError("maturation override must be rejected")
 
 
 if __name__ == "__main__":
@@ -74,4 +114,8 @@ if __name__ == "__main__":
     test_sensitivity_attributes_variance_to_the_maturing_pathway()
     test_cmax_dose_is_volume_matched_so_dose_interval_is_degenerate()
     test_blocked_case_returns_none()
+    test_sampled_curves_reproduce_the_published_95_cis()
+    test_absolute_daily_dose_also_gets_an_interval()
+    test_no_spread_means_no_variance_attribution()
+    test_caller_cannot_override_the_published_curves()
     print("All uncertainty tests passed.")

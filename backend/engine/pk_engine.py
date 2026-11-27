@@ -185,7 +185,9 @@ def compute_pediatric_dose(
     oral_bioavailability: Optional[float] = None,
     routes_allowed: Optional[list[str]] = None,  # explicit viable routes; None = infer from F
     assume_term: bool = True,
-    maturation: Optional[dict] = None,     # override MATURATION (uncertainty sampling only)
+    # Sampled curves from engine/uncertainty.py only. Not in the agent tool schema or
+    # _COMPUTE_KEYS, so the model can never pass invented curves.
+    maturation: Optional[dict] = None,
 ) -> DoseResult:
     """Scale adult PK to a pediatric dose via allometry × pathway-wise maturation.
 

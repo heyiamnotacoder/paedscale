@@ -3,18 +3,20 @@ PaedScale — parameter-uncertainty layer (deterministic, seeded; no I/O, no LLM
 
 The point estimate from compute_pediatric_dose uses the published TM50 / Hill of each
 maturation curve. Those same papers publish 95% confidence intervals. This module
-propagates them by Monte Carlo into a prediction interval for the child's clearance,
-half-life and dose, and attributes the variance to each maturing pathway.
+propagates them by Monte Carlo into a 90% *parameter-uncertainty interval* for the
+child's clearance, half-life and dose, and attributes the variance to each pathway.
 
 Assumptions (stated, not hidden):
-  * TM50 and Hill are sampled independently, each log-normal with median = the published
-    point estimate and log-SD = (ln hi − ln lo) / (2 × 1.96). Their covariance is not
-    published, so independence is an assumption (it widens, not narrows, the interval
-    when the true correlation is negative).
+  * TM50 and Hill are each sampled from a split (two-piece) log-normal whose median is the
+    published point estimate and whose 2.5th / 97.5th percentiles are the published CI
+    bounds exactly — published CIs are often asymmetric on the log scale.
+  * TM50 and Hill are sampled independently. Their covariance is not published. Below
+    TM50 a negative correlation would make the true spread narrower than shown; above
+    TM50 it would make it wider. The direction of the error is therefore age-dependent.
   * The allometric exponent stays fixed at 0.75 (theory-based; Anderson & Holford 2008).
   * The interval covers PARAMETER uncertainty in the maturation curves only. It is not a
-    between-subject variability interval and says nothing about errors in the retrieved
-    adult PK, the pathway split (fm) or the reference dose.
+    between-subject variability (prediction) interval and says nothing about errors in the
+    retrieved adult PK, the pathway split (fm) or the reference dose.
 """
 
 from __future__ import annotations
@@ -26,32 +28,38 @@ from typing import Optional
 from engine.constants import MATURATION
 from engine.pk_engine import compute_pediatric_dose
 
-Z_95 = 1.959963984540054
+Z_975 = 1.959963984540054
 DEFAULT_DRAWS = 2000
 DEFAULT_SEED = 20261127
+# Below this, log-CL variance is numerical noise (e.g. an adult on the plateau).
+_NO_SPREAD = 1e-12
 
 
-def _log_sd(ci: tuple[float, float]) -> float:
+def _split_lognormal(point: float, ci: tuple[float, float], rng: random.Random) -> float:
     lo, hi = ci
-    return (math.log(hi) - math.log(lo)) / (2.0 * Z_95)
+    z = rng.gauss(0.0, 1.0)
+    sd = (math.log(point) - math.log(lo)) / Z_975 if z < 0 else (math.log(hi) - math.log(point)) / Z_975
+    return point * math.exp(z * sd)
 
 
-def _sample_curve(params: dict, rng: random.Random) -> dict:
-    """One draw of a maturation curve from its published 95% CIs."""
+def sample_curve(params: dict, rng: random.Random) -> dict:
+    """One draw of a maturation curve whose TM50 / Hill reproduce the published 95% CIs."""
     out = dict(params)
     if params.get("tm50_ci95"):
-        out["tm50_weeks"] = params["tm50_weeks"] * math.exp(rng.gauss(0.0, _log_sd(params["tm50_ci95"])))
+        out["tm50_weeks"] = _split_lognormal(params["tm50_weeks"], params["tm50_ci95"], rng)
     if params.get("hill_ci95"):
-        out["hill"] = params["hill"] * math.exp(rng.gauss(0.0, _log_sd(params["hill_ci95"])))
+        out["hill"] = _split_lognormal(params["hill"], params["hill_ci95"], rng)
     return out
 
 
-def _quantiles(xs: list[float]) -> dict:
+def _quantiles(xs: list[float]) -> Optional[dict]:
+    if not xs:
+        return None
     s = sorted(xs)
     n = len(s)
 
     def q(p: float) -> float:
-        # linear interpolation between order statistics (type-7, as numpy default)
+        # linear interpolation between order statistics (type 7, the numpy default)
         h = (n - 1) * p
         lo = math.floor(h)
         hi = min(lo + 1, n - 1)
@@ -65,34 +73,32 @@ def _var(xs: list[float]) -> float:
     return sum((x - m) ** 2 for x in xs) / max(1, len(xs) - 1)
 
 
-def dose_prediction_interval(
+def dose_uncertainty_interval(
     *,
     n_draws: int = DEFAULT_DRAWS,
     seed: int = DEFAULT_SEED,
     **case,
 ) -> Optional[dict]:
-    """90% prediction interval for a compute_pediatric_dose case.
+    """90% parameter-uncertainty interval for a compute_pediatric_dose case.
 
-    `case` takes the same keyword arguments as compute_pediatric_dose. Returns None when
-    the point estimate is blocked (no interval around a withheld dose). Pathways in `fm`
-    with no published CI contribute no spread (their curve is held at the point value).
+    `case` takes the same keyword arguments as compute_pediatric_dose, except `maturation`
+    (the published curves are not caller-overridable here). Returns None when the point
+    estimate is blocked: there is no interval around a withheld dose.
     """
-    case = dict(case)
-    case.pop("maturation", None)
+    if "maturation" in case:
+        raise TypeError("dose_uncertainty_interval samples the published MATURATION curves only")
     point = compute_pediatric_dose(**case)
     if point.blocked:
         return None
-    fm = case.get("fm") or {}
-    maturing = [p for p in fm if p in MATURATION]
+    maturing = [p for p in (case.get("fm") or {}) if p in MATURATION]
 
     def run(vary: set[str], rng: random.Random):
-        curves = {
-            k: (_sample_curve(v, rng) if k in vary else v) for k, v in MATURATION.items()
-        }
+        curves = {k: (sample_curve(v, rng) if k in vary else v) for k, v in MATURATION.items()}
         return compute_pediatric_dose(maturation=curves, **case)
 
     rng = random.Random(seed)
-    doses: list[float] = []
+    dose_kg: list[float] = []
+    dose_day: list[float] = []
     cls: list[float] = []
     hls: list[float] = []
     for _ in range(n_draws):
@@ -100,46 +106,34 @@ def dose_prediction_interval(
         cls.append(r.cl_child_l_h)
         hls.append(r.half_life_h)
         if r.recommended_dose_mg_per_kg_per_day is not None:
-            doses.append(r.recommended_dose_mg_per_kg_per_day)
+            dose_kg.append(r.recommended_dose_mg_per_kg_per_day)
+            dose_day.append(r.recommended_dose_mg_per_day)
 
-    # One-at-a-time variance attribution on log(CL_child) — the quantity every dose
-    # metric and the half-life depend on.
+    # One-at-a-time variance attribution on log(CL_child): every dose metric and the
+    # half-life depend on it, so the attribution is meaningful even for Cmax drugs.
     raw: dict[str, float] = {}
     for i, pw in enumerate(maturing):
         sub = random.Random(seed + 1 + i)
         raw[pw] = _var([math.log(run({pw}, sub).cl_child_l_h) for _ in range(max(200, n_draws // 4))])
     total = sum(raw.values())
-    share = {k: (v / total if total > 0 else 1.0 / len(raw)) for k, v in raw.items()}
+    share = {k: v / total for k, v in raw.items()} if total > _NO_SPREAD else None
 
-    dose_q = _quantiles(doses) if doses else None
-    out = {
+    dq = _quantiles(dose_kg)
+    return {
+        "kind": "parameter-uncertainty interval (maturation TM50/Hill only)",
         "method": (
-            f"Monte Carlo, {n_draws} draws (seed {seed}); TM50 and Hill sampled log-normally "
-            "and independently from the published 95% CIs; allometric exponent fixed at 0.75. "
-            "Covers maturation-parameter uncertainty only."
+            f"Monte Carlo, {n_draws} draws (seed {seed}); TM50 and Hill sampled independently "
+            "from split log-normals matching the published 95% CIs; allometric exponent fixed "
+            "at 0.75. Not a between-subject variability interval."
         ),
         "level": 0.90,
         "n_draws": n_draws,
+        "n_valid": len(dose_kg),
         "seed": seed,
-        "dose_mg_per_kg_per_day": dose_q,
+        "dose_mg_per_kg_per_day": dq,
+        "dose_mg_per_day": _quantiles(dose_day),
         "cl_child_l_h": _quantiles(cls),
         "half_life_h": _quantiles(hls),
-        "fold_width_90": (dose_q["p95"] / dose_q["p05"]) if dose_q and dose_q["p05"] > 0 else None,
+        "fold_width_90": (dq["p95"] / dq["p05"]) if dq and dq["p05"] > 0 else None,
         "variance_share": share,
     }
-    return out
-
-
-def interval_to_dict(pi: Optional[dict], ndigits: int = 3) -> Optional[dict]:
-    """Round an interval for JSON / tool return (keeps structure)."""
-    if pi is None:
-        return None
-
-    def rnd(x):
-        if isinstance(x, float):
-            return round(x, ndigits)
-        if isinstance(x, dict):
-            return {k: rnd(v) for k, v in x.items()}
-        return x
-
-    return rnd(pi)
