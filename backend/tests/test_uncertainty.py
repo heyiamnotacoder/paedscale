@@ -223,5 +223,7 @@ def test_every_curve_has_a_short_citation_drawn_from_its_source():
     for key, curve in MATURATION.items():
         cite = curve.get("citation")
         assert cite, key
-        surname, year = cite.split()[0], cite.split()[-1]
-        assert surname in curve["source"] and year in curve["source"], (key, cite)
+        *names, year = cite.split()
+        assert f" {year};" in curve["source"], (key, cite)            # the journal's "2009;24:67"
+        for name in names:
+            assert name == "&" or name in curve["source"], (key, name)
