@@ -18,6 +18,8 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BENCH = os.path.join(ROOT, "backend", "benchmark")
 OUTPUT = os.path.join(BENCH, "output")
+EXT = os.path.join(BENCH, "external")
+EXT_OUTPUT = os.path.join(EXT, "output")
 HERE = os.path.dirname(os.path.abspath(__file__))
 BUILD = os.path.join(HERE, "build")
 
@@ -91,15 +93,84 @@ def method_table(results: dict, population: str) -> str:
     return "\n".join(rows)
 
 
-def hypothesis_table(results: dict) -> str:
-    rows = ["| Hypothesis | Population | Drugs | Pairs | Ratio of typical fold error (95% CI) | Tied pairs | Wilcoxon p (drug level) | Supported |",
-            "|---|---|---|---|---|---|---|---|"]
+def _h_row(study, key, pop, h, drugs, n, supported, sign_p=None):
+    return (f"| {study} | {key} | {pop} | {drugs} | {n} | {ratio_with_ci(h, label=False)} | "
+            f"{_p(h.get('wilcoxon_p_drug_level'))} | {_p(sign_p)} | {'Yes' if supported else 'No'} |")
+
+
+def hypothesis_table(results: dict, ext: dict) -> str:
+    """Both studies' pre-specified hypotheses in one table (label: H1–H3, external: HE1–HE2)."""
+    rows = ["| Study | Hypothesis | Population | Drugs | Pairs or observations | Ratio of typical fold error (95% CI) | "
+            "Wilcoxon p (drug level) | Sign-flip p | Supported |",
+            "|---|---|---|---|---|---|---|---|---|"]
+    pops = {"H1": "Newborns (<28 days)", "H2": "Children under 2 years", "H3": "All ages"}
     for k in ("H1", "H2", "H3"):
         h = results["hypotheses"][k]
-        rows.append(f"| {k} | {h['population']} | {h['n_clusters']} | {h['n_pairs']} | {ratio_with_ci(h, label=False)} | "
-                    f"{h['n_tied_pairs']} | {_p(h.get('wilcoxon_p_drug_level'))} | "
-                    f"{'Yes' if h['significant'] else 'No'} |")
+        rows.append(_h_row("Label", k, pops[k], h, h["n_clusters"], h["n_pairs"], h["significant"]))
+    for k, key, pop in (("HE1_under2", "HE1", "Children under 2 years"), ("HE2_all_ages", "HE2", "All ages")):
+        h = ext["hypotheses"][k]
+        rows.append(_h_row("Clearance", key, pop, h, h["n_drugs"], h["n_obs"], h["success"], h.get("sign_flip_p")))
     return "\n".join(rows)
+
+
+EXT_METHODS = ["weight_linear", "bsa", "allometry", "paedscale"]
+EXT_METHOD_LABEL = {**METHOD_LABEL, "allometry": "Allometry (primary comparator)"}
+
+
+def external_method_table(ext: dict) -> str:
+    rows = ["| Method | Under 2 years: AAFE (95% CI) | Under 2 years: AFE (95% CI) | All ages: AAFE (95% CI) | "
+            "All ages: AFE (95% CI) | All ages: within 0.5–2× (95% CI) |",
+            "|---|---|---|---|---|---|"]
+    for m in EXT_METHODS:
+        u, a = ext["by_method"]["under2"][m], ext["by_method"]["all"][m]
+        rows.append(f"| {EXT_METHOD_LABEL[m]} | {_fold(u['aafe'], u.get('aafe_ci95'))} | {_fold(u['afe'], u.get('afe_ci95'))} | "
+                    f"{_fold(a['aafe'], a.get('aafe_ci95'))} | {_fold(a['afe'], a.get('afe_ci95'))} | "
+                    f"{_pct(a['within_2'], a.get('within_2_ci95'))} |")
+    return "\n".join(rows)
+
+
+def label_method_table(results: dict) -> str:
+    rows = ["| Method | Newborns: AAFE (95% CI) | Under 2 years: AAFE (95% CI) | All ages: AAFE (95% CI) | "
+            "All ages: AFE (95% CI) |", "|---|---|---|---|---|"]
+    for m in METHOD_ORDER:
+        n, u, a = (results["by_method"][p][m] for p in ("newborn", "under2", "all"))
+        rows.append(f"| {METHOD_LABEL[m]} | {_fold(n['aafe'], n.get('aafe_ci95'))} | {_fold(u['aafe'], u.get('aafe_ci95'))} | "
+                    f"{_fold(a['aafe'], a.get('aafe_ci95'))} | {_fold(a['afe'], a.get('afe_ci95'))} |")
+    return "\n".join(rows)
+
+
+def external_flow(ext_dir: str) -> dict:
+    """Search, pre-filter, screening and inclusion counts from the committed snapshot and final record."""
+    from collections import Counter
+    flow = Counter()
+    reasons = Counter()
+    names = sorted(f[:-5] for f in os.listdir(os.path.join(ext_dir, "search")) if f.endswith(".json"))
+    for d in names:
+        with open(os.path.join(ext_dir, "search", f"{d}.json")) as f:
+            snap = json.load(f)
+        with open(os.path.join(ext_dir, "extraction", "final", f"{d}.json")) as f:
+            fin = json.load(f)
+        for k, tag in (("pediatric", "ped"), ("adult", "adult")):
+            flow[f"{tag}_hits"] += len(snap[k])
+            flow[f"{tag}_prefilter"] += sum(1 for r in snap[k] if r.get("prefilter"))
+            flow[f"{tag}_screened"] += len(fin[k])
+            flow[f"{tag}_included"] += sum(s["decision"] == "include" for s in fin[k])
+        flow["ped_obs"] += sum(len(s["observations"]) for s in fin["pediatric"] if s["decision"] == "include")
+        for s in fin["pediatric"]:
+            if s["decision"] == "exclude":
+                reasons[_reason_group(s["reason"])] += 1
+    return {**flow, "drugs": len(names), "ped_reasons": dict(reasons)}
+
+
+def _reason_group(reason: str) -> str:
+    r = reason.lower()
+    if r.startswith(("cl/f", "not total iv cl", "p1")) and not r.startswith("p1/p2"):
+        return "not total intravenous clearance (P1)"
+    if r.startswith("p4"):
+        return "restricted population (P4)"
+    if r.startswith(("no age", "range only")):
+        return "no usable age or clearance summary (P3)"
+    return "no group summary or typical value (P2)"
 
 
 def secondary_table(results: dict) -> str:
@@ -112,23 +183,49 @@ def secondary_table(results: dict) -> str:
     return "\n".join(rows)
 
 
-def sensitivity_table(results: dict) -> str:
-    rows = ["| Analysis | Newborns: drugs, ratio (95% CI) | All ages: drugs, ratio (95% CI) |",
-            "|---|---|---|"]
+EXT_SENSITIVITY_LABEL = {
+    "E1_exclude_imputed_weight_or_ga": "E1 Exclude imputed weight or gestational age",
+    "E2_exclude_critically_ill": "E2 Exclude critically ill groups",
+    "E3_exclude_standardized_or_fixed": "E3 Exclude values from allometric or fixed-maturation models",
+    "E4_first_adult_abstract": "E4 First qualifying adult abstract only",
+    "E5_study_weighted": "E5 Each study weighted equally",
+    "E7_exclude_curve_source_authors": "E7 Exclude studies by authors of the curve sources",
+    "E8_exclude_before_1995": "E8 Exclude studies published before 1995",
+    "E9_exclude_route_unstated": "E9 Exclude studies with no stated route",
+}
+
+
+def _cell(h: dict | None, n_key: str) -> str:
+    if not h or not h.get(n_key) or not h.get("ci95"):
+        return "not estimable"
+    return f"{h[n_key]}, {ratio_with_ci(h, label=False)}"
+
+
+def sensitivity_table(results: dict, ext: dict) -> str:
+    rows = ["| Analysis | Primary population: drugs, ratio (95% CI) | All ages: drugs, ratio (95% CI) |",
+            "|---|---|---|",
+            "| **Label benchmark** (primary population: newborns) | | |"]
     sens = results["sensitivity"]
     unknown = sorted(set(sens) - set(SENSITIVITY_LABEL) - {"S6_leave_one_drug_out"})
     if unknown:
         raise KeyError(f"no label for sensitivity analysis: {', '.join(unknown)}")
     for k, label in SENSITIVITY_LABEL.items():
-        if k not in sens:
-            continue
-        cells = []
-        for pop in ("newborn", "all"):
-            h = sens[k].get(pop) or {}
-            cells.append(f"{h['n_clusters']}, {ratio_with_ci(h, label=False)}" if h.get("n_pairs") else "not estimable")
-        rows.append(f"| {label} | {cells[0]} | {cells[1]} |")
-    rows.append(f"| S6 Leave one drug out (range of point estimates) | {s6_range(results, 'newborn')} | "
-                f"{s6_range(results, 'all')} |")
+        if k in sens:
+            rows.append(f"| {label} | {_cell(sens[k].get('newborn'), 'n_clusters')} | {_cell(sens[k].get('all'), 'n_clusters')} |")
+        if k == "S5_ga_plus2":
+            rows.append(f"| S6 Leave one drug out (range of point estimates) | {s6_range(results, 'newborn')} | "
+                        f"{s6_range(results, 'all')} |")
+    rows.append("| **Clearance validation** (primary population: under 2 years) | | |")
+    es = ext["sensitivity"]
+    unknown = sorted(set(es) - set(EXT_SENSITIVITY_LABEL) - {"E6_leave_one_drug_out"})
+    if unknown:
+        raise KeyError(f"no label for sensitivity analysis: {', '.join(unknown)}")
+    for k, label in EXT_SENSITIVITY_LABEL.items():
+        rows.append(f"| {label} | {_cell(es[k].get('HE1_under2'), 'n_drugs')} | {_cell(es[k].get('HE2_all_ages'), 'n_drugs')} |")
+        if k == "E5_study_weighted":
+            e6 = es["E6_leave_one_drug_out"]
+            rng = lambda h: f"{_ratio(10 ** h['min'])} to {_ratio(10 ** h['max'])}"
+            rows.append(f"| E6 Leave one drug out (range of point estimates) | {rng(e6['HE1_under2'])} | {rng(e6['HE2_all_ages'])} |")
     return "\n".join(rows)
 
 
@@ -172,6 +269,109 @@ def stratum_table(results: dict) -> str:
     return "\n".join(rows)
 
 
+DRUG_NAME = {"penicillin_g": "benzylpenicillin", "piperacillin_tazobactam": "piperacillin (with tazobactam)"}
+
+
+def drug_name(d: str) -> str:
+    return DRUG_NAME.get(d, d.replace("_", " "))
+
+
+EXT_STRATA = ["preterm_newborn", "term_newborn", "infant_toddler", "child", "adolescent"]
+
+
+def external_stratum_table(ext: dict) -> str:
+    rows = ["| ICH E11 stratum | Drugs | Observations | PaedScale AAFE (AFE) | Allometry AAFE (AFE) | "
+            "Weight-linear AAFE (AFE) | Ratio, PaedScale ÷ allometry (95% CI) |", "|---|---|---|---|---|---|---|"]
+    for st in EXT_STRATA:
+        v = ext["by_stratum"].get(st)
+        if not v:
+            continue
+        bm, h = v["by_method"], v["paedscale_vs_allometry"]
+        cell = lambda m: f"{bm[m]['aafe']:.2f} ({bm[m]['afe']:.2f})"
+        ratio = ratio_with_ci(h, label=False) if h.get("ci95") else "fewer than 5 drugs"
+        rows.append(f"| {STRATUM_LABEL[st]} | {bm['paedscale']['n_drugs']} | {bm['paedscale']['n_pairs']} | "
+                    f"{cell('paedscale')} | {cell('allometry')} | {cell('weight_linear')} | {ratio} |")
+    return "\n".join(rows)
+
+
+def external_drug_table(ext: dict, ext_dir: str) -> str:
+    rows = ["| Drug | Qualifying adult abstracts | Adult reference clearance, L/h at 70 kg | Pediatric studies included | "
+            "Observations | Scored |", "|---|---|---|---|---|---|"]
+    for d, a in sorted(ext["adult_reference"].items()):
+        with open(os.path.join(ext_dir, "extraction", "final", f"{d}.json")) as f:
+            fin = json.load(f)
+        inc = [x for x in fin["pediatric"] if x["decision"] == "include"]
+        n_obs = sum(len(x["observations"]) for x in inc)
+        cl = "—" if a["median_l_h"] is None else f"{a['median_l_h']:.2f}"
+        scored = "Yes" if a["median_l_h"] is not None and n_obs else ("No adult reference" if a["median_l_h"] is None else "No observations")
+        rows.append(f"| {drug_name(d)} | {a['n_abstracts']} | {cl} | "
+                    f"{len(inc)} | {n_obs} | {scored} |")
+    return "\n".join(rows)
+
+
+def _and(items: list[str]) -> str:
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1] if items else "none"
+
+
+def external_values(ext: dict, agreement: dict, flow: dict) -> dict:
+    v = {}
+    for k, tag in (("HE1_under2", "he1"), ("HE2_all_ages", "he2")):
+        h = ext["hypotheses"][k]
+        v[f"ext_{tag}_ratio"] = ratio_with_ci(h)
+        v[f"ext_{tag}_cell"] = ratio_with_ci(h, label=False)
+        v[f"ext_{tag}_drugs"], v[f"ext_{tag}_obs"] = h["n_drugs"], h["n_obs"]
+        v[f"ext_{tag}_p"] = _p(h.get("wilcoxon_p_drug_level"))
+        v[f"ext_{tag}_signp"] = _p(h.get("sign_flip_p"))
+    for pop in ("under2", "all"):
+        for m in EXT_METHODS:
+            s = ext["by_method"][pop][m]
+            v[f"ext_{pop}_{m}_aafe"] = _fold(s["aafe"], s.get("aafe_ci95"))
+            v[f"ext_{pop}_{m}_afe"] = _fold(s["afe"], s.get("afe_ci95"))
+            v[f"ext_{pop}_{m}_w2"] = _pct(s["within_2"], s.get("within_2_ci95"))
+            v[f"ext_{pop}_{m}_w15"] = _pct(s["within_1_5"], s.get("within_1_5_ci95"))
+    for m in ("weight_linear", "bsa"):
+        v[f"ext_sec_{m}"] = ratio_with_ci(ext["secondary"][m])
+        v[f"ext_sec_{m}_holm"] = _p(ext["secondary"][m].get("wilcoxon_p_holm"))
+    for st in EXT_STRATA:
+        st_v = ext["by_stratum"].get(st) or {}
+        h = st_v.get("paedscale_vs_allometry") or {}
+        v[f"ext_st_{st}_ratio"] = ratio_with_ci(h) if h.get("ci95") else "not estimated"
+        for m in EXT_METHODS:
+            bm = (st_v.get("by_method") or {}).get(m)
+            v[f"ext_st_{st}_{m}_afe"] = f"{bm['afe']:.2f}" if bm else "—"
+            v[f"ext_st_{st}_{m}_aafe"] = f"{bm['aafe']:.2f}" if bm else "—"
+    adult = ext["adult_reference"]
+    no_adult = sorted(d for d, a in adult.items() if a["median_l_h"] is None)
+    v["ext_no_adult"] = ", ".join(drug_name(d) for d in no_adult)
+    no_obs = sorted(d for d in adult if d not in ext["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"] and d not in no_adult)
+    v["ext_no_obs"] = ", ".join(drug_name(d) for d in no_obs)
+    v["ext_scored_drugs"] = ", ".join(drug_name(d) for d in sorted(ext["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"]))
+    v["ext_n_no_adult"] = len(no_adult)
+    v["ext_n_drugs"], v["ext_n_obs"] = ext["n_drugs"], ext["n_obs"]
+    per = ext["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"]
+    v["ext_n_favour"] = sum(d < 0 for d in per.values())
+    v["ext_not_favour"] = _and([drug_name(k) for k, d in sorted(per.items()) if d >= 0])
+    v["ext_he1_reduction"] = f"{100 * (1 - 10 ** ext['hypotheses']['HE1_under2']['mean_abs_log10_diff']):.0f}%"
+    e6 = ext["sensitivity"]["E6_leave_one_drug_out"]["HE1_under2"]
+    v["ext_e6_he1"] = f"{_ratio(10 ** e6['min'])} to {_ratio(10 ** e6['max'])}"
+    he1_sens = [h["HE1_under2"] for k, h in ext["sensitivity"].items() if k != "E6_leave_one_drug_out"]
+    v["ext_n_sens"] = len(he1_sens)
+    v["ext_n_sens_excluding_1"] = sum(1 for h in he1_sens if h.get("ci95") and h["ci95"][1] < 0)
+    v["ext_coverage"] = f"{100 * ext['uncertainty_coverage']['coverage_90_drug_weighted']:.0f}%"
+    v["ext_kappa"] = f"{agreement['kappa_overall']:.2f}"
+    v["ext_both_read"] = agreement["both_read"]
+    v["ext_dec_dis"] = agreement["n_decision_disagreements"]
+    v["ext_val_agree"] = agreement["n_value_agreements"]
+    v["ext_both_incl"] = agreement["n_value_agreements"] + agreement["n_value_disagreements"]
+    v["ext_num_compared"], v["ext_num_differ"] = agreement["n_values_compared"], agreement["n_values_differ"]
+    for k in ("drugs", "ped_hits", "ped_prefilter", "ped_screened", "ped_included", "ped_obs",
+              "adult_hits", "adult_prefilter", "adult_screened", "adult_included"):
+        v[f"ext_{k}"] = f"{flow[k]:,}"
+    reasons = sorted(flow["ped_reasons"].items(), key=lambda kv: -kv[1])
+    v["ext_ped_reasons"] = "; ".join(f"{r}, {n}" for r, n in reasons)
+    return v
+
+
 def values(results: dict, refset: dict) -> dict:
     hyp, bm, cov, prov = results["hypotheses"], results["by_method"], results["uncertainty_coverage"], results["provenance"]
     v = {
@@ -186,8 +386,8 @@ def values(results: dict, refset: dict) -> dict:
         "cov_median_width": f"{cov['median_fold_width']:.3f}", "cov_max_width": f"{cov['max_fold_width']:.2f}",
         "cov_blocked": cov["n_bands_blocked"],
         "table_drugs": drug_table(refset), "table_excluded": exclusion_table(results),
-        "table_hypotheses": hypothesis_table(results), "table_secondary": secondary_table(results),
-        "table_sensitivity": sensitivity_table(results), "table_strata": stratum_table(results),
+        "table_secondary": secondary_table(results), "table_strata": stratum_table(results),
+        "table_label_methods": label_method_table(results),
     }
     for pop in ("newborn", "under2", "all"):
         v[f"table_methods_{pop}"] = method_table(results, pop)
@@ -208,6 +408,43 @@ def values(results: dict, refset: dict) -> dict:
         v[f"sec_{m}_holm"] = _p(results["secondary"][m].get("wilcoxon_p_holm"))
     for pop in ("newborn", "all"):
         v[f"s6_{pop}"] = s6_range(results, pop)
+    newborn = [h.get("newborn") or {} for k, h in results["sensitivity"].items() if k != "S6_leave_one_drug_out"]
+    v["label_n_sens"] = len(newborn)
+    v["label_n_sens_crossing_1"] = sum(1 for h in newborn if not h.get("ci95") or h["ci95"][1] >= 0)
+    return v
+
+
+def word_count(markdown: str) -> int:
+    """Words from the Introduction to the end of the Discussion, without tables, figures or captions."""
+    body = markdown[markdown.index("# Introduction"):markdown.index("# Declarations")]
+    body = re.sub(r"^\|.*\|$", "", body, flags=re.M)
+    body = re.sub(r"!\[.*?\]\(.*?\)", "", body)
+    body = re.sub(r"^Table: .*$", "", body, flags=re.M)
+    return len(body.split())
+
+
+def render_manuscript(template: str, v: dict) -> str:
+    """Fill the template, with the word count of the filled text itself."""
+    n = word_count(render(template, {**v, "word_count": "0"}))
+    return render(template, {**v, "word_count": f"{n:,}"})
+
+
+def load_external() -> tuple[dict, dict, dict]:
+    with open(os.path.join(EXT_OUTPUT, "results.json")) as f:
+        ext = json.load(f)
+    with open(os.path.join(EXT, "dataset", "agreement.json")) as f:
+        agreement = json.load(f)
+    return ext, agreement, external_flow(EXT)
+
+
+def all_values(results: dict, refset: dict, ext: dict, agreement: dict, flow: dict) -> dict:
+    v = {**values(results, refset), **external_values(ext, agreement, flow)}
+    v["table_hypotheses"] = hypothesis_table(results, ext)
+    v["table_sensitivity"] = sensitivity_table(results, ext)
+    v["table_ext_methods"] = external_method_table(ext)
+    v["table_ext_strata"] = external_stratum_table(ext)
+    v["table_ext_drugs"] = external_drug_table(ext, EXT)
+    v["ext_engine_commit"] = ext["provenance"]["engine_commit"][:7]
     return v
 
 
@@ -221,11 +458,13 @@ def main(pdf: bool = False) -> None:
     with open(os.path.join(BENCH, "reference_set.json")) as f:
         refset = json.load(f)
     with open(os.path.join(HERE, "manuscript.md")) as f:
-        text = render(f.read(), values(results, refset))
+        template = f.read()
+    text = render_manuscript(template, all_values(results, refset, *load_external()))
     os.makedirs(os.path.join(BUILD, "figures"), exist_ok=True)
-    for name in os.listdir(OUTPUT):
-        if name.endswith(".png"):
-            shutil.copy(os.path.join(OUTPUT, name), os.path.join(BUILD, "figures", name))
+    for src in (OUTPUT, EXT_OUTPUT):
+        for name in os.listdir(src):
+            if name.endswith(".png"):
+                shutil.copy(os.path.join(src, name), os.path.join(BUILD, "figures", name))
     md = os.path.join(BUILD, "manuscript.md")
     with open(md, "w") as f:
         f.write(text)

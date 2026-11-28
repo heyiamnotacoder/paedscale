@@ -1,246 +1,229 @@
 ---
-title: "Adding organ maturation to size scaling of adult doses for children: a pre-registered benchmark against FDA labels"
-subtitle: "Preprint draft. Not peer reviewed. Decision support research, not prescribing guidance."
+title: "Adding organ maturation to allometric scaling of adult clearance for children: two pre-registered evaluations against labels and published clearance"
+subtitle: "Original Article. Draft for submission to the British Journal of Clinical Pharmacology. Decision-support research, not prescribing guidance."
 author: "[Author names, affiliations and ORCID iDs to be completed by the authors]"
-date: "Draft of 27 November 2026"
+date: "Draft of 28 November 2026"
 ---
+
+**Running head:** Maturation-adjusted scaling of adult clearance for children
+
+**Corresponding author:** [to be completed by the authors]
+
+**Principal Investigator statement:** [The authors confirm that the Principal Investigator for this paper is ... / There is no Principal Investigator, because the study used no patient data. To be completed by the authors.]
+
+**Keywords:** allometry; clearance; maturation; neonates; paediatric dosing; pharmacokinetics
+
+**Word count:** {{word_count}} words (Introduction to Discussion). **Tables:** 4. **Figures:** 4. Supporting information: 4 tables and 1 figure.
+
+## What is already known about this subject
+
+- Scaling adult doses by weight, body surface area or allometry ignores organ maturation.
+- Published maturation curves describe glomerular filtration and several drug-metabolising enzymes from preterm birth to adulthood.
+- Whether they improve scaled predictions across many drugs has rarely been tested prospectively.
+
+## What this study adds
+
+- In two pre-registered evaluations, adding maturation to allometry reduced prediction error under 2 years, against labelled doses and published clearance.
+- Beyond infancy, and against weight-linear scaling, it gave little or no improvement.
+- Data, code and every number are public and reproducible.
 
 # Abstract
 
-**Background.** Many drugs given to children have no pediatric dose on their label, and prescribers often scale the adult dose by body size. Scaling by weight or by allometry ignores the maturation of the organs that clear the drug, which matters most in newborns and infants. PaedScale is an open-source decision-support system that multiplies allometric size scaling by published maturation curves for the drug's elimination pathways. We tested whether this maturation term brings size-scaled doses closer to the doses in FDA labels.
+**Aim.** To test whether multiplying allometric size scaling by published organ-maturation curves brings predictions from adult data closer to paediatric reality than size scaling alone.
 
-**Methods.** We wrote and committed an analysis protocol before scoring any prediction. Three amendments, all made before scoring, are dated in the repository. The reference standard was the pediatric intravenous maintenance dose in public FDA Structured Product Labels, with one label selected per drug by a fixed rule. Of {{n_candidates}} candidate drugs, {{n_drugs}} met the eligibility criteria and gave {{n_bands}} pairs of an adult regimen and a labeled pediatric age band. Five methods received identical inputs: weight-linear scaling, body surface area, allometry, allometry with a drug-class rule for the target metric (A1, the primary comparator), and PaedScale. A1 differs from PaedScale only by the maturation term. The endpoint was the absolute fold error against the labeled dose, averaged first within each drug. Three hypotheses were tested in a fixed sequence: newborns (H1), children under 2 years (H2) and all ages (H3). Each used a 95% BCa cluster-bootstrap interval that resampled drugs ({{n_boot}} replicates).
+**Methods.** PaedScale is an open-source engine that scales adult clearance by (weight/70)^0.75 and by maturation curves for glomerular filtration, CYP3A4 and UGT2B7. Two protocols were committed before any prediction. In the label benchmark, five methods predicted the paediatric intravenous doses in US labels for {{n_drugs}} drugs ({{n_bands}} age bands). In the clearance validation, four methods predicted total clearance in {{ext_n_obs}} groups of children reported in PubMed abstracts ({{ext_n_drugs}} drugs). Abstracts were screened and extracted twice, independently and with AI assistance, and adjudicated. The endpoint was the drug-weighted mean absolute log10 fold error, with 95% BCa cluster-bootstrap intervals over drugs.
 
-**Results.** In newborns, PaedScale's typical fold error was {{H1_ratio}} times that of A1 ({{H1_drugs}} drugs, {{H1_pairs}} pairs). Under 2 years the ratio was {{H2_ratio}}. Across all ages it was {{H3_ratio}}, so H3 was not supported. The secondary drug-level Wilcoxon tests did not reach significance (H1 p = {{H1_p}}; H2 p = {{H2_p}}). In newborns, plain weight-linear scaling agreed with the labels at least as closely as PaedScale did (AAFE {{newborn_weight_linear_aafe}} against {{newborn_paedscale_aafe}}). PaedScale's 90% parameter-uncertainty interval contained the labeled dose in {{coverage}} of drugs.
+**Results.** Against labels, PaedScale's typical fold error relative to allometry with a class rule was {{H1_ratio}} in newborns and {{H2_ratio}} under 2 years, but {{H3_ratio}} across all ages. Against published clearance (κ for inclusion {{ext_kappa}}), it was {{ext_he1_ratio}} under 2 years ({{ext_he1_drugs}} drugs) and {{ext_he2_ratio}} at all ages. Weight-linear scaling performed about as well as PaedScale in both evaluations ({{ext_sec_weight_linear}} against published clearance). The engine's parameter-uncertainty interval contained {{ext_coverage}} of observed clearances.
 
-**Conclusions.** Adding published maturation curves to allometric scaling moved predictions closer to FDA-labeled doses in newborns and children under 2 years. It did not do so across all ages. The benchmark is small and measures agreement with labels, not drug exposure. The close agreement of weight-linear scaling with neonatal labels suggests that many of those labels are themselves written in mg/kg. Any clinical use needs prospective, exposure-based evaluation.
+**Conclusion.** Maturation curves corrected the large overprediction of allometric scaling in newborns and infants. They did not outperform weight-linear scaling, and their uncertainty interval is not a prediction interval.
 
 # Introduction
 
-Most children admitted to tertiary pediatric hospitals receive at least one drug outside the terms of its license [1]. In one prospective study of pediatric inpatients, potential adverse drug events were three times as common as in a comparable adult study. Incorrect dosing was the most common type, and the rate was highest in the neonatal intensive care unit [2]. When a label gives no pediatric dose, a common shortcut is to scale the adult dose by weight, by body surface area [3] or by allometry, in which clearance scales with weight to the power 0.75 [4].
+Most children admitted to tertiary paediatric hospitals receive at least one drug outside the terms of its licence [1]. Potential adverse drug events are about three times as common in paediatric inpatients as in adults, incorrect dosing is the most common type, and the rate is highest in neonatal intensive care [2]. When a label gives no paediatric dose, a common shortcut is to scale the adult dose by weight, by body surface area [3] or by allometry, in which clearance scales with weight to the power 0.75 [4].
 
-Size alone does not explain clearance in early life. Glomerular filtration and the main drug-metabolizing enzymes mature over the first months to years after birth. Postmenstrual age describes this maturation better than postnatal age [4]. Published sigmoid (Hill) maturation models exist for glomerular filtration [5], for CYP3A4 as measured by midazolam clearance [6] and for UGT2B7 as measured by morphine clearance [7]. Simulation work shows that allometry with a fixed exponent of 0.75 predicts clearance less well the younger the child [8].
+Size alone does not explain clearance in early life. Glomerular filtration and the main drug-metabolising enzymes mature over the first months to years after birth, and postmenstrual age describes this maturation better than postnatal age [4]. Published sigmoid (Hill) maturation models exist for glomerular filtration [5], for CYP3A4 as measured by midazolam clearance [6] and for UGT2B7 as measured by morphine clearance [7]. Simulation work shows that allometry with a fixed exponent of 0.75 predicts clearance less well the younger the child [8].
 
-PaedScale combines allometry with these published maturation curves. It is a decision-support system: a large language model maps a drug to its elimination pathways and retrieves cited pharmacokinetic data, and a deterministic engine does all of the arithmetic. This paper does not test the language-model layer. It asks a narrower question that can be pre-registered and reproduced offline. Given only an adult regimen and a child's age and weight, does adding the maturation term bring a size-scaled dose closer to the dose that the FDA label gives that child?
+PaedScale is an open-source decision-support system that combines allometry with these curves. A large language model maps a drug to its elimination pathways and retrieves cited pharmacokinetic data, and a deterministic engine does all of the arithmetic. This paper does not test the language-model layer. It asks a narrower question that can be pre-registered and reproduced offline: given only adult data and a child's age and weight, does adding the maturation term bring a size-scaled prediction closer to what is known about that child?
+
+There is no single reference standard for that question, so we used two. Labelled paediatric doses are what prescribers use, but many are set by convention in mg/kg rather than to match adult exposure. Published paediatric clearance is closer to exposure, but it comes from small studies with their own designs. We pre-registered one evaluation against each, with the same engine and the same comparators.
 
 # Methods
 
 ## The PaedScale engine
 
-For each elimination pathway, the engine scales adult clearance as
+For each elimination pathway the engine scales adult clearance as
 
-$$CL_{child} = CL_{adult} \times (WT/70)^{0.75} \times MF(PMA) \times OF$$
+$$CL_{child} = CL_{adult} \times (WT/70)^{0.75} \times MF(PMA), \qquad MF(PMA) = \frac{PMA^{H}}{TM_{50}^{H} + PMA^{H}}$$
 
-$$MF(PMA) = \frac{PMA^{H}}{TM_{50}^{H} + PMA^{H}}$$
+where WT is body weight (kg), PMA is postmenstrual age (weeks), TM50 is the PMA at half-maturation and H is the Hill coefficient. Clearance is split by the fraction excreted unchanged in urine (fe), which follows the renal curve, and the non-renal fraction, which follows an enzyme curve when the principal enzyme is known and size alone otherwise. The three curves are glomerular filtration (TM50 47.7 weeks, Hill 3.40) [5], CYP3A4 (73.6 weeks, 3.0) [6] and UGT2B7 (54.2 weeks, 3.92) [7] (Figure 1). The engine refuses a pathway without a published curve. It also reports a 90% parameter-uncertainty interval by sampling TM50 and Hill within their published confidence intervals; this interval describes uncertainty in the curves only.
 
-Here WT is body weight in kg and PMA is postmenstrual age in weeks. TM50 is the PMA at which clearance reaches half its mature value, H is the Hill coefficient, and OF is an organ-function modifier, which equals 1 in this benchmark. The curve is normalized so that an adult has MF of 1. Volume of distribution scales with WT^1.0.
+![**Figure 1.** The three published maturation curves used by the engine, with 90% parameter-uncertainty bands.](figures/fig1_maturation_curves.png)
 
-Clearance is split between pathways by the fraction excreted unchanged in urine (fe), which uses the renal curve, and the non-renal fraction. The non-renal fraction uses an enzyme curve when the principal enzyme is known, and is scaled by size alone otherwise. The engine refuses any pathway without a published curve. The curves and their published 95% confidence intervals are:
+## Pre-registration
 
-| Pathway | TM50, weeks PMA (95% CI) | Hill (95% CI) | Source |
-|---|---|---|---|
-| Glomerular filtration | 47.7 (45.1–50.5) | 3.40 (3.03–3.80) | Rhodin et al. 2009 [5] |
-| CYP3A4 (midazolam) | 73.6 (59.4–80.0) | 3.0 (2.2–4.1) | Anderson and Larsson 2011 [6] |
-| UGT2B7 (morphine) | 54.2 (50.3–60.5) | 3.92 (3.25–4.40) | Anand et al. 2008 [7] |
+Each evaluation has a protocol in the public repository, committed before any prediction was computed (`backend/benchmark/PROTOCOL.md` and `backend/benchmark/external/PROTOCOL.md`). Every change is a dated amendment that states what had been seen when it was made. The label benchmark had three amendments, all before scoring. The clearance validation had 16 amendments before any prediction: 11 before any abstract was screened, and five during screening and adjudication, which record the rules the adjudicator applied and list their effects on the dataset. Two amendments made after scoring correct code and documentation and change no scored number.
 
-![Figure 1. The three published maturation curves used by the engine, with their parameter-uncertainty bands.](figures/fig1_maturation_curves.png)
+## Evaluation 1: label benchmark
 
-The dose solve depends on the metric that drives the drug's effect:
+**Reference standard.** For each candidate drug the intravenous US Structured Product Label was taken from openFDA (retrieved 27 November 2026) by a fixed rule, and its text was committed. Of {{n_candidates}} candidates chosen before scoring, {{n_drugs}} gave an adult intravenous maintenance regimen and a paediatric intravenous regimen for a defined age band, mapped onto a published curve and had linear clearance at labelled doses ({{n_bands}} adult–paediatric pairs; Supporting Tables S1 and S2). The reference was the labelled daily maintenance dose in mg/kg/day, at its midpoint for a range. Every dose and fe value carries a quotation checked by a test against the label text.
 
-- For average concentration (css) or area under the curve, the daily dose scales by the ratio CL_child / CL_adult.
-- For peak concentration (cmax), the dose scales by the volume ratio.
-- For β-lactams, efficacy depends on the time above the minimum inhibitory concentration. The engine matches daily exposure as for css, flags this as a proxy, and caps the recommendation grade.
+**Predictions.** Each labelled band was represented by seven postnatal ages log-spaced across it, each with the sex-averaged median weight from the Fenton preterm, WHO and CDC references [9–11], and the band's prediction was their geometric mean. Every method received the same adult daily dose. The target metric followed a class rule: aminoglycosides were matched on peak concentration (dose scaled by volume), β-lactams on daily exposure as a flagged proxy for time above the inhibitory concentration, and all other drugs on average concentration. Five methods were compared: weight-linear, body surface area (Costeff formula [3]), allometry, allometry with the class rule (A1, the primary comparator, which differs from PaedScale only by the maturation term) and PaedScale.
 
-When the cited evidence gives toxic or effective dose thresholds, the engine flags any dose past them. The application checks the final recommended dose against the same thresholds again. The engine also reports a 90% parameter-uncertainty interval by Monte Carlo sampling of TM50 and Hill within their published confidence intervals (split log-normal, fixed seed). This interval describes uncertainty in the maturation parameters only. It is not a prediction interval for an individual child.
+**Hypotheses.** H1 (newborns, under 28 days), H2 (under 2 years) and H3 (all ages) were tested in sequence, each only if the previous one succeeded.
 
-In the full application, a retrieval agent queries PubMed and openFDA live and returns a cited dossier, or returns no data. An orchestrating agent records the drug's mechanism, calls the engine, checks the result against a guideline, and grades the recommendation from A to D. When the pharmacokinetic data cannot be retrieved, the grade is D and no dose is given. None of this layer is used in the benchmark.
+## Evaluation 2: clearance validation
 
-## Benchmark design and pre-registration
+**Drugs.** The {{ext_drugs}} drugs of the label benchmark's reference set other than morphine, the source drug of the UGT2B7 curve, with the engine inputs (fe and enzyme) frozen as recorded there. For piperacillin–tazobactam the analyte was piperacillin.
 
-The protocol (`backend/benchmark/PROTOCOL.md`) was committed before any prediction was scored. It was amended three times before scoring, each time after an internal methodological, standards or data review. Amendment 1 replaced the co-primary endpoints with a hypothesis sequence and added the primary comparator. Amendment 2 corrected the label-selection code and the curation. Amendment 3 made label selection deterministic and fixed the reporting. Each amendment is dated, states that it preceded scoring, and gives its reason. A scoring record in the protocol states the commit at which scoring first ran. Every later change is a post-scoring amendment.
+**Search.** For each drug, one paediatric and one adult PubMed query required the drug name, "clearance" and "pharmacokinetic*" in the title or abstract, a paediatric or adult term, human studies, English and an abstract. The snapshot of {{ext_ped_hits}} paediatric and {{ext_adult_hits}} adult records was saved with a SHA-256 hash of each abstract on 27 November 2026, before screening. A regular expression fixed in advance passed only abstracts that print a numeric clearance with units ({{ext_ped_prefilter}} paediatric and {{ext_adult_prefilter}} adult abstracts). The validation therefore uses only values printed in abstracts.
 
-## Reference standard and eligibility
+**Eligibility.** A paediatric study was included if its abstract described patients under 18 years given the drug intravenously (P1); reported a numeric total clearance for a defined group, or a population typical value at a stated covariate point (P2); stated the group's age (P3); and did not restrict the population to extracorporeal support, therapeutic hypothermia, stated organ impairment, burns, cystic fibrosis or obesity (P4). Critically ill groups were included and flagged. Abstracts were screened in a seeded random order per drug, and screening of a drug stopped in each ICH E11 age stratum [12] once two studies were included there. The adult reference was the median of up to the first five qualifying adult abstracts (healthy adults, or adults aged 18–65 years with normal renal function), each converted to 70 kg. A drug with no qualifying adult abstract was excluded.
 
-For each candidate drug, the label was taken from openFDA (`/drug/label.json`, retrieved 27 November 2026) by a fixed rule. The search returned labels whose generic name matched and whose route included intravenous. Combination products were removed: the label's active ingredients had to be exactly the candidate's. The rule then preferred labels whose Dosage and Administration text matched `pediatric|neonat`, then the latest effective date, then the highest SPL version, then the highest set ID. The selected labels' text is committed, so the benchmark reruns offline. Every adult dose, pediatric dose and urinary-excretion value used carries a quotation that a test checks against the stored label text.
+**Extraction and adjudication.** Each included group gave one observation: its clearance and units, central age or age range and, where stated, weight, each with a verbatim quote that a script checks against the hashed abstract. Missing weight was imputed from the growth references and missing gestational age from a fixed rule; both were flagged. Two passes screened and extracted independently, each run with AI assistance (Claude, Anthropic) from the protocol and the abstracts alone, blind to the other pass. Agreement on inclusion is reported as Cohen's κ over the abstracts both passes read, and extracted numbers were compared one by one. Each disagreement was resolved by re-reading the abstract against the protocol, and each resolution was logged with its reason. Rules for recurring questions were fixed in amendments before the second pass's records were read; among them, an abstract that reports a clearance (not CL/F) and mentions no non-intravenous dosing counts as intravenous and is flagged, with a sensitivity analysis (E9) that removes such studies. The final dataset was committed before any prediction.
 
-There were {{n_candidates}} candidate drugs, chosen by the authors before scoring. They were the PaedScale demonstration drugs plus commonly used intravenous anti-infectives, anticonvulsants, acid suppressants, a cardiac glycoside, sedatives and opioids. A drug was included if its label gave an adult intravenous maintenance regimen as text (E1), gave a pediatric intravenous maintenance regimen for a defined age band (E2), had elimination that mapped onto a published curve (E3), and had linear clearance at labeled doses (E4). {{n_excluded}} candidates were excluded ({{excluded_list}}; Table S1).
+**Predictions.** Every method received the same adult clearance and the same child. For an age range, predictions were made at seven log-spaced ages and their geometric mean was used; a stated postmenstrual age was used directly. Four methods were compared: weight-linear, body surface area, allometry (the primary comparator, which differs from PaedScale only by the maturation term) and PaedScale.
 
-The reference dose was the labeled daily maintenance dose in mg/kg/day. A labeled range was scored at its midpoint. Adult and pediatric regimens were paired on the same indication and severity, using rules fixed in the protocol, and the choices and quotations were recorded before scoring. Pairs were flagged when:
+**Hypotheses.** HE1: under 2 years, PaedScale has lower error than allometry; it was confirmatory only if at least 8 drugs contributed. HE2 (all ages) was tested only if HE1 succeeded.
 
-- the label gave the adult and the child the same mg/kg (`mgkg_shared`);
-- the neonatal indication differed from the adult one;
-- the fe was qualitative;
-- the dose was an "up to" value.
+## Endpoints and statistics (both evaluations)
 
-## Virtual patients and inputs
-
-Each labeled band was scored at seven postnatal ages, spaced evenly on a log scale across the band. The band's prediction was the geometric mean over these ages. Gestational age was 40 weeks unless the band was defined by gestational or postmenstrual age. Weight was the sex-averaged median from three references:
-
-- the Fenton 2013 preterm chart [9], bridged linearly to the WHO standard between 40 and 50 weeks PMA;
-- the WHO Child Growth Standards up to 5 years [10];
-- the CDC 2000 charts above 5 years [11].
-
-Every method received the same adult daily dose and the same virtual patients. fe came from the label. The non-renal enzyme came from the label, or from fixed literature sources: morphine and zidovudine to UGT2B7 [12, 13]. The target metric followed a class rule, never a per-drug choice:
-
-- aminoglycosides used cmax;
-- β-lactams used time above the minimum inhibitory concentration;
-- all other drugs used css.
-
-Each pair was assigned to an ICH E11 age stratum [14].
-
-## Methods compared
-
-| Method | Child daily dose |
-|---|---|
-| Weight-linear | adult × WT/70 |
-| Body surface area | adult × BSA(WT)/BSA(70), with Costeff's weight-only formula [3] |
-| Allometry only | adult × (WT/70)^0.75 |
-| Allometry + class rule (A1) | adult × WT/70 for cmax drugs, otherwise adult × (WT/70)^0.75 |
-| PaedScale | the engine with the inputs above |
-
-A1 is the primary comparator because it differs from PaedScale only by the maturation term. For aminoglycosides, PaedScale, A1 and weight-linear scaling give identical predictions by construction. These pairs are reported as ties.
-
-## Endpoints and statistics
-
-The fold error is FE = predicted / labeled dose. The average absolute fold error is AAFE = 10^mean(|log10 FE|) and the bias is AFE = 10^mean(log10 FE). Each metric was computed per drug, as the mean over that drug's bands, and then averaged over drugs, so drugs with many bands do not dominate.
-
-The primary comparison was the paired difference in drug-level mean |log10 FE| between PaedScale and A1. We report it as a ratio of typical fold errors: below 1 favors PaedScale. The 95% confidence intervals came from a cluster bootstrap that resampled drugs ({{n_boot}} replicates, seed {{seed}}). The BCa method [15] was used, with a fallback to the percentile method where BCa is undefined. A drug drawn twice in one replicate counted twice.
-
-The hypotheses were tested in a fixed sequence, each only if the previous one succeeded. Success meant a 95% interval for the difference that excluded zero:
-
-- H1: newborns, under 28 days;
-- H2: under 2 years;
-- H3: all ages.
-
-A Wilcoxon signed-rank test on drug-level differences is reported as a secondary test. The three all-ages comparisons against the other comparators are secondary, with Holm-adjusted p-values [16]. Eleven sensitivity analyses (S1 to S10, with S4 and S5 run in both directions) were pre-specified.
-
-The exploratory calibration endpoint was the share of labeled doses inside PaedScale's 90% parameter-uncertainty interval.
+The fold error is FE = predicted / reference. The average absolute fold error is AAFE = 10^mean(|log10 FE|) and the bias is AFE = 10^mean(log10 FE). Each was computed per drug and then averaged over drugs, so drugs with many observations do not dominate. The primary comparison was the paired difference in drug-level mean |log10 FE| between PaedScale and the primary comparator, reported as a ratio of typical fold errors (below 1 favours PaedScale). Intervals are 95% BCa intervals [13] from a cluster bootstrap that resamples drugs (10,000 replicates, seed 20261127). A hypothesis succeeded when its interval excluded 1. Drug-level Wilcoxon signed-rank tests and, for the clearance validation, an exact sign-flip test are secondary; comparisons with the other methods are secondary, with Holm-adjusted p-values [14]. Sensitivity analyses were pre-specified (S1–S10 and E1–E9; Table 4). The share of reference values inside PaedScale's 90% parameter-uncertainty interval was exploratory.
 
 ## Software and reproducibility
 
-One command, `python3 -m benchmark.run`, regenerates every number, table and figure. Each output records the engine's git commit. The committed outputs come from commit {{engine_commit}} with a clean working tree, Python {{python_version}}, NumPy {{numpy_version}} and SciPy {{scipy_version}}. This manuscript is generated from those outputs (`python3 -m paper.build`). Every number in the text and tables is filled in from `results.json`, and none is typed by hand. Continuous integration runs the test suite and a short benchmark run on every push.
+`python3 -m benchmark.run` and `python3 -m benchmark.external.score` regenerate every number and figure, and each output records the engine's git commit. The outputs come from commits {{engine_commit}} (labels) and {{ext_engine_commit}} (clearance) with a clean working tree, Python {{python_version}}, NumPy {{numpy_version}} and SciPy {{scipy_version}}. This manuscript is generated from those outputs (`python3 -m paper.build`); no number in the text or tables is typed by hand.
 
 # Results
 
-## Included drugs
+## Label benchmark
 
-{{n_drugs}} drugs and {{n_bands}} adult–pediatric pairs were included (Table 1). Most were renally cleared anti-infectives. Three drugs mapped to an enzyme curve: clindamycin to CYP3A4, and morphine and zidovudine to UGT2B7.
+{{n_drugs}} drugs and {{n_bands}} adult–paediatric pairs were included, mostly renally cleared anti-infectives; clindamycin mapped to CYP3A4 and morphine and zidovudine to UGT2B7. PaedScale's typical fold error was lower than A1's in newborns ({{H1_ratio}}) and under 2 years ({{H2_ratio}}), so H1 and H2 were supported (Table 1). Across all ages the interval reached just above 1 ({{H3_ratio}}), so H3 was not supported. The drug-level Wilcoxon tests were not significant (H1 p = {{H1_p}}; H2 p = {{H2_p}}).
 
-{{table_drugs}}
-
-Table: **Table 1. Included drugs.** fe is the fraction excreted unchanged in urine, as stated in the selected label. The clindamycin label states no urinary fraction but names CYP3A4 as the principal route, so by protocol fe = 0 and all clearance uses the CYP3A4 curve.
-
-## Primary hypotheses
-
-PaedScale's typical fold error was lower than A1's in newborns and in children under 2 years. It was not lower across all ages (Table 2). The H3 interval reaches just above 1. The secondary Wilcoxon tests did not reach significance for any hypothesis. Three of the nine newborn drugs are aminoglycosides, which tie by construction.
+Size-only methods overpredicted newborn doses: allometry by about twofold (AFE {{newborn_allometry_afe}}) and body surface area by more (AFE {{newborn_bsa_afe}}). PaedScale was nearly unbiased (AFE {{newborn_paedscale_afe}}). Weight-linear scaling had the lowest error in newborns (AAFE {{newborn_weight_linear_aafe}} against {{newborn_paedscale_aafe}} for PaedScale; Table 2, Figure 2).
 
 {{table_hypotheses}}
 
-Table: **Table 2. Pre-specified hypotheses, PaedScale against allometry + class rule (A1).** The ratio is 10 raised to the mean paired difference in |log10 FE|; below 1 favors PaedScale.
+Table: **Table 1. Pre-specified hypotheses.** Label benchmark: PaedScale against allometry with the class rule (A1); clearance validation: PaedScale against allometry. The ratio is 10 raised to the mean paired difference in drug-level |log10 FE|, with its 95% BCa cluster-bootstrap confidence interval; below 1 favours PaedScale.
 
-![Figure 2. Fold error of each prediction against the labeled dose, by ICH E11 stratum. The shaded band is 0.67–1.5×.](figures/fig2_fold_error_by_stratum.png)
+{{table_label_methods}}
 
-## Agreement with the label, by method and age
+Table: **Table 2. Label benchmark: agreement with the labelled dose by method (drug-weighted, 95% confidence intervals).** AAFE, average absolute fold error; AFE, average fold error (above 1 means overprediction).
 
-{{table_methods_newborn}}
+![**Figure 2.** Label benchmark: fold error of each prediction against the labelled dose, by ICH E11 stratum. The shaded band is 0.67–1.5×.](figures/fig2_fold_error_by_stratum.png)
 
-Table: **Table 3. Agreement with the labeled dose in newborns (drug-weighted, 95% CI).**
+## Clearance validation: search, screening and agreement
 
-{{table_methods_under2}}
+Of {{ext_ped_prefilter}} paediatric abstracts that passed the pre-filter, {{ext_ped_screened}} were screened (no stratum cap was reached early enough to stop a drug's list) and {{ext_ped_included}} studies were included, with {{ext_ped_obs}} observations. The excluded abstracts failed for these reasons: {{ext_ped_reasons}}. Of {{ext_adult_prefilter}} adult abstracts, {{ext_adult_screened}} were screened until five qualified or the list ended, and {{ext_adult_included}} qualified.
 
-Table: **Table 4. Agreement with the labeled dose under 2 years.**
+The two passes both read {{ext_both_read}} abstracts and disagreed on {{ext_dec_dis}} inclusion decisions (κ = {{ext_kappa}}). Of the {{ext_both_incl}} abstracts both included, {{ext_val_agree}} had identical extractions; {{ext_num_differ}} of {{ext_num_compared}} numbers compared one by one differed.
 
-{{table_methods_all}}
+{{ext_n_no_adult}} drugs had no qualifying adult abstract and were excluded ({{ext_no_adult}}), and {{ext_no_obs}} had no included paediatric observation (Supporting Table S3). {{ext_n_drugs}} drugs with {{ext_n_obs}} observations were scored: {{ext_scored_drugs}}.
 
-Table: **Table 5. Agreement with the labeled dose across all ages.**
+## Clearance validation: primary and secondary results
 
-Size-only methods without a maturation term overpredicted newborn doses on average: allometry by about twofold (AFE {{newborn_allometry_afe}}) and body surface area more (AFE {{newborn_bsa_afe}}). PaedScale slightly underpredicted (AFE {{newborn_paedscale_afe}}). Weight-linear scaling was nearly unbiased in newborns (AFE {{newborn_weight_linear_afe}}). Its absolute error there was the lowest of all methods (AAFE {{newborn_weight_linear_aafe}}).
+Under 2 years ({{ext_he1_drugs}} drugs, {{ext_he1_obs}} observations), PaedScale's typical fold error was {{ext_he1_ratio}} that of allometry, so HE1 was confirmatory and succeeded (Wilcoxon p = {{ext_he1_p}}; sign-flip p = {{ext_he1_signp}}; Table 1). HE2 was therefore tested and also succeeded: {{ext_he2_ratio}} at all ages.
 
-{{table_strata}}
+Allometry overpredicted clearance under 2 years (AFE {{ext_under2_allometry_afe}}) and body surface area more (AFE {{ext_under2_bsa_afe}}). PaedScale reduced this bias (AFE {{ext_under2_paedscale_afe}}) but still overpredicted, as did weight-linear scaling (AFE {{ext_under2_weight_linear_afe}}; Table 3, Figure 3). The overprediction was concentrated in newborns: the AFE of PaedScale was {{ext_st_preterm_newborn_paedscale_afe}} in preterm and {{ext_st_term_newborn_paedscale_afe}} in term newborns, against {{ext_st_preterm_newborn_allometry_afe}} and {{ext_st_term_newborn_allometry_afe}} for allometry (Supporting Table S4). By stratum, the ratio against allometry was {{ext_st_preterm_newborn_ratio}} in preterm newborns, {{ext_st_term_newborn_ratio}} in term newborns, {{ext_st_infant_toddler_ratio}} in infants and toddlers and {{ext_st_child_ratio}} in children aged 2–11 years.
 
-Table: **Table 6. AAFE by ICH E11 stratum (drug-weighted, point estimates).** Several strata contain few drugs.
+Across all ages PaedScale's error was lower than that of body surface area scaling ({{ext_sec_bsa}}; Holm p = {{ext_sec_bsa_holm}}). It was not clearly lower than that of weight-linear scaling ({{ext_sec_weight_linear}}; Holm p = {{ext_sec_weight_linear_holm}}). At all ages, {{ext_n_favour}} of the {{ext_n_drugs}} drugs favoured PaedScale over allometry; {{ext_not_favour}} did not (Figure 4).
 
-## Secondary comparisons
+{{table_ext_methods}}
 
-Across all ages, PaedScale's typical fold error was lower than that of body surface area scaling and of allometry alone. The intervals for both excluded 1, but no Holm-adjusted Wilcoxon p-value was below 0.05 (Table 7). Against weight-linear scaling, the interval included 1.
+Table: **Table 3. Clearance validation: agreement with published clearance by method (drug-weighted, 95% confidence intervals).** AAFE, average absolute fold error; AFE, average fold error (above 1 means overprediction).
 
-{{table_secondary}}
+![**Figure 3.** Clearance validation: fold error of each method against the central postnatal age of each study group. The shaded band is 0.67–1.5×; the dotted line marks 2 years.](figures/fig4_external_fold_error_by_age.png)
 
-Table: **Table 7. Secondary all-ages comparisons.**
+![**Figure 4.** Clearance validation: per-drug ratio of typical fold error, PaedScale ÷ allometry, under 2 years and at all ages, with the all-drug estimates and their 95% BCa intervals.](figures/fig5_external_paired_difference_by_drug.png)
 
-![Figure 3. Per-drug ratio of typical fold error, PaedScale ÷ A1, all ages. The diamond and bar show the all-drug estimate and its 95% BCa interval, {{H3_ratio}}, which includes 1.](figures/fig3_paired_difference_by_drug.png)
+## Sensitivity analyses and uncertainty
 
-## Sensitivity analyses
-
-The newborn result kept the same direction in every sensitivity analysis (Table 8). Its interval excluded 1 in most of them, but not in three: S2, which leaves 6 drugs; weight +20%; and S9, which leaves 5 drugs. When one drug at a time was left out, the newborn point estimate ranged from {{s6_newborn}} and the all-ages estimate from {{s6_all}}.
+In the clearance validation, the under-2 interval excluded 1 in {{ext_n_sens_excluding_1}} of the {{ext_n_sens}} sensitivity analyses that give an interval, and leaving one drug out at a time gave estimates from {{ext_e6_he1}} (Table 4). Excluding imputed weights or gestational ages (E1) left fewer than 8 drugs under 2 years, so that analysis is descriptive. In the label benchmark the newborn interval included 1 in {{label_n_sens_crossing_1}} of {{label_n_sens}} analyses. PaedScale's 90% parameter-uncertainty interval contained {{ext_coverage}} of the observed clearances and {{coverage}} of the labelled doses.
 
 {{table_sensitivity}}
 
-Table: **Table 8. Sensitivity analyses, PaedScale against A1.**
-
-## Parameter-uncertainty interval
-
-PaedScale's 90% parameter-uncertainty interval contained the labeled dose in {{coverage}} of drugs. No band was blocked ({{cov_blocked}} blocked). The median interval width was {{cov_median_width}}-fold, and the widest was {{cov_max_width}}-fold. For most children beyond infancy the maturation factor is close to 1, so the interval is very narrow. The interval does not describe how far a label may sit from a size-based prediction, and low coverage is the expected result.
+Table: **Table 4. Pre-specified sensitivity analyses, PaedScale against the primary comparator.** Ratio of typical fold error with 95% BCa cluster-bootstrap confidence interval. In the label benchmark the primary population is newborns; in the clearance validation it is children under 2 years.
 
 # Discussion
 
-In this pre-registered benchmark, adding published maturation curves to allometric scaling brought predicted doses closer to FDA-labeled doses in newborns and in children under 2 years. Across all ages there was no clear difference. This pattern fits the mechanism. Glomerular filtration and the enzymes modeled here are mostly mature by about 2 years (Figure 1), so beyond infancy PaedScale and A1 give nearly the same doses. Their differences there mostly reflect drugs whose labels depart from allometry for other reasons.
+In two pre-registered evaluations with different reference standards, adding published maturation curves to allometric scaling reduced the error of predictions for children under 2 years. Against published clearance, the typical fold error under 2 years was {{ext_he1_reduction}} lower than with allometry, and the result held in the sensitivity analyses. The gain came from the youngest children: in preterm and term newborns, allometry overpredicted clearance on average {{ext_st_preterm_newborn_allometry_afe}}- and {{ext_st_term_newborn_allometry_afe}}-fold, and the maturation term removed most of that bias. Beyond 2 years PaedScale and allometry gave nearly the same predictions, as expected from curves that are mostly mature by then (Figure 1). That the two evaluations agree is the main finding, because their weaknesses differ: labels mix exposure matching with convention, while published clearance reflects small studies with their own designs.
 
-The comparison isolates the maturation term because A1 shares everything else with PaedScale. Allometry and body surface area scaling without maturation overpredicted newborn doses about two- to threefold. This matches the core concern that motivates maturation models [4, 8].
+Two findings limit the claim. First, plain weight-linear scaling did about as well as PaedScale in both evaluations. Under 2 years the two methods had similar error, and across all ages the comparison was not significant. Linear scaling with weight overpredicts the clearance of a small child less than allometry does, because WT/70 is smaller than (WT/70)^0.75, and in the first months of life this happens to offset much of the immaturity that the maturation term models. The coincidence does not hold for every drug or age, and linear scaling underpredicted clearance in children aged 2–11 years. A method that is right for the right reason is preferable, but these data do not show that PaedScale predicts better than weight-linear scaling.
 
-Two findings limit what can be claimed.
+Second, PaedScale still overpredicted clearance in newborns, on average {{ext_st_preterm_newborn_paedscale_afe}}-fold in preterm and {{ext_st_term_newborn_paedscale_afe}}-fold in term newborns. Several explanations are possible. Many neonatal studies enrolled sick infants; the renal curve describes glomerular filtration in a mixed population [5]; and for drugs with large non-renal clearance and no mapped enzyme, the engine scales that fraction by size alone, which ignores its maturation. For a starting dose, an overprediction of clearance means a dose that is too high, so in newborns the engine's output still needs a downward check against neonatal data or a guideline, which the full application performs.
 
-First, weight-linear scaling agreed with neonatal labels at least as well as PaedScale. A likely reason is that many neonatal and pediatric labels are written in mg/kg, and some give the adult the same mg/kg (the `mgkg_shared` pairs). For those pairs, weight-linear scaling matches the label by construction. More broadly, where a labeled pediatric dose was set by mg/kg convention rather than to match adult exposure, agreement with the label, the reference standard here, is not the same as matching exposure. A method that matches exposure better could then look worse against labels. This benchmark cannot tell these cases apart.
+The parameter-uncertainty interval contained almost none of the observed clearances. This is the expected result for an interval that reflects uncertainty in two curve parameters only, and it confirms that the interval must not be read as a prediction interval for a child or a study group. A useful interval would also need between-subject and between-study variability.
 
-Second, the effect estimates are imprecise and depend on few drugs. H1 rests on nine drugs, three of which tie. The secondary Wilcoxon tests were not significant. The pre-specified sequence makes H1 and H2 confirmatory, but their size is uncertain.
-
-The drugs where PaedScale did worse than A1 were mainly β-lactams and fluconazole (Figure 3). For β-lactams, matching daily exposure is only a proxy for time above the inhibitory concentration, and the engine flags it as such. The fluconazole label states that its pediatric regimens were chosen to match adult exposure, and they are higher than allometry predicts. The application flags this kind of discordance between engine and guideline.
+The clearance validation was designed to limit the usual weaknesses of literature-based validation. The search, the screening order and the stopping rule were fixed before any abstract was read, so the authors could not choose studies. Two passes screened independently with high agreement, every number is tied to a verbatim quote that a script checks, and the rules the adjudicator needed were written as dated amendments, with their effect on the dataset listed. Removing studies whose abstracts state no route (E9), the studies most affected by those rules, strengthened the result.
 
 ## Limitations
 
-- **Reference standard.** Labeled doses are a clinical reference, not measured exposure. Some come from pediatric pharmacokinetic studies, and some from convention.
-- **Sample.** The sample is small (21 drugs, 46 pairs). The candidates were chosen by the authors, not by systematic search, and most are renally cleared anti-infectives. Only three drugs used an enzyme curve, and morphine is the source drug for the UGT2B7 curve. Sensitivity analysis S7 removes it.
-- **Who did the work.** Curation, pairing and the analysis code were done by the study team with AI assistance (see the AI-use statement). They were not done by independent curators, though every value carries a verbatim quotation checked by a test.
-- **Patients.** Each band was represented by median-weight virtual patients. There was no individual variability, obesity, critical illness or organ impairment.
-- **Inputs.** The benchmark gives the engine label-derived inputs. It does not test the live retrieval and language-model layers, which need a separate evaluation.
-- **Uncertainty interval.** The interval reflects maturation-parameter uncertainty only. Its 13% coverage shows it must not be read as a dose range.
-- **Labels.** Only US FDA labels were used.
+- **Abstracts only.** Only values printed in abstracts were used. Abstracts summarise small studies with different designs, assays and sampling, and population typical values depend on the authors' models.
+- **Sample.** {{ext_n_drugs}} drugs were scored, mostly renally cleared anti-infectives, and only clindamycin used an enzyme curve in the clearance validation. The results say little about drugs cleared mainly by metabolism.
+- **Adult reference.** Several drugs rested on one or two adult abstracts, and {{ext_n_no_adult}} drugs had none that qualified.
+- **AI-assisted curation.** Both screening passes and the drafting of adjudication records used an AI assistant directed by the authors. The passes were independent, but they used the same model, which may share systematic errors; agreement between them is not agreement between independent human reviewers. The authors must verify the final dataset before publication.
+- **Rules set during screening.** Three amendments (14–16) were made after the first pass's records were known. They are dated, their effects are listed, and one sensitivity analysis (E9) removes the studies most affected.
+- **Uncertainty interval.** The interval covers curve parameters only.
+- **Scope.** Neither evaluation tests the retrieval and language-model layers of the application, which need separate evaluation.
 
 ## Conclusions
 
-Published maturation curves improved the agreement of size-scaled doses with FDA labels in newborns and children under 2 years, and not across all ages. Weight-linear scaling agreed with neonatal labels about as well. The open, pre-registered benchmark and its one-command reproduction are offered as a baseline for testing pediatric dose-extrapolation tools, including language-model systems. Clinical use of any such tool needs prospective evaluation against measured exposure.
+Published maturation curves corrected most of the large overprediction that allometric scaling gives for newborns and infants, against both labelled doses and published clearance. They did not outperform weight-linear scaling, and PaedScale still overpredicted neonatal clearance. A maturation-adjusted starting dose for a young child therefore still needs checking against neonatal data, a guideline or therapeutic drug monitoring. The open protocols, data and one-command reproduction are offered as a baseline for testing paediatric dose-extrapolation tools, including language-model systems.
 
 # Declarations
 
-**Code and data availability.** The source code, protocol, label snapshots, reference set, outputs and the manuscript build are in the PaedScale repository (https://github.com/heyiamnotacoder/paedscale), at commit {{engine_commit}} for the scored outputs.
+**Data availability statement.** The protocols, search snapshot (PMIDs, years and abstract hashes), extraction records of both passes, adjudication log, final dataset, label texts, analysis code, outputs and the manuscript build are openly available in the PaedScale repository at https://github.com/heyiamnotacoder/paedscale. Abstract texts are not redistributed; `python3 -m benchmark.external.curation.search restore` re-fetches them from PubMed and checks each against its committed hash.
 
-**Use of AI tools.** The authors used an AI coding assistant, Claude (Anthropic), for software development, the benchmark code, label curation support and drafting this manuscript. The authors directed the work and are responsible for the content. The authors must check every statement, number and reference before submission. Every number in this manuscript is generated from the committed outputs by script.
+**Use of AI tools.** The authors used an AI assistant, Claude (Anthropic), to write the software, the analysis and curation code, to run both screening and extraction passes, to draft adjudication records and to draft this manuscript. The authors directed the work and are accountable for all content. Every number in the manuscript is generated by script from the committed outputs. The authors must check every statement, extracted value and reference before submission.
 
-**Funding.** [To be completed by the authors.]
+**Acknowledgements and funding.** [To be completed by the authors.]
 
-**Competing interests.** [To be completed by the authors.]
+**Competing interests.** [To be completed by the authors; state "none" if none.]
 
-**Ethics.** The study used only public drug labels and published growth references. No human participants or patient data were involved.
+**Ethics.** The study used only public drug labels, published abstracts and published growth references. No human participants or patient data were involved.
+
+**Nomenclature.** Key ligands and targets (the drugs studied, CYP3A4 and UGT2B7) are to be linked to the IUPHAR/BPS Guide to Pharmacology at first mention before submission.
 
 # References
 
-1. Shah SS, Hall M, Goodman DM, et al. Off-label drug use in hospitalized children. Arch Pediatr Adolesc Med. 2007;161(3):282–290. doi:10.1001/archpedi.161.3.282. PMID 17339510.
-2. Kaushal R, Bates DW, Landrigan C, et al. Medication errors and adverse drug events in pediatric inpatients. JAMA. 2001;285(16):2114–2120. doi:10.1001/jama.285.16.2114. PMID 11311101.
-3. Costeff H. A simple empirical formula for calculating approximate surface area in children. Arch Dis Child. 1966;41(220):681–683. doi:10.1136/adc.41.220.681. PMID 5927924.
-4. Anderson BJ, Holford NHG. Mechanism-based concepts of size and maturity in pharmacokinetics. Annu Rev Pharmacol Toxicol. 2008;48:303–332. doi:10.1146/annurev.pharmtox.48.113006.094708. PMID 17914927.
-5. Rhodin MM, Anderson BJ, Peters AM, et al. Human renal function maturation: a quantitative description using weight and postmenstrual age. Pediatr Nephrol. 2009;24(1):67–76. doi:10.1007/s00467-008-0997-5. PMID 18846389.
-6. Anderson BJ, Larsson P. A maturation model for midazolam clearance. Paediatr Anaesth. 2011;21(3):302–308. doi:10.1111/j.1460-9592.2010.03364.x. PMID 20704661.
-7. Anand KJS, Anderson BJ, Holford NHG, et al. Morphine pharmacokinetics and pharmacodynamics in preterm and term neonates: secondary results from the NEOPAIN trial. Br J Anaesth. 2008;101(5):680–689. doi:10.1093/bja/aen248. PMID 18723857.
-8. Calvier EAM, Krekels EHJ, Välitalo PAJ, et al. Allometric scaling of clearance in paediatric patients: when does the magic of 0.75 fade? Clin Pharmacokinet. 2017;56(3):273–285. doi:10.1007/s40262-016-0436-x. PMID 27510367.
-9. Fenton TR, Kim JH. A systematic review and meta-analysis to revise the Fenton growth chart for preterm infants. BMC Pediatr. 2013;13:59. doi:10.1186/1471-2431-13-59. PMID 23601190.
+1. Shah SS, Hall M, Goodman DM, et al. Off-label drug use in hospitalized children. Arch Pediatr Adolesc Med. 2007;161(3):282–290. doi:10.1001/archpedi.161.3.282.
+2. Kaushal R, Bates DW, Landrigan C, et al. Medication errors and adverse drug events in pediatric inpatients. JAMA. 2001;285(16):2114–2120. doi:10.1001/jama.285.16.2114.
+3. Costeff H. A simple empirical formula for calculating approximate surface area in children. Arch Dis Child. 1966;41(220):681–683. doi:10.1136/adc.41.220.681.
+4. Anderson BJ, Holford NHG. Mechanism-based concepts of size and maturity in pharmacokinetics. Annu Rev Pharmacol Toxicol. 2008;48:303–332. doi:10.1146/annurev.pharmtox.48.113006.094708.
+5. Rhodin MM, Anderson BJ, Peters AM, et al. Human renal function maturation: a quantitative description using weight and postmenstrual age. Pediatr Nephrol. 2009;24(1):67–76. doi:10.1007/s00467-008-0997-5.
+6. Anderson BJ, Larsson P. A maturation model for midazolam clearance. Paediatr Anaesth. 2011;21(3):302–308. doi:10.1111/j.1460-9592.2010.03364.x.
+7. Anand KJS, Anderson BJ, Holford NHG, et al. Morphine pharmacokinetics and pharmacodynamics in preterm and term neonates: secondary results from the NEOPAIN trial. Br J Anaesth. 2008;101(5):680–689. doi:10.1093/bja/aen248.
+8. Calvier EAM, Krekels EHJ, Välitalo PAJ, et al. Allometric scaling of clearance in paediatric patients: when does the magic of 0.75 fade? Clin Pharmacokinet. 2017;56(3):273–285. doi:10.1007/s40262-016-0436-x.
+9. Fenton TR, Kim JH. A systematic review and meta-analysis to revise the Fenton growth chart for preterm infants. BMC Pediatr. 2013;13:59. doi:10.1186/1471-2431-13-59.
 10. WHO Multicentre Growth Reference Study Group. WHO Child Growth Standards: length/height-for-age, weight-for-age, weight-for-length, weight-for-height and body mass index-for-age. Methods and development. Geneva: World Health Organization; 2006.
-11. Kuczmarski RJ, Ogden CL, Guo SS, et al. 2000 CDC growth charts for the United States: methods and development. Vital Health Stat 11. 2002;(246):1–190. PMID 12043359.
-12. Coffman BL, Rios GR, King CD, Tephly TR. Human UGT2B7 catalyzes morphine glucuronidation. Drug Metab Dispos. 1997;25(1):1–4. PMID 9010622.
-13. Barbier O, Turgeon D, Girard C, et al. 3'-azido-3'-deoxythimidine (AZT) is glucuronidated by human UDP-glucuronosyltransferase 2B7 (UGT2B7). Drug Metab Dispos. 2000;28(5):497–502. PMID 10772627.
-14. International Council for Harmonisation. E11(R1): Addendum to clinical investigation of medicinal products in the pediatric population. 2017.
-15. Efron B. Better bootstrap confidence intervals. J Am Stat Assoc. 1987;82(397):171–185.
-16. Holm S. A simple sequentially rejective multiple test procedure. Scand J Stat. 1979;6(2):65–70.
+11. Kuczmarski RJ, Ogden CL, Guo SS, et al. 2000 CDC growth charts for the United States: methods and development. Vital Health Stat 11. 2002;(246):1–190.
+12. International Council for Harmonisation. E11(R1): Addendum to clinical investigation of medicinal products in the pediatric population. 2017.
+13. Efron B. Better bootstrap confidence intervals. J Am Stat Assoc. 1987;82(397):171–185.
+14. Holm S. A simple sequentially rejective multiple test procedure. Scand J Stat. 1979;6(2):65–70.
 
-# Supplementary Table S1. Excluded candidates
+# Supporting information
+
+## Table S1. Label benchmark: included drugs
+
+{{table_drugs}}
+
+fe is the fraction excreted unchanged in urine, as stated in the selected label. The clindamycin label states no urinary fraction but names CYP3A4 as the principal route, so by protocol fe = 0.
+
+## Table S2. Label benchmark: excluded candidates
 
 {{table_excluded}}
+
+## Table S3. Clearance validation: drugs, adult references and included studies
+
+{{table_ext_drugs}}
+
+The adult reference is the median of the qualifying adult abstracts' values, each converted to 70 kg where a weight was stated.
+
+## Table S4. Clearance validation: results by ICH E11 stratum
+
+{{table_ext_strata}}
+
+Drug-weighted AAFE with AFE in brackets. Intervals are reported only for strata with at least 5 drugs.
+
+## Figure S1. Label benchmark: per-drug ratio of typical fold error, PaedScale ÷ A1
+
+![](figures/fig3_paired_difference_by_drug.png)
