@@ -86,11 +86,11 @@ def paired_difference_forest(results, out, prov=None):
         ax.hlines(y0, lo, hi, color=col, linewidth=1.2)
         ax.vlines([lo, hi], y0 - 0.2, y0 + 0.2, color=col, linewidth=1.2)
         ax.scatter([est], [y0], marker="D", s=32, color=col, zorder=3)
-        ax.text(max(hi, est), y0, f"  {lab.lower()}, all drugs, 95% CI", va="center", fontsize=8, color=INK)
         xs += [lo, hi, est]
     ax.axvline(1.0, color=INK2, linewidth=0.8)
-    ax.set_yticks(range(len(drugs)))
-    ax.set_yticklabels([d.replace("_", " ").replace("piperacillin tazobactam", "piperacillin") for d in drugs], fontsize=8)
+    names = [d.replace("_", " ").replace("piperacillin tazobactam", "piperacillin") for d in drugs]
+    ax.set_yticks([-1.8, -1.0] + list(range(len(drugs))))
+    ax.set_yticklabels(["All drugs, under 2 y (95% CI)", "All drugs, all ages (95% CI)"] + names, fontsize=8)
     ax.set_xscale("log")
     ticks = [t for t in (0.25, 0.33, 0.5, 0.67, 0.8, 1, 1.25, 1.5, 2, 3, 4) if min(xs) / 1.1 <= t <= max(xs) * 1.1]
     ax.set_xticks(ticks)
@@ -98,7 +98,7 @@ def paired_difference_forest(results, out, prov=None):
     ax.xaxis.set_minor_formatter(NullFormatter())
     ax.set_xlabel("Ratio of typical fold error, PaedScale ÷ allometry\n(<1 favours PaedScale)", color=INK)
     ax.set_ylim(-2.4, len(drugs))
-    ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.28), ncol=2)
+    ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=2, markerscale=1.4)
     _save(fig, out, "fig5_external_paired_difference_by_drug", prov)
 
 
