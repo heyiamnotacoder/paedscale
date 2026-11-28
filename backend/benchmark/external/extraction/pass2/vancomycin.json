@@ -1,0 +1,1629 @@
+{
+ "drug": "vancomycin",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "20385872",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "premature AGA neonate, typical value at 1 kg, PMA 30 wk",
+     "preterm": true,
+     "cl": {
+      "value": 0.0426,
+      "unit": "L/h",
+      "summary": "typical",
+      "quote": "0.0426 liters/h"
+     },
+     "pna_days": null,
+     "ga_weeks": null,
+     "pma_weeks": 30,
+     "age_quote": "a postmenstrual age of 30 weeks",
+     "weight_kg": 1,
+     "weight_quote": "for a 1-kg premature",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "32296501",
+   "decision": "exclude",
+   "reason": "no age: non-ECMO control group has no stated age (ECMO group P4)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "28650363",
+   "decision": "exclude",
+   "reason": "P4: ECMO (extracorporeal life support) only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8477127",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "group 1 (no indomethacin), NICU infants, PCA 26-46 wk",
+     "preterm": false,
+     "cl": {
+      "value": 0.072,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "0.072 +/- 0.032 L/kg/h"
+     },
+     "pna_days": null,
+     "ga_weeks": [
+      23,
+      41
+     ],
+     "pma_weeks": [
+      26,
+      46
+     ],
+     "age_quote": "Gestational age range from 23 to 41 weeks and postconceptional age (PCA) at the time of the study ranged from 26 to 46 weeks",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": [
+      "pca_as_pma"
+     ]
+    }
+   ]
+  },
+  {
+   "pmid": "37994537",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value (only relative reductions)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2311439",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "children undergoing CSF shunt placement, mean age 8.3 y",
+     "preterm": false,
+     "cl": {
+      "value": 0.11,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "The mean total clearance, renal clearance, apparent volume of distribution, and elimination half-life were 0.11 +/- 0.05 l/h/kg"
+     },
+     "pna_days": 3031.575,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "mean age 8.3 +/- 7.0 years",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "23876785",
+   "decision": "exclude",
+   "reason": "P4: burns; also amikacin, not vancomycin, clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9853975",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "population model typical CL per kg at postnatal age 1 year",
+     "preterm": false,
+     "cl": {
+      "value": 0.119,
+      "unit": "L/h/kg",
+      "summary": "typical",
+      "quote": "CL(L/hour per kg) = 0.119 + 0.00508 x (1 - AGE)"
+     },
+     "pna_days": 365.25,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "increases with AGE up to 1 year of age",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "39821208",
+   "decision": "exclude",
+   "reason": "P2: review pooling published models; typical neonate value has no stated age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "40304294",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age (typical value's age not stated)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "40773131",
+   "decision": "exclude",
+   "reason": "P4: ECMO only; systematic review, range only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8062493",
+   "decision": "exclude",
+   "reason": "no age: typical CL applies to the GA > 32 wk, no-dopamine covariate point, stated by GA only; no postnatal age or PMA for that point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35049078",
+   "decision": "exclude",
+   "reason": "no age: groups described only as critically ill infants, no postnatal age or PMA stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "24789450",
+   "decision": "exclude",
+   "reason": "no age: typical value for a 'full term neonate of 4 kg' has no postnatal age or PMA",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "33839974",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26079639",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "pediatric cancer patients, mean age 6 y",
+     "preterm": false,
+     "cl": {
+      "value": 0.2,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "Mean baseline (±SD) vancomycin CL was 0.20 ± 0.07 L/h/kg"
+     },
+     "pna_days": 2191.5,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "mean age was 6 ± 2.5 (SD) years",
+     "weight_kg": 19.6,
+     "weight_quote": "mean weight was 19.6 ± 6.9(SD) kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "33070357",
+   "decision": "exclude",
+   "reason": "no age: no stated age for the group or the model's covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "40102766",
+   "decision": "exclude",
+   "reason": "P1: not a pediatric study (chronic liver disease patients); P2: no clearance value",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "31935538",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": [
+    {
+     "label": "children 2-13 y with severe infection, NCA",
+     "preterm": false,
+     "cl": {
+      "value": 2.82,
+      "unit": "mL/min/kg",
+      "summary": "median",
+      "quote": "2.82 mL/kg/min"
+     },
+     "pna_days": [
+      730.5,
+      4748.25
+     ],
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "age range from 2 to 13 years",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "34480578",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8483624",
+   "decision": "exclude",
+   "reason": "P4: extracorporeal support (cardiopulmonary bypass surgery) only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "37977199",
+   "decision": "exclude",
+   "reason": "no age: post-liver-transplant children, no age stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "10639350",
+   "decision": "exclude",
+   "reason": "no age: only 'under 18 years old', no central value or range",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34750740",
+   "decision": "exclude",
+   "reason": "range only: systematic review, clearance given as a range across studies",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34612690",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "pediatric liver transplant recipients, median age 13.3 months (post hoc mean CL)",
+     "preterm": false,
+     "cl": {
+      "value": 0.18,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "the average clearance and volume of distribution were 0.18 liters/h/kg"
+     },
+     "pna_days": 404.81875,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "The median age was 13.3 (interquartile range, 7.6 to 53.5) months",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "36767208",
+   "decision": "exclude",
+   "reason": "P4: ECMO and decreased renal function (single case)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "23824677",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8532423",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "infants and children with cancer",
+     "preterm": false,
+     "cl": {
+      "value": 0.149,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "0.149 +/- 0.028 liter/hour/kg"
+     },
+     "pna_days": 2089.23,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "age 5.72 +/- 4.11 years, mean +/- SD",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "control patients without cancer",
+     "preterm": false,
+     "cl": {
+      "value": 0.114,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "0.114 +/- 0.031 liter/hour/kg"
+     },
+     "pna_days": 1526.745,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "31 patients without cancer (age 4.18 +/- 5.10 years)",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "37379498",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26558810",
+   "decision": "exclude",
+   "reason": "no age: critically ill pediatric oncology cohort, no age stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26031618",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value (only case-control difference)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "16120065",
+   "decision": "exclude",
+   "reason": "P4: ECMO only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "24596064",
+   "decision": "exclude",
+   "reason": "P2: no vancomycin clearance measured (sCr assay comparison)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "36194537",
+   "decision": "exclude",
+   "reason": "P4: burns",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "28406088",
+   "decision": "exclude",
+   "reason": "P2: typical value without a stated covariate point (weight and age)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "11549096",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "typical study infant, age 27 d, GA 33.5 wk, 1.8 kg, CR 0.6",
+     "preterm": true,
+     "cl": {
+      "value": 0.066,
+      "unit": "L/h/kg",
+      "summary": "typical",
+      "quote": "Cl = 0.066 l/h/kg"
+     },
+     "pna_days": 27,
+     "ga_weeks": 33.5,
+     "pma_weeks": null,
+     "age_quote": "For the typical study infant (age = 27 days, CR = 0.6, WT= 1.8 kg, gestational age = 33.5 weeks)",
+     "weight_kg": 1.8,
+     "weight_quote": "WT= 1.8 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "30983533",
+   "decision": "exclude",
+   "reason": "no age: critically ill neonates, no postnatal age or PMA stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "30950674",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": [
+    {
+     "label": "infants with suspected or proven sepsis, median PNA 157 d",
+     "preterm": false,
+     "cl": {
+      "value": 0.112,
+      "unit": "L/h/kg",
+      "summary": "median",
+      "quote": "0.112 (0.095-0.133) L/h/kg"
+     },
+     "pna_days": 157,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "Median (IQR) postnatal age was 157 (112-238) days",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "32557716",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35094368",
+   "decision": "exclude",
+   "reason": "P2: sample-size resampling study; 0.057 L/h is a reference-model target value, not a reported group clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38450797",
+   "decision": "exclude",
+   "reason": "P4: therapeutic hypothermia",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "16869817",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "allometric_standardized"
+   ],
+   "observations": [
+    {
+     "label": "preterm neonates, model typical CL at PMA 24 wk",
+     "preterm": true,
+     "cl": {
+      "value": 0.897,
+      "unit": "L/h/70kg",
+      "summary": "typical",
+      "quote": "Clearance (CL) increased from 0.897 l h(-1) 70 kg(-1) at 24 weeks PMA"
+     },
+     "pna_days": null,
+     "ga_weeks": null,
+     "pma_weeks": 24,
+     "age_quote": "at 24 weeks PMA",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "preterm neonates, model typical CL at PMA 34 wk",
+     "preterm": true,
+     "cl": {
+      "value": 2.02,
+      "unit": "L/h/70kg",
+      "summary": "typical",
+      "quote": "to 2.02 l h(-1) 70 kg(-1) by 34 weeks PMA"
+     },
+     "pna_days": null,
+     "ga_weeks": null,
+     "pma_weeks": 34,
+     "age_quote": "by 34 weeks PMA",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "38031322",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without pediatric age (standardized to 70 kg, 176 cm adult male)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "32266599",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "preterm neonates, typical neonate 1.48 kg, median age 14 d",
+     "preterm": true,
+     "cl": {
+      "value": 0.1,
+      "unit": "L/h",
+      "summary": "typical",
+      "quote": "Volume of distribution and clearance was 0.88 L and 0.1 L/h, respectively, for a typical neonate weighing 1.48 kg"
+     },
+     "pna_days": 14,
+     "pna_range_days": [
+      3,
+      58
+     ],
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "a median age of 14 (3-58) days",
+     "weight_kg": 1.48,
+     "weight_quote": "a typical neonate weighing 1.48 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "34671937",
+   "decision": "exclude",
+   "reason": "P2: review of published models, no primary group clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "39710751",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "42414650",
+   "decision": "exclude",
+   "reason": "P4: CRRT; P2: no clearance value",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26123638",
+   "decision": "exclude",
+   "reason": "P1: adults (critically ill, ECMO), not pediatric",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3725640",
+   "decision": "exclude",
+   "reason": "range only: clearance given as a range (regression on PCA, no group central value)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2630235",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "infants GA < 36 wk, PCA 26-44 wk",
+     "preterm": true,
+     "cl": {
+      "value": 1.37,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "Mean vancomycin body clearance (CL), volume of distribution (Vdss) and terminal elimination half-life were 1.37 ml/min"
+     },
+     "pna_days": null,
+     "ga_weeks": null,
+     "pma_weeks": [
+      26,
+      44
+     ],
+     "age_quote": "Postconceptional age (PCA) at the time of the study ranged from 26 to 44 weeks",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": [
+      "pca_as_pma"
+     ]
+    }
+   ]
+  },
+  {
+   "pmid": "34156647",
+   "decision": "exclude",
+   "reason": "no age: critically ill children, no age stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "32304024",
+   "decision": "exclude",
+   "reason": "P2: typical value without a stated covariate point (weight and age)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8723454",
+   "decision": "exclude",
+   "reason": "P4: ECMO only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "28257285",
+   "decision": "exclude",
+   "reason": "P2: model equation only, no typical value at a stated covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "31657864",
+   "decision": "exclude",
+   "reason": "P2: methotrexate clearance, not vancomycin",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "37574774",
+   "decision": "exclude",
+   "reason": "no age: neonates in NICU, no postnatal age or PMA stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "30063652",
+   "decision": "exclude",
+   "reason": "P4: ECMO only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3658557",
+   "decision": "exclude",
+   "reason": "no age: preterm infants described by GA only (<= 34 wk), no postnatal age or PMA",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "10525029",
+   "decision": "exclude",
+   "reason": "P2: clearance given only as a function of creatinine, no numeric value at a stated covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "32947559",
+   "decision": "exclude",
+   "reason": "P2: final-model CL 0.29 L/h/kg is neither a stated group summary nor a typical value at a stated weight and age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9658434",
+   "decision": "exclude",
+   "reason": "no age: children with malignancy and controls, no age stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35190502",
+   "decision": "exclude",
+   "reason": "P2: no clearance value (trough levels and eGFR only)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "36622172",
+   "decision": "exclude",
+   "reason": "no age: pediatric SSTI/BJI patients, no age stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "42885999",
+   "decision": "exclude",
+   "reason": "P2: single case report, no vancomycin clearance value",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35481751",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis; tobramycin, not vancomycin, clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "21353108",
+   "decision": "exclude",
+   "reason": "P2: gentamicin clearance, not vancomycin",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9758319",
+   "decision": "exclude",
+   "reason": "no age: non-ECMO control neonates have no stated age (ECMO group P4)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "28640009",
+   "decision": "exclude",
+   "reason": "P1: population 1-21 years, not restricted to under 18; clearance only per 1.73 m2 by ARC group",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26562817",
+   "decision": "exclude",
+   "reason": "no age: septic neonates with postnatal age > 72 h only, no central value or range",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34002357",
+   "decision": "exclude",
+   "reason": "range only: systematic review, clearance given as a range across models",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "29602981",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "typical infant 2.73 kg, PMA 39.8 wk, SCr 0.28 mg/dL",
+     "preterm": false,
+     "cl": {
+      "value": 0.103,
+      "unit": "L/h/kg",
+      "summary": "typical",
+      "quote": "were 0.103 L/h/kg and 0.58 L/kg, respectively"
+     },
+     "pna_days": null,
+     "ga_weeks": null,
+     "pma_weeks": 39.8,
+     "age_quote": "with a PMA of 39.8 weeks",
+     "weight_kg": 2.73,
+     "weight_quote": "for an infant weighing 2.73 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "23340565",
+   "decision": "exclude",
+   "reason": "P2: model equation only, no typical value at a stated covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "17179516",
+   "decision": "exclude",
+   "reason": "P4: peritoneal dialysis; intraperitoneal dosing",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "39352409",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": [
+    {
+     "label": "PICU children, typical patient 20 kg, median age 6.0 y",
+     "preterm": false,
+     "cl": {
+      "value": 2.76,
+      "unit": "L/h",
+      "summary": "typical",
+      "quote": "the clearance of 2.76 L/hr for a typical patient weighing 20 kg"
+     },
+     "pna_days": 2191.5,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "302 children with a median age of 6.0 years",
+     "weight_kg": 20,
+     "weight_quote": "a typical patient weighing 20 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "30833429",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age (population 1 day-21 years)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "28481829",
+   "decision": "exclude",
+   "reason": "no age: typical value is for a 70 kg normothermic patient with no stated age (cohort 30 d to 17 yr after cardiac arrest)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "40993490",
+   "decision": "exclude",
+   "reason": "P2: typical value without a stated covariate point; no age stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "7845750",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "pediatric cancer patients 9 months to 13 years",
+     "preterm": false,
+     "cl": {
+      "value": 0.153,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "Mean vancomycin clearance, volume of distribution and serum half-life were 0.153 +/- 0.033 liter/hour/kg"
+     },
+     "pna_days": [
+      273.9375,
+      4748.25
+     ],
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "28 pediatric cancer patients 9 months to 13 years of age",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "38260090",
+   "decision": "exclude",
+   "reason": "adult criteria: renal impairment (median CLcr 12.7 mL/min)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "27216073",
+   "decision": "exclude",
+   "reason": "adult criteria: septic ICU patients; no clearance value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "37162349",
+   "decision": "exclude",
+   "reason": "adult criteria: patients with external ventricular drain, not healthy or stated normal renal function; no age stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40681311",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalised patients, no clearance value and no age range",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20653673",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients with SCr 1.4 mg/dL, not healthy or normal renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "15616299",
+   "decision": "exclude",
+   "reason": "adult criteria: tigecycline, not vancomycin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41510782",
+   "decision": "exclude",
+   "reason": "adult criteria: CRRT/hemodialysis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20031929",
+   "decision": "exclude",
+   "reason": "adult criteria: daptomycin, not vancomycin; AKI on dialysis",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "15905303",
+   "decision": "exclude",
+   "reason": "adult criteria: linezolid, not vancomycin; CVVH",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "24596064",
+   "decision": "exclude",
+   "reason": "adult criteria: children, not adults; no clearance measured",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30919233",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalised patients, no clearance value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32266599",
+   "decision": "exclude",
+   "reason": "adult criteria: preterm neonates, not adults",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "25627406",
+   "decision": "exclude",
+   "reason": "adult criteria: neurosurgical (ICU) patients with augmented clearance, not healthy or stated normal renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "31154476",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients with sepsis or septic shock, not healthy or stated normal renal function; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19884368",
+   "decision": "exclude",
+   "reason": "adult criteria: nemonoxacin, oral, not vancomycin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20650044",
+   "decision": "exclude",
+   "reason": "adult criteria: routine-care patients, not healthy or stated normal renal function; age of the < 65 y group not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "29195829",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalised patients, not healthy or stated normal renal function; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40773131",
+   "decision": "exclude",
+   "reason": "adult criteria: ECMO systematic review, range only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "16120065",
+   "decision": "exclude",
+   "reason": "adult criteria: ECMO patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "27639260",
+   "decision": "exclude",
+   "reason": "adult criteria: ECMO patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35481751",
+   "decision": "exclude",
+   "reason": "adult criteria: children with cystic fibrosis; tobramycin, not vancomycin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8787903",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients, not healthy; clearance only per 1.73 m2",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "31715528",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill septic patients with normal and impaired renal function; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3415206",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (clearance only per 1.73 m2); no age stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19583681",
+   "decision": "exclude",
+   "reason": "adult criteria: infected patients, clearance only as a function of CLCR; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "37195225",
+   "decision": "exclude",
+   "reason": "adult criteria: hemodialysis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41926045",
+   "decision": "exclude",
+   "reason": "adult criteria: inpatients (obesity study), renal function not stated normal; age only >= 18 years",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3365918",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 131,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "The systemic clearance of vancomycin was 131 +/- 7 ml/min"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "42223065",
+   "decision": "exclude",
+   "reason": "adult criteria: TDM patients, young controls only '< 65 years', renal function not stated normal",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38349160",
+   "decision": "exclude",
+   "reason": "adult criteria: AKI/ESKD patients on SLED",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "26544074",
+   "decision": "exclude",
+   "reason": "adult criteria: ECMO patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "31463971",
+   "decision": "exclude",
+   "reason": "adult criteria: neurosurgical patients, renal function not stated normal; age only >= 18 years; typical value without covariate point",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21923425",
+   "decision": "exclude",
+   "reason": "adult criteria: no clearance value (nomogram trough study)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "37792309",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients, not healthy; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38059634",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients; per 70 kg only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "29957824",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients, no clearance value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42366866",
+   "decision": "exclude",
+   "reason": "adult criteria: intermittent haemodialysis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30051194",
+   "decision": "exclude",
+   "reason": "adult criteria: TBI patients with augmented renal clearance; no clearance value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "36350011",
+   "decision": "exclude",
+   "reason": "adult criteria: peritoneal dialysis patients, intraperitoneal dosing",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35190502",
+   "decision": "exclude",
+   "reason": "adult criteria: children, not adults; no clearance value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "28836582",
+   "decision": "exclude",
+   "reason": "adult criteria: typical value at age 75 years, outside 18-65; patients, not healthy",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42157789",
+   "decision": "exclude",
+   "reason": "adult criteria: review of critically ill adults, range only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "31935538",
+   "decision": "exclude",
+   "reason": "adult criteria: children, not adults",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "26123638",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill ECMO patients and ICU controls, not healthy; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21402850",
+   "decision": "exclude",
+   "reason": "adult criteria: septic critically ill patients, not healthy or stated normal renal function; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9558127",
+   "decision": "exclude",
+   "reason": "adult criteria: MRSA-infected patients, clearance only as a function of CLcr; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "31471789",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients on SLED",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38031322",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (clearance only standardized to 70 kg); no adult age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "28504034",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients, not healthy or stated normal renal function; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "16958822",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients; only non-renal clearance value; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "12217710",
+   "decision": "exclude",
+   "reason": "adult criteria: cardiopulmonary bypass surgery patients; only CPB-machine clearance reported",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "16869817",
+   "decision": "exclude",
+   "reason": "adult criteria: preterm neonates; adult value is an extrapolated per-70 kg prediction",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20015925",
+   "decision": "exclude",
+   "reason": "adult criteria: patients with and without cancer, not healthy or stated normal renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "12548147",
+   "decision": "exclude",
+   "reason": "adult criteria: liver transplant recipients with reduced CrCl",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "22547995",
+   "decision": "exclude",
+   "reason": "adult criteria: patients; clearance only as a function of CLCr; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35836330",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients, not healthy; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "16304155",
+   "decision": "exclude",
+   "reason": "adult criteria: haematological malignancy patients; clearance only as a function of CLCR",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41221701",
+   "decision": "exclude",
+   "reason": "adult criteria: allo-HSCT patients; renal clearance only, per 1.73 m2",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41085602",
+   "decision": "exclude",
+   "reason": "adult criteria: imipenem, not vancomycin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "34426481",
+   "decision": "exclude",
+   "reason": "adult criteria: TDM patients, renal function not stated normal; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42369367",
+   "decision": "exclude",
+   "reason": "adult criteria: cancer patients aged 18-85, model equation only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3579256",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (healthy volunteers, clearance only per 1.73 m2)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "28289024",
+   "decision": "exclude",
+   "reason": "adult criteria: obese infected patients; no clearance value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33257444",
+   "decision": "exclude",
+   "reason": "adult criteria: ECMO patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "23604132",
+   "decision": "exclude",
+   "reason": "adult criteria: septic patients; no clearance value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32020531",
+   "decision": "exclude",
+   "reason": "adult criteria: review, range only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8721277",
+   "decision": "exclude",
+   "reason": "adult criteria: age 17-85 years, outside 18-65",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3606073",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 6.4,
+      "unit": "L/h",
+      "summary": "mean",
+      "quote": "Mean control values +/- standard deviation for vancomycin clearance, elimination half-life, and 24-h urinary recovery were 6.4 +/- 1.0 liters/h"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "17179516",
+   "decision": "exclude",
+   "reason": "adult criteria: children on peritoneal dialysis, intraperitoneal dosing",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "34633852",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill ECMO patients, some on RRT",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8460912",
+   "decision": "exclude",
+   "reason": "adult criteria: age 18-92 years; obese and nonobese patients; no clearance value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20616157",
+   "decision": "exclude",
+   "reason": "adult criteria: anuric haemodialysis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42730518",
+   "decision": "exclude",
+   "reason": "adult criteria: PBPK simulation of septic CRRT patients; no observed clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42963461",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalised kidney transplant and nontransplant patients, renal function not stated normal; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32468446",
+   "decision": "exclude",
+   "reason": "adult criteria: ECMO patients with reduced CrCl",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "18789586",
+   "decision": "exclude",
+   "reason": "adult criteria: severe burn patients; clearance in subeschar tissue fluid, not systemic",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "12654665",
+   "decision": "exclude",
+   "reason": "adult criteria: daptomycin, not vancomycin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "23458230",
+   "decision": "exclude",
+   "reason": "adult criteria: patients (not healthy volunteers) with no stated age; normal-renal-function value is a model typical value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21521799",
+   "decision": "exclude",
+   "reason": "adult criteria: AML patients; clearance only as CLCR slope; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30423042",
+   "decision": "exclude",
+   "reason": "adult criteria: infected in-house patients, not healthy or stated normal renal function; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "23876785",
+   "decision": "exclude",
+   "reason": "adult criteria: pediatric burn patients; amikacin, not vancomycin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19015332",
+   "decision": "exclude",
+   "reason": "adult criteria: daptomycin, not vancomycin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17005801",
+   "decision": "exclude",
+   "reason": "adult criteria: daptomycin, not vancomycin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "37394830",
+   "decision": "exclude",
+   "reason": "adult criteria: kidney failure patients on haemodialysis",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "24789450",
+   "decision": "exclude",
+   "reason": "adult criteria: patients aged 1 day-18 years, not adults",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "23132513",
+   "decision": "exclude",
+   "reason": "adult criteria: septic AKI patients on CVVH; 0.97 mL/min/kg is a cited literature value, not measured here",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40304294",
+   "decision": "exclude",
+   "reason": "adult criteria: neonates, not adults",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7927850",
+   "decision": "exclude",
+   "reason": "adult criteria: neutropenic haematological malignancy patients, not healthy; no age",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

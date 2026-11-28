@@ -1,0 +1,203 @@
+{
+ "drug": "clindamycin",
+ "pass": "final",
+ "pediatric": [
+  {
+   "pmid": "25092696",
+   "decision": "exclude",
+   "reason": "P1/P2: interspecies allometric scaling analysis; no measured pediatric clindamycin clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "28137820",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age; model equation only (13.8 L/h at TBW 70 kg and mature PMA), no stated covariate age; route not stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "20176904",
+   "decision": "exclude",
+   "reason": "P1: adult pregnant women, not patients under 18",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "24949994",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age; model equation only (13.7 L/h at 70 kg, mature PMA), no stated covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "6470871",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "premature infants <4 weeks",
+     "preterm": true,
+     "cl": {
+      "value": 0.294,
+      "unit": "L/h",
+      "summary": "mean",
+      "quote": "Both premature and term infants less than 4 weeks had significantly decreased clearance when compared with infants greater than 4 weeks (0.294 and 0.678, respectively, vs 1.58 L/hr)"
+     },
+     "pna_days": [
+      0,
+      28
+     ],
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "studied in 40 children less than 1 year of age. Mean peak serum concentrations were 10.92 micrograms/ml in premature infants less than 4 weeks of age, 10.45 micrograms/ml in term infants greater than 4 weeks, and 12.69 micrograms/ml in term infants less than 4 weeks of age",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "term infants <4 weeks",
+     "preterm": false,
+     "cl": {
+      "value": 0.678,
+      "unit": "L/h",
+      "summary": "mean",
+      "quote": "Both premature and term infants less than 4 weeks had significantly decreased clearance when compared with infants greater than 4 weeks (0.294 and 0.678, respectively, vs 1.58 L/hr)"
+     },
+     "pna_days": [
+      0,
+      28
+     ],
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "studied in 40 children less than 1 year of age. Mean peak serum concentrations were 10.92 micrograms/ml in premature infants less than 4 weeks of age, 10.45 micrograms/ml in term infants greater than 4 weeks, and 12.69 micrograms/ml in term infants less than 4 weeks of age",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "term infants >4 weeks, <1 year",
+     "preterm": false,
+     "cl": {
+      "value": 1.58,
+      "unit": "L/h",
+      "summary": "mean",
+      "quote": "Both premature and term infants less than 4 weeks had significantly decreased clearance when compared with infants greater than 4 weeks (0.294 and 0.678, respectively, vs 1.58 L/hr)"
+     },
+     "pna_days": [
+      28,
+      365.25
+     ],
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "studied in 40 children less than 1 year of age. Mean peak serum concentrations were 10.92 micrograms/ml in premature infants less than 4 weeks of age, 10.45 micrograms/ml in term infants greater than 4 weeks, and 12.69 micrograms/ml in term infants less than 4 weeks of age",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "25092696",
+   "decision": "exclude",
+   "reason": "adult criteria: interspecies allometric scaling analysis; no clindamycin clearance value for a human adult group",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8517703",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 0.27,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "The clearances were 0.27 +/- 0.06 liter/h/kg in healthy volunteers"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "24949994",
+   "decision": "exclude",
+   "reason": "adult criteria: pediatric population (premature infants to adolescents)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3245695",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 23.3,
+      "unit": "L/h",
+      "summary": "mean",
+      "quote": "Clindamycin plasma clearance and elimination half-life averaged 23.3 +/- 4.0 liters/h"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    },
+    {
+     "cl": {
+      "value": 25.6,
+      "unit": "L/h",
+      "summary": "mean",
+      "quote": "25.6 +/- 8.2 liters/h and 2.1 +/- 0.4 h for the 900-mg regimen"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    },
+    {
+     "cl": {
+      "value": 26.4,
+      "unit": "L/h",
+      "summary": "mean",
+      "quote": "26.4 +/- 4.7 liters/h and 2.1 +/- 0.4 h for the 1,200-mg regimen"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ]
+}

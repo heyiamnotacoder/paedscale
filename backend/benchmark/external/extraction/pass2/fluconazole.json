@@ -1,0 +1,521 @@
+{
+ "drug": "fluconazole",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "10510743",
+   "decision": "exclude",
+   "reason": "CL/F: oral dosing, apparent clearance given as a range only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35266811",
+   "decision": "exclude",
+   "reason": "not total IV CL: unit (L/h/kg0.75); clearance of fluconazole after IV fosfluconazole prodrug",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35074829",
+   "decision": "exclude",
+   "reason": "P1: route of administration not stated as intravenous in the abstract (pooled two studies)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "12867215",
+   "decision": "exclude",
+   "reason": "P2: voriconazole review, no fluconazole clearance reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8375121",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "VLBW preterm, after first dose",
+     "preterm": true,
+     "cl": {
+      "value": 0.18,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "The mean total clearance corrected for weight (CL/kg) was 0.18 ml/min/kg (n = 7)"
+     },
+     "pna_days": [
+      1,
+      14
+     ],
+     "pna_range_days": null,
+     "ga_weeks": 27.4,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "Twelve premature infants (mean gestational age, 27.4 weeks; mean birth weight, 912 gm) receiving fluconazole prophylactically from the first day of life were enrolled in an open phase I-II pharmacokinetics, safety, and tolerance trial. Up to 5 doses of 6 mg/kg were administered intravenously every 72 hours during the first 2 weeks of life",
+     "weight_kg": 0.912,
+     "weight_quote": "mean birth weight, 912 gm",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "VLBW preterm, after third dose",
+     "preterm": true,
+     "cl": {
+      "value": 0.33,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "0.33 ml/min/kg (n = 7)"
+     },
+     "pna_days": [
+      1,
+      14
+     ],
+     "pna_range_days": null,
+     "ga_weeks": 27.4,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "Twelve premature infants (mean gestational age, 27.4 weeks; mean birth weight, 912 gm) receiving fluconazole prophylactically from the first day of life were enrolled in an open phase I-II pharmacokinetics, safety, and tolerance trial. Up to 5 doses of 6 mg/kg were administered intravenously every 72 hours during the first 2 weeks of life",
+     "weight_kg": 0.912,
+     "weight_quote": "mean birth weight, 912 gm",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "VLBW preterm, after fifth dose",
+     "preterm": true,
+     "cl": {
+      "value": 0.52,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "0.52 ml/min/kg (n = 4; p = 0.02)"
+     },
+     "pna_days": [
+      1,
+      14
+     ],
+     "pna_range_days": null,
+     "ga_weeks": 27.4,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "Twelve premature infants (mean gestational age, 27.4 weeks; mean birth weight, 912 gm) receiving fluconazole prophylactically from the first day of life were enrolled in an open phase I-II pharmacokinetics, safety, and tolerance trial. Up to 5 doses of 6 mg/kg were administered intravenously every 72 hours during the first 2 weeks of life",
+     "weight_kg": 0.912,
+     "weight_quote": "mean birth weight, 912 gm",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "18809946",
+   "decision": "exclude",
+   "reason": "P1: route of administration not stated as intravenous in the abstract",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "7739946",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "immune-compromised children, mean 7.4 y",
+     "preterm": false,
+     "cl": {
+      "value": 0.63,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "total body clearance 0.63 (0.19) ml/min/kg"
+     },
+     "pna_days": 2702.85,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "mean +/- SD age 7.4 +/- 4.0 yrs",
+     "weight_kg": 31.6,
+     "weight_quote": "weight 31.6 +/- 25.9 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "8013270",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "infants 9 d-4.4 mo, single IV dose",
+     "preterm": false,
+     "cl": {
+      "value": 0.63,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "The mean total clearance was calculated as 0.63 +/- 0.06 ml/min x kg"
+     },
+     "pna_days": [
+      9,
+      133.93
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "aged between 9 days and 4.4 months (n = 14)",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "22627870",
+   "decision": "exclude",
+   "reason": "P4: ECMO",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "30910892",
+   "decision": "exclude",
+   "reason": "CL/F: model pools IV and oral dosing without an IV-only value; no postnatal age stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8448970",
+   "decision": "exclude",
+   "reason": "P1: review; clearance values are adult, no pediatric group clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "25141896",
+   "decision": "exclude",
+   "reason": "P2: clearance is of tacrolimus, not fluconazole",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "1593362",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "children with cancer 5-15 y, after first IV dose",
+     "preterm": false,
+     "cl": {
+      "value": 22.8,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "After the first dose, mean clearance was 22.8 +/- 2.3 ml/min"
+     },
+     "pna_days": [
+      1826.25,
+      5478.75
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "26 children, aged 5 to 15 years, with normal renal function",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "11280621",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill surgical ICU patients; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "25432141",
+   "decision": "exclude",
+   "reason": "not total IV CL: only tubular reabsorption of fluconazole reported; critically ill",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33638727",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill adults; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9876807",
+   "decision": "exclude",
+   "reason": "adult criteria: intraperitoneal dosing in peritoneal dialysis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40614133",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of rimegepant (CL/F), not fluconazole",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33428168",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of rosuvastatin, not fluconazole",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2354592",
+   "decision": "exclude",
+   "reason": "adult criteria: chronic renal failure on CAPD; oral/intraperitoneal dosing",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21930888",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill anuric patients on CVVHDF",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "12741433",
+   "decision": "exclude",
+   "reason": "adult criteria: enteral dosing in critically ill SICU patients (CL/F)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "16413247",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of flurbiprofen, not fluconazole",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "23958198",
+   "decision": "exclude",
+   "reason": "not total IV CL: review, no fluconazole clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9559811",
+   "decision": "exclude",
+   "reason": "adult criteria: burn patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9661572",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of alfentanil, not fluconazole",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "28833380",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of selumetinib, not fluconazole",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1593362",
+   "decision": "exclude",
+   "reason": "adult criteria: children aged 5-15 y",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7937290",
+   "decision": "exclude",
+   "reason": "adult criteria: single patient with acute renal failure on CAVHD",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "16044097",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of tacrolimus (CL/F), not fluconazole",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1680653",
+   "decision": "exclude",
+   "reason": "CL/F: oral dosing, apparent clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10749518",
+   "decision": "exclude",
+   "reason": "not total IV CL: review of celecoxib, no fluconazole clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "29914943",
+   "decision": "exclude",
+   "reason": "CL/F: oral dosing in cryptococcal meningitis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41430005",
+   "decision": "exclude",
+   "reason": "adult criteria: MCS implantation patients with RRT-dependent clearance; not healthy/normal renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8013270",
+   "decision": "exclude",
+   "reason": "adult criteria: infant study; adult value is a cited literature comparator, not measured here",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7946940",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 23,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "The mean value of plasma clearance was 25% lower in the patient groups (17 +/- 6 (s.d.) vs 23 +/- 4 ml min-1"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "9871431",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of zolpidem, not fluconazole",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35238961",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of omeprazole, not fluconazole",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7739946",
+   "decision": "exclude",
+   "reason": "adult criteria: children, mean age 7.4 y",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7579091",
+   "decision": "exclude",
+   "reason": "not total IV CL: no numeric fluconazole total clearance; renal failure study (route not stated IV)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35502774",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of tacrolimus (CL/F), not fluconazole",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "12698988",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of efavirenz (CL/F), not fluconazole",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8444063",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 21.03,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "Plasma clearance (Clp) was 21.03 +/- 5.07 ml/min"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "33361296",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill ICU patients incl. dialysis",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "11422014",
+   "decision": "exclude",
+   "reason": "not total IV CL: oral fluconazole, renal clearance only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2306414",
+   "decision": "exclude",
+   "reason": "CL/F: oral dosing; no numeric clearance",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

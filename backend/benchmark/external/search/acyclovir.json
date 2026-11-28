@@ -1,0 +1,214 @@
+{
+ "drug": "acyclovir",
+ "retrieved": "2026-11-27",
+ "queries": {
+  "pediatric": "(acyclovir[tiab] OR aciclovir[tiab]) AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "(acyclovir[tiab] OR aciclovir[tiab]) AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "2066845",
+   "year": "1991",
+   "sha256": "d3aa6065bc55fb1944ae2aa86e872d34c85289612fcbc576a706565882798d89",
+   "prefilter": false
+  },
+  {
+   "pmid": "6355048",
+   "year": "1983",
+   "sha256": "db47ae956c31feed9bf9c61c75a698148396cfd1a17aae21124146d05cf8b77d",
+   "prefilter": true
+  },
+  {
+   "pmid": "7048911",
+   "year": "1982",
+   "sha256": "266e243b54160d273af138efdb0b19f4e08d159b44281e7a2d227dcae3012478",
+   "prefilter": false
+  },
+  {
+   "pmid": "11120958",
+   "year": "2001",
+   "sha256": "e02e0552a2d0de875e3ac330d0af3028780f20c23266509137d95ab512f5c7a1",
+   "prefilter": false
+  },
+  {
+   "pmid": "12516939",
+   "year": "2002",
+   "sha256": "476d301c58fbf32039f0ba92ec04c27637c960b2450956001bed1ffb91192304",
+   "prefilter": true
+  },
+  {
+   "pmid": "16368917",
+   "year": "2006",
+   "sha256": "869d87d4a789bdf95fbb92b1f28999ea592562d71b75cc90e81e863ac72379fa",
+   "prefilter": true
+  },
+  {
+   "pmid": "19414579",
+   "year": "2009",
+   "sha256": "c97dd3a968050a7e2a2d2993ca4e384aa5878393e4c9a9edf9e28a9f79ef1df7",
+   "prefilter": true
+  },
+  {
+   "pmid": "20014952",
+   "year": "2010",
+   "sha256": "095d9f4995c579528043628d56e27e3180423a60cd6537a291083f5568ca4c9c",
+   "prefilter": false
+  },
+  {
+   "pmid": "24346595",
+   "year": "2014",
+   "sha256": "96b88945d03ebb07d4fd37d0f1bd96f03d2ac36c251e9e692b9ac8976c131b6a",
+   "prefilter": true
+  },
+  {
+   "pmid": "25821006",
+   "year": "2015",
+   "sha256": "9a12d00a7ebfe0c1d0f199fd75f97411f5d6b0b2645e72ffe80c3e19bad8f062",
+   "prefilter": false
+  },
+  {
+   "pmid": "32988829",
+   "year": "2020",
+   "sha256": "1b798c06d4c4474a6828231c23842031456cf085320e12eeac49a855759694b5",
+   "prefilter": true
+  },
+  {
+   "pmid": "36702934",
+   "year": "2023",
+   "sha256": "5d8370c9024f3a2655eeba004ad93102066cebe932df05b839f8a17dfd60a1c8",
+   "prefilter": true
+  },
+  {
+   "pmid": "38775304",
+   "year": "2024",
+   "sha256": "cebd8296dabd0ae5619d3d4e1a9d9570a3d7549da6d989e4bbf49d8fe3a8eb14",
+   "prefilter": true
+  },
+  {
+   "pmid": "40233332",
+   "year": "2025",
+   "sha256": "1e855f99bf860d22ba849cb39502df1715030d59c9f68973f0009c75390ede4b",
+   "prefilter": true
+  }
+ ],
+ "query_translation": {
+  "pediatric": "(\"acyclovir\"[Title/Abstract] OR \"aciclovir\"[Title/Abstract]) AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "(\"acyclovir\"[Title/Abstract] OR \"aciclovir\"[Title/Abstract]) AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "6355048",
+   "year": "1983",
+   "sha256": "db47ae956c31feed9bf9c61c75a698148396cfd1a17aae21124146d05cf8b77d",
+   "prefilter": true
+  },
+  {
+   "pmid": "7048911",
+   "year": "1982",
+   "sha256": "266e243b54160d273af138efdb0b19f4e08d159b44281e7a2d227dcae3012478",
+   "prefilter": false
+  },
+  {
+   "pmid": "7102703",
+   "year": "1982",
+   "sha256": "4109f6679692fdefed82d74696c06ccfb84234b1a75eef7e5997a2ac7d48bb84",
+   "prefilter": true
+  },
+  {
+   "pmid": "7103443",
+   "year": "1982",
+   "sha256": "21e1cde9921e942a5f6c1124faee2af9768946a60a88a99c2c09aff9f624a03a",
+   "prefilter": false
+  },
+  {
+   "pmid": "7103460",
+   "year": "1982",
+   "sha256": "d0ebf71b4b7b9eeed37a5acf93cb64c01952df8e1024706deb321302beffad52",
+   "prefilter": true
+  },
+  {
+   "pmid": "7695306",
+   "year": "1995",
+   "sha256": "3baf7fc3afc20c57e4e85ef0e2c23612e1a12be71c5f37c2d54eb76dc9ead249",
+   "prefilter": false
+  },
+  {
+   "pmid": "8787884",
+   "year": "1996",
+   "sha256": "96f0124bdf86e905687c6d23b70d46dfb57a9d0b1d1599b3b900970272e00e2f",
+   "prefilter": true
+  },
+  {
+   "pmid": "8996645",
+   "year": "1996",
+   "sha256": "790931bc12fa755ab2ff652a868068fd6f759ad74661d21937666c854cb3a1e8",
+   "prefilter": true
+  },
+  {
+   "pmid": "9489600",
+   "year": "1998",
+   "sha256": "596ebbd155c1305215aab59a79ea4bbde5ac230705bc5f2b28000fa6564b335e",
+   "prefilter": false
+  },
+  {
+   "pmid": "10984808",
+   "year": "2000",
+   "sha256": "fa098c5f3ae10464ca2bb40691f02cf2a8546f58837df07ab71b9d1a1bb1d895",
+   "prefilter": true
+  },
+  {
+   "pmid": "12516939",
+   "year": "2002",
+   "sha256": "476d301c58fbf32039f0ba92ec04c27637c960b2450956001bed1ffb91192304",
+   "prefilter": true
+  },
+  {
+   "pmid": "15244498",
+   "year": "2004",
+   "sha256": "fe424b1b9265c22866b4001adeb66a22fcce8670fba262bef2d7b172c8dbc5db",
+   "prefilter": false
+  },
+  {
+   "pmid": "19897764",
+   "year": "2010",
+   "sha256": "a742d9185f254765aeb23aa1a2d746933da1c21b6c8d4e1e67921d01644c5c0a",
+   "prefilter": true
+  },
+  {
+   "pmid": "20014952",
+   "year": "2010",
+   "sha256": "095d9f4995c579528043628d56e27e3180423a60cd6537a291083f5568ca4c9c",
+   "prefilter": false
+  },
+  {
+   "pmid": "21960151",
+   "year": "2011",
+   "sha256": "e3c6f7cdaab15201eb8dd652af6f892b081431d1b0412feb2d8a1d12e95f8283",
+   "prefilter": false
+  },
+  {
+   "pmid": "22946868",
+   "year": "2013",
+   "sha256": "5ea76b0deef3728f0f9c05b696a731c53aac542ccd7956ecc8e3263d1c0c9457",
+   "prefilter": false
+  },
+  {
+   "pmid": "37257520",
+   "year": "2023",
+   "sha256": "f24dd7bb9487725424adbc2ca67b6730903ffc52056ec659dc293b863288fa8f",
+   "prefilter": false
+  },
+  {
+   "pmid": "38775304",
+   "year": "2024",
+   "sha256": "cebd8296dabd0ae5619d3d4e1a9d9570a3d7549da6d989e4bbf49d8fe3a8eb14",
+   "prefilter": true
+  },
+  {
+   "pmid": "40233332",
+   "year": "2025",
+   "sha256": "1e855f99bf860d22ba849cb39502df1715030d59c9f68973f0009c75390ede4b",
+   "prefilter": true
+  }
+ ]
+}

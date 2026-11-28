@@ -1,0 +1,1458 @@
+{
+ "_about": "PaedScale label benchmark reference set. Curated from FDA SPL text snapshots in benchmark/labels/ under benchmark/PROTOCOL.md. Every number carries a verbatim quote checked by tests/test_benchmark.py. Harness only: never read by the product path.",
+ "drugs": {
+  "acyclovir": {
+   "included": true,
+   "label": "acyclovir.json",
+   "class": "antiviral",
+   "target_metric": "css",
+   "unit": "mg",
+   "fe": {
+    "value": 0.765,
+    "quote": "Renal excretion of unchanged drug is the major route of acyclovir elimination accounting for 62% to 91% of the dose.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "herpes simplex encephalitis (10 mg/kg q8h × 70 kg)",
+    "daily": 2100,
+    "range_daily": [
+     2100,
+     2100
+    ],
+    "quote": "HERPES SIMPLEX ENCEPHALITIS Adults and Adolescents (12 years of age and older) 10 mg/kg infused at a constant rate over 1 hour, every 8 hours for 10 days.",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Pediatrics 3 months–12 y (HSV encephalitis)",
+     "pna_days": [
+      91.31,
+      4383.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 60,
+     "range_per_kg_daily": [
+      60,
+      60
+     ],
+     "quote": "Pediatrics (3 months to 12 years of age) 20 mg/kg infused at a constant rate over 1 hour, every 8 hours for 10 days .",
+     "flags": []
+    },
+    {
+     "id": "neo",
+     "label": "Neonatal HSV (birth–3 months)",
+     "pna_days": [
+      0,
+      91.31
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 30,
+     "range_per_kg_daily": [
+      30,
+      30
+     ],
+     "quote": "Neonatal Herpes Simplex Virus Infections (Birth to 3 months) 10 mg/kg infused at a constant rate over 1 hour, every 8 hours for 10 days.",
+     "flags": [
+      "indication_mismatch",
+      "mgkg_shared"
+     ]
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "unspecified",
+    "matched": null,
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "amikacin": {
+   "included": true,
+   "label": "amikacin.json",
+   "class": "aminoglycoside",
+   "target_metric": "cmax",
+   "unit": "mg",
+   "fe": {
+    "value": 0.94,
+    "quote": "about 94% within 24 hours",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "normal renal function (15 mg/kg/day × 70 kg)",
+    "daily": 1050,
+    "range_daily": [
+     1050,
+     1050
+    ],
+    "quote": "The recommended dosage for adults, children and older infants (see WARNINGS box) with normal renal function is 15 mg/kg/day",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Children and older infants (1 month–16 y)",
+     "pna_days": [
+      30.44,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 15,
+     "range_per_kg_daily": [
+      15,
+      15
+     ],
+     "quote": "The recommended dosage for adults, children and older infants (see WARNINGS box) with normal renal function is 15 mg/kg/day",
+     "flags": [
+      "mgkg_shared"
+     ]
+    },
+    {
+     "id": "neo",
+     "label": "Newborns (0–28 days)",
+     "pna_days": [
+      0,
+      28
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 15,
+     "range_per_kg_daily": [
+      15,
+      15
+     ],
+     "quote": "it is recommended that a loading dose of 10 mg/kg be administered initially to be followed with 7.5 mg/kg every 12 hours",
+     "flags": [
+      "mgkg_shared"
+     ]
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "glomerular_filtration",
+    "matched": "glomerular filtration",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "ampicillin": {
+   "included": true,
+   "label": "ampicillin.json",
+   "class": "beta-lactam",
+   "target_metric": "time_mic",
+   "unit": "mg",
+   "fe": {
+    "value": 0.9,
+    "quote": "Ampicillin is excreted largely unchanged in the urine",
+    "flags": [
+     "fe_qualitative"
+    ]
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "septicemia (150–200 mg/kg/day × 70 kg)",
+    "daily": 12250,
+    "range_daily": [
+     10500,
+     14000
+    ],
+    "quote": "Septicemia Adults and children: 150 to 200 mg/kg/day.",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Children (>28 days)",
+     "pna_days": [
+      28,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 175,
+     "range_per_kg_daily": [
+      150,
+      200
+     ],
+     "quote": "Septicemia Adults and children: 150 to 200 mg/kg/day.",
+     "flags": [
+      "mgkg_shared"
+     ]
+    },
+    {
+     "id": "neo_term",
+     "label": "Neonates GA >34 wk, PNA ≤28 days",
+     "pna_days": [
+      0,
+      28
+     ],
+     "ga_weeks": 37,
+     "ref_per_kg_daily": 150,
+     "range_per_kg_daily": [
+      150,
+      150
+     ],
+     "quote": "greater than 34 less than or equal to 28 150 mg/kg/day in equally divided doses every 8 hours",
+     "flags": []
+    },
+    {
+     "id": "neo_pre_wk1",
+     "label": "Neonates GA ≤34 wk, PNA ≤7 days",
+     "pna_days": [
+      0,
+      7
+     ],
+     "ga_weeks": 32,
+     "ref_per_kg_daily": 100,
+     "range_per_kg_daily": [
+      100,
+      100
+     ],
+     "quote": "less than or equal to 34 less than or equal to 7 100 mg/kg/day in equally divided doses every 12 hours",
+     "flags": []
+    },
+    {
+     "id": "neo_pre_wk1_4",
+     "label": "Neonates GA ≤34 wk, PNA 8–<28 days",
+     "pna_days": [
+      8,
+      28
+     ],
+     "ga_weeks": 32,
+     "ref_per_kg_daily": 150,
+     "range_per_kg_daily": [
+      150,
+      150
+     ],
+     "quote": "less than or equal to 34 greater than or equal to 8 and less than 28 150 mg/kg/day in equally divided doses every 12 hours",
+     "flags": []
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "unspecified",
+    "matched": null,
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "aztreonam": {
+   "included": true,
+   "label": "aztreonam.json",
+   "class": "beta-lactam",
+   "target_metric": "time_mic",
+   "unit": "mg",
+   "fe": {
+    "value": 0.65,
+    "quote": "Approximately 60% to 70% of an intravenous or intramuscular dose was recovered in the urine by 8 hours.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "moderately severe to severe systemic infections (union of tiers 1 g q12h–2 g q6h)",
+    "daily": 5000,
+    "range_daily": [
+     2000,
+     8000
+    ],
+    "quote": "Moderately severe systemic infections 1 g or 2 g 8 or 12 Severe systemic or life-threatening infections 2 g 6 or 8",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Pediatric patients 9 months–16 y (moderate to severe)",
+     "pna_days": [
+      273.94,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 105,
+     "range_per_kg_daily": [
+      90,
+      120
+     ],
+     "quote": "Moderate to severe infections 30 mg/kg 6 or 8",
+     "flags": []
+    }
+   ],
+   "notes": "Age band from Pediatric Use: established in the age groups 9 months to 16 years.",
+   "renal_mechanism": {
+    "value": "secretion",
+    "matched": "tubular secretion",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "cefazolin": {
+   "included": false,
+   "label": "cefazolin.json",
+   "excluded_by": "E1",
+   "reason": "Adult treatment dosage table is an image in the selected label; only the perioperative prophylaxis regimen is text, so no adult regimen can be paired to the pediatric 25–100 mg/kg/day treatment text."
+  },
+  "cefepime": {
+   "included": true,
+   "label": "cefepime.json",
+   "class": "beta-lactam",
+   "target_metric": "time_mic",
+   "unit": "mg",
+   "fe": {
+    "value": 0.85,
+    "quote": "Urinary recovery of unchanged cefepime accounts for approximately 85% of the administered dose.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "empiric therapy for febrile neutropenia (most severe indication with a pediatric row)",
+    "daily": 6000,
+    "range_daily": [
+     6000,
+     6000
+    ],
+    "quote": "Empiric therapy for febrile neutropenic patients 2 g IV Every 8 hours",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Pediatric patients 2 months–16 y (febrile neutropenia)",
+     "pna_days": [
+      60.88,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 150,
+     "range_per_kg_daily": [
+      150,
+      150
+     ],
+     "quote": "50 mg per kg per dose, every 8 hours for febrile neutropenic patients.",
+     "flags": []
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "unspecified",
+    "matched": null,
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "cefoxitin": {
+   "included": true,
+   "label": "cefoxitin.json",
+   "class": "beta-lactam",
+   "target_metric": "time_mic",
+   "unit": "mg",
+   "fe": {
+    "value": 0.85,
+    "quote": "Approximately 85 percent of cefoxitin is excreted unchanged by the kidneys over a 6-hour period",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "usual adult dosage range (1–2 g q6–8h)",
+    "daily": 5500,
+    "range_daily": [
+     3000,
+     8000
+    ],
+    "quote": "The usual adult dosage range is 1 gram to 2 grams every 6 to 8 hours.",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Pediatric patients ≥3 months",
+     "pna_days": [
+      91.31,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 120,
+     "range_per_kg_daily": [
+      80,
+      160
+     ],
+     "quote": "The recommended dosage in pediatric patients 3 months of age and older is 80 to 160 mg/kg of body weight per day",
+     "flags": []
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "secretion",
+    "matched": "tubular excretion",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "ceftazidime": {
+   "included": true,
+   "label": "ceftazidime.json",
+   "class": "beta-lactam",
+   "target_metric": "time_mic",
+   "unit": "mg",
+   "fe": {
+    "value": 0.85,
+    "quote": "Approximately 80% to 90% of an IM or IV dose of ceftazidime is excreted unchanged by the kidneys over a 24-hour period.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "usual recommended adult dosage (1 g q8–12h)",
+    "daily": 2500,
+    "range_daily": [
+     2000,
+     3000
+    ],
+    "quote": "Usual recommended dosage 1 gram intravenous or intramuscular every 8 to 12 hours",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Infants and children (1 month–12 y)",
+     "pna_days": [
+      30.44,
+      4383.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 90,
+     "range_per_kg_daily": [
+      90,
+      150
+     ],
+     "quote": "Infants and children (1 month to 12 years) 30 to 50 mg/kg intravenous to a maximum of 6 grams per day** every 8 hours",
+     "flags": []
+    },
+    {
+     "id": "neo",
+     "label": "Neonates (0–4 weeks)",
+     "pna_days": [
+      0,
+      28
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 60,
+     "range_per_kg_daily": [
+      60,
+      60
+     ],
+     "quote": "Neonates (0 to 4 weeks) 30 mg/kg intravenous every 12 hours",
+     "flags": []
+    }
+   ],
+   "notes": "Child scored at the usual 30 mg/kg q8h to match the adult 'usual' regimen; label: the higher dose should be reserved for immunocompromised pediatric patients or pediatric patients with cystic fibrosis or meningitis.",
+   "renal_mechanism": {
+    "value": "glomerular_filtration",
+    "matched": "glomerular filtration",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "cefuroxime": {
+   "included": true,
+   "label": "cefuroxime.json",
+   "class": "beta-lactam",
+   "target_metric": "time_mic",
+   "unit": "mg",
+   "fe": {
+    "value": 0.89,
+    "quote": "Approximately 89% of a dose of cefuroxime is excreted by the kidneys over an 8-hour period",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "usual adult dosage range (750 mg–1.5 g q8h)",
+    "daily": 3375,
+    "range_daily": [
+     2250,
+     4500
+    ],
+    "quote": "The usual adult dosage range for Cefuroxime for Injection is 750 mg to 1.5 grams every 8 hours",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Pediatric patients above 3 months",
+     "pna_days": [
+      91.31,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 75,
+     "range_per_kg_daily": [
+      50,
+      100
+     ],
+     "quote": "Administration of 50 to 100 mg/kg/day in equally divided doses every 6 to 8 hours",
+     "flags": []
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "secretion",
+    "matched": "tubular secretion",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "clindamycin": {
+   "included": true,
+   "label": "clindamycin.json",
+   "class": "lincosamide",
+   "target_metric": "css",
+   "unit": "mg",
+   "fe": {
+    "value": 0.0,
+    "quote": "predominantly metabolized by Cytochrome P450 3A4 (CYP3A4)",
+    "flags": [
+     "fe_not_in_label"
+    ]
+   },
+   "nonrenal_enzyme": "cyp3a4",
+   "enzyme_evidence": "label",
+   "adult": {
+    "indication": "serious to more severe infections (union of tiers 600–2700 mg/day)",
+    "daily": 1650,
+    "range_daily": [
+     600,
+     2700
+    ],
+    "quote": "600–1200 mg/day in 2, 3 or 4 equal doses.",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "1 month–16 years",
+     "pna_days": [
+      30.44,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 30,
+     "range_per_kg_daily": [
+      20,
+      40
+     ],
+     "quote": "Pediatric Patients 1 month of age to 16 years Parenteral (IM or IV) Administration 20 to 40 mg/kg/day in 3 or 4 equal doses.",
+     "flags": []
+    },
+    {
+     "id": "neo",
+     "label": "Pediatric patients less than 1 month",
+     "pna_days": [
+      0,
+      30.44
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 17.5,
+     "range_per_kg_daily": [
+      15,
+      20
+     ],
+     "quote": "Pediatric Patients less than 1 month The recommended dosage is 15 to 20 mg/kg/day in 3 to 4 equal doses.",
+     "flags": []
+    }
+   ],
+   "notes": "Label Table 3 (PMA-based neonatal regimens) is not machine-readable text, so those bands are not scored (E1/E2 text rule). Adult tier quote continues with 1200–2700 mg/day for more severe infections.",
+   "renal_mechanism": {
+    "value": "not_renal_predominant",
+    "matched": null,
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "daptomycin": {
+   "included": true,
+   "label": "daptomycin.json",
+   "class": "lipopeptide",
+   "target_metric": "css",
+   "unit": "mg",
+   "fe": {
+    "value": 0.52,
+    "quote": "approximately 78% of the administered dose was recovered from urine based on total radioactivity (approximately 52% of the dose based on micro",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "cSSSI, CLcr ≥30 mL/min (4 mg/kg q24h × 70 kg)",
+    "daily": 280,
+    "range_daily": [
+     280,
+     280
+    ],
+    "quote": "≥30 mL/min 4 mg/kg once every 24 hours 6 mg/kg once every 24 hours",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "adol",
+     "label": "12–17 years",
+     "pna_days": [
+      4383.0,
+      6574.5
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 5,
+     "range_per_kg_daily": [
+      5,
+      5
+     ],
+     "quote": "12 to 17 years 5 mg/kg once every 24 hours infused over 30 minutes Up to 14 days",
+     "flags": []
+    },
+    {
+     "id": "child_7_11",
+     "label": "7–11 years",
+     "pna_days": [
+      2556.75,
+      4383.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 7,
+     "range_per_kg_daily": [
+      7,
+      7
+     ],
+     "quote": "7 to 11 years 7 mg/kg once every 24 hours infused over 30 minutes",
+     "flags": []
+    },
+    {
+     "id": "child_2_6",
+     "label": "2–6 years",
+     "pna_days": [
+      730.5,
+      2556.75
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 9,
+     "range_per_kg_daily": [
+      9,
+      9
+     ],
+     "quote": "2 to 6 years 9 mg/kg once every 24 hours infused over 60 minutes",
+     "flags": []
+    },
+    {
+     "id": "infant_1_2",
+     "label": "1 to <2 years",
+     "pna_days": [
+      365.25,
+      730.5
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 10,
+     "range_per_kg_daily": [
+      10,
+      10
+     ],
+     "quote": "1 to less than 2 years 10 mg/kg once every 24 hours infused over 60 minutes",
+     "flags": []
+    }
+   ],
+   "notes": "fe = microbiologically active (unchanged) fraction, not total radioactivity. Label age bands are whole years (7–11 y means through the 12th birthday).",
+   "renal_mechanism": {
+    "value": "unspecified",
+    "matched": null,
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "digoxin": {
+   "included": false,
+   "label": "digoxin.json",
+   "excluded_by": "E2",
+   "reason": "Selected label defers pediatric dosing under 10 years to a separate pediatric product label (not available from this manufacturer). It also fails E1: the adult and over-10-year maintenance doses are in image tables (Tables 2–3)."
+  },
+  "famotidine": {
+   "included": true,
+   "label": "famotidine.json",
+   "class": "H2 antagonist",
+   "target_metric": "css",
+   "unit": "mg",
+   "fe": {
+    "value": 0.675,
+    "quote": "Sixty-five to 70% of an intravenous dose are recovered in the urine as unchanged compound.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "adults: 20 mg every 12 hours",
+    "daily": 40,
+    "range_daily": [
+     40,
+     40
+    ],
+    "quote": "Adults: 20 mg every 12 hours.",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Pediatric patients 1–16 y (0.25 q12h titrated to 0.5 q12h)",
+     "pna_days": [
+      365.25,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 0.75,
+     "range_per_kg_daily": [
+      0.5,
+      1.0
+     ],
+     "quote": "Pediatric Patients 1 year of age and older: 0.25 mg/kg every 12 hours; titrate to a maximum of 0.5 mg/kg every 12 hours",
+     "flags": []
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "secretion",
+    "matched": "tubular excretion",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "fentanyl": {
+   "included": false,
+   "label": "fentanyl.json",
+   "excluded_by": "E1",
+   "reason": "Label gives only induction/premedication bolus doses (adult 50–100 mcg; children 2–3 mcg/kg), not a maintenance regimen."
+  },
+  "fluconazole": {
+   "included": true,
+   "label": "fluconazole.json",
+   "class": "azole",
+   "target_metric": "css",
+   "unit": "mg",
+   "fe": {
+    "value": 0.8,
+    "quote": "with approximately 80% of the administered dose appearing in the urine as unchanged drug.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "systemic Candida infections (adults: doses of up to 400 mg daily)",
+    "daily": 400,
+    "range_daily": [
+     400,
+     400
+    ],
+    "quote": "doses of up to 400 mg daily have been used",
+    "flags": [
+     "adult_up_to"
+    ]
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "3 months and older (systemic Candida)",
+     "pna_days": [
+      91.31,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 12,
+     "range_per_kg_daily": [
+      12,
+      12
+     ],
+     "quote": "3 months and older A loading dose of 25-mg/kg on the first day (not to exceed 800 mg), followed by 12-mg/kg once daily (not to exceed 400 mg).",
+     "flags": []
+    },
+    {
+     "id": "neo_ge30",
+     "label": "Birth to 3 months, GA ≥30 weeks",
+     "pna_days": [
+      0,
+      91.31
+     ],
+     "ga_weeks": 35,
+     "ref_per_kg_daily": 12,
+     "range_per_kg_daily": [
+      12,
+      12
+     ],
+     "quote": "Birth to 3 months postnatal age and gestational age 30 weeks and above 25-mg/kg on the first day, followed by 12- mg/kg once daily",
+     "flags": []
+    },
+    {
+     "id": "neo_lt30",
+     "label": "Birth to 3 months, GA <30 weeks",
+     "pna_days": [
+      0,
+      91.31
+     ],
+     "ga_weeks": 28,
+     "ref_per_kg_daily": 9,
+     "range_per_kg_daily": [
+      9,
+      9
+     ],
+     "quote": "Birth to 3 months postnatal age and gestational age less than 30 weeks 25-mg/kg on the first day, followed by 9- mg/kg once daily",
+     "flags": []
+    }
+   ],
+   "notes": "Indication with the most pediatric bands (systemic Candida; label: pediatric regimens chosen to match adult AUC). Adult reference is the label's 'up to 400 mg daily'.",
+   "renal_mechanism": {
+    "value": "unspecified",
+    "matched": null,
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "gentamicin": {
+   "included": true,
+   "label": "gentamicin.json",
+   "class": "aminoglycoside",
+   "target_metric": "cmax",
+   "unit": "mg",
+   "fe": {
+    "value": 0.7,
+    "quote": "ally 70% or more of the gentamicin dose is recoverable in the urine in 24 hours",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "serious to life-threatening infections (union of tiers 3–5 mg/kg/day × 70 kg)",
+    "daily": 280,
+    "range_daily": [
+     210,
+     350
+    ],
+    "quote": "The recommended dosage of gentamicin injection for patients with serious infections and normal renal function is 3 mg/kg/day, administered in three equal doses every eight hours ( Table 3 ). For patients with life-threatening infections, dosages up to 5 mg/kg/day may be ad",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Children (1–16 y)",
+     "pna_days": [
+      365.25,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 6.75,
+     "range_per_kg_daily": [
+      6,
+      7.5
+     ],
+     "quote": "Children 6 to 7.5 mg/kg/day (2 to 2.5 mg/kg administered every eight hours).",
+     "flags": []
+    },
+    {
+     "id": "infant",
+     "label": "Infants and neonates (>1 week to <1 y)",
+     "pna_days": [
+      7,
+      365.25
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 7.5,
+     "range_per_kg_daily": [
+      7.5,
+      7.5
+     ],
+     "quote": "Infants and Neonates 7.5 mg/kg/day (2.5 mg/kg administered every eight hours).",
+     "flags": []
+    },
+    {
+     "id": "neo_wk1",
+     "label": "Premature or full-term neonates ≤1 week",
+     "pna_days": [
+      0,
+      7
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 5,
+     "range_per_kg_daily": [
+      5,
+      5
+     ],
+     "quote": "Premature or Full-Term Neonates One Week of Age or Less 5 mg/kg/day (2.5 mg/kg administered every 12 hours).",
+     "flags": []
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "glomerular_filtration",
+    "matched": "glomerular filtration",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "levetiracetam": {
+   "included": true,
+   "label": "levetiracetam.json",
+   "class": "anticonvulsant",
+   "target_metric": "css",
+   "unit": "mg",
+   "fe": {
+    "value": 0.66,
+    "quote": "Sixty-six percent (66%) of the dose is renally excreted unchanged.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "partial-onset seizures, recommended dose (1500 mg twice daily)",
+    "daily": 3000,
+    "range_daily": [
+     3000,
+     3000
+    ],
+    "quote": "Adults 16 Years and Older: 500 mg twice daily; increase by 500 mg twice daily every 2 weeks to a recommended dose of 1500 mg twice daily",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "infant_1_6m",
+     "label": "1 to <6 months",
+     "pna_days": [
+      30.44,
+      182.62
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 42,
+     "range_per_kg_daily": [
+      42,
+      42
+     ],
+     "quote": "1 Month to < 6 Months: 7 mg/kg twice daily; increase by 7 mg/kg twice daily every 2 weeks to recommended dose of 21 mg/kg twice daily",
+     "flags": []
+    },
+    {
+     "id": "infant_6m_4y",
+     "label": "6 months to <4 years",
+     "pna_days": [
+      182.62,
+      1461.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 50,
+     "range_per_kg_daily": [
+      50,
+      50
+     ],
+     "quote": "6 Months to < 4 Years: 10 mg/kg twice daily; increase by 10 mg/kg twice daily every 2 weeks to recommended dose of 25 mg/kg twice daily",
+     "flags": []
+    },
+    {
+     "id": "child_4_16",
+     "label": "4 to <16 years",
+     "pna_days": [
+      1461.0,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 60,
+     "range_per_kg_daily": [
+      60,
+      60
+     ],
+     "quote": "every 2 weeks to recommended dose of 30 mg/kg twice daily",
+     "flags": []
+    }
+   ],
+   "notes": "Non-renal fraction is enzymatic hydrolysis (not CYP) and stays unattributed.",
+   "renal_mechanism": {
+    "value": "secretion",
+    "matched": "tubular secretion",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "meropenem": {
+   "included": true,
+   "label": "meropenem.json",
+   "class": "beta-lactam",
+   "target_metric": "time_mic",
+   "unit": "mg",
+   "fe": {
+    "value": 0.625,
+    "quote": "Approximately 70% (50% - 75%) of the dose is excreted unchanged within 12 hours.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "complicated intra-abdominal infection (1 g q8h)",
+    "daily": 3000,
+    "range_daily": [
+     3000,
+     3000
+    ],
+    "quote": "1 gram every 8 hours by intravenous infusion over 15 minutes to 30 minutes for intra-abdominal infections for adult patients.",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Pediatric patients ≥3 months (intra-abdominal)",
+     "pna_days": [
+      91.31,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 60,
+     "range_per_kg_daily": [
+      60,
+      60
+     ],
+     "quote": "Intra-abdominal 20 1 gram Every 8 hours",
+     "flags": []
+    },
+    {
+     "id": "neo_lt32_lt2w",
+     "label": "GA <32 wk, PNA <2 weeks",
+     "pna_days": [
+      0,
+      14
+     ],
+     "ga_weeks": 30,
+     "ref_per_kg_daily": 40,
+     "range_per_kg_daily": [
+      40,
+      40
+     ],
+     "quote": "Infants less than 32 weeks GA and PNA less than 2 weeks 20 Every 12 hours",
+     "flags": []
+    },
+    {
+     "id": "neo_lt32_ge2w",
+     "label": "GA <32 wk, PNA ≥2 weeks (to 3 months)",
+     "pna_days": [
+      14,
+      91.31
+     ],
+     "ga_weeks": 30,
+     "ref_per_kg_daily": 60,
+     "range_per_kg_daily": [
+      60,
+      60
+     ],
+     "quote": "Infants less than 32 weeks GA and PNA 2 weeks and older 20 Every 8 hours",
+     "flags": []
+    },
+    {
+     "id": "neo_ge32_lt2w",
+     "label": "GA ≥32 wk, PNA <2 weeks",
+     "pna_days": [
+      0,
+      14
+     ],
+     "ga_weeks": 36,
+     "ref_per_kg_daily": 60,
+     "range_per_kg_daily": [
+      60,
+      60
+     ],
+     "quote": "Infants 32 weeks and older GA and PNA less than 2 weeks 20 Every 8 hours",
+     "flags": []
+    },
+    {
+     "id": "neo_ge32_ge2w",
+     "label": "GA ≥32 wk, PNA ≥2 weeks (to 3 months)",
+     "pna_days": [
+      14,
+      91.31
+     ],
+     "ga_weeks": 36,
+     "ref_per_kg_daily": 90,
+     "range_per_kg_daily": [
+      90,
+      90
+     ],
+     "quote": "Infants 32 weeks and older GA and PNA 2 weeks and older 30 Every 8 hours",
+     "flags": []
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "secretion",
+    "matched": "tubular secretion",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "midazolam": {
+   "included": false,
+   "label": "midazolam.json",
+   "excluded_by": "E1",
+   "reason": "Selected label (rule: pediatric mention, latest effective_time, then highest version and set_id) has no continuous-infusion or other maintenance regimen in its machine-readable Dosage and Administration text."
+  },
+  "morphine": {
+   "included": true,
+   "label": "morphine.json",
+   "class": "opioid",
+   "target_metric": "css",
+   "unit": "mg",
+   "fe": {
+    "value": 0.07,
+    "quote": "Morphine is also eliminated by the kidneys, 2 to 12% being excreted unchang",
+    "flags": []
+   },
+   "nonrenal_enzyme": "ugt2b7",
+   "enzyme_evidence": "literature: UGT2B7 forms M3G/M6G (Coffman et al., Drug Metab Dispos 1997;25:1-4)",
+   "adult": {
+    "indication": "continuous IV infusion, initiation 0.02–0.1 mg/kg/hour × 70 kg",
+    "daily": 100.8,
+    "range_daily": [
+     33.6,
+     168.0
+    ],
+    "quote": "Adults: Initiate treatment in a dosing range of 0.02 mg/kg/hour to 0.1 mg/kg/hour as needed.",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "1 to <17 years, <50 kg (initiation)",
+     "pna_days": [
+      365.25,
+      6209.25
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 0.6,
+     "range_per_kg_daily": [
+      0.48,
+      0.72
+     ],
+     "quote": "Less than 50 kg body weight: 20 mcg/kg/hour to 30 mcg/kg/hour (0.02 mg/kg/hour to 0.03 mg/kg/hour)",
+     "flags": []
+    },
+    {
+     "id": "infant",
+     "label": "<1 year including neonates (initiation)",
+     "pna_days": [
+      0,
+      365.25
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 0.18,
+     "range_per_kg_daily": [
+      0.12,
+      0.24
+     ],
+     "quote": "Initiate treatment in a dosing range of 0.005 mg/kg/hour to 0.01 mg/kg/hour.",
+     "flags": []
+    }
+   ],
+   "notes": "Label states hepatic glucuronidation is the major clearance pathway; enzyme identity from literature.",
+   "renal_mechanism": {
+    "value": "not_renal_predominant",
+    "matched": null,
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "penicillin_g": {
+   "included": true,
+   "label": "penicillin_g_potassium.json",
+   "class": "beta-lactam",
+   "target_metric": "time_mic",
+   "unit": "units",
+   "fe": {
+    "value": 0.6,
+    "quote": "Approximately 60 percent of the total dose of 300,000 units is excreted in the urine within this 5-hour period.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "meningococcal meningitis (most severe indication with a pediatric row)",
+    "daily": 24000000,
+    "range_daily": [
+     24000000,
+     24000000
+    ],
+    "quote": "Meningococcal meningitis and/or septicemia 24 million units/day as 2 million units every 2 hours",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Pediatric patients, pneumococcal/meningococcal meningitis",
+     "pna_days": [
+      28,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 250000,
+     "range_per_kg_daily": [
+      250000,
+      250000
+     ],
+     "quote": "Meningitis caused by susceptible strains of pneumococcus and meningococcus 250,000 units/kg/day divided in equal doses every 4 hours",
+     "flags": []
+    }
+   ],
+   "notes": "Urinary fraction is the label's 5-hour collection (the only quantitative value).",
+   "renal_mechanism": {
+    "value": "secretion",
+    "matched": "tubular secretion",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "piperacillin_tazobactam": {
+   "included": true,
+   "label": "piperacillin_and_tazobactam.json",
+   "class": "beta-lactam",
+   "target_metric": "time_mic",
+   "unit": "mg",
+   "fe": {
+    "value": 0.68,
+    "quote": "Piperacillin is excreted rapidly as unchanged drug with 68% of the administered dose excreted in the urine.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "nosocomial pneumonia (piperacillin component; most severe indication with pediatric rows)",
+    "daily": 16000,
+    "range_daily": [
+     16000,
+     16000
+    ],
+    "quote": "should start with piperacillin and tazobactam for injection at a dosage of 4.5 g every six hours plus an aminoglycoside, [totaling 18 g (16 g piperacillin and 2 g tazobactam)]",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "infant",
+     "label": "2–9 months (nosocomial pneumonia)",
+     "pna_days": [
+      60.88,
+      273.94
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 320,
+     "range_per_kg_daily": [
+      320,
+      320
+     ],
+     "quote": "90 mg/kg (80 mg piperacillin and 10 mg tazobactam) every 6 ( six ) hours",
+     "flags": []
+    },
+    {
+     "id": "child",
+     "label": ">9 months (nosocomial pneumonia)",
+     "pna_days": [
+      273.94,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 400,
+     "range_per_kg_daily": [
+      400,
+      400
+     ],
+     "quote": "112.5 mg/kg (100 mg piperacillin and 12.5 mg tazobactam) every 6 ( six) hours",
+     "flags": []
+    }
+   ],
+   "notes": "Doses scored as the piperacillin component. The label's 40 kg weight cap is not applied (Amendment 1 §15).",
+   "renal_mechanism": {
+    "value": "secretion",
+    "matched": "tubular secretion",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "tobramycin": {
+   "included": true,
+   "label": "tobramycin.json",
+   "class": "aminoglycoside",
+   "target_metric": "cmax",
+   "unit": "mg",
+   "fe": {
+    "value": 0.93,
+    "quote": "up to 84% of the dose is recoverable from the urine in 8 hours and up to 93% in 24 hours",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "serious to life-threatening infections (union of tiers 3–5 mg/kg/day × 70 kg)",
+    "daily": 280,
+    "range_daily": [
+     210,
+     350
+    ],
+    "quote": "Adults with Serious Infections: 3 mg/kg/day in 3 equal doses every 8 hours (see Table 1). Adults with Life-Threatening Infections: Up to 5 mg/kg/day may be administered",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Pediatric patients >1 week of age",
+     "pna_days": [
+      7,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 6.75,
+     "range_per_kg_daily": [
+      6,
+      7.5
+     ],
+     "quote": "Pediatric Patients (Greater Than 1 Week of Age): 6 to 7.5 mg/kg/day in 3 or 4 equally divided doses",
+     "flags": []
+    },
+    {
+     "id": "neo_wk1",
+     "label": "Premature or full-term neonates ≤1 week",
+     "pna_days": [
+      0,
+      7
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 4,
+     "range_per_kg_daily": [
+      0,
+      4
+     ],
+     "quote": "Premature or Full-Term Neonates 1 Week of Age or Less: Up to 4 mg/kg/day",
+     "flags": [
+      "up_to",
+      "mgkg_shared"
+     ]
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "glomerular_filtration",
+    "matched": "glomerular filtration",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "vancomycin": {
+   "included": true,
+   "label": "vancomycin.json",
+   "class": "glycopeptide",
+   "target_metric": "css",
+   "unit": "mg",
+   "fe": {
+    "value": 0.75,
+    "quote": "In the first 24 hours, about 75% of an administered dose of vancomycin is excreted in urine by glomerular filtration.",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "adult": {
+    "indication": "usual adult IV dose (normal renal function)",
+    "daily": 2000,
+    "range_daily": [
+     2000,
+     2000
+    ],
+    "quote": "The usual daily intravenous dose is 2 g divided either as 500 mg every 6 hours or 1 g every 12 hours.",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "child",
+     "label": "Pediatric patients (>1 month)",
+     "pna_days": [
+      30.44,
+      5844.0
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 40,
+     "range_per_kg_daily": [
+      40,
+      40
+     ],
+     "quote": "The usual intravenous dosage of vancomycin is 10 mg/kg per dose given every 6 hours.",
+     "flags": []
+    },
+    {
+     "id": "neo_wk1",
+     "label": "Neonates, 1st week of life",
+     "pna_days": [
+      0,
+      7
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 20,
+     "range_per_kg_daily": [
+      20,
+      20
+     ],
+     "quote": "followed by 10 mg/kg every 12 hours for neonates in the 1st week of life and every 8 hours thereafter up to the age of 1 month",
+     "flags": []
+    },
+    {
+     "id": "neo_wk1_4",
+     "label": "Neonates, 1 week to 1 month",
+     "pna_days": [
+      7,
+      30.44
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 30,
+     "range_per_kg_daily": [
+      30,
+      30
+     ],
+     "quote": "followed by 10 mg/kg every 12 hours for neonates in the 1st week of life and every 8 hours thereafter up to the age of 1 month",
+     "flags": []
+    }
+   ],
+   "notes": "",
+   "renal_mechanism": {
+    "value": "glomerular_filtration",
+    "matched": "glomerular filtration",
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  },
+  "zidovudine": {
+   "included": true,
+   "label": "zidovudine.json",
+   "class": "NRTI",
+   "target_metric": "css",
+   "unit": "mg",
+   "fe": {
+    "value": 0.29,
+    "quote": "After IV dosing, about 29% of the dose was excreted in the urine unchanged",
+    "flags": []
+   },
+   "nonrenal_enzyme": "ugt2b7",
+   "enzyme_evidence": "literature: zidovudine glucuronidation by UGT2B7 (Barbier et al., Drug Metab Dispos 2000;28:497-502)",
+   "adult": {
+    "indication": "adult IV dosing (1 mg/kg q4h × 70 kg)",
+    "daily": 420,
+    "range_daily": [
+     420,
+     420
+    ],
+    "quote": "The recommended intravenous dose is 1 mg per kg infused at a constant rate over 1 hour every 4 hours.",
+    "flags": []
+   },
+   "bands": [
+    {
+     "id": "neo",
+     "label": "Neonates, birth to 6 weeks (IV)",
+     "pna_days": [
+      0,
+      42
+     ],
+     "ga_weeks": null,
+     "ref_per_kg_daily": 6,
+     "range_per_kg_daily": [
+      6,
+      6
+     ],
+     "quote": "Intravenous 6 mg/kg/day 1.5 mg/kg infused over 30 minutes, every 6 hours",
+     "flags": [
+      "mgkg_shared",
+      "indication_mismatch"
+     ]
+    }
+   ],
+   "notes": "Label: major route is metabolism to GZDV (the glucuronide).",
+   "renal_mechanism": {
+    "value": "not_renal_predominant",
+    "matched": null,
+    "rule": "regex on label clinical pharmacology + pharmacokinetics sections: 'tubular (secretion|excretion)' -> secretion; else 'glomerular filtration' -> glomerular_filtration; else unspecified"
+   }
+  }
+ }
+}

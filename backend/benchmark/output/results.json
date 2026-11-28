@@ -1,0 +1,3162 @@
+{
+ "by_method": {
+  "all": {
+   "allometry": {
+    "aafe": 1.5887241176251976,
+    "aafe_ci95": [
+     1.3934738443253099,
+     2.0663016306229562
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.4034384361434262,
+    "afe_ci95": [
+     1.1890043904646683,
+     1.859027718151353
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.6481801899800441,
+    "pair_weighted_aafe_ci95": [
+     1.4577882101970356,
+     2.1057876967054967
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.5349206349206349,
+    "within_1_5_ci95": [
+     0.3746031746031746,
+     0.6857142857142857
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.7007936507936507,
+    "within_2_ci95": [
+     0.523015873015873,
+     0.8333333333333334
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.23809523809523808,
+    "within_label_range_ci95": [
+     0.09523809523809523,
+     0.4523809523809524
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "allometry_class": {
+    "aafe": 1.5497675688766108,
+    "aafe_ci95": [
+     1.3511598672000622,
+     2.027185161992775
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.2877018735520105,
+    "afe_ci95": [
+     1.0749300095276721,
+     1.7310137267391204
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.6185287303825207,
+    "pair_weighted_aafe_ci95": [
+     1.4230970970516204,
+     2.0825028223364654
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.5666666666666667,
+    "within_1_5_ci95": [
+     0.40793650793650793,
+     0.7174603174603175
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.7484126984126984,
+    "within_2_ci95": [
+     0.557936507936508,
+     0.8761904761904761
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2857142857142857,
+    "within_label_range_ci95": [
+     0.11904761904761904,
+     0.5
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "bsa": {
+    "aafe": 1.7210958108218721,
+    "aafe_ci95": [
+     1.4796658367957258,
+     2.2572094377242355
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.612091543434344,
+    "afe_ci95": [
+     1.3568740929857959,
+     2.1350482280700707
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.8054120096738502,
+    "pair_weighted_aafe_ci95": [
+     1.5566057906595319,
+     2.322467832936645
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.5666666666666667,
+    "within_1_5_ci95": [
+     0.39682539682539686,
+     0.7253968253968254
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.6277777777777778,
+    "within_2_ci95": [
+     0.4666666666666667,
+     0.7626984126984127
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.23015873015873015,
+    "within_label_range_ci95": [
+     0.09523809523809523,
+     0.4444444444444445
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "paedscale": {
+    "aafe": 1.4161864321370932,
+    "aafe_ci95": [
+     1.2807544210134567,
+     1.7299261134468358
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.9168685386973544,
+    "afe_ci95": [
+     0.7937746784321894,
+     1.195848595029395
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.414184030026916,
+    "pair_weighted_aafe_ci95": [
+     1.2888192857085514,
+     1.7102768833318203
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.6095238095238096,
+    "within_1_5_ci95": [
+     0.4111111111111111,
+     0.7825396825396825
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9126984126984128,
+    "within_2_ci95": [
+     0.746031746031746,
+     0.9841269841269842
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2619047619047619,
+    "within_label_range_ci95": [
+     0.09523809523809523,
+     0.47619047619047616
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "weight_linear": {
+    "aafe": 1.5099214918301183,
+    "aafe_ci95": [
+     1.3729916705064684,
+     1.815577115504884
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.8243660565179116,
+    "afe_ci95": [
+     0.7166187376297153,
+     1.100982963143113
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.5183779781002495,
+    "pair_weighted_aafe_ci95": [
+     1.3747609528609013,
+     1.8056519503465063
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.553968253968254,
+    "within_1_5_ci95": [
+     0.3611111111111111,
+     0.7222222222222222
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.8634920634920634,
+    "within_2_ci95": [
+     0.6968253968253968,
+     0.9523809523809523
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2261904761904762,
+    "within_label_range_ci95": [
+     0.09523809523809523,
+     0.4166666666666667
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "newborn": {
+   "allometry": {
+    "aafe": 2.136054545799044,
+    "aafe_ci95": [
+     1.7627108864150527,
+     2.4554228502975497
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 2.136054545799044,
+    "afe_ci95": [
+     1.7627108864150527,
+     2.4554228502975497
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 9,
+    "n_pairs": 13,
+    "pair_weighted_aafe": 2.2807568345873013,
+    "pair_weighted_aafe_ci95": [
+     1.930744906198391,
+     2.7156212017710897
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.1111111111111111,
+    "within_1_5_ci95": [
+     0.0,
+     0.4444444444444444
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.3333333333333333,
+    "within_2_ci95": [
+     0.1111111111111111,
+     0.6666666666666666
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "allometry_class": {
+    "aafe": 1.743388512815435,
+    "aafe_ci95": [
+     1.315898683799149,
+     2.2759741676210643
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.6590467405985792,
+    "afe_ci95": [
+     1.1903755816553674,
+     2.2229609408396787
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 9,
+    "n_pairs": 13,
+    "pair_weighted_aafe": 1.9815492699721273,
+    "pair_weighted_aafe_ci95": [
+     1.481567137425995,
+     2.5680300029179812
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.4444444444444444,
+    "within_1_5_ci95": [
+     0.1111111111111111,
+     0.7777777777777778
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.5555555555555556,
+    "within_2_ci95": [
+     0.2777777777777778,
+     0.8333333333333334
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2222222222222222,
+    "within_label_range_ci95": [
+     0.0,
+     0.5555555555555556
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "bsa": {
+    "aafe": 2.5771680804202695,
+    "aafe_ci95": [
+     2.1160660281711645,
+     2.9889044634844795
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 2.5771680804202695,
+    "afe_ci95": [
+     2.1160660281711645,
+     2.9889044634844795
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 9,
+    "n_pairs": 13,
+    "pair_weighted_aafe": 2.7817370301214006,
+    "pair_weighted_aafe_ci95": [
+     2.3354137041818266,
+     3.3583964511121804
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.1111111111111111,
+    "within_1_5_ci95": [
+     0.0,
+     0.4444444444444444
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.16666666666666666,
+    "within_2_ci95": [
+     0.0,
+     0.5
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "paedscale": {
+    "aafe": 1.34612691834982,
+    "aafe_ci95": [
+     1.175262689688396,
+     1.6541943982266145
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.831129114041878,
+    "afe_ci95": [
+     0.6431634745238621,
+     1.0019027809385943
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 9,
+    "n_pairs": 13,
+    "pair_weighted_aafe": 1.3018851925250088,
+    "pair_weighted_aafe_ci95": [
+     1.174568398694422,
+     1.5559626138736626
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.6111111111111112,
+    "within_1_5_ci95": [
+     0.2777777777777778,
+     0.8888888888888888
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.8888888888888888,
+    "within_2_ci95": [
+     0.4444444444444444,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2222222222222222,
+    "within_label_range_ci95": [
+     0.0,
+     0.5555555555555556
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "weight_linear": {
+    "aafe": 1.2125516695184766,
+    "aafe_ci95": [
+     1.0967719186335738,
+     1.3607206738035673
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.9851563278170513,
+    "afe_ci95": [
+     0.8224395889394215,
+     1.12984632258764
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 9,
+    "n_pairs": 13,
+    "pair_weighted_aafe": 1.2325985093469294,
+    "pair_weighted_aafe_ci95": [
+     1.128494000458703,
+     1.338437040975074
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.8518518518518519,
+    "within_1_5_ci95": [
+     0.48148148148148145,
+     1.0
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 1.0,
+    "within_2_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.3333333333333333,
+    "within_label_range_ci95": [
+     0.1111111111111111,
+     0.6666666666666666
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "under2": {
+   "allometry": {
+    "aafe": 2.1379630190477026,
+    "aafe_ci95": [
+     1.7350493835609941,
+     3.4887317555565494
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 2.014927647612183,
+    "afe_ci95": [
+     1.5547553484382626,
+     3.2269553527146737
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 15,
+    "n_pairs": 23,
+    "pair_weighted_aafe": 2.0558004966424606,
+    "pair_weighted_aafe_ci95": [
+     1.6815393835280894,
+     2.88056370362685
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.21666666666666667,
+    "within_1_5_ci95": [
+     0.06666666666666667,
+     0.45
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.48333333333333334,
+    "within_2_ci95": [
+     0.25,
+     0.7333333333333333
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "allometry_class": {
+    "aafe": 1.9521340759280863,
+    "aafe_ci95": [
+     1.543328654560659,
+     3.2212410157081885
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.7382336670462861,
+    "afe_ci95": [
+     1.2864166450757177,
+     2.8987134458159547
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 15,
+    "n_pairs": 23,
+    "pair_weighted_aafe": 1.9498959273397558,
+    "pair_weighted_aafe_ci95": [
+     1.5794781894952492,
+     2.7929779760761524
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.35,
+    "within_1_5_ci95": [
+     0.15,
+     0.6
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.6166666666666667,
+    "within_2_ci95": [
+     0.36666666666666664,
+     0.8333333333333334
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.13333333333333333,
+    "within_label_range_ci95": [
+     0.0,
+     0.4
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "bsa": {
+    "aafe": 2.499233888857045,
+    "aafe_ci95": [
+     2.012319875862995,
+     4.063994468962967
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 2.3948994347531145,
+    "afe_ci95": [
+     1.8350196712345737,
+     3.8094431457084466
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 15,
+    "n_pairs": 23,
+    "pair_weighted_aafe": 2.451804097915765,
+    "pair_weighted_aafe_ci95": [
+     1.9982291499445328,
+     3.46183995370851
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.2833333333333333,
+    "within_1_5_ci95": [
+     0.11666666666666667,
+     0.5333333333333333
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.3,
+    "within_2_ci95": [
+     0.13333333333333333,
+     0.5333333333333333
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "paedscale": {
+    "aafe": 1.5164123646426189,
+    "aafe_ci95": [
+     1.2917792318473145,
+     2.091632803892654
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.9359018229997885,
+    "afe_ci95": [
+     0.7448761709773195,
+     1.4346706475878404
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 15,
+    "n_pairs": 23,
+    "pair_weighted_aafe": 1.4555142237373684,
+    "pair_weighted_aafe_ci95": [
+     1.2806654828996904,
+     1.8397350312159837
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.5166666666666667,
+    "within_1_5_ci95": [
+     0.2833333333333333,
+     0.75
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.8333333333333334,
+    "within_2_ci95": [
+     0.5666666666666667,
+     0.9666666666666667
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.13333333333333333,
+    "within_label_range_ci95": [
+     0.0,
+     0.4
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "weight_linear": {
+    "aafe": 1.4974060643585785,
+    "aafe_ci95": [
+     1.248847643436566,
+     2.2553301925195055
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.9807690133074854,
+    "afe_ci95": [
+     0.7747619127092353,
+     1.6172350663164088
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 15,
+    "n_pairs": 23,
+    "pair_weighted_aafe": 1.4772529191208346,
+    "pair_weighted_aafe_ci95": [
+     1.298665837149703,
+     1.999093508750954
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.6611111111111111,
+    "within_1_5_ci95": [
+     0.4222222222222222,
+     0.85
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.8166666666666667,
+    "within_2_ci95": [
+     0.5666666666666667,
+     0.95
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.26666666666666666,
+    "within_label_range_ci95": [
+     0.06666666666666667,
+     0.5333333333333333
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  }
+ },
+ "by_stratum": {
+  "adolescent": {
+   "allometry": {
+    "aafe": 1.159192215742375,
+    "aafe_ci95": [
+     1.159192215742375,
+     1.159192215742375
+    ],
+    "aafe_ci_method": "percentile",
+    "afe": 0.8626696991400822,
+    "afe_ci95": [
+     0.8626696991400822,
+     0.8626696991400822
+    ],
+    "afe_ci_method": "percentile",
+    "ci_n_boot": 10000,
+    "n_drugs": 1,
+    "n_pairs": 1,
+    "pair_weighted_aafe": 1.159192215742375,
+    "pair_weighted_aafe_ci95": [
+     1.159192215742375,
+     1.159192215742375
+    ],
+    "pair_weighted_aafe_ci_method": "percentile",
+    "within_1_5": 1.0,
+    "within_1_5_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_1_5_ci_method": "percentile",
+    "within_2": 1.0,
+    "within_2_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "allometry_class": {
+    "aafe": 1.159192215742375,
+    "aafe_ci95": [
+     1.159192215742375,
+     1.159192215742375
+    ],
+    "aafe_ci_method": "percentile",
+    "afe": 0.8626696991400822,
+    "afe_ci95": [
+     0.8626696991400822,
+     0.8626696991400822
+    ],
+    "afe_ci_method": "percentile",
+    "ci_n_boot": 10000,
+    "n_drugs": 1,
+    "n_pairs": 1,
+    "pair_weighted_aafe": 1.159192215742375,
+    "pair_weighted_aafe_ci95": [
+     1.159192215742375,
+     1.159192215742375
+    ],
+    "pair_weighted_aafe_ci_method": "percentile",
+    "within_1_5": 1.0,
+    "within_1_5_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_1_5_ci_method": "percentile",
+    "within_2": 1.0,
+    "within_2_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "bsa": {
+    "aafe": 1.1002514376371064,
+    "aafe_ci95": [
+     1.1002514376371064,
+     1.1002514376371064
+    ],
+    "aafe_ci_method": "percentile",
+    "afe": 0.9088831568787533,
+    "afe_ci95": [
+     0.9088831568787533,
+     0.9088831568787533
+    ],
+    "afe_ci_method": "percentile",
+    "ci_n_boot": 10000,
+    "n_drugs": 1,
+    "n_pairs": 1,
+    "pair_weighted_aafe": 1.1002514376371064,
+    "pair_weighted_aafe_ci95": [
+     1.1002514376371064,
+     1.1002514376371064
+    ],
+    "pair_weighted_aafe_ci_method": "percentile",
+    "within_1_5": 1.0,
+    "within_1_5_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_1_5_ci_method": "percentile",
+    "within_2": 1.0,
+    "within_2_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "paedscale": {
+    "aafe": 1.1592346558714188,
+    "aafe_ci95": [
+     1.1592346558714188,
+     1.1592346558714188
+    ],
+    "aafe_ci_method": "percentile",
+    "afe": 0.862638116394373,
+    "afe_ci95": [
+     0.862638116394373,
+     0.862638116394373
+    ],
+    "afe_ci_method": "percentile",
+    "ci_n_boot": 10000,
+    "n_drugs": 1,
+    "n_pairs": 1,
+    "pair_weighted_aafe": 1.1592346558714188,
+    "pair_weighted_aafe_ci95": [
+     1.1592346558714188,
+     1.1592346558714188
+    ],
+    "pair_weighted_aafe_ci_method": "percentile",
+    "within_1_5": 1.0,
+    "within_1_5_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_1_5_ci_method": "percentile",
+    "within_2": 1.0,
+    "within_2_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "weight_linear": {
+    "aafe": 1.25,
+    "aafe_ci95": [
+     1.25,
+     1.25
+    ],
+    "aafe_ci_method": "percentile",
+    "afe": 0.8,
+    "afe_ci95": [
+     0.8,
+     0.8
+    ],
+    "afe_ci_method": "percentile",
+    "ci_n_boot": 10000,
+    "n_drugs": 1,
+    "n_pairs": 1,
+    "pair_weighted_aafe": 1.25,
+    "pair_weighted_aafe_ci95": [
+     1.25,
+     1.25
+    ],
+    "pair_weighted_aafe_ci_method": "percentile",
+    "within_1_5": 1.0,
+    "within_1_5_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_1_5_ci_method": "percentile",
+    "within_2": 1.0,
+    "within_2_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   }
+  },
+  "child": {
+   "allometry": {
+    "aafe": 1.3268518280477564,
+    "aafe_ci95": [
+     1.2074665051760738,
+     1.567661153038118
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.0638834545951559,
+    "afe_ci95": [
+     0.929191761277632,
+     1.3170591993774186
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 20,
+    "n_pairs": 22,
+    "pair_weighted_aafe": 1.3292710535782906,
+    "pair_weighted_aafe_ci95": [
+     1.214766620812149,
+     1.5501744819587886
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.725,
+    "within_1_5_ci95": [
+     0.5,
+     0.9
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9,
+    "within_2_ci95": [
+     0.7,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.3,
+    "within_label_range_ci95": [
+     0.15,
+     0.55
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "allometry_class": {
+    "aafe": 1.3523949945723457,
+    "aafe_ci95": [
+     1.220404286326171,
+     1.5945591091617868
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.998247632357213,
+    "afe_ci95": [
+     0.8592259755803233,
+     1.2485298072137787
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 20,
+    "n_pairs": 22,
+    "pair_weighted_aafe": 1.352514237205084,
+    "pair_weighted_aafe_ci95": [
+     1.2285297871975123,
+     1.5723669601110852
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.675,
+    "within_1_5_ci95": [
+     0.45,
+     0.85
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9,
+    "within_2_ci95": [
+     0.7,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.3,
+    "within_label_range_ci95": [
+     0.15,
+     0.55
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "bsa": {
+    "aafe": 1.3465053076939142,
+    "aafe_ci95": [
+     1.2179419479646207,
+     1.6300707015753186
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.189483354818622,
+    "afe_ci95": [
+     1.0399025538016833,
+     1.473259605458647
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 20,
+    "n_pairs": 22,
+    "pair_weighted_aafe": 1.3409176653678672,
+    "pair_weighted_aafe_ci95": [
+     1.2234052683968177,
+     1.6022667341468546
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.775,
+    "within_1_5_ci95": [
+     0.55,
+     0.925
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9,
+    "within_2_ci95": [
+     0.7,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.3,
+    "within_label_range_ci95": [
+     0.15,
+     0.55
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "paedscale": {
+    "aafe": 1.3897206532866206,
+    "aafe_ci95": [
+     1.2567470383596606,
+     1.62005485449419
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.8953369453402898,
+    "afe_ci95": [
+     0.7761221072926003,
+     1.1321607159696876
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 20,
+    "n_pairs": 22,
+    "pair_weighted_aafe": 1.384685172776158,
+    "pair_weighted_aafe_ci95": [
+     1.2604361146456557,
+     1.5960503887896564
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.625,
+    "within_1_5_ci95": [
+     0.4,
+     0.825
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.95,
+    "within_2_ci95": [
+     0.75,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.25,
+    "within_label_range_ci95": [
+     0.1,
+     0.5
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "weight_linear": {
+    "aafe": 1.5748811710444524,
+    "aafe_ci95": [
+     1.4165412286647785,
+     1.7541940612005227
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.715303998587967,
+    "afe_ci95": [
+     0.625748045197915,
+     0.8921835925937491
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 20,
+    "n_pairs": 22,
+    "pair_weighted_aafe": 1.5764729496234418,
+    "pair_weighted_aafe_ci95": [
+     1.415724620453891,
+     1.756579352951116
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.45,
+    "within_1_5_ci95": [
+     0.25,
+     0.65
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.825,
+    "within_2_ci95": [
+     0.6,
+     0.95
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2,
+    "within_label_range_ci95": [
+     0.05,
+     0.4
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "infant_toddler": {
+   "allometry": {
+    "aafe": 1.9498670411727654,
+    "aafe_ci95": [
+     1.3576699659263194,
+     4.982124370536846
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.742848020891596,
+    "afe_ci95": [
+     1.1355354190360294,
+     4.4957534525690255
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 8,
+    "n_pairs": 10,
+    "pair_weighted_aafe": 1.7961952469219056,
+    "pair_weighted_aafe_ci95": [
+     1.3349217472332229,
+     4.2835498613425145
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.375,
+    "within_1_5_ci95": [
+     0.125,
+     0.6875
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.75,
+    "within_2_ci95": [
+     0.375,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "allometry_class": {
+    "aafe": 2.1048105655541614,
+    "aafe_ci95": [
+     1.4930958413058648,
+     5.186658316274421
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.607745180139894,
+    "afe_ci95": [
+     0.9909060630621708,
+     4.0763229957013145
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 8,
+    "n_pairs": 10,
+    "pair_weighted_aafe": 1.9095012903869473,
+    "pair_weighted_aafe_ci95": [
+     1.4241306290744051,
+     4.275267489911321
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.25,
+    "within_1_5_ci95": [
+     0.0625,
+     0.5625
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.75,
+    "within_2_ci95": [
+     0.375,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "bsa": {
+    "aafe": 2.2179903944346693,
+    "aafe_ci95": [
+     1.5411570627305433,
+     5.743534112423951
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 2.0475540469014555,
+    "afe_ci95": [
+     1.3267742262103608,
+     5.243169293243783
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 8,
+    "n_pairs": 10,
+    "pair_weighted_aafe": 2.080685160449658,
+    "pair_weighted_aafe_ci95": [
+     1.551708738369579,
+     5.193965065555386
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.5,
+    "within_1_5_ci95": [
+     0.1875,
+     0.8125
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.5,
+    "within_2_ci95": [
+     0.1875,
+     0.8125
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "paedscale": {
+    "aafe": 1.7017406470883272,
+    "aafe_ci95": [
+     1.3314358959198842,
+     2.8619426282947704
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.017594522920837,
+    "afe_ci95": [
+     0.7047154920395231,
+     2.118492370986555
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 8,
+    "n_pairs": 10,
+    "pair_weighted_aafe": 1.6826482967136385,
+    "pair_weighted_aafe_ci95": [
+     1.351197733777436,
+     2.645029718214819
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.4375,
+    "within_1_5_ci95": [
+     0.125,
+     0.75
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.8125,
+    "within_2_ci95": [
+     0.4375,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "weight_linear": {
+    "aafe": 1.896081943437914,
+    "aafe_ci95": [
+     1.3845320976432909,
+     3.400567868472981
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.8914743981962198,
+    "afe_ci95": [
+     0.5912031987214106,
+     2.4098197873453753
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 8,
+    "n_pairs": 10,
+    "pair_weighted_aafe": 1.8692958469641987,
+    "pair_weighted_aafe_ci95": [
+     1.4499163313696235,
+     3.209179913862043
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.4375,
+    "within_1_5_ci95": [
+     0.125,
+     0.75
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.625,
+    "within_2_ci95": [
+     0.3125,
+     0.875
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.125,
+    "within_label_range_ci95": [
+     0.0,
+     0.5
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "preterm_newborn": {
+   "allometry": {
+    "aafe": 2.683064029909899,
+    "aafe_ci95": [
+     2.0964255748230363,
+     3.433860316841448
+    ],
+    "aafe_ci_method": "percentile",
+    "afe": 2.683064029909899,
+    "afe_ci95": [
+     2.0964255748230363,
+     3.433860316841448
+    ],
+    "afe_ci_method": "percentile",
+    "ci_n_boot": 10000,
+    "n_drugs": 2,
+    "n_pairs": 4,
+    "pair_weighted_aafe": 2.683064029909899,
+    "pair_weighted_aafe_ci95": [
+     2.0964255748230363,
+     3.433860316841448
+    ],
+    "pair_weighted_aafe_ci_method": "percentile",
+    "within_1_5": 0.0,
+    "within_1_5_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_1_5_ci_method": "percentile",
+    "within_2": 0.25,
+    "within_2_ci95": [
+     0.0,
+     0.5
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "allometry_class": {
+    "aafe": 2.683064029909899,
+    "aafe_ci95": [
+     2.0964255748230363,
+     3.433860316841448
+    ],
+    "aafe_ci_method": "percentile",
+    "afe": 2.683064029909899,
+    "afe_ci95": [
+     2.0964255748230363,
+     3.433860316841448
+    ],
+    "afe_ci_method": "percentile",
+    "ci_n_boot": 10000,
+    "n_drugs": 2,
+    "n_pairs": 4,
+    "pair_weighted_aafe": 2.683064029909899,
+    "pair_weighted_aafe_ci95": [
+     2.0964255748230363,
+     3.433860316841448
+    ],
+    "pair_weighted_aafe_ci_method": "percentile",
+    "within_1_5": 0.0,
+    "within_1_5_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_1_5_ci_method": "percentile",
+    "within_2": 0.25,
+    "within_2_ci95": [
+     0.0,
+     0.5
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "bsa": {
+    "aafe": 3.4860902602530266,
+    "aafe_ci95": [
+     2.7319808092390394,
+     4.448356760608448
+    ],
+    "aafe_ci_method": "percentile",
+    "afe": 3.4860902602530266,
+    "afe_ci95": [
+     2.7319808092390394,
+     4.448356760608448
+    ],
+    "afe_ci_method": "percentile",
+    "ci_n_boot": 10000,
+    "n_drugs": 2,
+    "n_pairs": 4,
+    "pair_weighted_aafe": 3.4860902602530275,
+    "pair_weighted_aafe_ci95": [
+     2.7319808092390394,
+     4.448356760608448
+    ],
+    "pair_weighted_aafe_ci_method": "percentile",
+    "within_1_5": 0.0,
+    "within_1_5_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_1_5_ci_method": "percentile",
+    "within_2": 0.25,
+    "within_2_ci95": [
+     0.0,
+     0.5
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "paedscale": {
+    "aafe": 1.215308701989232,
+    "aafe_ci95": [
+     1.1950762152848209,
+     1.2358837220927756
+    ],
+    "aafe_ci_method": "percentile",
+    "afe": 1.073112544772738,
+    "afe_ci95": [
+     1.0510545302560466,
+     1.095633481041263
+    ],
+    "afe_ci_method": "percentile",
+    "ci_n_boot": 10000,
+    "n_drugs": 2,
+    "n_pairs": 4,
+    "pair_weighted_aafe": 1.215308701989232,
+    "pair_weighted_aafe_ci95": [
+     1.1950762152848209,
+     1.2358837220927756
+    ],
+    "pair_weighted_aafe_ci_method": "percentile",
+    "within_1_5": 1.0,
+    "within_1_5_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_1_5_ci_method": "percentile",
+    "within_2": 1.0,
+    "within_2_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "weight_linear": {
+    "aafe": 1.3228756555322956,
+    "aafe_ci95": [
+     1.2247448713915892,
+     1.4288690166235212
+    ],
+    "aafe_ci_method": "percentile",
+    "afe": 1.1180339887498951,
+    "afe_ci95": [
+     0.8748177652797066,
+     1.4288690166235212
+    ],
+    "afe_ci_method": "percentile",
+    "ci_n_boot": 10000,
+    "n_drugs": 2,
+    "n_pairs": 4,
+    "pair_weighted_aafe": 1.3228756555322956,
+    "pair_weighted_aafe_ci95": [
+     1.2247448713915892,
+     1.4288690166235212
+    ],
+    "pair_weighted_aafe_ci_method": "percentile",
+    "within_1_5": 0.75,
+    "within_1_5_ci95": [
+     0.5,
+     1.0
+    ],
+    "within_1_5_ci_method": "percentile",
+    "within_2": 1.0,
+    "within_2_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   }
+  },
+  "term_newborn": {
+   "allometry": {
+    "aafe": 2.0827965945797127,
+    "aafe_ci95": [
+     1.693126865003137,
+     2.3685480336608187
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 2.0827965945797127,
+    "afe_ci95": [
+     1.693126865003137,
+     2.3685480336608187
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 8,
+    "n_pairs": 9,
+    "pair_weighted_aafe": 2.1218882963562797,
+    "pair_weighted_aafe_ci95": [
+     1.7296170689297676,
+     2.3918901470950225
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.125,
+    "within_1_5_ci95": [
+     0.0,
+     0.5
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.3125,
+    "within_2_ci95": [
+     0.0625,
+     0.6875
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "allometry_class": {
+    "aafe": 1.657301146005596,
+    "aafe_ci95": [
+     1.2523476668376423,
+     2.190989519690027
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 1.5673786524261395,
+    "afe_ci95": [
+     1.1293966072583774,
+     2.1524035656577807
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 8,
+    "n_pairs": 9,
+    "pair_weighted_aafe": 1.7318264126823815,
+    "pair_weighted_aafe_ci95": [
+     1.28379975497348,
+     2.2499888602035565
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.5,
+    "within_1_5_ci95": [
+     0.125,
+     0.875
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.5625,
+    "within_2_ci95": [
+     0.25,
+     0.875
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.25,
+    "within_label_range_ci95": [
+     0.0,
+     0.625
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "bsa": {
+    "aafe": 2.4703688183133528,
+    "aafe_ci95": [
+     2.0074491239317944,
+     2.80521665005979
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 2.4703688183133528,
+    "afe_ci95": [
+     2.0074491239317944,
+     2.80521665005979
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 8,
+    "n_pairs": 9,
+    "pair_weighted_aafe": 2.516230901337602,
+    "pair_weighted_aafe_ci95": [
+     2.051802740670299,
+     2.8345598271529404
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.125,
+    "within_1_5_ci95": [
+     0.0,
+     0.5
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.125,
+    "within_2_ci95": [
+     0.0,
+     0.5
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.0,
+    "within_label_range_ci95": [
+     0.0,
+     0.0
+    ],
+    "within_label_range_ci_method": "percentile"
+   },
+   "paedscale": {
+    "aafe": 1.345136802339543,
+    "aafe_ci95": [
+     1.141106887062094,
+     1.6936778835230477
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.7968475866172171,
+    "afe_ci95": [
+     0.616635966319454,
+     0.9829319100306806
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 8,
+    "n_pairs": 9,
+    "pair_weighted_aafe": 1.3423179245905668,
+    "pair_weighted_aafe_ci95": [
+     1.1584909032365371,
+     1.664416028613716
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.5625,
+    "within_1_5_ci95": [
+     0.25,
+     0.875
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.875,
+    "within_2_ci95": [
+     0.5,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.25,
+    "within_label_range_ci95": [
+     0.0,
+     0.625
+    ],
+    "within_label_range_ci_method": "bca"
+   },
+   "weight_linear": {
+    "aafe": 1.1907482342583555,
+    "aafe_ci95": [
+     1.078711178676768,
+     1.3683651248868094
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.983142476462462,
+    "afe_ci95": [
+     0.8008933993114876,
+     1.1203671690476051
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 8,
+    "n_pairs": 9,
+    "pair_weighted_aafe": 1.194478550493315,
+    "pair_weighted_aafe_ci95": [
+     1.0880543316684077,
+     1.350754216030446
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.875,
+    "within_1_5_ci95": [
+     0.5,
+     1.0
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 1.0,
+    "within_2_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.375,
+    "within_label_range_ci95": [
+     0.125,
+     0.75
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  }
+ },
+ "excluded": {
+  "cefazolin": {
+   "criterion": "E1",
+   "reason": "Adult treatment dosage table is an image in the selected label; only the perioperative prophylaxis regimen is text, so no adult regimen can be paired to the pediatric 25\u2013100 mg/kg/day treatment text."
+  },
+  "digoxin": {
+   "criterion": "E2",
+   "reason": "Selected label defers pediatric dosing under 10 years to a separate pediatric product label (not available from this manufacturer). It also fails E1: the adult and over-10-year maintenance doses are in image tables (Tables 2\u20133)."
+  },
+  "fentanyl": {
+   "criterion": "E1",
+   "reason": "Label gives only induction/premedication bolus doses (adult 50\u2013100 mcg; children 2\u20133 mcg/kg), not a maintenance regimen."
+  },
+  "midazolam": {
+   "criterion": "E1",
+   "reason": "Selected label (rule: pediatric mention, latest effective_time, then highest version and set_id) has no continuous-infusion or other maintenance regimen in its machine-readable Dosage and Administration text."
+  }
+ },
+ "hypotheses": {
+  "H1": {
+   "aafe_ratio": 0.77213249281764,
+   "ci95": [
+    -0.2352967272703949,
+    -0.01980929492508735
+   ],
+   "ci_method": "bca",
+   "ci_n_boot": 10000,
+   "comparator": "allometry_class",
+   "mean_abs_log10_diff": -0.11230817121544003,
+   "n_clusters": 9,
+   "n_pairs": 13,
+   "n_tied_drugs": 3,
+   "n_tied_pairs": 3,
+   "per_drug_mean_d": {
+    "amikacin": 0.0,
+    "ampicillin": -0.4302910727030347,
+    "ceftazidime": 0.12600370918862427,
+    "clindamycin": -0.08591227189644507,
+    "gentamicin": 0.0,
+    "meropenem": -0.22950183697723112,
+    "tobramycin": 0.0,
+    "vancomycin": -0.27076091865097296,
+    "zidovudine": -0.12031114989990058
+   },
+   "population": "newborns (<28 d)",
+   "significant": true,
+   "tested": true,
+   "wilcoxon_p_drug_level": 0.15625
+  },
+  "H2": {
+   "aafe_ratio": 0.7767972412046975,
+   "ci95": [
+    -0.20297065776560205,
+    -0.029098589720296032
+   ],
+   "ci_method": "bca",
+   "ci_n_boot": 10000,
+   "comparator": "allometry_class",
+   "mean_abs_log10_diff": -0.10969232549410944,
+   "n_clusters": 15,
+   "n_pairs": 23,
+   "n_tied_drugs": 3,
+   "n_tied_pairs": 4,
+   "per_drug_mean_d": {
+    "acyclovir": -0.25717348476841395,
+    "amikacin": 0.0,
+    "ampicillin": -0.4302910727030347,
+    "ceftazidime": 0.12600370918862427,
+    "clindamycin": -0.08591227189644507,
+    "daptomycin": 0.012385091449010455,
+    "fluconazole": 0.1676808465146439,
+    "gentamicin": 0.0,
+    "levetiracetam": -0.14653019305006698,
+    "meropenem": -0.10394580056712002,
+    "morphine": -0.4335842083677248,
+    "piperacillin_tazobactam": -0.10294542966024131,
+    "tobramycin": 0.0,
+    "vancomycin": -0.27076091865097296,
+    "zidovudine": -0.12031114989990058
+   },
+   "population": "<2 years",
+   "significant": true,
+   "tested": true,
+   "wilcoxon_p_drug_level": 0.06396484375
+  },
+  "H3": {
+   "aafe_ratio": 0.9138056961429722,
+   "ci95": [
+    -0.09542932295336248,
+    0.00016345459187785827
+   ],
+   "ci_method": "bca",
+   "ci_n_boot": 10000,
+   "comparator": "allometry_class",
+   "mean_abs_log10_diff": -0.03914613912803666,
+   "n_clusters": 21,
+   "n_pairs": 46,
+   "n_tied_drugs": 3,
+   "n_tied_pairs": 7,
+   "per_drug_mean_d": {
+    "acyclovir": -0.10626035854035216,
+    "amikacin": 0.0,
+    "ampicillin": -0.3478978843662935,
+    "aztreonam": 0.01018162819920531,
+    "cefepime": 0.06388572683034877,
+    "cefoxitin": 0.04805415680667145,
+    "ceftazidime": 0.11017531344176075,
+    "cefuroxime": 0.05075363195229859,
+    "clindamycin": 0.005339623546737615,
+    "daptomycin": 0.0035464305534888586,
+    "famotidine": -0.006540864805306867,
+    "fluconazole": 0.12670408458201188,
+    "gentamicin": 0.0,
+    "levetiracetam": -0.05735618879529042,
+    "meropenem": -0.08694917368437254,
+    "morphine": -0.22201476114043628,
+    "penicillin_g": -0.06066965718088091,
+    "piperacillin_tazobactam": -0.046137046672213425,
+    "tobramycin": 0.0,
+    "vancomycin": -0.18657243251624644,
+    "zidovudine": -0.12031114989990058
+   },
+   "population": "all ages",
+   "significant": false,
+   "tested": true,
+   "wilcoxon_p_drug_level": 0.24620819091796875
+  }
+ },
+ "n_bands": 46,
+ "n_included_drugs": 21,
+ "provenance": {
+  "engine_commit": "6e467662e722ba9095cebd08b8cd81a15d750230",
+  "n_boot": 10000,
+  "seed": 20261127,
+  "versions": {
+   "matplotlib": "3.11.2",
+   "numpy": "2.5.3",
+   "python": "3.13.18",
+   "scipy": "1.18.1"
+  },
+  "working_tree_dirty": false
+ },
+ "secondary": {
+  "allometry": {
+   "aafe_ratio": 0.8913985860893134,
+   "ci95": [
+    -0.10813054090560496,
+    -0.0038046548645480163
+   ],
+   "ci_method": "bca",
+   "ci_n_boot": 10000,
+   "comparator": "allometry",
+   "mean_abs_log10_diff": -0.04992805911465744,
+   "n_clusters": 21,
+   "n_pairs": 46,
+   "n_tied_drugs": 0,
+   "n_tied_pairs": 0,
+   "per_drug_mean_d": {
+    "acyclovir": -0.10626035854035216,
+    "amikacin": -0.2593985650806313,
+    "ampicillin": -0.3478978843662935,
+    "aztreonam": 0.01018162819920531,
+    "cefepime": 0.06388572683034877,
+    "cefoxitin": 0.04805415680667145,
+    "ceftazidime": 0.11017531344176075,
+    "cefuroxime": 0.05075363195229859,
+    "clindamycin": 0.005339623546737615,
+    "daptomycin": 0.0035464305534888586,
+    "famotidine": -0.006540864805306867,
+    "fluconazole": 0.12670408458201188,
+    "gentamicin": 0.0901638987531584,
+    "levetiracetam": -0.05735618879529042,
+    "meropenem": -0.08694917368437254,
+    "morphine": -0.22201476114043628,
+    "penicillin_g": -0.06066965718088091,
+    "piperacillin_tazobactam": -0.046137046672213425,
+    "tobramycin": -0.057185653391563396,
+    "vancomycin": -0.18657243251624644,
+    "zidovudine": -0.12031114989990058
+   },
+   "wilcoxon_p_drug_level": 0.1789875030517578,
+   "wilcoxon_p_holm": 0.3080902099609375
+  },
+  "bsa": {
+   "aafe_ratio": 0.8228399739470772,
+   "ci95": [
+    -0.15336500952614257,
+    -0.02969683161244351
+   ],
+   "ci_method": "bca",
+   "ci_n_boot": 10000,
+   "comparator": "bsa",
+   "mean_abs_log10_diff": -0.0846846182377183,
+   "n_clusters": 21,
+   "n_pairs": 46,
+   "n_tied_drugs": 0,
+   "n_tied_pairs": 0,
+   "per_drug_mean_d": {
+    "acyclovir": -0.11583933128141369,
+    "amikacin": -0.3209633802408263,
+    "ampicillin": -0.4349417899219473,
+    "aztreonam": -4.265750576528532e-05,
+    "cefepime": 0.11190454345071782,
+    "cefoxitin": 0.023500247701396103,
+    "ceftazidime": 0.09961305458158191,
+    "cefuroxime": 0.042137582189574516,
+    "clindamycin": -0.05609277156550688,
+    "daptomycin": 0.04683235769768936,
+    "famotidine": -0.0526697678186447,
+    "fluconazole": 0.06562755956487566,
+    "gentamicin": 0.059522022406787035,
+    "levetiracetam": -0.07963996436728236,
+    "meropenem": -0.17265892426187177,
+    "morphine": -0.2777281398657035,
+    "penicillin_g": -0.11037824381113426,
+    "piperacillin_tazobactam": -0.05011610035018277,
+    "tobramycin": -0.11187099380030792,
+    "vancomycin": -0.25195946359536636,
+    "zidovudine": -0.19261282219875367
+   },
+   "wilcoxon_p_drug_level": 0.02385425567626953,
+   "wilcoxon_p_holm": 0.0715627670288086
+  },
+  "weight_linear": {
+   "aafe_ratio": 0.9379205738840022,
+   "ci95": [
+    -0.06281428833286451,
+    0.018416213912490004
+   ],
+   "ci_method": "bca",
+   "ci_n_boot": 10000,
+   "comparator": "weight_linear",
+   "mean_abs_log10_diff": -0.027833937510488328,
+   "n_clusters": 21,
+   "n_pairs": 46,
+   "n_tied_drugs": 3,
+   "n_tied_pairs": 7,
+   "per_drug_mean_d": {
+    "acyclovir": -0.04165481754559214,
+    "amikacin": 0.0,
+    "ampicillin": -0.027424495192184185,
+    "aztreonam": -0.13905306532138811,
+    "cefepime": -0.11668064520043647,
+    "cefoxitin": -0.12443101127223032,
+    "ceftazidime": -0.054693888718613914,
+    "cefuroxime": -0.12173153612660337,
+    "clindamycin": 0.15966869456883193,
+    "daptomycin": -0.11946952170379309,
+    "famotidine": -0.1003655991903149,
+    "fluconazole": -0.028176279041931335,
+    "gentamicin": 0.0,
+    "levetiracetam": 0.023341839378062376,
+    "meropenem": -0.06726990220088633,
+    "morphine": -0.0047780443719819266,
+    "penicillin_g": 0.1345927423800708,
+    "piperacillin_tazobactam": -0.14035945098496622,
+    "tobramycin": 0.0,
+    "vancomycin": -0.01722089112753375,
+    "zidovudine": 0.20119318395123612
+   },
+   "wilcoxon_p_drug_level": 0.15404510498046875,
+   "wilcoxon_p_holm": 0.3080902099609375
+  }
+ },
+ "sensitivity": {
+  "S10_midpoint_child": {
+   "all": {
+    "aafe_ratio": 0.9097750039294773,
+    "ci95": [
+     -0.0909301068899933,
+     -0.010712531014633667
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.04106599958413077,
+    "n_clusters": 21,
+    "n_pairs": 46,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 7,
+    "per_drug_mean_d": {
+     "acyclovir": -0.1102992569612536,
+     "amikacin": 0.0,
+     "ampicillin": -0.3235861471597972,
+     "aztreonam": 0.00011160353491569686,
+     "cefepime": 0.00016306973170868155,
+     "cefoxitin": 0.00016047188619382202,
+     "ceftazidime": 0.06250714638249355,
+     "cefuroxime": 0.00016802496538176337,
+     "clindamycin": -0.04899317271905613,
+     "daptomycin": 0.0026563090231398988,
+     "famotidine": 0.0001106328391221826,
+     "fluconazole": 0.11733944278457366,
+     "gentamicin": 0.0,
+     "levetiracetam": -0.043166326412184486,
+     "meropenem": -0.08111348348137071,
+     "morphine": -0.08067381261616141,
+     "penicillin_g": -0.00011712602572064301,
+     "piperacillin_tazobactam": -0.043977919670438695,
+     "tobramycin": -2.7755575615628914e-17,
+     "vancomycin": -0.17897400088806062,
+     "zidovudine": -0.13470144648023186
+    },
+    "wilcoxon_p_drug_level": 0.14151763916015625
+   },
+   "newborn": {
+    "aafe_ratio": 0.7675766543792141,
+    "ci95": [
+     -0.23596872964508186,
+     -0.022142110629163207
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.11487824267610208,
+    "n_clusters": 9,
+    "n_pairs": 13,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 3,
+    "per_drug_mean_d": {
+     "amikacin": 0.0,
+     "ampicillin": -0.43138962925098934,
+     "ceftazidime": 0.12461524198023326,
+     "clindamycin": -0.09622575252766641,
+     "gentamicin": 0.0,
+     "meropenem": -0.2276684851150357,
+     "tobramycin": 0.0,
+     "vancomycin": -0.26853411269122884,
+     "zidovudine": -0.13470144648023186
+    },
+    "wilcoxon_p_drug_level": 0.09375
+   },
+   "paedscale": {
+    "aafe": 1.4238972055732075,
+    "aafe_ci95": [
+     1.2916681113286979,
+     1.8065056446260488
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.9259459389747049,
+    "afe_ci95": [
+     0.8049880465444981,
+     1.2523507411131884
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.4220086767930702,
+    "pair_weighted_aafe_ci95": [
+     1.2983849214206007,
+     1.7939175763054929
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.6333333333333334,
+    "within_1_5_ci95": [
+     0.43650793650793646,
+     0.792063492063492
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9285714285714286,
+    "within_2_ci95": [
+     0.7619047619047619,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2857142857142857,
+    "within_label_range_ci95": [
+     0.11904761904761904,
+     0.5
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "S1_exclude_mgkg_shared": {
+   "all": {
+    "aafe_ratio": 0.9261294465809393,
+    "ci95": [
+     -0.10954955961524566,
+     0.01122210267668049
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.03332830704723941,
+    "n_clusters": 19,
+    "n_pairs": 40,
+    "n_tied_drugs": 2,
+    "n_tied_pairs": 4,
+    "per_drug_mean_d": {
+     "acyclovir": 0.04465276768770962,
+     "ampicillin": -0.4302910727030347,
+     "aztreonam": 0.01018162819920531,
+     "cefepime": 0.06388572683034877,
+     "cefoxitin": 0.04805415680667145,
+     "ceftazidime": 0.11017531344176075,
+     "cefuroxime": 0.05075363195229859,
+     "clindamycin": 0.005339623546737615,
+     "daptomycin": 0.0035464305534888586,
+     "famotidine": -0.006540864805306867,
+     "fluconazole": 0.12670408458201188,
+     "gentamicin": 0.0,
+     "levetiracetam": -0.05735618879529042,
+     "meropenem": -0.08694917368437254,
+     "morphine": -0.22201476114043628,
+     "penicillin_g": -0.06066965718088091,
+     "piperacillin_tazobactam": -0.046137046672213425,
+     "tobramycin": 0.0,
+     "vancomycin": -0.18657243251624644
+    },
+    "wilcoxon_p_drug_level": 0.6112213134765625
+   },
+   "newborn": {
+    "aafe_ratio": 0.7105417503477128,
+    "ci95": [
+     -0.29312952887590554,
+     -0.002031417974163776
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.14841039850650992,
+    "n_clusters": 6,
+    "n_pairs": 10,
+    "n_tied_drugs": 1,
+    "n_tied_pairs": 1,
+    "per_drug_mean_d": {
+     "ampicillin": -0.4302910727030347,
+     "ceftazidime": 0.12600370918862427,
+     "clindamycin": -0.08591227189644507,
+     "gentamicin": 0.0,
+     "meropenem": -0.22950183697723112,
+     "vancomycin": -0.27076091865097296
+    },
+    "wilcoxon_p_drug_level": 0.1875
+   },
+   "paedscale": {
+    "aafe": 1.4612669956742201,
+    "aafe_ci95": [
+     1.3089994214594172,
+     1.7831648207820479
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.9038286811802777,
+    "afe_ci95": [
+     0.7663101021597976,
+     1.2165844987380858
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 19,
+    "n_pairs": 40,
+    "pair_weighted_aafe": 1.4598075907592367,
+    "pair_weighted_aafe_ci95": [
+     1.3169411328057046,
+     1.7790420073093653
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.5947368421052632,
+    "within_1_5_ci95": [
+     0.38421052631578945,
+     0.7789473684210527
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9035087719298246,
+    "within_2_ci95": [
+     0.7192982456140351,
+     0.9824561403508772
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.21052631578947367,
+    "within_label_range_ci95": [
+     0.05263157894736842,
+     0.42105263157894735
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "S2_exclude_mismatch_qualitative_upto": {
+   "all": {
+    "aafe_ratio": 0.9587073658699241,
+    "ci95": [
+     -0.0639773061901898,
+     0.013177930835464959
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.01831393587647366,
+    "n_clusters": 18,
+    "n_pairs": 36,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 6,
+    "per_drug_mean_d": {
+     "acyclovir": 0.04465276768770962,
+     "amikacin": 0.0,
+     "aztreonam": 0.01018162819920531,
+     "cefepime": 0.06388572683034877,
+     "cefoxitin": 0.04805415680667145,
+     "ceftazidime": 0.11017531344176075,
+     "cefuroxime": 0.05075363195229859,
+     "clindamycin": 0.005339623546737615,
+     "daptomycin": 0.0035464305534888586,
+     "famotidine": -0.006540864805306867,
+     "gentamicin": 0.0,
+     "levetiracetam": -0.05735618879529042,
+     "meropenem": -0.08694917368437254,
+     "morphine": -0.22201476114043628,
+     "penicillin_g": -0.06066965718088091,
+     "piperacillin_tazobactam": -0.046137046672213425,
+     "tobramycin": 0.0,
+     "vancomycin": -0.18657243251624644
+    },
+    "wilcoxon_p_drug_level": 0.638671875
+   },
+   "newborn": {
+    "aafe_ratio": 0.8381172518290609,
+    "ci95": [
+     -0.18794947747109916,
+     0.027682524413467247
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.07669521972267081,
+    "n_clusters": 6,
+    "n_pairs": 8,
+    "n_tied_drugs": 2,
+    "n_tied_pairs": 2,
+    "per_drug_mean_d": {
+     "amikacin": 0.0,
+     "ceftazidime": 0.12600370918862427,
+     "clindamycin": -0.08591227189644507,
+     "gentamicin": 0.0,
+     "meropenem": -0.22950183697723112,
+     "vancomycin": -0.27076091865097296
+    },
+    "wilcoxon_p_drug_level": 0.375
+   },
+   "paedscale": {
+    "aafe": 1.4343700904786651,
+    "aafe_ci95": [
+     1.2821360771721997,
+     1.7773888461536245
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.9272546446156664,
+    "afe_ci95": [
+     0.7826482578833259,
+     1.278591145510912
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 18,
+    "n_pairs": 36,
+    "pair_weighted_aafe": 1.4345665153019147,
+    "pair_weighted_aafe_ci95": [
+     1.290227223713573,
+     1.8086169392491895
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.6277777777777778,
+    "within_1_5_ci95": [
+     0.4074074074074074,
+     0.8055555555555556
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9166666666666666,
+    "within_2_ci95": [
+     0.7222222222222222,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2777777777777778,
+    "within_label_range_ci95": [
+     0.1111111111111111,
+     0.5
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "S3_all_css": {
+   "all": {
+    "aafe_ratio": 0.8876977348976426,
+    "ci95": [
+     -0.10558097004524869,
+     -0.009408449287758153
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.051734888289930794,
+    "n_clusters": 21,
+    "n_pairs": 46,
+    "n_tied_drugs": 0,
+    "n_tied_pairs": 0,
+    "per_drug_mean_d": {
+     "acyclovir": -0.10626035854035216,
+     "amikacin": -0.1865826988819272,
+     "ampicillin": -0.3478978843662935,
+     "aztreonam": 0.01018162819920531,
+     "cefepime": 0.06388572683034877,
+     "cefoxitin": 0.04805415680667145,
+     "ceftazidime": 0.11017531344176075,
+     "cefuroxime": 0.05075363195229859,
+     "clindamycin": 0.005339623546737615,
+     "daptomycin": 0.0035464305534888586,
+     "famotidine": -0.006540864805306867,
+     "fluconazole": 0.12670408458201188,
+     "gentamicin": -0.018524901137184576,
+     "levetiracetam": -0.05735618879529042,
+     "meropenem": -0.08694917368437254,
+     "morphine": -0.22201476114043628,
+     "penicillin_g": -0.06066965718088091,
+     "piperacillin_tazobactam": -0.046137046672213425,
+     "tobramycin": -0.05925613238066499,
+     "vancomycin": -0.18657243251624644,
+     "zidovudine": -0.12031114989990058
+    },
+    "wilcoxon_p_drug_level": 0.08879852294921875
+   },
+   "newborn": {
+    "aafe_ratio": 0.6362927832554468,
+    "ci95": [
+     -0.2775135723513176,
+     -0.08092714064013576
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.1963430024436602,
+    "n_clusters": 9,
+    "n_pairs": 13,
+    "n_tied_drugs": 0,
+    "n_tied_pairs": 0,
+    "per_drug_mean_d": {
+     "amikacin": -0.26987911361437267,
+     "ampicillin": -0.4302910727030347,
+     "ceftazidime": 0.12600370918862427,
+     "clindamycin": -0.08591227189644507,
+     "gentamicin": -0.21285470007065074,
+     "meropenem": -0.22950183697723112,
+     "tobramycin": -0.2735796673689582,
+     "vancomycin": -0.27076091865097296,
+     "zidovudine": -0.12031114989990058
+    },
+    "wilcoxon_p_drug_level": 0.01953125
+   },
+   "paedscale": {
+    "aafe": 1.4103068005931436,
+    "aafe_ci95": [
+     1.2812270938704104,
+     1.7247190308186868
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.9298684737864317,
+    "afe_ci95": [
+     0.8048124086286783,
+     1.204851495497875
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.4011783393180504,
+    "pair_weighted_aafe_ci95": [
+     1.283504774248029,
+     1.7074672623824634
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.665079365079365,
+    "within_1_5_ci95": [
+     0.4492063492063492,
+     0.8317460317460317
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9126984126984128,
+    "within_2_ci95": [
+     0.746031746031746,
+     0.9841269841269842
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.21428571428571427,
+    "within_label_range_ci95": [
+     0.07142857142857142,
+     0.42857142857142855
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "S4_weight_minus20": {
+   "all": {
+    "aafe_ratio": 0.887041086669984,
+    "ci95": [
+     -0.10976658447158975,
+     -0.013626588194545224
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.052056263707396674,
+    "n_clusters": 21,
+    "n_pairs": 46,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 7,
+    "per_drug_mean_d": {
+     "acyclovir": -0.1062603585403521,
+     "amikacin": 0.0,
+     "ampicillin": -0.368960816435975,
+     "aztreonam": -0.0021080958496576697,
+     "cefepime": 0.06388572683034838,
+     "cefoxitin": 0.022462007280114875,
+     "ceftazidime": 0.08594781018974673,
+     "cefuroxime": 0.0410993417682934,
+     "clindamycin": -0.04311538295729067,
+     "daptomycin": 0.00354643055348885,
+     "famotidine": -0.006540864805306905,
+     "fluconazole": 0.09440074691265976,
+     "gentamicin": 0.0,
+     "levetiracetam": -0.05735618879529051,
+     "meropenem": -0.11589768034464347,
+     "morphine": -0.22201476114043617,
+     "penicillin_g": -0.06066965718088008,
+     "piperacillin_tazobactam": -0.0501095375852982,
+     "tobramycin": 0.0,
+     "vancomycin": -0.20272410135092248,
+     "zidovudine": -0.1687661564039289
+    },
+    "wilcoxon_p_drug_level": 0.0736846923828125
+   },
+   "newborn": {
+    "aafe_ratio": 0.7340536132813957,
+    "ci95": [
+     -0.25940483026825933,
+     -0.040818499073444446
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.13427221923658905,
+    "n_clusters": 9,
+    "n_pairs": 13,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 3,
+    "per_drug_mean_d": {
+     "amikacin": 0.0,
+     "ampicillin": -0.4583749821292768,
+     "ceftazidime": 0.07754870268459625,
+     "clindamycin": -0.13436727840047347,
+     "gentamicin": 0.0,
+     "meropenem": -0.25372934022924554,
+     "tobramycin": 0.0,
+     "vancomycin": -0.270760918650973,
+     "zidovudine": -0.1687661564039289
+    },
+    "wilcoxon_p_drug_level": 0.0625
+   },
+   "paedscale": {
+    "aafe": 1.3949458690499763,
+    "aafe_ci95": [
+     1.2608410755515098,
+     1.7229164390278964
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.9617750399002285,
+    "afe_ci95": [
+     0.8321515207678118,
+     1.2557341731092977
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.3947403322938812,
+    "pair_weighted_aafe_ci95": [
+     1.2755949058249711,
+     1.707134890966516
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.6611111111111111,
+    "within_1_5_ci95": [
+     0.4785714285714286,
+     0.8150793650793651
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9285714285714286,
+    "within_2_ci95": [
+     0.7619047619047619,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2857142857142857,
+    "within_label_range_ci95": [
+     0.11904761904761904,
+     0.5
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "S4_weight_plus20": {
+   "all": {
+    "aafe_ratio": 0.9344481360859384,
+    "ci95": [
+     -0.08465232834878064,
+     0.010125500250324555
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.029444797909276274,
+    "n_clusters": 21,
+    "n_pairs": 46,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 7,
+    "per_drug_mean_d": {
+     "acyclovir": -0.10626035854035194,
+     "amikacin": 0.0,
+     "ampicillin": -0.32810257285438754,
+     "aztreonam": 0.010181628199205657,
+     "cefepime": 0.06388572683034878,
+     "cefoxitin": 0.048054156806671,
+     "ceftazidime": 0.129970624953667,
+     "cefuroxime": 0.05075363195229863,
+     "clindamycin": 0.044930246570549906,
+     "daptomycin": 0.0035464305534887997,
+     "famotidine": -0.002417667556853652,
+     "fluconazole": 0.15079062418862668,
+     "gentamicin": 0.0,
+     "levetiracetam": -0.05735618879529051,
+     "meropenem": -0.06319479987008515,
+     "morphine": -0.22201476114043622,
+     "penicillin_g": -0.06066965718088163,
+     "piperacillin_tazobactam": -0.0263417351603076,
+     "tobramycin": 0.0,
+     "vancomycin": -0.17337555817497563,
+     "zidovudine": -0.0807205268760883
+    },
+    "wilcoxon_p_drug_level": 0.34654998779296875
+   },
+   "newborn": {
+    "aafe_ratio": 0.8054170535392203,
+    "ci95": [
+     -0.21446339889175106,
+     0.0013516828600810117
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.09397917907478617,
+    "n_clusters": 9,
+    "n_pairs": 13,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 3,
+    "per_drug_mean_d": {
+     "amikacin": 0.0,
+     "ampicillin": -0.4038973240204935,
+     "ceftazidime": 0.16559433221243697,
+     "clindamycin": -0.04632164887263274,
+     "gentamicin": 0.0,
+     "meropenem": -0.20970652546532503,
+     "tobramycin": 0.0,
+     "vancomycin": -0.27076091865097296,
+     "zidovudine": -0.0807205268760883
+    },
+    "wilcoxon_p_drug_level": 0.15625
+   },
+   "paedscale": {
+    "aafe": 1.4383095594672097,
+    "aafe_ci95": [
+     1.300959339862052,
+     1.7334254911856835
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.8817382089975806,
+    "afe_ci95": [
+     0.763145775540435,
+     1.147535563901543
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.4356565482717405,
+    "pair_weighted_aafe_ci95": [
+     1.304808152690416,
+     1.719002658853286
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.5857142857142857,
+    "within_1_5_ci95": [
+     0.38888888888888884,
+     0.753968253968254
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.888888888888889,
+    "within_2_ci95": [
+     0.7301587301587302,
+     0.9603174603174603
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2619047619047619,
+    "within_label_range_ci95": [
+     0.09523809523809523,
+     0.47619047619047616
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "S5_ga_minus2": {
+   "all": {
+    "aafe_ratio": 0.9109770296862288,
+    "ci95": [
+     -0.09794947860987553,
+     -0.0013103646952284974
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.04049257363763664,
+    "n_clusters": 21,
+    "n_pairs": 46,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 7,
+    "per_drug_mean_d": {
+     "acyclovir": -0.10626035854035216,
+     "amikacin": 0.0,
+     "ampicillin": -0.3598490205150586,
+     "aztreonam": 0.01018162819920531,
+     "cefepime": 0.06388572683034877,
+     "cefoxitin": 0.04805415680667145,
+     "ceftazidime": 0.11017531344176075,
+     "cefuroxime": 0.05075363195229859,
+     "clindamycin": 0.005339623546737615,
+     "daptomycin": 0.0035464305534888586,
+     "famotidine": -0.006540864805306867,
+     "fluconazole": 0.11973119118430364,
+     "gentamicin": 0.0,
+     "levetiracetam": -0.05735618879529042,
+     "meropenem": -0.09630026883949878,
+     "morphine": -0.22201476114043628,
+     "penicillin_g": -0.06066965718088091,
+     "piperacillin_tazobactam": -0.046137046672213425,
+     "tobramycin": 0.0,
+     "vancomycin": -0.18657243251624644,
+     "zidovudine": -0.12031114989990058
+    },
+    "wilcoxon_p_drug_level": 0.22875213623046875
+   },
+   "newborn": {
+    "aafe_ratio": 0.7655612636845588,
+    "ci95": [
+     -0.24325541526962796,
+     -0.02117533822962384
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.11602004936084634,
+    "n_clusters": 9,
+    "n_pairs": 13,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 3,
+    "per_drug_mean_d": {
+     "amikacin": 0.0,
+     "ampicillin": -0.4462259209013883,
+     "ceftazidime": 0.12600370918862427,
+     "clindamycin": -0.08591227189644507,
+     "gentamicin": 0.0,
+     "meropenem": -0.24697389208753437,
+     "tobramycin": 0.0,
+     "vancomycin": -0.27076091865097296,
+     "zidovudine": -0.12031114989990058
+    },
+    "wilcoxon_p_drug_level": 0.15625
+   },
+   "paedscale": {
+    "aafe": 1.4175771274501536,
+    "aafe_ci95": [
+     1.282009301243476,
+     1.7314997286611906
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.915046767737056,
+    "afe_ci95": [
+     0.792039084454419,
+     1.1935456087042902
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.416419008154599,
+    "pair_weighted_aafe_ci95": [
+     1.2907480420477575,
+     1.7158698898060365
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.6095238095238096,
+    "within_1_5_ci95": [
+     0.4111111111111111,
+     0.7825396825396825
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9126984126984128,
+    "within_2_ci95": [
+     0.746031746031746,
+     0.9841269841269842
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2619047619047619,
+    "within_label_range_ci95": [
+     0.09523809523809523,
+     0.47619047619047616
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "S5_ga_plus2": {
+   "all": {
+    "aafe_ratio": 0.9161545956509194,
+    "ci95": [
+     -0.0931007699773592,
+     0.0012289752663617137
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.038031235531865326,
+    "n_clusters": 21,
+    "n_pairs": 46,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 7,
+    "per_drug_mean_d": {
+     "acyclovir": -0.10626035854035216,
+     "amikacin": 0.0,
+     "ampicillin": -0.33784391957920035,
+     "aztreonam": 0.01018162819920531,
+     "cefepime": 0.06388572683034877,
+     "cefoxitin": 0.04805415680667145,
+     "ceftazidime": 0.11017531344176075,
+     "cefuroxime": 0.05075363195229859,
+     "clindamycin": 0.005339623546737615,
+     "daptomycin": 0.0035464305534888586,
+     "famotidine": -0.006540864805306867,
+     "fluconazole": 0.13268558818814102,
+     "gentamicin": 0.0,
+     "levetiracetam": -0.05735618879529042,
+     "meropenem": -0.07957166655799683,
+     "morphine": -0.22201476114043628,
+     "penicillin_g": -0.06066965718088091,
+     "piperacillin_tazobactam": -0.046137046672213425,
+     "tobramycin": 0.0,
+     "vancomycin": -0.18657243251624644,
+     "zidovudine": -0.12031114989990058
+    },
+    "wilcoxon_p_drug_level": 0.24620819091796875
+   },
+   "newborn": {
+    "aafe_ratio": 0.7784459174698881,
+    "ci95": [
+     -0.2277340951839347,
+     -0.018319818660332818
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.10877155465691622,
+    "n_clusters": 9,
+    "n_pairs": 13,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 3,
+    "per_drug_mean_d": {
+     "amikacin": 0.0,
+     "ampicillin": -0.4168857863202439,
+     "ceftazidime": 0.12600370918862427,
+     "clindamycin": -0.08591227189644507,
+     "gentamicin": 0.0,
+     "meropenem": -0.21107757433330776,
+     "tobramycin": 0.0,
+     "vancomycin": -0.27076091865097296,
+     "zidovudine": -0.12031114989990058
+    },
+    "wilcoxon_p_drug_level": 0.15625
+   },
+   "paedscale": {
+    "aafe": 1.41542097215151,
+    "aafe_ci95": [
+     1.2801409018429708,
+     1.7290130157086572
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.9182998265760896,
+    "afe_ci95": [
+     0.7945550570990912,
+     1.1965937111443243
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 21,
+    "n_pairs": 46,
+    "pair_weighted_aafe": 1.4130214769887062,
+    "pair_weighted_aafe_ci95": [
+     1.287755667073515,
+     1.7100369318575617
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.6095238095238096,
+    "within_1_5_ci95": [
+     0.4111111111111111,
+     0.7825396825396825
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9126984126984128,
+    "within_2_ci95": [
+     0.746031746031746,
+     0.9841269841269842
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.2619047619047619,
+    "within_label_range_ci95": [
+     0.09523809523809523,
+     0.47619047619047616
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "S6_leave_one_drug_out": {
+   "all": {
+    "by_left_out_drug": {
+     "acyclovir": -0.03579042815742088,
+     "amikacin": -0.04110344608443849,
+     "ampicillin": -0.02370855186612382,
+     "aztreonam": -0.04161252749439876,
+     "cefepime": -0.04429773242595593,
+     "cefoxitin": -0.04350615392477207,
+     "ceftazidime": -0.046612211756526536,
+     "cefuroxime": -0.04364112768205343,
+     "clindamycin": -0.04137042726177538,
+     "daptomycin": -0.04128076761211294,
+     "famotidine": -0.04077640284417315,
+     "fluconazole": -0.04743865031353909,
+     "gentamicin": -0.04110344608443849,
+     "levetiracetam": -0.03823563664467398,
+     "meropenem": -0.03675598740021987,
+     "morphine": -0.03000270802741668,
+     "penicillin_g": -0.03806996322539445,
+     "piperacillin_tazobactam": -0.03879659375082782,
+     "tobramycin": -0.04110344608443849,
+     "vancomycin": -0.03177482445862617,
+     "zidovudine": -0.035087888589443464
+    },
+    "max": -0.02370855186612382,
+    "min": -0.04743865031353909
+   },
+   "newborn": {
+    "by_left_out_drug": {
+     "acyclovir": -0.11230817121544003,
+     "amikacin": -0.12634669261737003,
+     "ampicillin": -0.07256030852949068,
+     "aztreonam": -0.11230817121544003,
+     "cefepime": -0.11230817121544003,
+     "cefoxitin": -0.11230817121544003,
+     "ceftazidime": -0.14209715626594804,
+     "cefuroxime": -0.11230817121544003,
+     "clindamycin": -0.11560765863031439,
+     "daptomycin": -0.11230817121544003,
+     "famotidine": -0.11230817121544003,
+     "fluconazole": -0.11230817121544003,
+     "gentamicin": -0.12634669261737003,
+     "levetiracetam": -0.11230817121544003,
+     "meropenem": -0.09765896299521612,
+     "morphine": -0.11230817121544003,
+     "penicillin_g": -0.11230817121544003,
+     "piperacillin_tazobactam": -0.11230817121544003,
+     "tobramycin": -0.12634669261737003,
+     "vancomycin": -0.09250157778599839,
+     "zidovudine": -0.11130779887988244
+    },
+    "max": -0.07256030852949068,
+    "min": -0.14209715626594804
+   }
+  },
+  "S7_exclude_curve_source_drugs": {
+   "all": {
+    "aafe_ratio": 0.9332484815419481,
+    "ci95": [
+     -0.08866122847661999,
+     0.008415529034510904
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.03000270802741668,
+    "n_clusters": 20,
+    "n_pairs": 44,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 7,
+    "per_drug_mean_d": {
+     "acyclovir": -0.10626035854035216,
+     "amikacin": 0.0,
+     "ampicillin": -0.3478978843662935,
+     "aztreonam": 0.01018162819920531,
+     "cefepime": 0.06388572683034877,
+     "cefoxitin": 0.04805415680667145,
+     "ceftazidime": 0.11017531344176075,
+     "cefuroxime": 0.05075363195229859,
+     "clindamycin": 0.005339623546737615,
+     "daptomycin": 0.0035464305534888586,
+     "famotidine": -0.006540864805306867,
+     "fluconazole": 0.12670408458201188,
+     "gentamicin": 0.0,
+     "levetiracetam": -0.05735618879529042,
+     "meropenem": -0.08694917368437254,
+     "penicillin_g": -0.06066965718088091,
+     "piperacillin_tazobactam": -0.046137046672213425,
+     "tobramycin": 0.0,
+     "vancomycin": -0.18657243251624644,
+     "zidovudine": -0.12031114989990058
+    },
+    "wilcoxon_p_drug_level": 0.4037628173828125
+   },
+   "newborn": {
+    "aafe_ratio": 0.77213249281764,
+    "ci95": [
+     -0.2352967272703949,
+     -0.01980929492508735
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.11230817121544003,
+    "n_clusters": 9,
+    "n_pairs": 13,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 3,
+    "per_drug_mean_d": {
+     "amikacin": 0.0,
+     "ampicillin": -0.4302910727030347,
+     "ceftazidime": 0.12600370918862427,
+     "clindamycin": -0.08591227189644507,
+     "gentamicin": 0.0,
+     "meropenem": -0.22950183697723112,
+     "tobramycin": 0.0,
+     "vancomycin": -0.27076091865097296,
+     "zidovudine": -0.12031114989990058
+    },
+    "wilcoxon_p_drug_level": 0.15625
+   },
+   "paedscale": {
+    "aafe": 1.3391610901936057,
+    "aafe_ci95": [
+     1.2362146611441431,
+     1.4701725932905987
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.8483572891754676,
+    "afe_ci95": [
+     0.7507464782196726,
+     0.9743391409220526
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 20,
+    "n_pairs": 44,
+    "pair_weighted_aafe": 1.3439971691369628,
+    "pair_weighted_aafe_ci95": [
+     1.2497341055815083,
+     1.469779564972775
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.64,
+    "within_1_5_ci95": [
+     0.44000000000000006,
+     0.8066666666666666
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9583333333333334,
+    "within_2_ci95": [
+     0.8666666666666666,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.275,
+    "within_label_range_ci95": [
+     0.125,
+     0.5
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "S8_exclude_titrated": {
+   "all": {
+    "aafe_ratio": 0.9305987355891793,
+    "ci95": [
+     -0.09151261255995871,
+     0.008504440047866003
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.03123754188121193,
+    "n_clusters": 19,
+    "n_pairs": 43,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 7,
+    "per_drug_mean_d": {
+     "acyclovir": -0.10626035854035216,
+     "amikacin": 0.0,
+     "ampicillin": -0.3478978843662935,
+     "aztreonam": 0.01018162819920531,
+     "cefepime": 0.06388572683034877,
+     "cefoxitin": 0.04805415680667145,
+     "ceftazidime": 0.11017531344176075,
+     "cefuroxime": 0.05075363195229859,
+     "clindamycin": 0.005339623546737615,
+     "daptomycin": 0.0035464305534888586,
+     "fluconazole": 0.12670408458201188,
+     "gentamicin": 0.0,
+     "levetiracetam": -0.05735618879529042,
+     "meropenem": -0.08694917368437254,
+     "penicillin_g": -0.06066965718088091,
+     "piperacillin_tazobactam": -0.046137046672213425,
+     "tobramycin": 0.0,
+     "vancomycin": -0.18657243251624644,
+     "zidovudine": -0.12031114989990058
+    },
+    "wilcoxon_p_drug_level": 0.433197021484375
+   },
+   "newborn": {
+    "aafe_ratio": 0.77213249281764,
+    "ci95": [
+     -0.2352967272703949,
+     -0.01980929492508735
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.11230817121544003,
+    "n_clusters": 9,
+    "n_pairs": 13,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 3,
+    "per_drug_mean_d": {
+     "amikacin": 0.0,
+     "ampicillin": -0.4302910727030347,
+     "ceftazidime": 0.12600370918862427,
+     "clindamycin": -0.08591227189644507,
+     "gentamicin": 0.0,
+     "meropenem": -0.22950183697723112,
+     "tobramycin": 0.0,
+     "vancomycin": -0.27076091865097296,
+     "zidovudine": -0.12031114989990058
+    },
+    "wilcoxon_p_drug_level": 0.15625
+   },
+   "paedscale": {
+    "aafe": 1.3569844800926456,
+    "aafe_ci95": [
+     1.2524040322720904,
+     1.4901482564436184
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.8392404957404604,
+    "afe_ci95": [
+     0.7407442319146688,
+     0.9742423975405909
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 19,
+    "n_pairs": 43,
+    "pair_weighted_aafe": 1.351985239845349,
+    "pair_weighted_aafe_ci95": [
+     1.2544873899565268,
+     1.4839851967671411
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.6210526315789474,
+    "within_1_5_ci95": [
+     0.41228070175438597,
+     0.7982456140350876
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 0.9561403508771931,
+    "within_2_ci95": [
+     0.8596491228070174,
+     1.0
+    ],
+    "within_2_ci_method": "bca",
+    "within_label_range": 0.23684210526315788,
+    "within_label_range_ci95": [
+     0.07894736842105263,
+     0.47368421052631576
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  },
+  "S9_gfr_only_renal": {
+   "all": {
+    "aafe_ratio": 0.9654295245556347,
+    "ci95": [
+     -0.11194345950974786,
+     0.0440701253767043
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.01527942381489714,
+    "n_clusters": 5,
+    "n_pairs": 12,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 7,
+    "per_drug_mean_d": {
+     "amikacin": 0.0,
+     "ceftazidime": 0.11017531344176075,
+     "gentamicin": 0.0,
+     "tobramycin": 0.0,
+     "vancomycin": -0.18657243251624644
+    },
+    "wilcoxon_p_drug_level": 1.0
+   },
+   "newborn": {
+    "aafe_ratio": 0.9355102669309487,
+    "ci95": [
+     -0.16245655119058378,
+     0.05040148367544971
+    ],
+    "ci_method": "bca",
+    "ci_n_boot": 10000,
+    "comparator": "allometry_class",
+    "mean_abs_log10_diff": -0.02895144189246974,
+    "n_clusters": 5,
+    "n_pairs": 6,
+    "n_tied_drugs": 3,
+    "n_tied_pairs": 3,
+    "per_drug_mean_d": {
+     "amikacin": 0.0,
+     "ceftazidime": 0.12600370918862427,
+     "gentamicin": 0.0,
+     "tobramycin": 0.0,
+     "vancomycin": -0.27076091865097296
+    },
+    "wilcoxon_p_drug_level": 1.0
+   },
+   "paedscale": {
+    "aafe": 1.3561384469283237,
+    "aafe_ci95": [
+     1.1424769476933792,
+     1.6254497782941206
+    ],
+    "aafe_ci_method": "bca",
+    "afe": 0.7940486941269843,
+    "afe_ci95": [
+     0.6225733658331456,
+     1.012753457258805
+    ],
+    "afe_ci_method": "bca",
+    "ci_n_boot": 10000,
+    "n_drugs": 5,
+    "n_pairs": 12,
+    "pair_weighted_aafe": 1.3625625856032098,
+    "pair_weighted_aafe_ci95": [
+     1.1588567427145733,
+     1.6020761939364059
+    ],
+    "pair_weighted_aafe_ci_method": "bca",
+    "within_1_5": 0.5,
+    "within_1_5_ci95": [
+     0.2,
+     0.8
+    ],
+    "within_1_5_ci_method": "bca",
+    "within_2": 1.0,
+    "within_2_ci95": [
+     1.0,
+     1.0
+    ],
+    "within_2_ci_method": "percentile",
+    "within_label_range": 0.3,
+    "within_label_range_ci95": [
+     0.0,
+     0.8
+    ],
+    "within_label_range_ci_method": "bca"
+   }
+  }
+ },
+ "uncertainty_coverage": {
+  "coverage_90": 0.13095238095238096,
+  "coverage_90_ci95": [
+   0.047619047619047616,
+   0.2976190476190476
+  ],
+  "coverage_90_ci_method": "bca",
+  "max_fold_width": 2.573316277884735,
+  "median_fold_width": 1.0011629459917142,
+  "n_bands": 46,
+  "n_bands_blocked": 0,
+  "n_drugs": 21
+ }
+}

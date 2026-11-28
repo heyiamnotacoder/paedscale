@@ -49,6 +49,8 @@
   .brand-mark{width:28px;height:28px;border-radius:7px;display:block;flex-shrink:0}
   .brand b{color:var(--ink)}
   .topnav{display:flex;align-items:center;gap:8px}
+  @media (max-width:640px){.topbar .inner{padding:8px 16px;height:auto;min-height:60px;flex-wrap:wrap;gap:4px 10px}
+    .topnav{flex-wrap:wrap;align-items:center;gap:2px 4px}.topnav .link{padding:6px 8px}.topnav .btn{padding:7px 12px;font-size:.85rem}}
   .topnav .link{background:none;border:0;font:inherit;font-size:.85rem;color:var(--ink-2);cursor:pointer;padding:8px 12px;border-radius:8px}
   .topnav .link:hover{color:var(--teal);background:var(--teal-wash)}
   .btn{font:inherit;cursor:pointer;border:0;border-radius:10px;font-weight:600;
@@ -331,7 +333,7 @@
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:560px){.grid2{grid-template-columns:1fr}}
   .seg{display:flex;gap:8px}
-  .seg label{flex:1;margin:0}
+  .seg label{flex:1;margin:0;position:relative}
   .seg input{position:absolute;opacity:0;pointer-events:none}
   .seg .opt{display:block;text-align:center;padding:11px;border:1px solid var(--line);border-radius:11px;
     font-size:.92rem;font-weight:500;color:var(--ink-2);cursor:pointer;transition:.12s;background:#fff}
@@ -502,6 +504,17 @@
   .stopbanner b{font-size:1.02rem;color:var(--red)}
   .stopbanner .msg{font-size:.9rem;margin-top:3px;color:#7a2a2a}
   .conc{font-size:.94rem;padding:14px 16px;border-radius:12px;background:var(--teal-wash);color:var(--teal-deep)}
+  .pu-strip{position:relative;height:30px;margin:10px 0 4px}
+  .pu-strip .track{position:absolute;left:0;right:0;top:14px;height:2px;background:var(--line)}
+  .pu-strip .band{position:absolute;top:9px;height:12px;border-radius:6px;background:var(--teal-wash);border:1px solid var(--teal)}
+  .pu-strip .mark{position:absolute;top:5px;width:2px;height:20px;margin-left:-1px;border-radius:1px}
+  .pu-strip .mark.mid{background:var(--teal-deep)}
+  .pu-strip .mark.final{width:10px;height:10px;top:10px;margin-left:-5px;transform:rotate(45deg);background:var(--amber);border-radius:1px}
+  .pu-strip .mark.toxic{background:var(--red);width:2px;top:2px;height:26px}
+  .pu-strip .mark.effective{background:var(--ink-2);width:2px;top:2px;height:26px}
+  .pu-warn{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--red-wash);color:var(--red);font-size:.9rem;font-weight:600}
+  .pu-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem;color:var(--ink-2);margin-top:6px}
+  .pu-legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
   .conc.fail{background:var(--red-wash);color:#7a2a2a}
   .conc .ratio{font-family:var(--mono);font-weight:600}
   .md{font-size:.96rem;color:var(--ink);line-height:1.65}
@@ -1367,7 +1380,8 @@ function scrollToId(id){
   const run = ()=>{
     const el = document.getElementById(id);
     if(!el) return;
-    const y = el.getBoundingClientRect().top + window.scrollY - 72;
+    const bar = document.querySelector(".topbar");
+    const y = el.getBoundingClientRect().top + window.scrollY - ((bar ? bar.offsetHeight : 60) + 12);
     window.scrollTo({top: Math.max(0, y), behavior:"smooth"});
   };
   if(needSwitch){
@@ -1546,7 +1560,7 @@ function pushLine(html, cls){
   div.appendChild(caretEl);
   c.scrollTop = c.scrollHeight;
 }
-function esc(s){ return (s||"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
+function esc(s){ return (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
 
 /* turn a raw backend step into a cutesy, human-readable console line + stage move */
 function handleStep(text){
@@ -1757,6 +1771,66 @@ function mdToHtml(s){
 function linkify(s){ return esc(s).replace(/(https?:\/\/[^\s)]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>'); }
 function fmtList(a){ return (a&&a.length)? a.join(", ") : null; }
 
+function fmtDose(x){
+  if(x==null || !isFinite(x)) return "—";
+  const a = Math.abs(x);
+  return a>=100 ? x.toFixed(0) : a>=10 ? x.toFixed(1) : a>=0.01 ? x.toPrecision(2) : x.toExponential(1);
+}
+function fmtShare(f){ const p = f*100; return p>0 && p<1 ? "<1%" : p>99 && p<100 ? ">99%" : Math.round(p)+"%"; }
+const PU_FLAT_FOLD = 1.01;     // a 90% interval narrower than this is shown as "about X"
+const PU_ANCHOR_TOL = 0.05;    // final dose this far from the engine dose is called out
+const PATHWAY_LABEL = {renal_gfr:"renal (GFR) maturation", cyp3a4:"CYP3A4 maturation", ugt2b7:"UGT2B7 maturation"};
+function paramUncertaintyHtml(pu, finalDpk){
+  const q = pu && pu.dose_mg_per_kg_per_day;
+  if(!q || q.p05==null || q.p50==null || q.p95==null) return "";
+  const toxic = pu.toxic_dose_mg_per_kg_per_day;
+  let h = `<div class="sec" id="param-uncertainty"><h3>Parameter uncertainty</h3>`;
+  // past a safety bound: a prominent alert (CLAUDE.md safety-bounds rule)
+  const eff = pu.effective_dose_mg_per_kg_per_day;
+  const warns = [];
+  if(finalDpk!=null && toxic!=null && finalDpk > toxic) warns.push(`⚠ The recommended dose (${fmtDose(finalDpk)} mg/kg/day) is above the toxic threshold (${fmtDose(toxic)} mg/kg/day).`);
+  if(finalDpk!=null && eff!=null && finalDpk < eff) warns.push(`⚠ The recommended dose (${fmtDose(finalDpk)} mg/kg/day) is below the effective threshold (${fmtDose(eff)} mg/kg/day).`);
+  if(pu.share_above_toxic) warns.push(`⚠ ${fmtShare(pu.share_above_toxic)} of plausible engine doses exceed the toxic threshold (${fmtDose(toxic)} mg/kg/day).`);
+  if(pu.share_below_effective) warns.push(`⚠ ${fmtShare(pu.share_below_effective)} of plausible engine doses fall below the effective threshold (${fmtDose(eff)} mg/kg/day).`);
+  const flat = q.p05 > 0 && q.p95 / q.p05 < PU_FLAT_FOLD;
+  h += flat
+    ? `<div class="md" style="font-size:.92rem">Engine dose, 90% parameter-uncertainty interval: <b>about ${fmtDose(q.p50)} mg/kg/day</b>. The maturation curves are essentially complete at this age, so the published parameter uncertainty barely moves the dose.</div>`
+    : `<div class="md" style="font-size:.92rem">Engine dose, 90% parameter-uncertainty interval: <b>${fmtDose(q.p05)}–${fmtDose(q.p95)} mg/kg/day</b> (median ${fmtDose(q.p50)}).</div>`;
+  const cl = pu.cl_child_l_h, hl = pu.half_life_h;
+  if(cl && hl) h += `<div class="md" style="font-size:.86rem;color:var(--ink-2)">Clearance ${fmtDose(cl.p05)}–${fmtDose(cl.p95)} L/h · half-life ${fmtDose(hl.p05)}–${fmtDose(hl.p95)} h</div>`;
+  const pts = [q.p05, q.p95].concat(...[finalDpk, toxic, eff].map(x => x!=null ? [x] : []));
+  if(!flat && pts.every(x => x > 0)){
+    // log-scaled strip over the interval, the recommended dose and the thresholds, 15% padding
+    const lo = Math.log(Math.min(...pts)/1.15), hi = Math.log(Math.max(...pts)*1.15);
+    const pos = x => (100*(Math.log(x)-lo)/(hi-lo)).toFixed(2)+"%";
+    const aria = `Interval ${fmtDose(q.p05)} to ${fmtDose(q.p95)} mg/kg/day, median ${fmtDose(q.p50)}`
+      + (finalDpk!=null ? `; recommended ${fmtDose(finalDpk)}` : "") + (toxic!=null ? `; toxic threshold ${fmtDose(toxic)}` : "")
+      + (eff!=null ? `; effective threshold ${fmtDose(eff)}` : "");
+    h += `<div class="pu-strip" role="img" aria-label="${esc(aria)}">`
+       + `<div class="track"></div><div class="band" style="left:${pos(q.p05)};width:calc(${pos(q.p95)} - ${pos(q.p05)})"></div>`
+       + `<div class="mark mid" style="left:${pos(q.p50)}"></div>`
+       + (toxic!=null ? `<div class="mark toxic" style="left:${pos(toxic)}"></div>` : "")
+       + (eff!=null ? `<div class="mark effective" style="left:${pos(eff)}"></div>` : "")
+       + (finalDpk!=null ? `<div class="mark final" style="left:${pos(finalDpk)}"></div>` : "")
+       + `</div>`;
+    h += `<div class="pu-legend"><span><span class="sw" style="background:var(--teal-wash);border:1px solid var(--teal)"></span>90% interval</span>`
+       + `<span><span class="sw" style="background:var(--teal-deep);width:3px"></span>Engine median</span>`
+       + (finalDpk!=null ? `<span><span class="sw" style="background:var(--amber);transform:rotate(45deg)"></span>Recommended dose</span>` : "")
+       + (toxic!=null ? `<span><span class="sw" style="background:var(--red);width:3px"></span>Toxic threshold</span>` : "")
+       + (eff!=null ? `<span><span class="sw" style="background:var(--ink-2);width:3px"></span>Effective threshold</span>` : "") + `</div>`;
+  }
+  if(warns.length) h += `<div class="pu-warn" role="alert">${warns.join("<br>")}</div>`;
+  const shares = Object.entries(pu.variance_share||{}).sort((a,b)=>b[1]-a[1]);
+  const notes = [];
+  if(pu.fold_width_90!=null && !flat) notes.push(`The interval spans ${pu.fold_width_90.toFixed(2)}-fold.`);
+  if(shares.length) notes.push(`Spread comes from ` + shares.map(([k,v])=>`${esc(PATHWAY_LABEL[k]||k)} (${Math.round(v*100)}%)`).join(", ") + `.`);
+  const eng = pu.engine_dose_mg_per_kg_per_day;
+  if(finalDpk!=null && eng>0 && Math.abs(finalDpk/eng - 1) > PU_ANCHOR_TOL) notes.push(`The recommended dose differs from the engine estimate (${fmtDose(eng)} mg/kg/day), for example because it is guideline-anchored.`);
+  notes.push(`This covers uncertainty in the published maturation-curve parameters only. It is not the range of doses that suit different children.`);
+  h += `<div class="hint" style="margin-top:8px">${notes.join(" ")}</div></div>`;
+  return h;
+}
+
 function renderResult(data){
   currentRec = data.recommendation || {};
   const r = currentRec;
@@ -1848,6 +1922,9 @@ function renderResult(data){
   }
   if(r.grade_rationale) h += `<div class="md" style="color:var(--ink-2);font-size:.92rem;margin-bottom:6px">${esc(r.grade_rationale)}</div>`;
 
+  // parameter uncertainty (engine dose; prescribable cases only)
+  if(!blocked && !adultHi) h += paramUncertaintyHtml(r.parameter_uncertainty, dpk);
+
   // concordance
   if(r.concordance && (r.concordance.ratio!=null || r.concordance.verdict)){
     const cc = r.concordance, fail = /fail|discord/i.test(cc.verdict||"");
@@ -1865,7 +1942,7 @@ function renderResult(data){
   const flags = r.flags||[];
   if(flags.length){
     h += `<div class="sec"><h3>Flags &amp; warnings</h3>`;
-    flags.forEach(f=>{ const stop=/exceed|toxic|do not|below|sub-therapeutic|safety stop|contraindicat/i.test(f);
+    flags.forEach(f=>{ const stop=/exceed|toxic|do not|below|sub-therapeutic|safety (stop|bound)|contraindicat/i.test(f);
       h += `<div class="flag ${stop?"stop":""}">${esc(f)}</div>`; });
     h += `</div>`;
   }

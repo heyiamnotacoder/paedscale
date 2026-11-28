@@ -1,0 +1,163 @@
+{
+ "drug": "acyclovir",
+ "pass": "final",
+ "pediatric": [
+  {
+   "pmid": "32988829",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance reported in the abstract",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "19414579",
+   "decision": "exclude",
+   "reason": "P1/P2: ages up to 20 years; typical CL from a model pooling IV acyclovir with oral valacyclovir, no stated covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "40233332",
+   "decision": "exclude",
+   "reason": "no age: infants with neonatal HSV disease, no postnatal age or PMA stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "12516939",
+   "decision": "exclude",
+   "reason": "CL/F: oral valaciclovir only, apparent clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38775304",
+   "decision": "exclude",
+   "reason": "no age: groups defined only by open-ended PMA bounds (<34 or >=34 weeks), no central value or closed range",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "16368917",
+   "decision": "exclude",
+   "reason": "P4/P2: single child with stated renal impairment; ganciclovir after oral valganciclovir, no acyclovir clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "36702934",
+   "decision": "exclude",
+   "reason": "P4: continuous kidney replacement therapy (CVVHDF), single case with liver failure",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "24346595",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "preterm and term infants <31 d PNA, model typical value at PMA 31.3 wk",
+     "preterm": true,
+     "cl": {
+      "value": 0.305,
+      "unit": "L/h/kg",
+      "summary": "typical",
+      "quote": "clearance (L/h/kg) = 0.305 \u00d7 [postmenstrual age (PMA)/31.3 weeks]"
+     },
+     "pna_days": null,
+     "ga_weeks": 30,
+     "pma_weeks": 31.3,
+     "age_quote": "The analysis included 28 infants (median 30 weeks gestation). Acyclovir pharmacokinetics was described by a 1-compartment model: clearance (L/h/kg) = 0.305 \u00d7 [postmenstrual age (PMA)/31.3 weeks]",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "6355048",
+   "decision": "exclude",
+   "reason": "P2: review; pediatric clearance given only relative to adults, no numeric pediatric value",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "8787884",
+   "decision": "exclude",
+   "reason": "adult criteria: geriatric volunteers 65-83 y given oral valaciclovir; no IV clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40233332",
+   "decision": "exclude",
+   "reason": "adult criteria: infants with neonatal HSV disease",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "12516939",
+   "decision": "exclude",
+   "reason": "adult criteria: children given oral valaciclovir (CL/F)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7103460",
+   "decision": "exclude",
+   "reason": "probenecid: probenecid interaction study; baseline clearance also only per 1.73 m2",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10984808",
+   "decision": "exclude",
+   "reason": "adult criteria: cyclosporine clearance in transplant patients, no acyclovir clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7102703",
+   "decision": "exclude",
+   "reason": "adult criteria: chronic renal failure with anuria on hemodialysis",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19897764",
+   "decision": "exclude",
+   "reason": "CL/F: oral valacyclovir in patients with infectious mononucleosis, apparent clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38775304",
+   "decision": "exclude",
+   "reason": "adult criteria: term and preterm neonates",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8996645",
+   "decision": "exclude",
+   "reason": "adult criteria: theophylline clearance after oral aciclovir, no acyclovir IV clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6355048",
+   "decision": "exclude",
+   "reason": "adult criteria: unit; adult clearance given only per 1.73 m2 (review, no stated age)",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

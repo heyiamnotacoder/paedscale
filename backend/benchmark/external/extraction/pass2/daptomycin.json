@@ -1,0 +1,229 @@
+{
+ "drug": "daptomycin",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "29610198",
+   "decision": "exclude",
+   "reason": "range only: clearance given as range (15.1-80.7 ml/h/kg); also includes burn patients",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "22627869",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "young infants <120 days, median GA 32 wk, median PNA 3 days",
+     "preterm": false,
+     "cl": {
+      "value": 0.021,
+      "unit": "L/h/kg",
+      "summary": "median",
+      "quote": "total body clearance and half-life of daptomycin were 262.4 mg×h/L (166.7, 340.2), 0.21 L/kg (0.11, 0.34), 0.021 L/h/kg"
+     },
+     "pna_days": 3,
+     "pna_range_days": [
+      1,
+      85
+     ],
+     "ga_weeks": 32,
+     "ga_range_weeks": [
+      23,
+      40
+     ],
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "Median gestational age at birth and postnatal age were 32 weeks (range: 23, 40) and 3 days (1, 85), respectively",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "19015332",
+   "decision": "exclude",
+   "reason": "adult criteria: oncology patients with neutropenic fever, not healthy or stated normal renal function; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "28575511",
+   "decision": "exclude",
+   "reason": "adult criteria: haematological malignancy patients; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20890189",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill on CVVHD",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38349160",
+   "decision": "exclude",
+   "reason": "adult criteria: AKI/ESKD on sustained low-efficiency dialysis",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35462110",
+   "decision": "exclude",
+   "reason": "adult criteria: MRSA patients with variable renal function; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41586500",
+   "decision": "exclude",
+   "reason": "adult criteria: infected patients (not healthy volunteers) with no stated age; typical value at eGFR 90 only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1318678",
+   "decision": "exclude",
+   "reason": "range only: total body clearance given as 0.13 to 0.21 ml/min/kg across doses",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "27628437",
+   "decision": "exclude",
+   "reason": "adult criteria: CRRT patients; comparator CrCl >=30 not normal renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17005801",
+   "decision": "exclude",
+   "reason": "range only: weight-normalized clearance given as 9 to 10 ml/h/kg across cohorts",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20031929",
+   "decision": "exclude",
+   "reason": "adult criteria: anuric AKI on extended dialysis",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "18779352",
+   "decision": "exclude",
+   "reason": "not total IV CL: no numeric daptomycin clearance reported",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30224525",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 0.53,
+      "unit": "L/h",
+      "summary": "mean",
+      "quote": "clearance (0.53 versus 0.55 liters/h, P = 1.00)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "15273084",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 0.81,
+      "unit": "L/h",
+      "summary": "typical",
+      "quote": "CL among dialysis subjects was approximately one-third that of healthy subjects (0.27 versus 0.81 liter/h)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "34231117",
+   "decision": "exclude",
+   "reason": "adult criteria: intravenous drug users with infective endocarditis, not healthy",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41349922",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill on CRRT",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "22627869",
+   "decision": "exclude",
+   "reason": "adult criteria: infants <120 days",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "22210754",
+   "decision": "exclude",
+   "reason": "adult criteria: acute renal failure on CVVHDF",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "12654665",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 8.2,
+      "unit": "mL/h/kg",
+      "summary": "mean",
+      "quote": "systemic clearance ( approximately 8.2 ml/h/kg)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,250 @@
+{
+ "drug": "aztreonam",
+ "retrieved": "2026-11-27",
+ "queries": {
+  "pediatric": "aztreonam[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "aztreonam[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "1952838",
+   "year": "1991",
+   "sha256": "ac3cee646a45270a06fe50941605b7a4b22266ae2f4c856d5148bfd97a264547",
+   "prefilter": true
+  },
+  {
+   "pmid": "2682507",
+   "year": "1989",
+   "sha256": "0a01813b672f86b416f2a43d2b1420ded41a5035226b2a200e8bcc08615af02c",
+   "prefilter": false
+  },
+  {
+   "pmid": "3286083",
+   "year": "1988",
+   "sha256": "be44e39780ccc41849db0630f54d221485e09629ad23ccd77df04f0deef0d33b",
+   "prefilter": true
+  },
+  {
+   "pmid": "3774385",
+   "year": "1986",
+   "sha256": "9dccc0b65ef3bb6973cdbc79ffc0a95d4ca7382644704a8cde7fa48083294c9a",
+   "prefilter": true
+  },
+  {
+   "pmid": "6541452",
+   "year": "1984",
+   "sha256": "c810b6ff97025fe19efb7827ab8ff0846de7057a9ab8581c3e31894f70455c21",
+   "prefilter": false
+  },
+  {
+   "pmid": "8162661",
+   "year": "1994",
+   "sha256": "10063c00df19f59ffe1a80d2ee7f6213b6ffbb20dc1f51aec123a1538e7aead0",
+   "prefilter": true
+  },
+  {
+   "pmid": "14531724",
+   "year": "2003",
+   "sha256": "808578a3b12e4037c594ac5791a3ff2e1f70adbbbda47bc2f82954d662d4d9e3",
+   "prefilter": false
+  },
+  {
+   "pmid": "41949135",
+   "year": "2026",
+   "sha256": "2fa6d88e83f6f3ea6cd06c93ab100e56fdd3c2539b6feb061efd3621f881704a",
+   "prefilter": false
+  },
+  {
+   "pmid": "42751173",
+   "year": "2026",
+   "sha256": "abf69ce208842c7b6cf3f614f760c1bfcce1bc55dcc80b990ac0ca1e0918e24c",
+   "prefilter": false
+  }
+ ],
+ "query_translation": {
+  "pediatric": "\"aztreonam\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "\"aztreonam\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "1452504",
+   "year": "1992",
+   "sha256": "458cc82db40321cca491dbd24e94acbe22d7ec13377fb297780146aef8a57137",
+   "prefilter": true
+  },
+  {
+   "pmid": "1554831",
+   "year": "1992",
+   "sha256": "e344893edba791d5e1f19a9b5917fe60d86420020e3f07bfb9b33aa672b23f53",
+   "prefilter": false
+  },
+  {
+   "pmid": "2014982",
+   "year": "1991",
+   "sha256": "61199adad2b0a5b6d8edd0f24ff66ea0e216b2c7630e0cf5ecdc109290d02616",
+   "prefilter": false
+  },
+  {
+   "pmid": "2682507",
+   "year": "1989",
+   "sha256": "0a01813b672f86b416f2a43d2b1420ded41a5035226b2a200e8bcc08615af02c",
+   "prefilter": false
+  },
+  {
+   "pmid": "2795125",
+   "year": "1989",
+   "sha256": "2fa1473a4d7a614cdc9b1324a661b2bd6f0f8d1a44aa144544672eeaf46b2927",
+   "prefilter": true
+  },
+  {
+   "pmid": "3286083",
+   "year": "1988",
+   "sha256": "be44e39780ccc41849db0630f54d221485e09629ad23ccd77df04f0deef0d33b",
+   "prefilter": true
+  },
+  {
+   "pmid": "3909342",
+   "year": "1985",
+   "sha256": "12e9553176821877cdc0c69941f30de2888ee6400c56eab7528b554afce0f6c3",
+   "prefilter": false
+  },
+  {
+   "pmid": "4038635",
+   "year": "1985",
+   "sha256": "2b298f4a59576efa287d670cc1a06f79056fd4192eb27c1dec30610109eca113",
+   "prefilter": false
+  },
+  {
+   "pmid": "4039117",
+   "year": "1985",
+   "sha256": "65ded81053a2d7fe99312f4598a016df518302e041232c705e4b70e914a9257b",
+   "prefilter": true
+  },
+  {
+   "pmid": "4039189",
+   "year": "1985",
+   "sha256": "47cf252b8c227e74f3a45e9d13c9c246bf1168a8b09c0a5bc5213b1cdee65a22",
+   "prefilter": true
+  },
+  {
+   "pmid": "6541452",
+   "year": "1984",
+   "sha256": "c810b6ff97025fe19efb7827ab8ff0846de7057a9ab8581c3e31894f70455c21",
+   "prefilter": false
+  },
+  {
+   "pmid": "6684898",
+   "year": "1983",
+   "sha256": "14dc88a4bd770689ab25d526e8e9db09eafd808f9b1c7db7f32a4d71f817abcd",
+   "prefilter": true
+  },
+  {
+   "pmid": "6685452",
+   "year": "1983",
+   "sha256": "88b98699ce2612984010f35803398018858a701e9789b1b7eac7b738af2fea40",
+   "prefilter": true
+  },
+  {
+   "pmid": "6685766",
+   "year": "1983",
+   "sha256": "d510d77b6be85ec922b3583eaace08151aa8c7ab7604c1489d7c0617d9677015",
+   "prefilter": false
+  },
+  {
+   "pmid": "8162661",
+   "year": "1994",
+   "sha256": "10063c00df19f59ffe1a80d2ee7f6213b6ffbb20dc1f51aec123a1538e7aead0",
+   "prefilter": true
+  },
+  {
+   "pmid": "8331206",
+   "year": "1993",
+   "sha256": "9c2989e94f5bb416dfc6d9e56dd3150e4f9fbbbb4fe04d14d8fac3059c5810bf",
+   "prefilter": false
+  },
+  {
+   "pmid": "10890260",
+   "year": "1999",
+   "sha256": "dafcbe8e1bb51bb76ac72fdc50ac1633a2aae5b326a2b547b842b65b694a23bb",
+   "prefilter": true
+  },
+  {
+   "pmid": "12222544",
+   "year": "2002",
+   "sha256": "a2b493b79010019e1dbb7323a65dee13cf2d70e6a99e3060127e59c063f9d5a5",
+   "prefilter": false
+  },
+  {
+   "pmid": "14531724",
+   "year": "2003",
+   "sha256": "808578a3b12e4037c594ac5791a3ff2e1f70adbbbda47bc2f82954d662d4d9e3",
+   "prefilter": false
+  },
+  {
+   "pmid": "15013039",
+   "year": "2004",
+   "sha256": "aa21c0cdcaf2e0ca645fe5f7b63a6492df2542f5d44e4d0d84aa3a45d7036cbc",
+   "prefilter": false
+  },
+  {
+   "pmid": "17576827",
+   "year": "2007",
+   "sha256": "2a7da463960250ec42bafeec496fae468288496a2253eace33543019364b2457",
+   "prefilter": true
+  },
+  {
+   "pmid": "21142293",
+   "year": "2011",
+   "sha256": "3da0c1a15add37ed17fd0f955fb6e4a8a58f0cf6db67613c602386ddb7484558",
+   "prefilter": false
+  },
+  {
+   "pmid": "25769615",
+   "year": "2015",
+   "sha256": "fe53ec2cd60ab0c620b6a54585cd28c093b1390c5790c2a693de45d5d6e9834b",
+   "prefilter": true
+  },
+  {
+   "pmid": "27132188",
+   "year": "2016",
+   "sha256": "3b34232c6e5cfa31a00489a1db643ba5f8569c7e146c17e5cdda6f53025df5e9",
+   "prefilter": false
+  },
+  {
+   "pmid": "27530649",
+   "year": "2017",
+   "sha256": "2323c5e347e74904c6316772f05971b2956f340af01ce836c9eca56d76990675",
+   "prefilter": true
+  },
+  {
+   "pmid": "31828337",
+   "year": "2020",
+   "sha256": "b9bf845c0d623c90c9c71fdd04c63cd280fbc557c6ded4b10eeaf0fbecd2feee",
+   "prefilter": true
+  },
+  {
+   "pmid": "36394326",
+   "year": "2022",
+   "sha256": "15f0766704cc335a07a29327348c23e246c8651d0cd50fbd5ee0341e0cb394e2",
+   "prefilter": false
+  },
+  {
+   "pmid": "38252170",
+   "year": "2024",
+   "sha256": "6d249135ded32c02d179fd5ef34746087d7dc1cc9a76662b04036f5565a1b1ab",
+   "prefilter": true
+  },
+  {
+   "pmid": "40530972",
+   "year": "2025",
+   "sha256": "9a08160e9bb0449bf4c288d48db4dc5cc8950ecdecaa974d726c1a4d1e047883",
+   "prefilter": false
+  },
+  {
+   "pmid": "41973073",
+   "year": "2026",
+   "sha256": "c1f4b4b0472f8d07908bfa191cd52b5f54efcb8308908a1992a7eb4f6f873809",
+   "prefilter": false
+  }
+ ]
+}

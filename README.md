@@ -107,19 +107,43 @@ backend/                     run all commands from here (backend/ is the package
     edge_cases.py            deterministic flags: prodrug / obesity / protein-binding / illness
     pk_cache.py              bounded in-process LRU for live dossiers
     mechanism_score.py       mechanistic-reasoning scorer (6 dimensions)
+    uncertainty.py           seeded 90% parameter-uncertainty interval from the published curve CIs
   retrieval/                 retrieval subagent + tools (import retrieval → __init__.py)
     __init__.py              RETRIEVAL SUBAGENT (Sonnet) → cited dossier, cache hit, or abstain
     retrieval_tools.py       httpx: PubMed E-utilities + openFDA + web_fetch
   agents/agent.py            Opus ORCHESTRATOR: load_skill → retrieve → compute → edge_cases → grade
   api/main.py                FastAPI: /, /calculate, /calculate/stream, /chat, /pk, /health
   api/mcp_server.py          MCP server for the same retrieval tools (FastMCP, stdio)
-  tests/                     test_pk.py (no key) / test_agent.py (key + network)
+  tests/                     pytest suite; everything except test_agent.py runs in CI without a key
+  benchmark/                 pre-registered benchmark against FDA labels (harness only)
   skills/                    lean markdown skills loaded on demand
   eval_data/                 ANSWER KEYS ONLY — harness, never the product path
 ```
 
 **No hardcoded per-drug PK in the product path.** The agent retrieves adult PK live (PubMed + openFDA),
 serves a TTL-bounded cache hit, or **abstains** (grade D). `eval_data/` is harness-only.
+
+## Benchmark and uncertainty
+
+**How wide is the answer?** Each dose comes with a 90% *parameter-uncertainty interval*. It comes from a
+seeded Monte Carlo over the published 95% confidence intervals of the maturation curves (TM50 and Hill).
+It shows how much the dose moves when the curve parameters move, and which pathway drives that. It is
+not the range of doses that suit different children.
+
+**Does maturation help?** `backend/benchmark/` scores PaedScale against FDA-approved pediatric label
+doses for 21 IV drugs (46 age bands).
+- **Comparators:** weight-linear, BSA, allometry, and allometry with a class rule. The last of these
+  differs from PaedScale only by the maturation term.
+- **Pre-registration:** the protocol (`benchmark/PROTOCOL.md`) was committed before any scoring, and
+  every change since then is a dated amendment.
+- **Traceability:** every reference dose carries a verbatim label quote that a test checks.
+- **Reproducing it:** `python3 -m benchmark.run` regenerates every number and figure.
+- **Results (first scoring, 10,000 bootstrap replicates):** against allometry + class rule, PaedScale's
+  typical fold error was 0.77× in newborns and 0.78× under 2 years, both with 95% CIs below 1. Across all
+  ages it was 0.91× and the CI reached 1.0004, so that hypothesis was not supported. Weight-linear scaling
+  matched newborn labels at least as well. Full numbers: `backend/benchmark/output/results.json`.
+- **Manuscript:** `paper/manuscript.md`. Every number is filled in from the committed outputs. Build it
+  from the repo root with `python3 -m paper.build --pdf` (needs pandoc and Node Playwright).
 
 ## Run
 
@@ -130,6 +154,9 @@ cd backend                         # backend/ is the package root — run everyt
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python3 -m tests.test_pk           # deterministic core + scorers — NO key needed
+pip install -r requirements-dev.txt -r benchmark/requirements.txt
+python3 -m pytest -q tests --ignore=tests/test_agent.py   # the CI suite (no key)
+python3 -m benchmark.run           # regenerate the benchmark (benchmark/output/)
 cp .env.example .env               # ANTHROPIC_API_KEY (+ optional OPENFDA_API_KEY / NCBI_API_KEY)
 uvicorn api.main:app --reload --port 8000
 # open http://localhost:8000

@@ -1,0 +1,460 @@
+{
+ "drug": "zidovudine",
+ "retrieved": "2026-11-27",
+ "queries": {
+  "pediatric": "(zidovudine[tiab] OR azidothymidine[tiab]) AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "(zidovudine[tiab] OR azidothymidine[tiab]) AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "2120418",
+   "year": "1990",
+   "sha256": "93568e0682bd516d5866f725f9f7320637a9201db86993a32fde6a4aed75f94c",
+   "prefilter": true
+  },
+  {
+   "pmid": "2197818",
+   "year": "1990",
+   "sha256": "d0229b9be62bbe29763878f3b50eab33e6408c758a810d963fbd8abf74400b61",
+   "prefilter": true
+  },
+  {
+   "pmid": "2357867",
+   "year": "1990",
+   "sha256": "bfe6ac86acdc5895c451de69317964dc4e623babb45b508af76bc0127200a93d",
+   "prefilter": true
+  },
+  {
+   "pmid": "2643914",
+   "year": "1989",
+   "sha256": "96e7bae5a6b0ef31c1092a16fe1b0a73e72c454a7540ad0b5bb72a9035e7b801",
+   "prefilter": true
+  },
+  {
+   "pmid": "2715903",
+   "year": "1989",
+   "sha256": "2929f0504cb4d4582aaaf0330ff8e2a841d8d149f98299e48cb110eeb08087d2",
+   "prefilter": true
+  },
+  {
+   "pmid": "7669489",
+   "year": "1995",
+   "sha256": "1a817013a2297b14f45e22bc97e5ec8ab356875be26ce43723ddbf37c5b64bf1",
+   "prefilter": false
+  },
+  {
+   "pmid": "8098905",
+   "year": "1993",
+   "sha256": "25ef17e24b57ce2ee07ad83b58bad1e933b84622caf2081c2685d2a4a1194d06",
+   "prefilter": true
+  },
+  {
+   "pmid": "8419601",
+   "year": "1993",
+   "sha256": "1c17b3daea56ca55ff56489b076587edf0ae3509b3084fa2c528ba7804b50127",
+   "prefilter": true
+  },
+  {
+   "pmid": "9559787",
+   "year": "1998",
+   "sha256": "36b8e60f30902f7426da49e4f0ca85d000c63f1c3f8f6d2403ed774d4a4afaa7",
+   "prefilter": true
+  },
+  {
+   "pmid": "9572665",
+   "year": "1998",
+   "sha256": "84da45a73c011b855d11a28ef7c4d9a0593605fa4995666fc55ccb07be4c28d8",
+   "prefilter": false
+  },
+  {
+   "pmid": "9780252",
+   "year": "1998",
+   "sha256": "a215909e6d17807a41e7b197597178ebf88a8cd3650c18a64d9778c3925db5b5",
+   "prefilter": false
+  },
+  {
+   "pmid": "9989342",
+   "year": "1999",
+   "sha256": "06d9dad823994050abc35b7f0bab2825e9bd16558be860dec0c0527def7ec0f3",
+   "prefilter": true
+  },
+  {
+   "pmid": "10175219",
+   "year": "1997",
+   "sha256": "40ce72f245e4f0de0d3e0f8deec5c1ef69c93409d19ff53800abc0a15db0c3bb",
+   "prefilter": false
+  },
+  {
+   "pmid": "10430105",
+   "year": "1999",
+   "sha256": "3debcbd6212172d23893ced21c9ad0838da75f4db0b0b3db54f2e164b2461458",
+   "prefilter": false
+  },
+  {
+   "pmid": "10558940",
+   "year": "1999",
+   "sha256": "fd31dfad91461a8260fbaa1ac11d51cc320b883ad61ff324e448a94853934a14",
+   "prefilter": false
+  },
+  {
+   "pmid": "11131716",
+   "year": "2000",
+   "sha256": "76648e7d8f1a7ed91ee22666b1d3a244faa0763b2716bbef3e9707bcf05f6e74",
+   "prefilter": false
+  },
+  {
+   "pmid": "11452705",
+   "year": "2001",
+   "sha256": "f6b11287f0d0e7cc9ea31adadbe8bafdcd24f4642463c351e4a26665ad6bc9b9",
+   "prefilter": false
+  },
+  {
+   "pmid": "11742433",
+   "year": "2001",
+   "sha256": "6c1dae6c9697d2946f35bec1a9d84ae6d966fe7c0cf963d725845fac1d8bbd27",
+   "prefilter": true
+  },
+  {
+   "pmid": "12520254",
+   "year": "2003",
+   "sha256": "840096852a4f7b77e74aa4c1dd7a9175db84bc81ed30d9368db1067323fa464f",
+   "prefilter": false
+  },
+  {
+   "pmid": "12616665",
+   "year": "2003",
+   "sha256": "41073851311f5ae06799a76167845872eadbe9c1d00c97c008de31f0833a0447",
+   "prefilter": false
+  },
+  {
+   "pmid": "15098798",
+   "year": "2004",
+   "sha256": "5590b5ed896d89016cce00bf078f27e5c0b6070eb5794d5790ab6104ef389ff4",
+   "prefilter": false
+  },
+  {
+   "pmid": "15551216",
+   "year": "2004",
+   "sha256": "4cdc4bf73e01108c49af8731c51d97e296f3051725983877820a1e383a098a1f",
+   "prefilter": true
+  },
+  {
+   "pmid": "15568888",
+   "year": "2004",
+   "sha256": "ebf368a9830addbdf6a08197a039e8a8804177eacb93e1220e967c859ea4588b",
+   "prefilter": false
+  },
+  {
+   "pmid": "15905735",
+   "year": "2005",
+   "sha256": "c27cd3a8301d17e66e990c9d3a5f612751490fa20ff2dd968b971e14525e65cb",
+   "prefilter": true
+  },
+  {
+   "pmid": "16085374",
+   "year": "2005",
+   "sha256": "c5ec2d5b9ec3e5c0355ca873360a59e256c782b3f037c96e74df307571b198c7",
+   "prefilter": true
+  },
+  {
+   "pmid": "16148846",
+   "year": "2005",
+   "sha256": "4758377650db55eb0c24d13db865a55584144e55ae4a063726c81f1fec9c25c4",
+   "prefilter": false
+  },
+  {
+   "pmid": "18474496",
+   "year": "2008",
+   "sha256": "3fe1f88c4f273d9afb844757ae92ce96d726da756fbfccbba1ee662382cbdf22",
+   "prefilter": true
+  },
+  {
+   "pmid": "21920159",
+   "year": "2011",
+   "sha256": "b843b3d7c7ae76233629b9ea286a5095ff7a9d3db1360bd11ebff62080f1ca40",
+   "prefilter": true
+  },
+  {
+   "pmid": "23481669",
+   "year": "2013",
+   "sha256": "d193c4a839e4e3064a3ec468e04f9d670384adeaed0d30ccb020dbf656a3ca2b",
+   "prefilter": false
+  },
+  {
+   "pmid": "23877688",
+   "year": "2013",
+   "sha256": "20492bc6c441a56f408c640365104b4158ca9a9ed1126a0f32372565f2345440",
+   "prefilter": true
+  },
+  {
+   "pmid": "27562171",
+   "year": "2017",
+   "sha256": "430fbb2cb374dac00244ce10ae82b4ce2452f6aa6e0916c21bdb76101277d8c6",
+   "prefilter": false
+  },
+  {
+   "pmid": "29695616",
+   "year": "2018",
+   "sha256": "146fbf6258cde2c7cf8333633baad2c4a0067f91793525122c88d4e30e841c3f",
+   "prefilter": false
+  },
+  {
+   "pmid": "31693190",
+   "year": "2019",
+   "sha256": "561b622b6ddd4086bf1edb251ac00f192bed4ac4f674357cd7fa6704206eb543",
+   "prefilter": true
+  },
+  {
+   "pmid": "33464021",
+   "year": "2021",
+   "sha256": "8d170d2267d59e815309c22871299008cacb5f86645a064bb320a1d2886dfc96",
+   "prefilter": false
+  },
+  {
+   "pmid": "33839311",
+   "year": "2021",
+   "sha256": "a6f47446538bbd4f5de9ebaae68bfd031fc10deea3528481ff655c2494b68d39",
+   "prefilter": false
+  },
+  {
+   "pmid": "35506351",
+   "year": "2022",
+   "sha256": "7054256b1a7222658de6cd524964492c8aa9e12ca05f8902da8f55075388fffe",
+   "prefilter": false
+  },
+  {
+   "pmid": "39302766",
+   "year": "2024",
+   "sha256": "d9db3de46141337c8e84507aaa4f9f02cd109a6b088143fed2c5fb1a659e75ab",
+   "prefilter": false
+  },
+  {
+   "pmid": "42467063",
+   "year": "2026",
+   "sha256": "0aaf49f380b074f238b526f07f8ddeea14965215408f5947d302eddfe4981461",
+   "prefilter": true
+  }
+ ],
+ "query_translation": {
+  "pediatric": "(\"zidovudine\"[Title/Abstract] OR \"azidothymidine\"[Title/Abstract]) AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "(\"zidovudine\"[Title/Abstract] OR \"azidothymidine\"[Title/Abstract]) AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "1283384",
+   "year": "1992",
+   "sha256": "265184961e8cfeb1c6de73b882b271020b0548c8c82b693c41653f80d1c3dbb6",
+   "prefilter": true
+  },
+  {
+   "pmid": "1492005",
+   "year": "1992",
+   "sha256": "4d344fcae7967db3cced18271d63d9fafded1660d625c24d0c8d210e63eaa160",
+   "prefilter": false
+  },
+  {
+   "pmid": "2120418",
+   "year": "1990",
+   "sha256": "93568e0682bd516d5866f725f9f7320637a9201db86993a32fde6a4aed75f94c",
+   "prefilter": true
+  },
+  {
+   "pmid": "2197818",
+   "year": "1990",
+   "sha256": "d0229b9be62bbe29763878f3b50eab33e6408c758a810d963fbd8abf74400b61",
+   "prefilter": true
+  },
+  {
+   "pmid": "2357867",
+   "year": "1990",
+   "sha256": "bfe6ac86acdc5895c451de69317964dc4e623babb45b508af76bc0127200a93d",
+   "prefilter": true
+  },
+  {
+   "pmid": "2715903",
+   "year": "1989",
+   "sha256": "2929f0504cb4d4582aaaf0330ff8e2a841d8d149f98299e48cb110eeb08087d2",
+   "prefilter": true
+  },
+  {
+   "pmid": "2758728",
+   "year": "1989",
+   "sha256": "9ead64b4b81b453b914dacf2f10c6a8a1f55bb1e3403e52ef52f104e3205d86c",
+   "prefilter": true
+  },
+  {
+   "pmid": "7511360",
+   "year": "1994",
+   "sha256": "ed261b5c626041bacc63f57bdf2fa924aea3fde0249fbaf2ea3bf19925ae286c",
+   "prefilter": true
+  },
+  {
+   "pmid": "8086138",
+   "year": "1994",
+   "sha256": "d62e4bec063ed86de43c04ec5c36f36edaf41b91e06f32dcf5fce8e8c5e77122",
+   "prefilter": false
+  },
+  {
+   "pmid": "8093845",
+   "year": "1993",
+   "sha256": "14fb635e5a6e36232f4f2442bc6a92aafad0154c1ecf6d0e57ec88f840e42f5a",
+   "prefilter": false
+  },
+  {
+   "pmid": "8098905",
+   "year": "1993",
+   "sha256": "25ef17e24b57ce2ee07ad83b58bad1e933b84622caf2081c2685d2a4a1194d06",
+   "prefilter": true
+  },
+  {
+   "pmid": "8593010",
+   "year": "1995",
+   "sha256": "2963bd8fb93fd27f70e393bf18908b95f235006f9f9e63d938f55eb0024510cb",
+   "prefilter": true
+  },
+  {
+   "pmid": "9068926",
+   "year": "1997",
+   "sha256": "8327ef9fd68ebf9e9a59b54105276664c23ec0f18e5451668047ed9c43686397",
+   "prefilter": false
+  },
+  {
+   "pmid": "9495222",
+   "year": "1998",
+   "sha256": "823acb13f387a8d0a154a9ed0347efaae0d18b0aae05c0e0abeba0efb9195402",
+   "prefilter": false
+  },
+  {
+   "pmid": "9780252",
+   "year": "1998",
+   "sha256": "a215909e6d17807a41e7b197597178ebf88a8cd3650c18a64d9778c3925db5b5",
+   "prefilter": false
+  },
+  {
+   "pmid": "9989342",
+   "year": "1999",
+   "sha256": "06d9dad823994050abc35b7f0bab2825e9bd16558be860dec0c0527def7ec0f3",
+   "prefilter": true
+  },
+  {
+   "pmid": "10215701",
+   "year": "1999",
+   "sha256": "68d2a30c2900be5e89fa27b0068cb89a6699d0ba0554a18198520bd882095ec6",
+   "prefilter": false
+  },
+  {
+   "pmid": "11120972",
+   "year": "2001",
+   "sha256": "4456f359d84624c3970cd120e5e953f98a3fad29f1a729b9f133b9b2899358ed",
+   "prefilter": false
+  },
+  {
+   "pmid": "11310515",
+   "year": "2001",
+   "sha256": "c211eced4e7349210b63d15933dea7d2ffd408a73eedcebff191dc0a9a5bf26f",
+   "prefilter": true
+  },
+  {
+   "pmid": "11452705",
+   "year": "2001",
+   "sha256": "f6b11287f0d0e7cc9ea31adadbe8bafdcd24f4642463c351e4a26665ad6bc9b9",
+   "prefilter": false
+  },
+  {
+   "pmid": "15568888",
+   "year": "2004",
+   "sha256": "ebf368a9830addbdf6a08197a039e8a8804177eacb93e1220e967c859ea4588b",
+   "prefilter": false
+  },
+  {
+   "pmid": "15905735",
+   "year": "2005",
+   "sha256": "c27cd3a8301d17e66e990c9d3a5f612751490fa20ff2dd968b971e14525e65cb",
+   "prefilter": true
+  },
+  {
+   "pmid": "16085374",
+   "year": "2005",
+   "sha256": "c5ec2d5b9ec3e5c0355ca873360a59e256c782b3f037c96e74df307571b198c7",
+   "prefilter": true
+  },
+  {
+   "pmid": "16148846",
+   "year": "2005",
+   "sha256": "4758377650db55eb0c24d13db865a55584144e55ae4a063726c81f1fec9c25c4",
+   "prefilter": false
+  },
+  {
+   "pmid": "16724579",
+   "year": "2006",
+   "sha256": "91817f3355971148b57ccf9c69ce46770b74465cf0b816993486eca77c465a45",
+   "prefilter": false
+  },
+  {
+   "pmid": "16791115",
+   "year": "2006",
+   "sha256": "dd7e8c63a0cc9f88be2fe89b15dd40482a7dfecb2122a5c48444bd3c2d9e16a3",
+   "prefilter": false
+  },
+  {
+   "pmid": "17225002",
+   "year": "2007",
+   "sha256": "4ccc15eb1f242973142178e03815bc939fa5b5d1ca1003fe8469e14ee87aa6d2",
+   "prefilter": true
+  },
+  {
+   "pmid": "17413694",
+   "year": "2007",
+   "sha256": "aa882675d869d23e363a1ff19806f1353304d3bde5ec696bad648252a4aa130c",
+   "prefilter": false
+  },
+  {
+   "pmid": "17962426",
+   "year": "2007",
+   "sha256": "2e4b8ea3ad589d54f7660697b6f0fb29f66246860792abf4f7c53dc4c02f8cad",
+   "prefilter": true
+  },
+  {
+   "pmid": "18319359",
+   "year": "2008",
+   "sha256": "daf9a10e30ca41ccd8dc5cdd1c1f00ec419f5ad01e2e1aa785a9a56015f9ab02",
+   "prefilter": false
+  },
+  {
+   "pmid": "18333866",
+   "year": "2008",
+   "sha256": "eaa7452f46a562df395c16ff74f880d50cefa35d44c5fb4c75cf45b8b684f33f",
+   "prefilter": true
+  },
+  {
+   "pmid": "19118380",
+   "year": "2009",
+   "sha256": "641d53f7f33c40911ba6c99d309bf3670f2a0cf88bb811664b93c8215b56a4d0",
+   "prefilter": false
+  },
+  {
+   "pmid": "23481669",
+   "year": "2013",
+   "sha256": "d193c4a839e4e3064a3ec468e04f9d670384adeaed0d30ccb020dbf656a3ca2b",
+   "prefilter": false
+  },
+  {
+   "pmid": "27562171",
+   "year": "2017",
+   "sha256": "430fbb2cb374dac00244ce10ae82b4ce2452f6aa6e0916c21bdb76101277d8c6",
+   "prefilter": false
+  },
+  {
+   "pmid": "39302766",
+   "year": "2024",
+   "sha256": "d9db3de46141337c8e84507aaa4f9f02cd109a6b088143fed2c5fb1a659e75ab",
+   "prefilter": false
+  },
+  {
+   "pmid": "42467063",
+   "year": "2026",
+   "sha256": "0aaf49f380b074f238b526f07f8ddeea14965215408f5947d302eddfe4981461",
+   "prefilter": true
+  }
+ ]
+}

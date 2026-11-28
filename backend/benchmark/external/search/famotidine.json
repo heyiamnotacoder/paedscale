@@ -1,0 +1,184 @@
+{
+ "drug": "famotidine",
+ "retrieved": "2026-11-27",
+ "queries": {
+  "pediatric": "famotidine[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "famotidine[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "2311331",
+   "year": "1990",
+   "sha256": "26b56d841fee2b99fdd9e57b41ef7e0b2aea68e4ed06a6f7ca45da08c52bf2a5",
+   "prefilter": true
+  },
+  {
+   "pmid": "8932543",
+   "year": "1996",
+   "sha256": "9f626365ceaf81af216fa879649e125315ff0728e4dad41ab208e1e4d86bf1d5",
+   "prefilter": true
+  },
+  {
+   "pmid": "11301560",
+   "year": "1998",
+   "sha256": "26ca2ddb1cabcc4ceea86ced931093005f969b0cc1f5cd36202e406b55b6b32f",
+   "prefilter": true
+  },
+  {
+   "pmid": "12520622",
+   "year": "2003",
+   "sha256": "3d3c8337d084bfeed92ad1a0fde963ee62dc506146ce222a933fb3e2ff9707c2",
+   "prefilter": true
+  },
+  {
+   "pmid": "15828852",
+   "year": "2005",
+   "sha256": "d40c7ad89f1b45e4ea89096ff01e68059a45b346970d5fb54c23ad42d6001161",
+   "prefilter": false
+  },
+  {
+   "pmid": "24258773",
+   "year": "2014",
+   "sha256": "cb12c971a6f1f6caa76b66ed21d80e5a5f5ee1304c0db10a8634438e2da8defe",
+   "prefilter": false
+  }
+ ],
+ "query_translation": {
+  "pediatric": "\"famotidine\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "\"famotidine\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "1781278",
+   "year": "1991",
+   "sha256": "dc24fbb25dc6718e61cb5d5a2f3d5f787c69fd662703de74e3fb519fb65a6f99",
+   "prefilter": true
+  },
+  {
+   "pmid": "1986553",
+   "year": "1991",
+   "sha256": "d180addc093346398a881189d1a00ad23c32474fa2ea92e0b75ea582a8a55909",
+   "prefilter": true
+  },
+  {
+   "pmid": "2104076",
+   "year": "1990",
+   "sha256": "bb2e0967387fea424e7a7073491430526e5544e252f73d20d231b8cc668e7637",
+   "prefilter": true
+  },
+  {
+   "pmid": "2210613",
+   "year": "1990",
+   "sha256": "0b437b4f4ff1217a5a568c8d1022dc22b9d1f5b2eee459e46ed4cb9fa7af584f",
+   "prefilter": false
+  },
+  {
+   "pmid": "2303581",
+   "year": "1990",
+   "sha256": "d4448cda3a74322db17f7ef8c1220d12daa2dcf5924d205b1ffe71b805345c8f",
+   "prefilter": true
+  },
+  {
+   "pmid": "2311331",
+   "year": "1990",
+   "sha256": "26b56d841fee2b99fdd9e57b41ef7e0b2aea68e4ed06a6f7ca45da08c52bf2a5",
+   "prefilter": true
+  },
+  {
+   "pmid": "2568929",
+   "year": "1989",
+   "sha256": "db7eabda12632c6b8ef05e5c63213b654fcfbba3b51bb9e5817af7a87ee0ac41",
+   "prefilter": true
+  },
+  {
+   "pmid": "2866097",
+   "year": "1985",
+   "sha256": "93a15408174ef3a3529c6bc7a63096d93184e099f74831d20df9e586f4cbf719",
+   "prefilter": true
+  },
+  {
+   "pmid": "2888738",
+   "year": "1987",
+   "sha256": "ad87830f779fbf8268990e14bfd86f2de51670034dbcbcec3a5aa1810c0b4bc3",
+   "prefilter": true
+  },
+  {
+   "pmid": "2890149",
+   "year": "1986",
+   "sha256": "fe0002ce8aa7b06e2e0522b5aff3aae27f135bb697b76b2a8352f5c35571173d",
+   "prefilter": false
+  },
+  {
+   "pmid": "2892251",
+   "year": "1987",
+   "sha256": "a65018b59a56d30de6a177b53cd35b55e7335c646a5e2ca87bcb2b6b8ddd5bef",
+   "prefilter": true
+  },
+  {
+   "pmid": "2892544",
+   "year": "1987",
+   "sha256": "92d44b40190435f20c16629c4f6260a6a70e7764dc640bfad1055d232d739d5a",
+   "prefilter": true
+  },
+  {
+   "pmid": "2893637",
+   "year": "1987",
+   "sha256": "70c1e6818433390eecbdfa5a2a647bb719c0d1475ccb3106b22be4541ec35d36",
+   "prefilter": true
+  },
+  {
+   "pmid": "8462230",
+   "year": "1993",
+   "sha256": "57427bd2a55ff61c687ba3039d5f93c2abb6846faa01f4d49598efe525644ec3",
+   "prefilter": false
+  },
+  {
+   "pmid": "8513846",
+   "year": "1993",
+   "sha256": "a5bde1fcedafa70179bcd4350f049db48f4b73f8b771529acef783347a055528",
+   "prefilter": true
+  },
+  {
+   "pmid": "8932543",
+   "year": "1996",
+   "sha256": "9f626365ceaf81af216fa879649e125315ff0728e4dad41ab208e1e4d86bf1d5",
+   "prefilter": true
+  },
+  {
+   "pmid": "11301560",
+   "year": "1998",
+   "sha256": "26ca2ddb1cabcc4ceea86ced931093005f969b0cc1f5cd36202e406b55b6b32f",
+   "prefilter": true
+  },
+  {
+   "pmid": "15828852",
+   "year": "2005",
+   "sha256": "d40c7ad89f1b45e4ea89096ff01e68059a45b346970d5fb54c23ad42d6001161",
+   "prefilter": false
+  },
+  {
+   "pmid": "25562845",
+   "year": "2015",
+   "sha256": "9d594305fd489285adb3f2fba9596183727a5376dcda142e5ee5dbc860842a4b",
+   "prefilter": false
+  },
+  {
+   "pmid": "26597253",
+   "year": "2016",
+   "sha256": "5006fb0f4f8732ca911037a44f864d99d03d92af18df25b685cd1599d87b3444",
+   "prefilter": false
+  },
+  {
+   "pmid": "31176593",
+   "year": "2019",
+   "sha256": "e1dedcf1fb97e0a7792cebcc1c0d47ffe514ece04e6196f4649044191084f7b9",
+   "prefilter": false
+  },
+  {
+   "pmid": "41222899",
+   "year": "2026",
+   "sha256": "57b562decc3054f433e8039e371d4f818bc211991789a6f76144dff150c5bc65",
+   "prefilter": false
+  }
+ ]
+}

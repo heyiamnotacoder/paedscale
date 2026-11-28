@@ -1,0 +1,76 @@
+{
+ "drug": "cefoxitin",
+ "retrieved": "2026-11-27",
+ "queries": {
+  "pediatric": "cefoxitin[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "cefoxitin[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "6653646",
+   "year": "1983",
+   "sha256": "68320e8ad945a475d070e42564c544dca8a91f8be0065e8b926c1ff20694f8ab",
+   "prefilter": false
+  },
+  {
+   "pmid": "7396456",
+   "year": "1980",
+   "sha256": "83e3bd9cdd4e021996c018258c1c227b2353b65a1f324500a81a2748c0a18a2d",
+   "prefilter": true
+  },
+  {
+   "pmid": "20552179",
+   "year": "2010",
+   "sha256": "a40380ad7538a69ef495d82d20976785bbcbdf1c682279aeb98a8812a582f332",
+   "prefilter": false
+  },
+  {
+   "pmid": "32221166",
+   "year": "2020",
+   "sha256": "e699eaba3be46ece6d010b0cc576e40ade43ec4a560c5fc6039c4e3e680e120c",
+   "prefilter": false
+  }
+ ],
+ "query_translation": {
+  "pediatric": "\"cefoxitin\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "\"cefoxitin\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "2729930",
+   "year": "1989",
+   "sha256": "70f415de4d34a83e5470c51c8a99cf1a08536d403a444a639f1bfb1dcab13a37",
+   "prefilter": true
+  },
+  {
+   "pmid": "2840864",
+   "year": "1988",
+   "sha256": "601b3fb10af8db08718ecf2fc5f1a49adb752b79d00e057a800f6244e1c7890f",
+   "prefilter": false
+  },
+  {
+   "pmid": "6653646",
+   "year": "1983",
+   "sha256": "68320e8ad945a475d070e42564c544dca8a91f8be0065e8b926c1ff20694f8ab",
+   "prefilter": false
+  },
+  {
+   "pmid": "7259928",
+   "year": "1981",
+   "sha256": "059b064cc154225ef6fa12296e9cf729c965d0def33f940914626c9466931a41",
+   "prefilter": false
+  },
+  {
+   "pmid": "7325641",
+   "year": "1981",
+   "sha256": "96d49b6e96fbcc29bd095bd5a85c103ee7c9a6107521122da775c7f0c811e946",
+   "prefilter": true
+  },
+  {
+   "pmid": "7396472",
+   "year": "1980",
+   "sha256": "05b2590fbac66b9a12f96d3fe770b8182ee19fa9bb9f13ab8138e3e24470b951",
+   "prefilter": false
+  }
+ ]
+}

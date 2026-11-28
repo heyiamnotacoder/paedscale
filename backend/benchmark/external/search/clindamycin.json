@@ -1,0 +1,154 @@
+{
+ "drug": "clindamycin",
+ "retrieved": "2026-11-27",
+ "queries": {
+  "pediatric": "clindamycin[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "clindamycin[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "2208898",
+   "year": "1990",
+   "sha256": "ef5c953969e54b2f39ab2268afffe70204bc20548386d1b982db37f54cdd306f",
+   "prefilter": false
+  },
+  {
+   "pmid": "3737273",
+   "year": "1986",
+   "sha256": "5d4b360a0ee69615e3e5c1cf4e99a80323b50dc40105a24aea22454457c11682",
+   "prefilter": false
+  },
+  {
+   "pmid": "6470871",
+   "year": "1984",
+   "sha256": "45c60f00f8b0e74d2c10f5113f243e03bb008e46949ad48875f32a123183b76e",
+   "prefilter": true
+  },
+  {
+   "pmid": "15909266",
+   "year": "2005",
+   "sha256": "721f36dff14807264a5b2c373edd9235f58cc736b42599c19c7765e47f758836",
+   "prefilter": false
+  },
+  {
+   "pmid": "20176904",
+   "year": "2010",
+   "sha256": "75bcb6ba52b6362cbc81df51f14bb57a1101d9ede61201bc8cab75496febc868",
+   "prefilter": true
+  },
+  {
+   "pmid": "24949994",
+   "year": "2014",
+   "sha256": "d5970fc891b368a5604a795066d799ce7a54bf5a8f9e4f905bef4b6933214aad",
+   "prefilter": true
+  },
+  {
+   "pmid": "25092696",
+   "year": "2014",
+   "sha256": "4bc70f00df9717d85270248457f8dbf8a3035b34310beec7dd5f3c4a47e2e455",
+   "prefilter": true
+  },
+  {
+   "pmid": "26926644",
+   "year": "2016",
+   "sha256": "2ddbfbc9f839cdc26af7603affe509f0fd5afb0e2f97ed9170d9cf43694a63ce",
+   "prefilter": false
+  },
+  {
+   "pmid": "28137820",
+   "year": "2017",
+   "sha256": "4361426208cb0ab91f5ab1daf215dbd6eab1d44ee40c73ca68c9c186bd341873",
+   "prefilter": true
+  },
+  {
+   "pmid": "30819024",
+   "year": "2019",
+   "sha256": "0696f1d86c3967d59bba1d39ec11740873cfffa49f16c862cbe395ad18532d33",
+   "prefilter": false
+  },
+  {
+   "pmid": "31725114",
+   "year": "2020",
+   "sha256": "48115f54c6f22dae6738665adca19b67ec5cbf361416d6fe396f579a57d08534",
+   "prefilter": false
+  },
+  {
+   "pmid": "34617262",
+   "year": "2022",
+   "sha256": "8a5c188b5df37d42d15db12e077034f6c15caaa29711df425276e3b00eb2ffdb",
+   "prefilter": false
+  },
+  {
+   "pmid": "41857641",
+   "year": "2026",
+   "sha256": "b5b77b84bc8e1dc9aed63d5fa0e03af2854e3d06c8153cc79a898e7841ef5879",
+   "prefilter": false
+  }
+ ],
+ "query_translation": {
+  "pediatric": "\"clindamycin\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "\"clindamycin\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "3245695",
+   "year": "1988",
+   "sha256": "7887cfab683dcffe5e21afe318dd43ff4dcd649e9493df80d4ebf22086c7b4c4",
+   "prefilter": true
+  },
+  {
+   "pmid": "3569028",
+   "year": "1987",
+   "sha256": "13bbf1943d339018386a4931cc9cf629f28069eaf6e1e4fbfd843febf4afb2fc",
+   "prefilter": false
+  },
+  {
+   "pmid": "3665368",
+   "year": "1987",
+   "sha256": "fba1a487819026602a56cb7cabfed7c0aeee88b8ed62eb3e6ddc78516941baa1",
+   "prefilter": false
+  },
+  {
+   "pmid": "3737273",
+   "year": "1986",
+   "sha256": "5d4b360a0ee69615e3e5c1cf4e99a80323b50dc40105a24aea22454457c11682",
+   "prefilter": false
+  },
+  {
+   "pmid": "8517703",
+   "year": "1993",
+   "sha256": "1dfd802d9990be283448ce3329718f9be2f8fdb204e42a8602f16e9544288519",
+   "prefilter": true
+  },
+  {
+   "pmid": "15125216",
+   "year": "2004",
+   "sha256": "e90d708a4a500e1fdc8ea94763c20787f17441cf74ad95091926f6e0afc56a8b",
+   "prefilter": false
+  },
+  {
+   "pmid": "24949994",
+   "year": "2014",
+   "sha256": "d5970fc891b368a5604a795066d799ce7a54bf5a8f9e4f905bef4b6933214aad",
+   "prefilter": true
+  },
+  {
+   "pmid": "25092696",
+   "year": "2014",
+   "sha256": "4bc70f00df9717d85270248457f8dbf8a3035b34310beec7dd5f3c4a47e2e455",
+   "prefilter": true
+  },
+  {
+   "pmid": "26926644",
+   "year": "2016",
+   "sha256": "2ddbfbc9f839cdc26af7603affe509f0fd5afb0e2f97ed9170d9cf43694a63ce",
+   "prefilter": false
+  },
+  {
+   "pmid": "41857641",
+   "year": "2026",
+   "sha256": "b5b77b84bc8e1dc9aed63d5fa0e03af2854e3d06c8153cc79a898e7841ef5879",
+   "prefilter": false
+  }
+ ]
+}

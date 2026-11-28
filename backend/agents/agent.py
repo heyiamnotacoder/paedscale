@@ -11,6 +11,8 @@ Detail lives in lean skills (backend/skills/) via load_skill — keep SYSTEM sho
 from __future__ import annotations
 
 import json
+import math
+from typing import Optional
 import os
 
 from anthropic import Anthropic
@@ -18,6 +20,7 @@ from anthropic import Anthropic
 import retrieval
 from engine.formulation import attach_administration
 from engine.pk_cache import CACHE as PK_CACHE
+from engine.uncertainty import dose_uncertainty_interval
 from engine.pk_engine import (
     compute_pediatric_dose,
     estimate_gfr_bedside_schwartz,
@@ -28,6 +31,7 @@ from skills import load_skill, list_skills
 
 ORCHESTRATOR_MODEL = os.environ.get("ORCHESTRATOR_MODEL", "claude-opus-4-8")
 MAX_TOKENS = int(os.environ.get("PAEDSCALE_MAX_TOKENS", "4000"))
+AGENT_UNCERTAINTY_DRAWS = 1000  # per compute call (~10 ms); the benchmark/test default is 2000
 
 SYSTEM = """You are PaedScale: pediatric STARTING dose from adult PK via allometry × maturation.
 Decision support for a clinician — NOT a prescriber.
@@ -370,6 +374,74 @@ def _run_adult_hi_case(case: dict, on_step=None) -> dict:
     }
 
 
+def _is_finite_number(x) -> bool:
+    return isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x)
+
+
+def _bound(x) -> Optional[float]:
+    """A cited mg/kg/day bound as a finite float, or None. Numeric strings are read."""
+    if isinstance(x, str):
+        try:
+            x = float(x)
+        except ValueError:
+            return None
+    return float(x) if _is_finite_number(x) else None
+
+
+def apply_final_dose_safety_flags(rec: dict, dossier: Optional[dict],
+                                  weight_kg: Optional[float] = None) -> dict:
+    """Flag a final dose past a cited toxic/effective bound (CLAUDE.md safety-bounds rule).
+
+    The engine checks its own dose; the final dose may be guideline-anchored, so it is
+    checked again here, independently of the optional parameter-uncertainty interval.
+    Both stated doses are checked: mg/kg/day directly, and mg/day divided by the patient's
+    weight (when the weight is a positive finite number). Each bound flags at most once,
+    on the dose furthest past it, and a derived value says how it was derived.
+    """
+    doses = []   # (mg/kg/day, how it reads in the flag)
+    dpk = rec.get("final_dose_mg_per_kg_per_day")
+    if _is_finite_number(dpk):
+        doses.append((dpk, f"{dpk:g} mg/kg/day"))
+    per_day = rec.get("final_dose_mg_per_day")
+    if _is_finite_number(per_day) and _is_finite_number(weight_kg) and weight_kg > 0:
+        derived = per_day / weight_kg
+        doses.append((derived, f"{per_day:g} mg/day for {weight_kg:g} kg (= {derived:.3g} mg/kg/day)"))
+    dossier = dossier or {}
+    toxic = _bound(dossier.get("toxic_dose_mg_per_kg_per_day"))
+    effective = _bound(dossier.get("effective_dose_mg_per_kg_per_day"))
+    flags = list(rec.get("flags") or [])
+    stated = rec.get("final_dose_mg_per_kg_per_day") is not None or per_day is not None
+    if not doses and stated and (toxic is not None or effective is not None):
+        flags.append("NOT CHECKED AGAINST SAFETY BOUNDS: the final dose could not be expressed "
+                     "in mg/kg/day, so it was not compared with the cited thresholds.")
+    if doses and toxic is not None:
+        value, text = max(doses, key=lambda d: d[0])
+        if value > toxic:
+            flags.append(f"ABOVE TOXIC THRESHOLD: recommended {text} exceeds the cited "
+                         f"toxic threshold {toxic:g} mg/kg/day.")
+    if doses and effective is not None:
+        value, text = min(doses, key=lambda d: d[0])
+        if value < effective:
+            flags.append(f"BELOW EFFECTIVE THRESHOLD: recommended {text} is below the cited "
+                         f"effective threshold {effective:g} mg/kg/day.")
+    rec["flags"] = flags
+    return rec
+
+
+def attach_parameter_uncertainty(rec: dict, state: dict) -> dict:
+    """Attach the engine's 90% parameter-uncertainty interval to a prescribable recommendation.
+
+    Model-independent: the interval comes from the last successful engine call. It describes
+    the PK-extrapolated engine dose (maturation-parameter uncertainty only), not a
+    guideline-anchored final dose, and it is dropped whenever the recommendation withholds a
+    dose (blocked, or no final mg/kg/day such as titration or Michaelis–Menten drugs).
+    """
+    pu = state.get("last_parameter_uncertainty")
+    withheld = rec.get("blocked") or rec.get("final_dose_mg_per_kg_per_day") is None
+    rec["parameter_uncertainty"] = None if (withheld or not pu) else pu
+    return rec
+
+
 def _build_compute(case: dict, state: dict):
     """Return a compute_pediatric_dose tool handler closed over case + retrieval state.
 
@@ -380,6 +452,7 @@ def _build_compute(case: dict, state: dict):
     def _compute(args: dict) -> dict:
         # Live-or-abstain: refuse pediatric compute without core PK. Adult HI is
         # label lookup and does not need CL/Vd.
+        state["last_parameter_uncertainty"] = None  # only the latest successful engine call counts
         try:
             from engine.child_pugh import resolve_calculator_mode as _mode
             try:
@@ -494,6 +567,14 @@ def _build_compute(case: dict, state: dict):
             if out.get("blocked"):
                 state["blocked_reason"] = out.get("block_reason") or "not prescribable"
             else:
+                # Seeded Monte Carlo over the published TM50/Hill CIs (engine/uncertainty.py).
+                # Optional context: a failure here must never discard a valid engine dose.
+                try:
+                    pu = dose_uncertainty_interval(n_draws=AGENT_UNCERTAINTY_DRAWS, **merged)
+                except Exception:
+                    pu = None
+                out["parameter_uncertainty"] = pu
+                state["last_parameter_uncertainty"] = pu
                 # Successful non-blocked compute clears a prior engine latch only if
                 # this run is prescribable (PK-not-ready never latched blocked_reason).
                 state["blocked_reason"] = None
@@ -817,6 +898,8 @@ def run_case(case: dict, on_step=None, max_turns: int = 12) -> dict:
                             or "SAFETY STOP — no cited applicable hepatic-impairment adjustment; abstain.",
                         )
                     merge_pediatric_hi_into_recommendation(rec, ped_hi)
+                apply_final_dose_safety_flags(rec, state.get("last_dossier"), case.get("weight_kg"))
+                attach_parameter_uncertainty(rec, state)
                 attach_administration(rec, case)
                 return {
                     "recommendation": rec,

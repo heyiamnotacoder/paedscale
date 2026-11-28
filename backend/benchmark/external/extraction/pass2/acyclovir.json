@@ -1,0 +1,163 @@
+{
+ "drug": "acyclovir",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "32988829",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "19414579",
+   "decision": "exclude",
+   "reason": "CL/F: model pools IV acyclovir and oral valacyclovir without an IV-only value; no covariate point, ages to 20 y",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "40233332",
+   "decision": "exclude",
+   "reason": "no age: infants with neonatal HSV, no postnatal age or PMA stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "12516939",
+   "decision": "exclude",
+   "reason": "CL/F: oral valaciclovir only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38775304",
+   "decision": "exclude",
+   "reason": "no age: groups defined only by one-sided PMA bounds (<34, >=34 wk; Amendment 14 §6), no postnatal age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "16368917",
+   "decision": "exclude",
+   "reason": "P2: single-patient report, ganciclovir after oral valganciclovir, renal impairment",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "36702934",
+   "decision": "exclude",
+   "reason": "P4: CKRT (single patient, liver failure)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "24346595",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "model typical value at PMA 31.3 wk",
+     "preterm": true,
+     "cl": {
+      "value": 0.305,
+      "unit": "L/h/kg",
+      "summary": "typical",
+      "quote": "clearance (L/h/kg) = 0.305 × [postmenstrual age (PMA)/31.3 weeks]"
+     },
+     "pna_days": null,
+     "ga_weeks": null,
+     "pma_weeks": 31.3,
+     "age_quote": "clearance (L/h/kg) = 0.305 × [postmenstrual age (PMA)/31.3 weeks]",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "6355048",
+   "decision": "exclude",
+   "reason": "P2: overview of clinical development data; pediatric clearance not given numerically (adult per 1.73 m2 only)",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "8787884",
+   "decision": "exclude",
+   "reason": "adult criteria: geriatric volunteers 65-83 y, oral valaciclovir, no clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40233332",
+   "decision": "exclude",
+   "reason": "adult criteria: infants with neonatal HSV",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "12516939",
+   "decision": "exclude",
+   "reason": "adult criteria: children, oral valaciclovir CL/F",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7103460",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (pre-probenecid total clearance only per 1.73 m2); probenecid study",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10984808",
+   "decision": "exclude",
+   "reason": "adult criteria: clearance reported is cyclosporine, not acyclovir",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7102703",
+   "decision": "exclude",
+   "reason": "adult criteria: chronic renal failure on hemodialysis",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19897764",
+   "decision": "exclude",
+   "reason": "CL/F: oral valacyclovir only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38775304",
+   "decision": "exclude",
+   "reason": "adult criteria: term and preterm neonates",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8996645",
+   "decision": "exclude",
+   "reason": "adult criteria: clearance reported is oral theophylline, acyclovir given orally",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6355048",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (per 1.73 m2 only), no stated age; overview of development data",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

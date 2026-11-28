@@ -1,0 +1,775 @@
+{
+ "drug": "piperacillin_tazobactam",
+ "pass": "final",
+ "pediatric": [
+  {
+   "pmid": "34796702",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age (age range 1-17 y, lower bound below 2 y)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "32916003",
+   "decision": "exclude",
+   "reason": "P4: MARS/CRRT, liver failure (case report)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "41313259",
+   "decision": "exclude",
+   "reason": "P2: no numeric total clearance reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "41288085",
+   "decision": "exclude",
+   "reason": "P2: typical value at a weight (1.76 kg) without a stated age at the covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35275224",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "decision": "include",
+   "flags": [
+    "allometric_standardized",
+    "critically_ill",
+    "route_unstated",
+    "with_tazobactam"
+   ],
+   "observations": [
+    {
+     "age_quote": "median age: 3.1 years",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "clearance: 15.8 \u00b1 7.2 vs. 12.6 \u00b1 6.3 L/h/70 kg",
+      "summary": "mean",
+      "unit": "L/h/70kg",
+      "value": 12.6
+     },
+     "flags": [],
+     "ga_weeks": null,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "children, post-operative phase, median age 3.1 y",
+     "pma_range_weeks": null,
+     "pma_weeks": null,
+     "pna_days": 1132.275,
+     "pna_range_days": null,
+     "preterm": false,
+     "weight_kg": null,
+     "weight_quote": null
+    }
+   ],
+   "pmid": "38161045",
+   "reason": ""
+  },
+  {
+   "pmid": "32737909",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "1630856",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "Group A, GA 29-31 wk, PNA day 3-5",
+     "preterm": true,
+     "cl": {
+      "value": 1.68,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "for clearance (1.68 +/- 0.6 and 1.8 +/- 0.4 vs. 2.46 +/- 0.36 ml/min/kg)"
+     },
+     "pna_days": [
+      3,
+      5
+     ],
+     "pna_range_days": null,
+     "ga_weeks": [
+      29,
+      31
+     ],
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "(A = 29 to 31 weeks, B = 33 to 35 weeks, C = 38 to 42 weeks) and birth weights of 860 to 3900 g during 35 courses. Serum concentrations of piperacillin were determined by high pressure liquid chromatography. A one compartment open model characterized the disposition of piperacillin. Twenty courses were given between Day 3 and Day 5 of life",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "Group B, GA 33-35 wk, PNA day 3-5",
+     "preterm": true,
+     "cl": {
+      "value": 1.8,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "for clearance (1.68 +/- 0.6 and 1.8 +/- 0.4 vs. 2.46 +/- 0.36 ml/min/kg)"
+     },
+     "pna_days": [
+      3,
+      5
+     ],
+     "pna_range_days": null,
+     "ga_weeks": [
+      33,
+      35
+     ],
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "(A = 29 to 31 weeks, B = 33 to 35 weeks, C = 38 to 42 weeks) and birth weights of 860 to 3900 g during 35 courses. Serum concentrations of piperacillin were determined by high pressure liquid chromatography. A one compartment open model characterized the disposition of piperacillin. Twenty courses were given between Day 3 and Day 5 of life",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "Group C, GA 38-42 wk, PNA day 3-5",
+     "preterm": false,
+     "cl": {
+      "value": 2.46,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "for clearance (1.68 +/- 0.6 and 1.8 +/- 0.4 vs. 2.46 +/- 0.36 ml/min/kg)"
+     },
+     "pna_days": [
+      3,
+      5
+     ],
+     "pna_range_days": null,
+     "ga_weeks": [
+      38,
+      42
+     ],
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "(A = 29 to 31 weeks, B = 33 to 35 weeks, C = 38 to 42 weeks) and birth weights of 860 to 3900 g during 35 courses. Serum concentrations of piperacillin were determined by high pressure liquid chromatography. A one compartment open model characterized the disposition of piperacillin. Twenty courses were given between Day 3 and Day 5 of life",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "28387840",
+   "decision": "exclude",
+   "reason": "P2: typical value at a weight (14 kg) without a stated age at the covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "22569355",
+   "decision": "exclude",
+   "reason": "P2: covariate equation only, no typical value at a stated weight and age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "42560139",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "36342152",
+   "decision": "exclude",
+   "reason": "P4: CRRT",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "decision": "include",
+   "flags": [
+    "critically_ill",
+    "route_unstated",
+    "with_tazobactam"
+   ],
+   "observations": [
+    {
+     "age_quote": "For neonates and young infants less than 2 months of age",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "the median central clearance was 0.133 and 0.149 L/h/kg for piperacillin and tazobactam",
+      "summary": "median",
+      "unit": "L/h/kg",
+      "value": 0.133
+     },
+     "flags": [],
+     "ga_weeks": null,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "NICU neonates and infants < 2 months",
+     "pma_range_weeks": null,
+     "pma_weeks": null,
+     "pna_days": [
+      0,
+      60.875
+     ],
+     "pna_range_days": null,
+     "preterm": false,
+     "weight_kg": null,
+     "weight_quote": null
+    }
+   ],
+   "pmid": "23354809",
+   "reason": ""
+  },
+  {
+   "pmid": "26552978",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill",
+    "with_tazobactam"
+   ],
+   "observations": [
+    {
+     "label": "critically ill children, mean age 5 y",
+     "preterm": false,
+     "cl": {
+      "value": 0.22,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "clearance, 0.22 \u00b1 0.07 and 0.19 \u00b1 0.07 liter/h/kg"
+     },
+     "pna_days": 1826.25,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "The mean \u00b1 standard deviation (SD) age, weight, and estimated glomerular filtration rate were 5 \u00b1 3 years",
+     "weight_kg": 17,
+     "weight_quote": "17 \u00b1 6.2 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "39319995",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age (median 8 months, no GA or PMA)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "25328131",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "with_tazobactam"
+   ],
+   "observations": [
+    {
+     "label": "oncology children 3-10 y with fever and neutropenia",
+     "preterm": false,
+     "cl": {
+      "value": 0.204,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "0.204 \u00b1 0.076 L/h/kg"
+     },
+     "pna_days": [
+      1095.75,
+      3652.5
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "21 pediatric (age 3-10 years) patients",
+     "weight_kg": 28.5,
+     "weight_quote": "Mean \u00b1 SD body weight was 28.5 \u00b1 9.7 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "23907263",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill",
+    "with_tazobactam"
+   ],
+   "observations": [
+    {
+     "label": "PICU children 9 months to 6 years",
+     "preterm": false,
+     "cl": {
+      "value": 0.299,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "0.299 (0.128) L/hr/kg"
+     },
+     "pna_days": [
+      273.9375,
+      2191.5
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "13 children ages 9 months to 6 years",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "39912647",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "31306179",
+   "decision": "exclude",
+   "reason": "P1: ex vivo CRRT circuit, no patients",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "29862466",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": [
+    {
+     "label": "critically ill children, median 2.3 y (0.1-18)",
+     "preterm": false,
+     "cl": {
+      "value": 3,
+      "unit": "L/h",
+      "summary": "median",
+      "quote": "Median (range) values for piperacillin clearance (CL) and volume of distribution were 3 L.h-1"
+     },
+     "pna_days": 840.075,
+     "pna_range_days": [
+      36.525,
+      6574.5
+     ],
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "median (range) postnatal age of 2.3 years (0.1-18)",
+     "weight_kg": 11.9,
+     "weight_quote": "body weight (BW) of 11.9 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "41170728",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "6222169",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "infants 1-6 months",
+     "preterm": false,
+     "cl": {
+      "value": 71.7,
+      "unit": "mL/min/m2",
+      "summary": "mean",
+      "quote": "the total body clearance of the drug in the younger age group (71.7 ml/min/m2) was significantly lower than in the older children (130.8 ml/min/m2)"
+     },
+     "pna_days": [
+      30.4375,
+      182.625
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "The half-life of piperacillin in children 1 to 6 months of age",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "older children, >6 months to 11 years",
+     "preterm": false,
+     "cl": {
+      "value": 130.8,
+      "unit": "mL/min/m2",
+      "summary": "mean",
+      "quote": "the total body clearance of the drug in the younger age group (71.7 ml/min/m2) was significantly lower than in the older children (130.8 ml/min/m2)"
+     },
+     "pna_days": [
+      182.625,
+      4017.75
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "range 1 month to 11 years) after 50 mg/kg IV doses. Pharmacokinetic parameters were determined after the initial dose in 18 instances and after subsequent doses in 32 instances. There were no significant differences between the initial doses and the subsequent doses in the plasma piperacillin concentrations at comparable times, the elimination rate constants, the elimination-phase plasma half-lives, the total body clearances, the apparent volumes of distribution, or the areas under the concentration curves. At the end of a 30-minute infusion of the drug, the plasma concentration was 166.2 +/- 42.2 mg/L (mean +/- SD) and ranged from 91.6 to 268.3 mg/L. The mean half-life was 31.0 +/- 9.4 minutes. The half-life of piperacillin in children 1 to 6 months of age (47.2 minutes) was significantly longer than in older children",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "38349160",
+   "decision": "exclude",
+   "reason": "adult criteria: AKI/ESKD on SLED dialysis",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3780161",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 226,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "that of piperacillin (226 +/- 43 mL/min)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "42318924",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill septic, ages 18-88; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33743171",
+   "decision": "exclude",
+   "reason": "adult criteria: obese inpatients, incl. hemodialysis; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21501204",
+   "decision": "exclude",
+   "reason": "adult criteria: gentamicin study, no piperacillin clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "25542059",
+   "decision": "exclude",
+   "reason": "adult criteria: ECMO and critically ill controls, ages not stated, pooled meropenem/TZP",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "34704389",
+   "decision": "exclude",
+   "reason": "adult criteria: imipenem/relebactam study, no piperacillin clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38507250",
+   "decision": "exclude",
+   "reason": "adult criteria: cefepime/tazobactam study, no piperacillin clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "31479741",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients, no age or renal function stated; partly saturable model",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41999948",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill, renal function varied, no age range stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40910640",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients, no numeric piperacillin clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19451284",
+   "decision": "exclude",
+   "reason": "adult criteria: hemodiafiltration patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41313259",
+   "decision": "exclude",
+   "reason": "adult criteria: paediatric ICU children/young adults, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38411995",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill, ages 23-93, eGFR 6.4-234; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "22908169",
+   "decision": "exclude",
+   "reason": "not total IV CL: only renal and nonrenal components with saturable renal term, no total clearance value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "36633812",
+   "decision": "exclude",
+   "reason": "adult criteria: patients across lifespan incl. >=65 y; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32916003",
+   "decision": "exclude",
+   "reason": "adult criteria: pediatric case on MARS/CRRT",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1310077",
+   "decision": "exclude",
+   "reason": "adult criteria: no numeric clearance for the normal volunteers",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "4044070",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalized urology patients, not healthy, no age or renal function stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "24286231",
+   "decision": "exclude",
+   "reason": "adult criteria: febrile neutropenia patients, normal renal function not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40754267",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill, no age stated, normal renal function not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35224630",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill incl. ECMO; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8723474",
+   "decision": "exclude",
+   "reason": "adult criteria: teicoplanin study, no piperacillin clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35344155",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill, model evaluation, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2272706",
+   "decision": "exclude",
+   "reason": "not total IV CL: hepato-biliary clearance only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "23642005",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6454382",
+   "decision": "exclude",
+   "reason": "adult criteria: chronic renal failure",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40405288",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42508095",
+   "decision": "exclude",
+   "reason": "adult criteria: burn ICU patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9371358",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (per 1.73 m2 only)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9310805",
+   "decision": "exclude",
+   "reason": "adult criteria: anuric renal failure on CVVH",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35275224",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalized patients 0.5-25 y, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "26095008",
+   "decision": "exclude",
+   "reason": "adult criteria: CRRT",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19032173",
+   "decision": "exclude",
+   "reason": "adult criteria: no numeric piperacillin clearance (flucloxacillin values only)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "16934046",
+   "decision": "exclude",
+   "reason": "not total IV CL: biliary clearance only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41288084",
+   "decision": "exclude",
+   "reason": "adult criteria: febrile neutropenia patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "29730948",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill on SLED dialysis",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "24396980",
+   "decision": "exclude",
+   "reason": "adult criteria: pneumonia patients, no age stated, normal renal function not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42112094",
+   "decision": "exclude",
+   "reason": "adult criteria: low-body-weight patients, no age stated, normal renal function not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2324971",
+   "decision": "exclude",
+   "reason": "adult criteria: chronic renal failure on peritoneal dialysis",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

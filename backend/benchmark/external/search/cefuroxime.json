@@ -1,0 +1,160 @@
+{
+ "drug": "cefuroxime",
+ "retrieved": "2026-11-27",
+ "queries": {
+  "pediatric": "cefuroxime[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "cefuroxime[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "1617036",
+   "year": "1992",
+   "sha256": "4d06137044ae82adaa6987e8eae92a41adec36ef4aedb9d2cb0ec21e0e50d4e4",
+   "prefilter": true
+  },
+  {
+   "pmid": "7065060",
+   "year": "1982",
+   "sha256": "010a019a1e67f9168fe2420f386ec12160002c2382ec3f79a8a381bb8a64032a",
+   "prefilter": false
+  },
+  {
+   "pmid": "7159072",
+   "year": "1982",
+   "sha256": "4ac550a06193300b1793f837fea1adad803cfc6a30a7d3b355273c9415e0e131",
+   "prefilter": true
+  },
+  {
+   "pmid": "18239295",
+   "year": "2008",
+   "sha256": "4d3d02efb6ceb6f9093edeb914a2e9bbc6261aed872f4a95f6f5d90863387224",
+   "prefilter": false
+  },
+  {
+   "pmid": "19492870",
+   "year": "2009",
+   "sha256": "5ad2bc65da591694be92b0879dd5b824e95f45208452acc8261710451fe3c0c0",
+   "prefilter": false
+  },
+  {
+   "pmid": "20864357",
+   "year": "2011",
+   "sha256": "afa043abe42b999ff864ed092fbf522220c5b290f0950a7814ab590c76aa50da",
+   "prefilter": true
+  },
+  {
+   "pmid": "29761538",
+   "year": "2018",
+   "sha256": "7452429ff20cdb57d09a262838231dd0fd30bab2919200889f9f3db01bbb7e0a",
+   "prefilter": true
+  },
+  {
+   "pmid": "40677153",
+   "year": "2025",
+   "sha256": "9260edb63826f3a9dfe99c1cf395ecb6a42b87a3d39cdfe7942d3f0dbc3538dc",
+   "prefilter": false
+  },
+  {
+   "pmid": "41182478",
+   "year": "2026",
+   "sha256": "c09e7a0f83c04f9dcec98ce252b69dffa2ef43ef9b97799d70368b7db2748220",
+   "prefilter": true
+  }
+ ],
+ "query_translation": {
+  "pediatric": "\"cefuroxime\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "\"cefuroxime\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "590309",
+   "year": "1977",
+   "sha256": "c5730d05cb2e11b295fc8e1c50de426fbe43827d0442ed023b1893e0001baf54",
+   "prefilter": true
+  },
+  {
+   "pmid": "949172",
+   "year": "1976",
+   "sha256": "9864bc6afee25c58bb78c33a887cbd10a351fbf6fc43af726e8c2edabb85ba8f",
+   "prefilter": false
+  },
+  {
+   "pmid": "1363640",
+   "year": "1992",
+   "sha256": "a0659dbaecc40f18de71f6afd811345f80d833c521d441e625cdea891fb3311c",
+   "prefilter": true
+  },
+  {
+   "pmid": "1617036",
+   "year": "1992",
+   "sha256": "4d06137044ae82adaa6987e8eae92a41adec36ef4aedb9d2cb0ec21e0e50d4e4",
+   "prefilter": true
+  },
+  {
+   "pmid": "1952858",
+   "year": "1991",
+   "sha256": "043566dd20363aefbc54cf8f771e73a1dd4a73123490cf3b24aa8abe9b236997",
+   "prefilter": false
+  },
+  {
+   "pmid": "9017772",
+   "year": "1997",
+   "sha256": "f7220d56a9abb53eda9bbb66c46b868b9187a8ff5dd64d238b7c119a5f4b1c10",
+   "prefilter": true
+  },
+  {
+   "pmid": "11094856",
+   "year": "2000",
+   "sha256": "172004377325ad3895db56079676c7e6cde662b85304b1aeba4d773023f301d2",
+   "prefilter": false
+  },
+  {
+   "pmid": "17387462",
+   "year": "2007",
+   "sha256": "ae6e8082c40d417fe3b62eeaec597ea7119e406e2945e86ccb7aa101f21cc9b5",
+   "prefilter": false
+  },
+  {
+   "pmid": "17589665",
+   "year": "2007",
+   "sha256": "e59eef91a5c8b0e8cb8f0dc5f00822c3d87843799aa26e790ee416a53fa64674",
+   "prefilter": true
+  },
+  {
+   "pmid": "19528278",
+   "year": "2009",
+   "sha256": "47ae7463304f476776949a420c97de307221c32fc5cba3b0b5d8b0a4d8977f40",
+   "prefilter": true
+  },
+  {
+   "pmid": "25800069",
+   "year": "2016",
+   "sha256": "a9c262524477fdc0d936a070c70558caa6b79f8c710ce8f06546c5e7f45079ab",
+   "prefilter": false
+  },
+  {
+   "pmid": "33020154",
+   "year": "2020",
+   "sha256": "7ed4517d35dce0e6402e73c2de5c179ca52ace0181740a7df339e2519a792163",
+   "prefilter": false
+  },
+  {
+   "pmid": "33340419",
+   "year": "2021",
+   "sha256": "a4a2ba1895c5a3d2d0437f1b29fd33d4ed70b4bf15f64a0bd869f5f296608963",
+   "prefilter": false
+  },
+  {
+   "pmid": "34169370",
+   "year": "2021",
+   "sha256": "2aec236ec6e485532e598fdf664ca88fb3f60d8e835d8ae8ac06bb108f8ba85b",
+   "prefilter": false
+  },
+  {
+   "pmid": "40677153",
+   "year": "2025",
+   "sha256": "9260edb63826f3a9dfe99c1cf395ecb6a42b87a3d39cdfe7942d3f0dbc3538dc",
+   "prefilter": false
+  }
+ ]
+}

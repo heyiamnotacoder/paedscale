@@ -1,0 +1,458 @@
+{
+ "drug": "cefepime",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "32601155",
+   "decision": "exclude",
+   "reason": "P2: no numeric total clearance reported (only CrCl)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "42240402",
+   "decision": "exclude",
+   "reason": "no age: typical value given at a weight (36 kg) without any stated age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "41690641",
+   "decision": "exclude",
+   "reason": "P2: no numeric total clearance reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34902271",
+   "decision": "exclude",
+   "reason": "P2: no numeric total clearance (only elimination rate constant); mixed adult/child model",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "30431557",
+   "decision": "exclude",
+   "reason": "P4: ECMO",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35275224",
+   "decision": "exclude",
+   "reason": "P2: no numeric total clearance reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9257761",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "infants and children 2.1 mo-16.4 y, first IV dose",
+     "preterm": false,
+     "cl": {
+      "value": 3.1,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "total body clearance, and renal clearance after first dose administration averaged 1.7 h, 0.35 liter/kg, and 3.1 and 1.9 ml/min/kg, respectively"
+     },
+     "pna_days": [
+      63.92,
+      5990.1
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "Study subjects ranged in age from 2.1 months to 16.4 years",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "11303847",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "pooled review, 88 patients 2 mo-16 y",
+     "preterm": false,
+     "cl": {
+      "value": 3.1,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "total body clearance, 3.1 ml/min/kg (1.43 to 4.01)"
+     },
+     "pna_days": [
+      60.875,
+      5844.0
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "Three studies encompassing 88 patients ages 2 months to 16 years",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "35605841",
+   "decision": "exclude",
+   "reason": "P2: population typical clearance without a stated covariate point (weight)",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": []
+  },
+  {
+   "pmid": "38522579",
+   "decision": "exclude",
+   "reason": "P2: no numeric total clearance reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "32140940",
+   "decision": "exclude",
+   "reason": "P2: no numeric total clearance reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "37466170",
+   "decision": "exclude",
+   "reason": "P4: CRRT (continuous kidney replacement therapy)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "1496945",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis (also ages 4-41 y)",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "32140940",
+   "decision": "exclude",
+   "reason": "not total IV CL: no numeric clearance reported",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1622165",
+   "decision": "exclude",
+   "reason": "not total IV CL: only renal clearance (range) reported",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38349160",
+   "decision": "exclude",
+   "reason": "adult criteria: AKI/ESKD on dialysis (SLED)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "26712584",
+   "decision": "exclude",
+   "reason": "not total IV CL: no numeric clearance reported (febrile neutropenia patients)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8678096",
+   "decision": "exclude",
+   "reason": "adult criteria: review; approximate value not attributed to a defined healthy 18-65 y group (pools elderly, renal insufficiency, IV/IM)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30712199",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is for cefiderocol, not cefepime (range only)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "27496678",
+   "decision": "exclude",
+   "reason": "adult criteria: febrile neutropenic haematologic-malignancy patients, not healthy and normal renal function not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10630824",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 142,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "total body clearance 142 mL/min"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "38507250",
+   "decision": "exclude",
+   "reason": "not total IV CL: no numeric clearance reported",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35275224",
+   "decision": "exclude",
+   "reason": "adult criteria: mostly pediatric haemato-oncology patients 0.5-25 y; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "37466170",
+   "decision": "exclude",
+   "reason": "adult criteria: children/young adults on CKRT; per-70 kg only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "37449472",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill ICU patients, normal renal function not stated; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32601155",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients; no numeric cefepime clearance (only CrCl)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "34902271",
+   "decision": "exclude",
+   "reason": "not total IV CL: only elimination rate constants reported",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19304881",
+   "decision": "exclude",
+   "reason": "adult criteria: plasma exchange patients, age range to 67 y; no numeric cefepime clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1416818",
+   "decision": "exclude",
+   "reason": "range only: group means given only as a range across young and elderly groups, no value for the 20-40 y groups",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2203303",
+   "decision": "exclude",
+   "reason": "not total IV CL: only renal clearance reported",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "16125032",
+   "decision": "exclude",
+   "reason": "adult criteria: subcutaneous administration, not IV",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20359352",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients aged 21.8-81.2 y incl. renal impairment; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30397067",
+   "decision": "exclude",
+   "reason": "not total IV CL: no numeric clearance reported (renal impairment study)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2291655",
+   "decision": "exclude",
+   "reason": "adult criteria: middle-aged and elderly patients; per-1.73 m2 values only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "31332068",
+   "decision": "exclude",
+   "reason": "not total IV CL: no numeric clearance reported",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1452502",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 107.0,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "total clearance, 107.0 +/- 16.0 mL/min"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "11600370",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients on CRRT",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2229450",
+   "decision": "exclude",
+   "reason": "adult criteria: intramuscular administration (range only)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "31549737",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients on CRRT",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42121318",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill septic patients, median age 69 y",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8150753",
+   "decision": "exclude",
+   "reason": "range only: total clearance given only as a range across doses (review)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2401125",
+   "decision": "exclude",
+   "reason": "not total IV CL: no numeric clearance reported for healthy volunteers",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10582870",
+   "decision": "exclude",
+   "reason": "adult criteria: thermal burn patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "37882514",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill adults, not healthy and normal renal function not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8247913",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 103.5,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "Total clearance was 19% higher in patients with CF than in healthy volunteers (119.7 +/- 20.1 vs 103.5 +/- 19.8 ml/min)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "8150754",
+   "decision": "exclude",
+   "reason": "adult criteria: septic patients aged 66-78 y",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "25665726",
+   "decision": "exclude",
+   "reason": "not total IV CL: no numeric cefepime clearance reported (pneumonia patients)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17966838",
+   "decision": "exclude",
+   "reason": "adult criteria: burn patients; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1482136",
+   "decision": "exclude",
+   "reason": "adult criteria: unit - normal-GFR group value per 1.73 m2 only",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

@@ -27,6 +27,7 @@ backend/                    (run all commands from here; backend/ is the package
     edge_cases.py           deterministic flags: prodrug / obesity / protein-binding / illness
     pk_cache.py             bounded in-process LRU for live dossiers (Render single-dyno shared pool)
     mechanism_score.py      mechanistic-reasoning scorer (6 PRD dimensions)
+    uncertainty.py          seeded 90% parameter-uncertainty interval (published TM50/Hill CIs only)
   retrieval/                retrieval subagent + tools (package; `import retrieval` → __init__.py)
     __init__.py             RETRIEVAL SUBAGENT → live | cache | abstain
     retrieval_tools.py      httpx: PubMed E-utilities + openFDA + web_fetch
@@ -35,12 +36,18 @@ backend/                    (run all commands from here; backend/ is the package
   api/
     main.py                 FastAPI: /, /calculate, /calculate/stream, /chat, /pk, /health
     mcp_server.py           MCP server for the same retrieval tools (FastMCP, stdio)
-  tests/                    test_pk.py / test_agent.py
+  tests/                    pytest; test_agent.py needs key + network, the rest run in CI
+  benchmark/                FDA-label benchmark (harness only; product code never imports it)
+    PROTOCOL.md             pre-registered protocol + dated amendments — read before touching benchmark/
   skills/                   lean markdown skills (mechanism, pubmed, openfda, webfetch, edge_cases)
   eval_data/                ANSWER KEYS ONLY — harness never product path
 ```
 
 **On master:** no hardcoded per-drug PK in the product path — live retrieve or abstain.
+
+**Benchmark integrity.** The benchmark was pre-registered. A change to label selection, the
+reference set, the growth table or the analysis is a dated amendment in `PROTOCOL.md`, and once
+`benchmark/output/` is committed the amendment must say it came after scoring.
 
 Split of labour: **Python does the arithmetic; Claude does the judgment** (drug → pathway
 → maturation-curve mapping and the written justification). This is the whole point — the
@@ -117,6 +124,9 @@ cd backend                         # backend/ is the package root — run everyt
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python3 -m tests.test_pk           # deterministic core + scorers — NO key needed
+pip install -r requirements-dev.txt -r benchmark/requirements.txt
+python3 -m pytest -q tests --ignore=tests/test_agent.py   # what CI runs (no key)
+python3 -m benchmark.run           # regenerate every benchmark number + figure (benchmark/output/)
 cp .env.example .env               # ANTHROPIC_API_KEY (+ optional OPENFDA_API_KEY / NCBI_API_KEY)
 uvicorn api.main:app --reload --port 8000
 # open http://localhost:8000

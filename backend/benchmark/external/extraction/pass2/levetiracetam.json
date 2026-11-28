@@ -1,0 +1,324 @@
+{
+ "drug": "levetiracetam",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "22669118",
+   "decision": "exclude",
+   "reason": "CL/F: oral one-compartment first-order absorption model",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38902005",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "term neonates with seizures, typical at 3.34 kg and PNA 5.5 d",
+     "preterm": false,
+     "cl": {
+      "value": 0.0538,
+      "unit": "L/h",
+      "summary": "typical",
+      "quote": "CL and Vd were estimated to be 0.0538 L/hour and 0.832 L, respectively"
+     },
+     "pna_days": 5.5,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "CL (L/hour)=0.0538\u00d7(weight in kg/3.34)0.75\u00d7(postnatal age in days/5.5) 0.402",
+     "weight_kg": 3.34,
+     "weight_quote": "CL (L/hour)=0.0538\u00d7(weight in kg/3.34)0.75",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "33447943",
+   "decision": "exclude",
+   "reason": "CL/F: systematic review of apparent clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "22495532",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "term neonates, day 1 of first week of life",
+     "preterm": false,
+     "cl": {
+      "value": 0.7,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "LEV clearance (CL) increased from a mean of 0.7 ml/min/kg (SD 0.27 ml/min/kg) on day 1"
+     },
+     "pna_days": 1,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "LEV clearance (CL) increased from a mean of 0.7 ml/min/kg (SD 0.27 ml/min/kg) on day 1",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "term neonates, day 7 of first week of life",
+     "preterm": false,
+     "cl": {
+      "value": 1.33,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "to 1.33 ml/min/kg (SD 0.35 ml/min/kg) by day 7"
+     },
+     "pna_days": 7,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "to 1.33 ml/min/kg (SD 0.35 ml/min/kg) by day 7",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "29393846",
+   "decision": "exclude",
+   "reason": "no age: typical value 'evaluated at covariate medians' with no stated age or weight; route not stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "17442002",
+   "decision": "exclude",
+   "reason": "CL/F: single oral dose",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34247386",
+   "decision": "exclude",
+   "reason": "P1/P4: simulation in adult critically ill patients on CRRT, no pediatric patients",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34753796",
+   "decision": "exclude",
+   "reason": "P1: route of administration not stated as intravenous in the abstract (TDM data)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26913593",
+   "decision": "exclude",
+   "reason": "CL/F: oral clearance model",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38194771",
+   "decision": "exclude",
+   "reason": "P2: clearance is of lacosamide (CL/F), not levetiracetam",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "11879369",
+   "decision": "exclude",
+   "reason": "CL/F: apparent clearance after a single dose, route not stated as IV",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "34247386",
+   "decision": "exclude",
+   "reason": "adult criteria: simulated critically ill CRRT patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "22171585",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of eslicarbazepine (CL/F), not levetiracetam",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "39928152",
+   "decision": "exclude",
+   "reason": "CL/F: oral apparent clearance in epilepsy patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32208795",
+   "decision": "exclude",
+   "reason": "CL/F: oral levetiracetam in epilepsy outpatients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "26908152",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of topiramate (CL/F), not levetiracetam",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "29965883",
+   "decision": "exclude",
+   "reason": "CL/F: apparent oral clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33217623",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients on CRRT/SLED",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32113977",
+   "decision": "exclude",
+   "reason": "CL/F: oral levetiracetam; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "26913593",
+   "decision": "exclude",
+   "reason": "CL/F: oral clearance model, ages 1-89 y",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "11879369",
+   "decision": "exclude",
+   "reason": "adult criteria: children 6-12 y; no adult clearance value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "22495532",
+   "decision": "exclude",
+   "reason": "adult criteria: neonates",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17442002",
+   "decision": "exclude",
+   "reason": "adult criteria: infants/young children, oral dosing",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "39969140",
+   "decision": "exclude",
+   "reason": "adult criteria: review in critically ill patients; healthy value '~3.8 L/h' is an approximate cited figure, route not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "39932425",
+   "decision": "exclude",
+   "reason": "CL/F: apparent oral clearance in refractory epilepsy",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17573925",
+   "decision": "exclude",
+   "reason": "CL/F: apparent clearance in outpatients (oral)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "28279893",
+   "decision": "exclude",
+   "reason": "CL/F: oral dosing in epilepsy patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38166710",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill TBI patients with ARC; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21950640",
+   "decision": "exclude",
+   "reason": "adult criteria: neurocritical care patients, not healthy and normal renal function not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19054418",
+   "decision": "exclude",
+   "reason": "adult criteria: status epilepticus patients (median age 60), not healthy and renal function not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33428169",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill TBI/SAH patients with ARC; model includes oral bioavailability",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "25312351",
+   "decision": "exclude",
+   "reason": "adult criteria: unit - healthy-control value per 1.73 m2 only; route not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "23891703",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance is of topiramate (CL/F), not levetiracetam",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33447943",
+   "decision": "exclude",
+   "reason": "CL/F: systematic review of apparent clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "14530892",
+   "decision": "exclude",
+   "reason": "CL/F: single oral dose; clearance range only",
+   "flags": [],
+   "values": []
+  }
+ ]
+}
