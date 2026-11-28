@@ -120,3 +120,17 @@ def test_study_weighting_gives_each_study_equal_weight_within_a_drug():
             {"drug": "a", "pmid": "2", "d": 0.0}]
     assert sc.drug_mean_d(rows) == pytest.approx(2 / 3)
     assert sc.drug_mean_d(rows, by_study=True) == pytest.approx(0.5)
+
+
+def test_e9_excludes_route_unstated_observations():
+    keep = sc.SENSITIVITY["E9_exclude_route_unstated"]["keep"]
+    assert not keep({"observed": {"flags": ["route_unstated"]}})
+    assert keep({"observed": {"flags": ["critically_ill"]}})
+
+
+def test_e9_also_drops_route_unstated_adult_abstracts():
+    studies = [{"pmid": "1", "decision": "include", "flags": ["route_unstated"], "values": [_adult(9.0)]},
+               {"pmid": "2", "decision": "include", "flags": [], "values": [_adult(5.0)]}]
+    keep = sc.SENSITIVITY["E9_exclude_route_unstated"]["adult_keep"]
+    assert sc.adult_reference(studies, keep=keep)["median_l_h"] == 5.0
+    assert sc.adult_reference(studies)["median_l_h"] == 7.0

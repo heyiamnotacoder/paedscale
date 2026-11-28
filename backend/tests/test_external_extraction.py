@@ -220,3 +220,8 @@ def test_a_weight_stated_in_grams_is_recorded_in_kg():
     assert not any("weight" in p for p in ex.problems(o, ABSTRACT + " mean birth weight, 912 gm"))
     o = _obs(weight_kg=1.5, weight_quote="1086 +/- 311 g")
     assert any("weight 1.5 does not appear" in p for p in ex.problems(o, abstract))
+
+
+def test_amendment_14_flags_are_screener_flags():
+    assert ex.problems(_obs(flags=["route_unstated", "birth_weight", "typical_at_cohort_median"]), ABSTRACT) == []
+    assert ex.flag_problems(["route_unstated"], "adult") == []

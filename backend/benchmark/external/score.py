@@ -2,7 +2,7 @@
 
     cd backend && python3 -m benchmark.external.score      # -> benchmark/external/output/
 
-Implements benchmark/external/PROTOCOL.md (Amendments 1-12). Reads only the frozen dataset
+Implements benchmark/external/PROTOCOL.md (Amendments 1-14). Reads only the frozen dataset
 (extraction/final/<drug>.json, dataset/authors.json) and the committed search snapshot. It is
 the only external-validation module that imports the engine. Deterministic: no network.
 """
@@ -62,11 +62,11 @@ def adult_value_l_h(v: dict) -> float:
     return abs_l_h * (REF_KG / w) ** 0.75 if w else abs_l_h
 
 
-def adult_reference(studies: list[dict]) -> dict:
+def adult_reference(studies: list[dict], keep=lambda s: True) -> dict:
     """Median over the first five qualifying abstracts of each abstract's median value
     (Amendment 1 §2, Amendment 2 §5); E4 uses the first abstract alone."""
     per = [statistics.median(adult_value_l_h(v) for v in s["values"])
-           for s in studies if s["decision"] == "include"][:ADULT_ABSTRACTS]
+           for s in studies if s["decision"] == "include" and keep(s)][:ADULT_ABSTRACTS]
     if not per:
         return {"n_abstracts": 0, "median_l_h": None, "first_l_h": None, "per_abstract_l_h": []}
     return {"n_abstracts": len(per), "median_l_h": statistics.median(per), "first_l_h": per[0],
@@ -279,11 +279,12 @@ def load_dataset(final_dir: str = FINAL_DIR) -> dict:
     return out
 
 
-def rows_for(ds: dict, *, adult: str = "median_l_h", keep=lambda u: True) -> tuple[list[dict], dict]:
+def rows_for(ds: dict, *, adult: str = "median_l_h", keep=lambda u: True,
+             adult_keep=lambda s: True) -> tuple[list[dict], dict]:
     """One row per (observation, method). `keep` filters used observations (sensitivities)."""
     rows, adults = [], {}
     for name, d in sorted(ds.items()):
-        ref = adult_reference(d["record"]["adult"])
+        ref = adult_reference(d["record"]["adult"], keep=adult_keep)
         adults[name] = ref
         cl_adult = ref[adult]
         if cl_adult is None:                       # no adult reference: drug excluded
@@ -315,6 +316,8 @@ SENSITIVITY = {
     "E4_first_adult_abstract": dict(adult="first_l_h"),
     "E7_exclude_curve_source_authors": dict(keep=lambda u: not _is_curve_author(u["authors"])),
     "E8_exclude_before_1995": dict(keep=lambda u: u["year"] >= 1995),
+    "E9_exclude_route_unstated": dict(keep=lambda u: "route_unstated" not in u["observed"]["flags"],  # Amendment 14
+                                      adult_keep=lambda s: "route_unstated" not in (s.get("flags") or [])),
 }
 
 

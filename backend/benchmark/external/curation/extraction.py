@@ -27,8 +27,9 @@ PER_KG_UNITS = {"L/h/kg", "mL/min/kg", "mL/h/kg", "L/day/kg"}
 ADULT_UNITS = ABSOLUTE_UNITS | PER_KG_UNITS          # Amendment 1 §2 converts only these
 # Flags a screener records, by list. weight_imputed, ga_imputed and bsa_costeff are added by the scorer.
 PEDIATRIC_FLAGS = {"critically_ill", "allometric_standardized", "fixed_maturation", "fixed_allometry",
-                   "with_tazobactam", "pca_as_pma"}
-ADULT_FLAGS = {"with_tazobactam", "adult_weight_missing", "adult_age_unstated"}
+                   "with_tazobactam", "pca_as_pma",
+                   "route_unstated", "birth_weight", "typical_at_cohort_median"}     # Amendment 14
+ADULT_FLAGS = {"with_tazobactam", "adult_weight_missing", "adult_age_unstated", "route_unstated"}
 RANGE_FIELDS = {"pna": ("pna_days", "pna_range_days"), "pma": ("pma_weeks", "pma_range_weeks"),
                 "ga": ("ga_weeks", "ga_range_weeks")}
 SUMMARIES = {"mean", "median", "geometric_mean", "typical"}
