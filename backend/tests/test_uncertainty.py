@@ -182,3 +182,23 @@ def test_dominant_parameter_cites_the_published_value_and_ci():
 def test_no_spread_means_no_parameter_attribution():
     adult = dose_uncertainty_interval(weight_kg=70.0, age_years=40.0, **RENAL)
     assert adult["parameter_share"] is None and adult["dominant_parameter"] is None
+
+
+def test_no_parameter_is_named_when_the_spread_is_shared():
+    # renal 0.6 + CYP3A4 0.4 at 42 weeks: three parameters each carry about a third of the spread,
+    # inside Monte Carlo noise of one another, so naming one as "the driver" would be false.
+    pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0,
+                                   **dict(RENAL, fm={"renal_gfr": 0.6, "cyp3a4": 0.4}))
+    share = pi["parameter_share"]
+    assert len(share) == 4 and abs(sum(share.values()) - 1.0) < 1e-6, share
+    assert max(share.values()) < 0.5, share
+    assert pi["dominant_parameter"] is None, pi["dominant_parameter"]
+
+
+def test_hill_drives_cyp3a4_spread_in_an_older_child():
+    # CYP3A4's TM50 CI is strongly asymmetric (59.4–80.0 around 73.6); at 300 weeks PMA the curve is
+    # far past TM50, where ln(PMA/TM50) ≈ 1.4 makes the Hill CI dominate (delta method ≈ 0.9).
+    dom = dose_uncertainty_interval(weight_kg=20.0, pma_weeks=300.0,
+                                    **dict(RENAL, fm={"cyp3a4": 1.0}))["dominant_parameter"]
+    assert dom["key"] == "cyp3a4.hill" and dom["share"] > 0.8, dom
+    assert "Anderson" in dom["source"] and tuple(dom["ci95"]) == (2.2, 4.1)

@@ -6,7 +6,8 @@ maturation curve. Those same papers publish 95% confidence intervals. This modul
 propagates them by Monte Carlo into a 90% *parameter-uncertainty interval* for the
 child's clearance, half-life and dose. It attributes the variance of log clearance to each
 pathway (`variance_share`) and to each published parameter (`parameter_share`, keyed
-"pathway.parameter"), and names the parameter that drives most of it (`dominant_parameter`).
+"pathway.parameter"), and names the parameter that carries most of it (`dominant_parameter`,
+only when one parameter holds at least half; otherwise None, the spread is shared).
 Both attributions are one-at-a-time and first-order: interactions are not counted, and the
 shares are normalised to sum to 1.
 
@@ -35,6 +36,8 @@ from engine.pk_engine import compute_pediatric_dose
 Z_975 = 1.959963984540054
 DEFAULT_DRAWS = 2000
 DEFAULT_SEED = 20261127
+# Draws for an interactive request (agent compute call, /pk); the benchmark uses its own.
+INTERACTIVE_DRAWS = 1000
 # Below this, log-CL variance is numerical noise (e.g. an adult on the plateau).
 _NO_SPREAD = 1e-12
 
@@ -84,6 +87,25 @@ def _var(xs: list[float]) -> float:
     return sum((x - m) ** 2 for x in xs) / max(1, len(xs) - 1)
 
 
+# A parameter is named as the driver only when it carries most of the spread. Below this the
+# spread is shared, and the top shares are often within Monte Carlo noise of each other.
+DOMINANT_SHARE = 0.5
+
+
+def _dominant_parameter(param_share: Optional[dict]) -> Optional[dict]:
+    """The parameter carrying most of the spread, with its published value, CI and source."""
+    if not param_share:
+        return None
+    key = max(param_share, key=param_share.get)
+    if param_share[key] < DOMINANT_SHARE:
+        return None
+    pw, field = key.split(".", 1)
+    curve = MATURATION[pw]
+    return {"key": key, "pathway": pw, "parameter": field, "share": param_share[key],
+            "value": curve[field], "ci95": list(curve[PARAMETERS[field]]),
+            "source": curve.get("source")}
+
+
 SAFETY_BOUNDS = ("toxic_dose_mg_per_kg_per_day", "effective_dose_mg_per_kg_per_day")
 
 
@@ -128,33 +150,25 @@ def dose_uncertainty_interval(
             dose_day.append(r.recommended_dose_mg_per_day)
 
     # One-at-a-time variance attribution on log(CL_child): every dose metric and the
-    # half-life depend on it, so the attribution is meaningful even for Cmax drugs.
-    raw: dict[str, float] = {}
-    for i, pw in enumerate(maturing):
-        sub = random.Random(seed + 1 + i)
-        raw[pw] = _var([math.log(run({pw}, sub).cl_child_l_h) for _ in range(max(200, n_draws // 4))])
-    total = sum(raw.values())
-    share = {k: v / total for k, v in raw.items()} if total > _NO_SPREAD else None
+    # half-life depend on it, so the attribution is meaningful even for Cmax drugs. Each
+    # target has its own seed. Pathway seeds (seed+1+i) predate the parameter split and stay
+    # put, so `variance_share` is unchanged; parameters use seed+1001+... and more draws,
+    # because the dominant parameter is picked from them.
+    def attribute(targets: list[tuple[str, str, tuple[str, ...], int]], draws: int) -> Optional[dict]:
+        raw: dict[str, float] = {}
+        for key, pw, fields, target_seed in targets:
+            rng = random.Random(target_seed)
+            raw[key] = _var([math.log(run({pw}, rng, fields).cl_child_l_h) for _ in range(draws)])
+        total = sum(raw.values())
+        return {k: v / total for k, v in raw.items()} if total > _NO_SPREAD else None
 
-    # The same attribution one parameter at a time ("pathway.parameter"), on its own seeds so
-    # the pathway shares above are unchanged. First-order only: interactions are not counted.
-    raw_param: dict[str, float] = {}
-    for i, pw in enumerate(maturing):
-        for j, field in enumerate(PARAMETERS):
-            sub = random.Random(seed + 1001 + len(PARAMETERS) * i + j)
-            raw_param[f"{pw}.{field}"] = _var([math.log(run({pw}, sub, (field,)).cl_child_l_h)
-                                              for _ in range(max(200, n_draws // 4))])
-    total_param = sum(raw_param.values())
-    param_share = ({k: v / total_param for k, v in raw_param.items()}
-                   if total_param > _NO_SPREAD else None)
-    dominant = None
-    if param_share:
-        key = max(param_share, key=param_share.get)
-        pw, field = key.split(".", 1)
-        curve = MATURATION[pw]
-        dominant = {"key": key, "pathway": pw, "parameter": field, "share": param_share[key],
-                    "value": curve[field], "ci95": list(curve[PARAMETERS[field]]),
-                    "source": curve.get("source")}
+    share = attribute([(pw, pw, tuple(PARAMETERS), seed + 1 + i) for i, pw in enumerate(maturing)],
+                      max(200, n_draws // 4))
+    param_share = attribute(
+        [(f"{pw}.{field}", pw, (field,), seed + 1001 + len(PARAMETERS) * i + j)
+         for i, pw in enumerate(maturing) for j, field in enumerate(PARAMETERS)],
+        max(500, n_draws // 2))
+    dominant = _dominant_parameter(param_share)
 
     dq = _quantiles(dose_kg)
     share_past = lambda bound, past: (sum(past(x, bound) for x in dose_kg) / len(dose_kg)

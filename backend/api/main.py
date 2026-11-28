@@ -24,9 +24,9 @@ from pydantic import BaseModel, Field
 
 load_dotenv()  # pulls ANTHROPIC_API_KEY from backend/.env
 
-from agents.agent import AGENT_UNCERTAINTY_DRAWS, ORCHESTRATOR_MODEL, run_case  # noqa: E402  (after load_dotenv)
+from agents.agent import ORCHESTRATOR_MODEL, run_case  # noqa: E402  (after load_dotenv)
 from engine.child_pugh import hi_gate_error  # noqa: E402
-from engine.uncertainty import dose_uncertainty_interval  # noqa: E402
+from engine.uncertainty import INTERACTIVE_DRAWS, dose_uncertainty_interval  # noqa: E402
 from engine.pk_engine import (  # noqa: E402
     compute_pediatric_dose,
     renal_function_fraction_from_labs,
@@ -310,7 +310,7 @@ def pk(case: Case):
         # Same seeded 90% parameter-uncertainty interval the agent attaches. Optional context:
         # a failure here must never discard the engine dose.
         try:
-            out["parameter_uncertainty"] = dose_uncertainty_interval(n_draws=AGENT_UNCERTAINTY_DRAWS, **kwargs)
+            out["parameter_uncertainty"] = dose_uncertainty_interval(n_draws=INTERACTIVE_DRAWS, **kwargs)
         except Exception:
             out["parameter_uncertainty"] = None
     return out

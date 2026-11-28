@@ -20,7 +20,7 @@ from anthropic import Anthropic
 import retrieval
 from engine.formulation import attach_administration
 from engine.pk_cache import CACHE as PK_CACHE
-from engine.uncertainty import dose_uncertainty_interval
+from engine.uncertainty import INTERACTIVE_DRAWS, dose_uncertainty_interval
 from engine.pk_engine import (
     compute_pediatric_dose,
     estimate_gfr_bedside_schwartz,
@@ -31,7 +31,7 @@ from skills import load_skill, list_skills
 
 ORCHESTRATOR_MODEL = os.environ.get("ORCHESTRATOR_MODEL", "claude-opus-4-8")
 MAX_TOKENS = int(os.environ.get("PAEDSCALE_MAX_TOKENS", "4000"))
-AGENT_UNCERTAINTY_DRAWS = 1000  # per compute call (~10 ms); the benchmark/test default is 2000
+AGENT_UNCERTAINTY_DRAWS = INTERACTIVE_DRAWS  # per compute call; the benchmark/test default is 2000
 
 SYSTEM = """You are PaedScale: pediatric STARTING dose from adult PK via allometry × maturation.
 Decision support for a clinician — NOT a prescriber.

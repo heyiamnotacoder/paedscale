@@ -1780,18 +1780,28 @@ function fmtShare(f){ const p = f*100; return p>0 && p<1 ? "<1%" : p>99 && p<100
 const PU_FLAT_FOLD = 1.01;     // a 90% interval narrower than this is shown as "about X"
 const PU_ANCHOR_TOL = 0.05;    // final dose this far from the engine dose is called out
 const PATHWAY_LABEL = {renal_gfr:"renal (GFR) maturation", cyp3a4:"CYP3A4 maturation", ugt2b7:"UGT2B7 maturation"};
-const PATHWAY_CITE = {renal_gfr:"Rhodin 2009", cyp3a4:"Anderson & Larsson 2011", ugt2b7:"Anand 2008"};
-const PARAM_LABEL = {tm50_weeks:"TM50", hill:"Hill coefficient"};
-function dominantParameterHtml(d){
-  if(!d || d.share==null) return "";
-  const what = `${PARAM_LABEL[d.parameter]||d.parameter} of ${PATHWAY_LABEL[d.pathway]||d.pathway}`;
-  const unit = d.parameter==="tm50_weeks" ? " weeks PMA" : "";
-  const ci = Array.isArray(d.ci95) && d.ci95.length===2 ? `, 95% CI ${fmtDose(d.ci95[0])}–${fmtDose(d.ci95[1])}` : "";
-  const cite = PATHWAY_CITE[d.pathway];
-  const val = d.value!=null ? ` (published ${fmtDose(d.value)}${unit}${ci}${cite ? "; "+cite : ""})` : "";
-  return `<div class="md" id="pu-driver" style="font-size:.9rem;margin-top:8px"${d.source ? ` title="${esc(d.source)}"` : ""}>`
-       + `Most of this spread (${fmtShare(d.share)}) comes from the <b>${esc(what)}</b>${esc(val)}. `
-       + `A better estimate of that parameter would narrow the interval the most.</div>`;
+const PARAM_INFO = {tm50_weeks:{label:"TM50", unit:" weeks PMA"}, hill:{label:"Hill coefficient", unit:""}};
+// "Rhodin MM et al., Pediatr Nephrol 2009;…" → "Rhodin 2009": first author and year, read from the
+// engine's own citation so a new maturation curve never shows a stale or missing reference.
+function shortCite(src){ const m = /^\s*([^\s,.]+)[^]*?\b((?:19|20)\d{2})\b/.exec(src||""); return m ? `${m[1]} ${m[2]}` : ""; }
+function paramName(key){
+  const [pw, field] = key.split(".");
+  return `${(PARAM_INFO[field]||{label:field}).label} of ${PATHWAY_LABEL[pw]||pw}`;
+}
+function parameterDriverHtml(pu){
+  const d = pu.dominant_parameter, shares = Object.entries(pu.parameter_share||{}).sort((a,b)=>b[1]-a[1]);
+  if(d && d.share!=null){
+    const info = PARAM_INFO[d.parameter]||{label:d.parameter, unit:""};
+    const ci = Array.isArray(d.ci95) && d.ci95.length===2 ? `, 95% CI ${fmtDose(d.ci95[0])}–${fmtDose(d.ci95[1])}` : "";
+    const cite = shortCite(d.source);
+    const val = d.value!=null ? ` (published ${fmtDose(d.value)}${info.unit}${ci}${cite ? "; "+cite : ""})` : "";
+    return `<div class="md" id="pu-driver" style="font-size:.9rem;margin-top:8px"${d.source ? ` title="${esc(d.source)}"` : ""}>`
+         + `Most of this spread (${fmtShare(d.share)}) comes from the <b>${esc(paramName(d.key))}</b>${esc(val)}. `
+         + `A narrower published CI for that parameter would shrink the interval the most.</div>`;
+  }
+  if(shares.length < 2) return "";
+  return `<div class="md" id="pu-driver" style="font-size:.9rem;margin-top:8px">No single parameter dominates. The spread is shared by `
+       + shares.slice(0,3).map(([k,v])=>`the ${esc(paramName(k))} (${fmtShare(v)})`).join(", ").replace(/, (?=[^,]*$)/, " and ") + `.</div>`;
 }
 function paramUncertaintyHtml(pu, finalDpk){
   const q = pu && pu.dose_mg_per_kg_per_day;
@@ -1833,7 +1843,7 @@ function paramUncertaintyHtml(pu, finalDpk){
        + (eff!=null ? `<span><span class="sw" style="background:var(--ink-2);width:3px"></span>Effective threshold</span>` : "") + `</div>`;
   }
   if(warns.length) h += `<div class="pu-warn" role="alert">${warns.join("<br>")}</div>`;
-  if(!flat) h += dominantParameterHtml(pu.dominant_parameter);
+  if(!flat) h += parameterDriverHtml(pu);
   const shares = Object.entries(pu.variance_share||{}).sort((a,b)=>b[1]-a[1]);
   const notes = [];
   if(pu.fold_width_90!=null && !flat) notes.push(`The interval spans ${pu.fold_width_90.toFixed(2)}-fold.`);
