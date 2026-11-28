@@ -2,7 +2,7 @@
 
     cd backend && python3 -m benchmark.external.score      # -> benchmark/external/output/
 
-Implements benchmark/external/PROTOCOL.md (Amendments 1-14). Reads only the frozen dataset
+Implements benchmark/external/PROTOCOL.md (Amendments 1-15). Reads only the frozen dataset
 (extraction/final/<drug>.json, dataset/authors.json) and the committed search snapshot. It is
 the only external-validation module that imports the engine. Deterministic: no network.
 """
@@ -266,7 +266,9 @@ def by_method(rows: list[dict], n_boot: int) -> dict:
 def load_dataset(final_dir: str = FINAL_DIR) -> dict:
     with open(REFSET, encoding="utf-8") as f:
         ref = json.load(f)["drugs"]
-    authors = json.load(open(AUTHORS, encoding="utf-8")) if os.path.exists(AUTHORS) else {}
+    if not os.path.exists(AUTHORS):
+        raise FileNotFoundError(f"{AUTHORS} is missing: run `search authors` (needed for E7)")
+    authors = json.load(open(AUTHORS, encoding="utf-8"))
     out = {}
     for fn in sorted(os.listdir(final_dir)):
         if not fn.endswith(".json"):
@@ -277,6 +279,19 @@ def load_dataset(final_dir: str = FINAL_DIR) -> dict:
         years = {r["pmid"]: r["year"] for k in ("pediatric", "adult") for r in snap[k]}
         out[drug] = {"record": rec, "drug": ref[drug], "years": years, "authors": authors}
     return out
+
+
+def study_year(years: dict, pmid: str) -> int:
+    y = str(years.get(pmid) or "")
+    if not y[:4].isdigit():
+        raise ValueError(f"PMID {pmid} has no publication year in the snapshot (needed for E8)")
+    return int(y[:4])
+
+
+def study_authors(authors: dict, pmid: str) -> list[str]:
+    if pmid not in authors:
+        raise ValueError(f"PMID {pmid} has no author list in dataset/authors.json (needed for E7)")
+    return authors[pmid]
 
 
 def rows_for(ds: dict, *, adult: str = "median_l_h", keep=lambda u: True,
@@ -292,8 +307,8 @@ def rows_for(ds: dict, *, adult: str = "median_l_h", keep=lambda u: True,
         flags_by_pmid = {s["pmid"]: s.get("flags") or [] for s in d["record"]["pediatric"]}
         for i, u in enumerate(replay(d["record"])):
             obs = observed(u["obs"], flags_by_pmid[u["pmid"]])
-            u = {**u, "drug": name, "observed": obs, "year": int(d["years"].get(u["pmid"]) or 0),
-                 "authors": d["authors"].get(u["pmid"], [])}
+            u = {**u, "drug": name, "observed": obs, "year": study_year(d["years"], u["pmid"]),
+                 "authors": study_authors(d["authors"], u["pmid"])}
             if not keep(u):
                 continue
             for m in METHODS:
@@ -305,8 +320,13 @@ def rows_for(ds: dict, *, adult: str = "median_l_h", keep=lambda u: True,
     return rows, adults
 
 
+def _study_flags(study: dict, items: str) -> set:
+    """A study's own flags and those of each of its observations or values."""
+    return set(study.get("flags") or []).union(*(set(i.get("flags") or []) for i in study.get(items) or []))
+
+
 def _is_curve_author(authors: list[str]) -> bool:
-    return any(a == c or a.startswith(c + " ") or a.replace(".", "") == c for a in authors for c in CURVE_AUTHORS)
+    return any(a.replace(".", "") == c for a in authors for c in CURVE_AUTHORS)
 
 
 SENSITIVITY = {
@@ -317,7 +337,7 @@ SENSITIVITY = {
     "E7_exclude_curve_source_authors": dict(keep=lambda u: not _is_curve_author(u["authors"])),
     "E8_exclude_before_1995": dict(keep=lambda u: u["year"] >= 1995),
     "E9_exclude_route_unstated": dict(keep=lambda u: "route_unstated" not in u["observed"]["flags"],  # Amendment 14
-                                      adult_keep=lambda s: "route_unstated" not in (s.get("flags") or [])),
+                                      adult_keep=lambda s: "route_unstated" not in _study_flags(s, "values")),
 }
 
 
@@ -325,6 +345,9 @@ def two_hypotheses(rows: list[dict], n_boot: int, by_study: bool = False) -> dic
     he1 = hypothesis([r for r in rows if r["under2"]], n_boot, by_study)
     he2 = hypothesis(rows, n_boot, by_study)
     he2["tested"] = he1["success"]                 # HE2 is tested only if HE1 succeeds
+    # Amendment 1 §8: with fewer than 8 drugs under 2 years, HE1 and HE2 are both descriptive
+    he2["confirmatory"] = he1["confirmatory"]
+    he2["success"] = bool(he2["confirmatory"] and he2["tested"] and he2.get("ci95") and he2["ci95"][1] < 0)
     return {"HE1_under2": he1, "HE2_all_ages": he2}
 
 
@@ -368,9 +391,10 @@ def analyze(ds: dict, n_boot: int = 10000) -> dict:
         rs = [r for r in rows if r["stratum"] == st]
         if rs:
             enough = len(by_drug(rs)) >= MIN_DRUGS_STRATUM_CI
-            strata[st] = {"by_method": by_method(rs, n_boot if enough else 0),
-                          "paedscale_vs_allometry": compare(rs, "paedscale", PRIMARY, n_boot if enough else 0)
-                          if enough else {"n_drugs": len(by_drug(rs)), "per_drug_mean_d": drug_means(paired(rs))}}
+            strata[st] = {"by_method": by_method(rs, n_boot if enough else 0)}
+            for c in (PRIMARY, "weight_linear", "bsa"):            # protocol body: "all of the above by ICH stratum"
+                strata[st][f"paedscale_vs_{c}"] = (compare(rs, "paedscale", c, n_boot) if enough else
+                                                   {"n_drugs": len(by_drug(rs)), "per_drug_mean_d": drug_means(paired(rs, b=c))})
     sens = {}
     for name, kw in SENSITIVITY.items():
         r2, _ = rows_for(ds, **kw)

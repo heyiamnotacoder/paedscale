@@ -1,6 +1,6 @@
 # Screening and extraction guide (operational)
 
-This guide says *how* to record screening decisions. The rules themselves are in `PROTOCOL.md`, Amendments 1 to 11. Where the two differ, PROTOCOL.md wins. Each pass works only from PROTOCOL.md, this guide and the abstract texts. A pass never opens another pass's folder.
+This guide says *how* to record screening decisions. The rules themselves are in `PROTOCOL.md`, Amendments 1 to 15. Where the two differ, PROTOCOL.md wins. Each pass works only from PROTOCOL.md, this guide and the abstract texts. A pass never opens another pass's folder.
 
 ## Commands (from `backend/`)
 
@@ -46,6 +46,6 @@ python3 -m benchmark.external.curation.check <pass> [<drug>]            # valida
 - **summary** is `mean`, `median`, `geometric_mean` or `typical` (a population model's typical value).
 - **Quotes** are copied exactly from the printed abstract text. Each number must appear inside its own quote.
 - **Adults** qualify when aged 18–65 years (or healthy volunteers with no stated age), healthy or with normal renal function, given the drug IV without probenecid (Amendment 1 §2). Record the stated age in years in `age_years` (a number or `[low, high]`, every number within 18–65) with `age_quote`; with no stated age leave both null and flag `adult_age_unstated`. An adult value must be absolute or per kg (`L/h`, `mL/min`, `mL/h`, `L/min`, `L/day`, or a per-kg unit); exclude an adult abstract that gives only per-BSA or per-70 kg values with "adult criteria: unit". An absolute clearance (L/h, mL/min, mL/h, L/min, L/day) with no stated weight is flagged `adult_weight_missing`.
-- **Flags** you record are, for pediatric studies, `critically_ill`, `allometric_standardized`, `fixed_maturation`, `fixed_allometry`, `with_tazobactam` and `pca_as_pma`; for adult abstracts, `with_tazobactam`, `adult_weight_missing` and `adult_age_unstated` (definitions in PROTOCOL.md). A study-level flag applies to all its observations, an observation-level flag to that one only. The scorer adds `weight_imputed`, `ga_imputed` and `bsa_costeff` itself, so leave the weight, GA or BSA null instead of guessing.
+- **Flags** you record are, for pediatric studies, `critically_ill`, `allometric_standardized`, `fixed_maturation`, `fixed_allometry`, `with_tazobactam`, `pca_as_pma`, and from Amendment 14 `route_unstated`, `birth_weight` and `typical_at_cohort_median`; for adult abstracts, `with_tazobactam`, `adult_weight_missing`, `adult_age_unstated` and `route_unstated` (definitions in PROTOCOL.md). A study-level flag applies to all its observations, an observation-level flag to that one only. The scorer adds `weight_imputed`, `ga_imputed` and `bsa_costeff` itself, so leave the weight, GA or BSA null instead of guessing.
 - **Observations.** Record one per age group or covariate point the abstract reports. When an abstract gives both a group summary and a model typical value for the same group, record only the group summary.
 - **Stop rule.** Stop when `next` prints "NOTHING OPEN".

@@ -134,3 +134,29 @@ def test_e9_also_drops_route_unstated_adult_abstracts():
     keep = sc.SENSITIVITY["E9_exclude_route_unstated"]["adult_keep"]
     assert sc.adult_reference(studies, keep=keep)["median_l_h"] == 5.0
     assert sc.adult_reference(studies)["median_l_h"] == 7.0
+
+
+def test_e9_drops_an_adult_abstract_whose_value_carries_route_unstated():
+    studies = [{"pmid": "1", "decision": "include", "flags": [], "values": [_adult(9.0, flags=["route_unstated"])]},
+               {"pmid": "2", "decision": "include", "flags": [], "values": [_adult(5.0)]}]
+    keep = sc.SENSITIVITY["E9_exclude_route_unstated"]["adult_keep"]
+    assert sc.adult_reference(studies, keep=keep)["median_l_h"] == 5.0
+
+
+def test_he2_is_confirmatory_only_when_he1_is():
+    rows = []
+    for i in range(9):
+        for m, fe in (("paedscale", 1.1), ("allometry", 2.0)):
+            rows.append({"drug": f"d{i}", "pmid": "1", "obs": 0, "method": m, "fe": fe * (1 + i / 100),
+                         "stratum": "child", "under2": i < 3})
+    h = sc.two_hypotheses(rows, n_boot=200)
+    assert not h["HE1_under2"]["confirmatory"] and not h["HE2_all_ages"]["confirmatory"]
+    assert not h["HE2_all_ages"]["success"]
+
+
+def test_a_missing_year_or_author_list_stops_scoring():
+    with pytest.raises(ValueError, match="year"):
+        sc.study_year({"1": ""}, "1")
+    with pytest.raises(ValueError, match="author"):
+        sc.study_authors({}, "1")
+    assert sc.study_year({"1": "1999"}, "1") == 1999

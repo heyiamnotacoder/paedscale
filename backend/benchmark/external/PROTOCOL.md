@@ -356,3 +356,15 @@ The pass-1 reports showed the same few questions decided differently from drug t
 6. **Open-ended bounds.** A postnatal age stated only as an upper bound ("less than 4 weeks") is the range [0, bound]. A GA or PMA stated only as one bound ("≥ 32 weeks") is not recorded. An age in words is read by fixed rules: "first day of life" [0, 1] day, "first week of life" [1, 7] days.
 7. **Reviews, and values cited from other studies,** are not data from the abstract's own study and are excluded.
 8. **Adult patients** who are not healthy volunteers need a stated age within 18–65 years and stated normal renal function (Amendment 1 §2). Other co-medication than probenecid does not exclude an adult or pediatric study.
+
+### Amendment 15 — 2026-11-28, after both passes finished and during adjudication, before any prediction was made
+
+This answers a code review of the scorer, the agreement code and Amendments 12–14, and records rules the adjudicator needed. These rules override the text above where the two conflict.
+
+1. **Per kg over absolute.** When an abstract gives the same group's clearance both per kg and as an absolute value, the per-kg value is used. With an imputed weight, the fold error of a per-kg observation depends on weight only to the power −0.25 (observed and predicted both scale with weight), against 0.75 for an absolute one.
+2. **Repeated conditions in the same subjects.** When an abstract reports the same subjects under a usual and an experimental condition (a crossover, or before and after an interacting drug), the usual-condition value is used.
+3. **Ages from a stated schedule.** An age that follows arithmetically from a stated start and dosing schedule ("from the first day of life, every 72 hours", after the third dose) is accepted.
+4. **Grams.** Amendment 13 §2's rule now needs the gram unit on that number ("912 gm", "1086 ± 311 g"), and not a per-volume unit such as g/dL. Pass records were re-checked and pass.
+5. **Scoring.** HE2 is confirmatory only when HE1 is (Amendment 1 §8 counts drugs under 2 years). E7 and E8 stop with an error when an author list or a publication year is missing, rather than silently keeping or dropping the study. E9 also drops an adult abstract whose value, not only the study, carries `route_unstated`. The per-stratum comparisons now include weight-linear and BSA, as the protocol body asks. The E7 match is exact.
+6. **Agreement.** Besides the per-abstract comparison, extracted numbers are counted one by one (each clearance and each recorded age, weight, BSA or height), as Amendment 1 §9 asks, for abstracts both passes included with the same number of observations.
+7. **What was seen, corrected.** Amendment 13 §1's re-check of finished pass-1 records was by script (pass or fail only). The pass-2 screeners started after Amendments 13 and 14 were committed, and one of them applied Amendment 14 while screening; this is a deviation from strict blinding to adjudication rules, and it can only raise agreement on the Amendment 14 questions.

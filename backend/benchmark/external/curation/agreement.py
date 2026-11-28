@@ -57,8 +57,29 @@ def _items_key(study: dict, kind: str) -> tuple:
     return tuple(sorted(_key(i, fields, sf) for i in study.get(KINDS[kind]) or []))
 
 
+NUMERIC = ("pna_days", "pna_range_days", "ga_weeks", "ga_range_weeks", "pma_weeks", "pma_range_weeks",
+           "weight_kg", "bsa_m2", "height_cm", "age_years")
+
+
+def _value_counts(a: dict, b: dict, kind: str) -> tuple[int, int]:
+    """Numbers compared one by one (Amendment 1 §9): items paired in recorded order when both
+    passes recorded the same number of items; each clearance and each number either pass
+    recorded counts once."""
+    ia, ib = a.get(KINDS[kind]) or [], b.get(KINDS[kind]) or []
+    if len(ia) != len(ib):
+        return 0, 0
+    compared = differ = 0
+    for x, y in zip(ia, ib):
+        pairs = [(_num((x.get("cl") or {}).get("value")), _num((y.get("cl") or {}).get("value")))]
+        pairs += [(_num(x.get(f)), _num(y.get(f))) for f in NUMERIC if x.get(f) is not None or y.get(f) is not None]
+        compared += len(pairs)
+        differ += sum(p != q for p, q in pairs)
+    return compared, differ
+
+
 def compare(r1: dict, r2: dict) -> dict:
     pairs, dec_dis, val_dis, only1, only2, val_ok = [], [], [], [], [], 0
+    n_cmp = n_diff = 0
     for kind in KINDS:
         a = {s["pmid"]: s for s in r1.get(kind, [])}
         b = {s["pmid"]: s for s in r2.get(kind, [])}
@@ -71,13 +92,16 @@ def compare(r1: dict, r2: dict) -> dict:
             if a[p]["decision"] != b[p]["decision"]:
                 dec_dis.append(f"{kind} {p}")
             elif a[p]["decision"] == "include":
+                c, d = _value_counts(a[p], b[p], kind)
+                n_cmp, n_diff = n_cmp + c, n_diff + d
                 if _items_key(a[p], kind) == _items_key(b[p], kind):
                     val_ok += 1
                 else:
                     val_dis.append({"kind": kind, "pmid": p})
     return {"both_read": len(pairs), "pairs": pairs, "kappa": kappa(pairs),
             "decision_disagreements": dec_dis, "value_disagreements": val_dis,
-            "value_agreements": val_ok, "only_pass1": only1, "only_pass2": only2}
+            "value_agreements": val_ok, "values_compared": n_cmp, "values_differ": n_diff,
+            "only_pass1": only1, "only_pass2": only2}
 
 
 def main(p1: str, p2: str) -> dict:
@@ -95,6 +119,9 @@ def main(p1: str, p2: str) -> dict:
             "n_decision_disagreements": sum(len(c["decision_disagreements"]) for c in per_drug.values()),
             "n_value_disagreements": sum(len(c["value_disagreements"]) for c in per_drug.values()),
             "n_value_agreements": sum(c["value_agreements"] for c in per_drug.values()),
+            "n_values_compared": sum(c["values_compared"] for c in per_drug.values()),
+            "n_values_differ": sum(c["values_differ"] for c in per_drug.values()),
+            "drugs_missing_a_pass": sorted(set(os.listdir(d1)) ^ set(os.listdir(d2))),
             "per_drug": per_drug}
 
 

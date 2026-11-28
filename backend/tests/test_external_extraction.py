@@ -225,3 +225,9 @@ def test_a_weight_stated_in_grams_is_recorded_in_kg():
 def test_amendment_14_flags_are_screener_flags():
     assert ex.problems(_obs(flags=["route_unstated", "birth_weight", "typical_at_cohort_median"]), ABSTRACT) == []
     assert ex.flag_problems(["route_unstated"], "adult") == []
+
+
+def test_the_grams_rule_needs_the_gram_unit_on_that_number():
+    o = _obs(weight_kg=0.01, weight_quote="Hb 10 g/dL, weight 1.2 kg")
+    abstract = ABSTRACT + " Hb 10 g/dL, weight 1.2 kg"
+    assert any("weight 0.01 does not appear" in p for p in ex.problems(o, abstract))

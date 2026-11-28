@@ -1,4 +1,4 @@
-"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-11).
+"""External validation, step 3: checks on extraction records (PROTOCOL.md, Amendments 1-15).
 
 An extraction record lists, per drug and per screening pass, every screened abstract with its
 decision and, when included, its observations. Each observation is:
@@ -62,6 +62,20 @@ def _number_in(value: float, quote: str) -> bool:
     return any(math.isclose(float(n), value, rel_tol=1e-9, abs_tol=1e-12) for n in nums)
 
 
+def _grams_in(kg: float, quote: str) -> bool:
+    """The quote states this weight in grams: a number equal to kg × 1000 followed by g, gm or
+    gram(s), and not by a per-volume unit such as g/dL (Amendment 13 §2, Amendment 15)."""
+    q = _norm(quote).replace(",", ".")
+    for n in re.findall(r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:g|gm|grams?)\b(?!\s*/)", q):
+        if math.isclose(float(n), kg * 1000, rel_tol=1e-9):
+            return True
+    # "1086 +/- 311 g": the unit follows the spread, not the mean
+    for n in re.findall(r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:\+/-|±|\(SD\)?)\s*\d+(?:\.\d+)?\s*(?:g|gm|grams?)\b(?!\s*/)", q):
+        if math.isclose(float(n), kg * 1000, rel_tol=1e-9):
+            return True
+    return False
+
+
 def flag_problems(flags, kind: str) -> list[str]:
     allowed = PEDIATRIC_FLAGS if kind == "pediatric" else ADULT_FLAGS
     if not isinstance(flags, list) or not all(isinstance(f, str) for f in flags):
@@ -78,9 +92,8 @@ def _quoted(name: str, value, quote, text: str, ranged: bool) -> list[str]:
         return [f"{name} {value!r} is not a non-negative number" + (" or [low, high] range" if ranged else "")]
     if not isinstance(quote, str) or not quote or _norm(quote) not in _norm(text):
         return [f"{name} quote is not in the abstract: {quote!r}"]
-    grams = name == "weight" and re.search(r"\d\s*(?:g|gm|grams?)\b", _norm(quote))   # Amendment 13 §2
     return [f"{name} {v} does not appear in its quote" for v in _numbers(value)
-            if not (_number_in(v, quote) or (grams and _number_in(v * 1000, quote)))]
+            if not (_number_in(v, quote) or (name == "weight" and _grams_in(v, quote)))]
 
 
 def _cl(obs: dict) -> dict:

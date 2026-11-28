@@ -53,3 +53,10 @@ def test_integer_and_float_forms_of_a_number_agree():
     a = _study("1", "include", [_o(1, w=3)])
     b = _study("1", "include", [_o(1.0, w=3.0)])
     assert ag.compare({"pediatric": [a], "adult": []}, {"pediatric": [b], "adult": []})["value_agreements"] == 1
+
+
+def test_extracted_numbers_are_also_counted_value_by_value():
+    r1 = {"pediatric": [_study("1", "include", [_o(0.1, w=3.0)])], "adult": []}
+    r2 = {"pediatric": [_study("1", "include", [_o(0.2, w=3.0)])], "adult": []}
+    c = ag.compare(r1, r2)
+    assert c["values_compared"] == 3 and c["values_differ"] == 1     # clearance differs; age and weight agree
