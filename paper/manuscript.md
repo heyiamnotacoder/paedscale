@@ -1,13 +1,13 @@
 ---
 title: "Adding organ maturation to allometric scaling of adult clearance for children: two pre-registered evaluations against labels and published clearance"
 subtitle: "Original Article. Draft for submission to the British Journal of Clinical Pharmacology. Decision-support research, not prescribing guidance."
-author: "Dhruvik Pandya¹, Surjit Singh¹, Shoban Singh¹ [to confirm: the same person as the next author?], Shoban Babu Varthia¹, Pradeep Trivedi¹, Mohammad Arif Shamim¹ [to confirm spelling: Arif Shamim or Akib Shamin], Ayushman Sadhu¹"
+author: "Dhruvik Pandya¹, Surjit Singh¹, Shoban Babu Varthia¹, Pradeep Trivedi¹, Mohammed Aqib Shamin¹, Ayushman Sadhu¹"
 date: "Draft of 28 November 2026"
 ---
 
 **Affiliation:** ¹ [Department to confirm], All India Institute of Medical Sciences (AIIMS), [campus to confirm], India. ORCID iDs to be added.
 
-**Author positions:** Dhruvik Pandya, Junior Resident; Surjit Singh, Professor; Shoban Babu Varthia and Pradeep Trivedi, Additional Professors [to confirm]; Mohammad Arif Shamim, Senior Resident; Ayushman Sadhu, Junior Resident.
+**Author positions:** Dhruvik Pandya, Junior Resident; Surjit Singh, Professor; Shoban Babu Varthia and Pradeep Trivedi, Additional Professors; Mohammed Aqib Shamin, Senior Resident; Ayushman Sadhu, Junior Resident.
 
 **Running head:** Maturation-adjusted scaling of adult clearance for children
 
