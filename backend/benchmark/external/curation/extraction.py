@@ -77,7 +77,9 @@ def _quoted(name: str, value, quote, text: str, ranged: bool) -> list[str]:
         return [f"{name} {value!r} is not a non-negative number" + (" or [low, high] range" if ranged else "")]
     if not isinstance(quote, str) or not quote or _norm(quote) not in _norm(text):
         return [f"{name} quote is not in the abstract: {quote!r}"]
-    return [f"{name} {v} does not appear in its quote" for v in _numbers(value) if not _number_in(v, quote)]
+    grams = name == "weight" and re.search(r"\d\s*(?:g|grams?)\b", _norm(quote))   # Amendment 13 §2
+    return [f"{name} {v} does not appear in its quote" for v in _numbers(value)
+            if not (_number_in(v, quote) or (grams and _number_in(v * 1000, quote)))]
 
 
 def _cl(obs: dict) -> dict:

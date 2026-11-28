@@ -209,3 +209,12 @@ def test_a_number_matches_its_quote_with_trailing_zeros():
     assert ex._number_in(1.2, "1,20 l/h")
     assert not ex._number_in(0.034, "clearance 0.0341 L/h/kg")
     assert not ex._number_in(34, "clearance 0.034 L/h/kg")
+
+
+def test_a_weight_stated_in_grams_is_recorded_in_kg():
+    # Amendment 13 §2
+    o = _obs(weight_kg=1.086, weight_quote="1086 +/- 311 g")
+    abstract = ABSTRACT + " 1086 +/- 311 g"
+    assert not any("weight" in p for p in ex.problems(o, abstract))
+    o = _obs(weight_kg=1.5, weight_quote="1086 +/- 311 g")
+    assert any("weight 1.5 does not appear" in p for p in ex.problems(o, abstract))
