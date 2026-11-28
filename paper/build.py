@@ -72,7 +72,7 @@ def ratio_with_ci(h: dict, label: bool = True) -> str:
 
 
 def _fold(x: float, ci: list | None) -> str:
-    return f"{x:.2f} ({ci[0]:.2f}–{ci[1]:.2f})" if ci else f"{x:.2f}"
+    return f"{_ratio(x)} ({_ratio(ci[0])}–{_ratio(ci[1])})" if ci else _ratio(x)
 
 
 def _pct(x: float, ci: list | None) -> str:
@@ -246,10 +246,15 @@ def s6_range(results: dict, population: str) -> str:
     return f"{_ratio(10 ** s6['min'])} to {_ratio(10 ** s6['max'])}"
 
 
-METRIC_NAME = {"css": "Average concentration", "cmax": "Peak concentration",
+METRIC_NAME = {"css": "Average concentration", "auc": "Exposure (AUC)", "cmax": "Peak concentration",
                "time_mic": "Daily exposure (proxy for time above MIC)"}
 ENZYME_NAME = {"cyp3a4": "CYP3A4", "ugt2b7": "UGT2B7"}
 CLASS_NAME = {"beta-lactam": "β-lactam", "NRTI": "nucleoside reverse transcriptase inhibitor"}
+
+
+def _display(names: dict, code: str | None) -> str:
+    """A recorded code in words; a code without a display name is shown as recorded, an absent one as a dash."""
+    return "—" if code is None else names.get(code, code)
 
 
 def drug_table(refset: dict) -> str:
@@ -262,9 +267,9 @@ def drug_table(refset: dict) -> str:
         fev = fe.get("value")
         note = {"fe_qualitative": " (qualitative)", "fe_not_in_label": " (not in label)"}
         tag = "".join(note[f] for f in fe.get("flags", []) if f in note)
-        rows.append(f"| {drug_name(name)} | {CLASS_NAME.get(d.get('class', ''), d.get('class', ''))} | "
-                    f"{METRIC_NAME[d['target_metric']]} | "
-                    f"{'—' if fev is None else f'{fev:.3f}{tag}'} | {ENZYME_NAME.get(d.get('nonrenal_enzyme'), '—')} | "
+        rows.append(f"| {drug_name(name)} | {_display(CLASS_NAME, d.get('class'))} | "
+                    f"{_display(METRIC_NAME, d['target_metric'])} | "
+                    f"{'—' if fev is None else f'{fev:.3f}{tag}'} | {_display(ENZYME_NAME, d.get('nonrenal_enzyme'))} | "
                     f"{len(d.get('bands') or [])} |")
     return "\n".join(rows)
 
@@ -272,7 +277,7 @@ def drug_table(refset: dict) -> str:
 def exclusion_table(results: dict) -> str:
     rows = ["| Drug | Criterion | Reason |", "|---|---|---|"]
     for name, e in sorted(results["excluded"].items()):
-        rows.append(f"| {drug_name(name)} | {e['criterion'].replace('E', 'L')} | {e['reason']} |")
+        rows.append(f"| {drug_name(name)} | {re.sub(r"\bE(\d)\b", r"L\1", e['criterion'])} | {e['reason']} |")
     return "\n".join(rows)
 
 
@@ -288,7 +293,7 @@ def stratum_table(results: dict) -> str:
     return "\n".join(rows)
 
 
-DRUG_NAME = {"penicillin_g": "benzylpenicillin", "piperacillin_tazobactam": "piperacillin (with tazobactam)"}
+DRUG_NAME = {"acyclovir": "aciclovir", "penicillin_g": "benzylpenicillin", "piperacillin_tazobactam": "piperacillin (with tazobactam)"}
 
 
 def drug_name(d: str) -> str:
@@ -368,10 +373,11 @@ def external_values(ext: dict, agreement: dict, flow: dict) -> dict:
     v["ext_no_obs"] = _and(sorted(drug_name(d) for d in no_obs))
     v["ext_n_no_obs"] = len(no_obs)
     v["ext_scored_drugs"] = _and(sorted(drug_name(d) for d in ext["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"]))
-    v["ext_he1_status"] = "confirmatory" if ext["hypotheses"]["HE1_under2"]["confirmatory"] else "descriptive"
-    v["ext_e1_drugs"] = ext["sensitivity"]["E1_exclude_imputed_weight_or_ga"]["HE1_under2"]["n_drugs"]
-    v["ext_e1_status"] = ("descriptive" if not ext["sensitivity"]["E1_exclude_imputed_weight_or_ga"]["HE1_under2"].get("confirmatory")
-                          else "confirmatory")
+    he1, he2 = ext["hypotheses"]["HE1_under2"], ext["hypotheses"]["HE2_all_ages"]
+    v["ext_he1_status"], v["ext_he1_verdict"] = _status(he1), _verdict(he1)
+    v["ext_he2_sentence"] = _he2_sentence(he2, ratio_with_ci(he2))
+    e1 = ext["sensitivity"]["E1_exclude_imputed_weight_or_ga"]["HE1_under2"]
+    v["ext_e1_drugs"], v["ext_e1_status"] = e1["n_drugs"], _status(e1)
     v["ext_n_no_adult"] = len(no_adult)
     v["ext_n_drugs"], v["ext_n_obs"] = ext["n_drugs"], ext["n_obs"]
     per = ext["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"]
@@ -449,11 +455,30 @@ def word_count(markdown: str) -> int:
     return len(body.split())
 
 
+def _status(h: dict) -> str:
+    return "confirmatory" if h.get("confirmatory") else "descriptive"
+
+
+def _verdict(h: dict) -> str:
+    return "succeeded" if h.get("success") else "did not succeed"
+
+
+def _he2_sentence(he2: dict, ratio: str) -> str:
+    if not he2.get("tested"):
+        return "HE2 was therefore not tested."
+    return (f"HE2 was therefore tested, and it also succeeded: {ratio} at all ages." if he2.get("success")
+            else f"HE2 was therefore tested, and it did not succeed: {ratio} at all ages.")
+
+
+def _n_of(n: int, noun: str) -> str:
+    return f"{n} {noun}" + ("" if n == 1 else "s")
+
+
 def _main_text(markdown: str) -> str:
     return markdown[markdown.index("# Introduction"):markdown.index("# Declarations")]
 
 
-def counts(markdown: str) -> dict:
+def table_and_figure_counts(markdown: str) -> dict:
     """Main-text tables and figures, and the supporting ones."""
     main, supp = _main_text(markdown), markdown[markdown.index("# Supporting information"):]
     return {"tables": main.count("Table: **Table"), "figures": len(re.findall(r"!\[\*\*Figure", main)),
@@ -470,7 +495,10 @@ def _section(markdown: str, heading: str) -> str:
 def bjcp_problems(markdown: str) -> list[str]:
     """The British Journal of Clinical Pharmacology limits (paper/BJCP_REQUIREMENTS.md)."""
     out = []
-    title = re.search(r'^title: "(.*)"$', markdown, flags=re.M).group(1)
+    m = re.search(r'^title: "(.*)"$', markdown, flags=re.M)
+    if not m:
+        return ["title is missing from the front matter"]
+    title = m.group(1)
     if len(title) > 150:
         out.append(f"title has {len(title)} characters (limit 150)")
     if re.search(r"\b[A-Z]{2,}\b", title):
@@ -486,7 +514,7 @@ def bjcp_problems(markdown: str) -> list[str]:
         words = sum(len(b.split()) - 1 for b in bullets)
         if len(bullets) > 3 or words > 50:
             out.append(f"{box[3:]}: {len(bullets)} bullets, {words} words (limits 3 and 50)")
-    c = counts(markdown)
+    c = table_and_figure_counts(markdown)
     if c["tables"] + c["figures"] > 8:
         out.append(f"{c['tables']} tables and {c['figures']} figures in the main text (limit 8)")
     return out
@@ -496,10 +524,10 @@ def render_manuscript(template: str, v: dict) -> str:
     """Fill the template, with the word, table and figure counts of the filled text itself."""
     draft = render(template, {**v, "word_count": "0", "n_tables": "0", "n_figures": "0",
                               "n_supp_tables": "0", "n_supp_figures": "0"})
-    c = counts(draft)
+    c = table_and_figure_counts(draft)
     return render(template, {**v, "word_count": f"{word_count(draft):,}", "n_tables": c["tables"],
-                             "n_figures": c["figures"], "n_supp_tables": c["supp_tables"],
-                             "n_supp_figures": c["supp_figures"]})
+                             "n_figures": c["figures"], "n_supp_tables": _n_of(c["supp_tables"], "table"),
+                             "n_supp_figures": _n_of(c["supp_figures"], "figure")})
 
 
 def check_provenance(prov: dict) -> None:
@@ -518,6 +546,8 @@ def load_external() -> tuple[dict, dict, dict]:
 def all_values(results: dict, refset: dict, ext: dict, agreement: dict, flow: dict) -> dict:
     for prov in (results["provenance"], ext["provenance"]):
         check_provenance(prov)
+    if ext["provenance"]["versions"] != results["provenance"]["versions"]:
+        raise ValueError("the two evaluations' outputs were made with different software versions")
     v = {**values(results, refset), **external_values(ext, agreement, flow)}
     v["table_hypotheses"] = hypothesis_table(results, ext)
     v["table_sensitivity"] = sensitivity_table(results, ext)
@@ -525,8 +555,6 @@ def all_values(results: dict, refset: dict, ext: dict, agreement: dict, flow: di
     v["table_ext_strata"] = external_stratum_table(ext)
     v["table_ext_drugs"] = external_drug_table(ext, EXT)
     v["ext_engine_commit"] = ext["provenance"]["engine_commit"][:7]
-    if ext["provenance"]["versions"] != results["provenance"]["versions"]:
-        raise ValueError("the two evaluations' outputs were made with different software versions")
     for pop in ("newborn", "under2", "all"):
         v[f"table_label_methods_{pop}"] = method_table(results, pop)
     return v

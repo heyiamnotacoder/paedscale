@@ -22,3 +22,6 @@ p:has(+ table) { break-after: avoid; page-break-after: avoid; }
 figure img { max-width: 88%; display: block; margin: 0 auto; }
 caption { caption-side: top; text-align: left; font-family: "Charter", "Georgia", serif; font-size: 9.5pt;
           color: var(--ink); padding-bottom: .35em; }
+/* A bare image (the supporting figure) fits the page and stays with its heading. */
+img { max-width: 88%; display: block; margin: 0 auto; page-break-inside: avoid; }
+h2:has(+ p > img) { break-after: avoid; page-break-after: avoid; }

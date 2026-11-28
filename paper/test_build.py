@@ -154,3 +154,68 @@ def test_table_s1_uses_words_not_code_names():
     results, refset = _committed()
     t = build.drug_table(refset)
     assert "css" not in t and "cyp3a4" not in t and "Average concentration" in t
+
+
+def test_a_recorded_value_without_a_display_name_is_shown_as_recorded():
+    refset = {"drugs": {"x": {"included": True, "class": "other", "target_metric": "auc",
+                              "fe": {"value": 0.5}, "nonrenal_enzyme": "cyp2d6", "bands": []}}}
+    t = build.drug_table(refset)
+    assert "| cyp2d6 |" in t and "auc" in t.lower()
+
+
+def test_a_drug_with_no_non_renal_enzyme_shows_a_dash():
+    refset = {"drugs": {"x": {"included": True, "class": "other", "target_metric": "css",
+                              "fe": {"value": 0.9}, "bands": []}}}
+    assert "| — |" in build.drug_table(refset)
+
+
+def test_label_criteria_are_renamed_l_without_touching_other_letters():
+    t = build.exclusion_table({"excluded": {"x": {"criterion": "E2 and E1", "reason": "Every E1 dose"}}})
+    assert "| L2 and L1 | Every E1 dose |" in t
+
+
+def test_a_hypothesis_verdict_is_read_from_the_results():
+    he = {"confirmatory": True, "success": False, "tested": None}
+    assert build._status(he) == "confirmatory" and build._status({}) == "descriptive"
+    assert build._verdict(he) == "did not succeed" and build._verdict({"success": True}) == "succeeded"
+
+
+def test_he2_is_reported_as_untested_when_he1_failed():
+    assert "not tested" in build._he2_sentence({"tested": False, "success": None}, "0.9")
+    assert "also succeeded" in build._he2_sentence({"tested": True, "success": True}, "0.7")
+    assert "did not succeed" in build._he2_sentence({"tested": True, "success": False}, "0.9")
+
+
+def test_a_reason_outside_every_group_stops_the_build():
+    with pytest.raises(ValueError, match="no group"):
+        build._reason_group("Q9: something new")
+    assert build._reason_group("P1/P2: review") == build._reason_group("P1: review")
+
+
+def test_outputs_made_with_different_software_versions_stop_the_build():
+    results, refset = _committed()
+    ext, agreement, flow = build.load_external()
+    ext = {**ext, "provenance": {**ext["provenance"], "versions": {"python": "0"}}}
+    with pytest.raises(ValueError, match="software versions"):
+        build.all_values(results, refset, ext, agreement, flow)
+
+
+def test_a_missing_title_is_a_problem_not_a_crash():
+    assert "title" in " ".join(build.bjcp_problems("---\n---\n# Abstract\n# Introduction\n# Declarations\n"
+                                                    "# Supporting information\n"))
+
+
+def test_supporting_figures_take_the_right_plural():
+    assert build._n_of(1, "figure") == "1 figure" and build._n_of(2, "figure") == "2 figures"
+
+
+def test_the_external_method_table_reports_the_share_within_1_5_fold():
+    assert "0.67–1.5" in build.external_method_table(_ext()).splitlines()[0]
+
+
+def test_drugs_take_their_international_nonproprietary_names():
+    assert build.drug_name("acyclovir") == "aciclovir" and build.drug_name("penicillin_g") == "benzylpenicillin"
+
+
+def test_an_afe_interval_that_barely_crosses_one_is_not_rounded_onto_it():
+    assert build._fold(0.83, [0.643, 1.0019]) == "0.83 (0.64–1.0019)"
