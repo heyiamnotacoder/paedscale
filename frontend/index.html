@@ -1779,7 +1779,7 @@ function fmtDose(x){
 function fmtShare(f){ const p = f*100; return p>0 && p<1 ? "<1%" : p>99 && p<100 ? ">99%" : Math.round(p)+"%"; }
 const PU_FLAT_FOLD = 1.01;     // a 90% interval narrower than this is shown as "about X"
 const PU_ANCHOR_TOL = 0.05;    // final dose this far from the engine dose is called out
-const PATHWAY_LABEL = {renal_gfr:"renal (GFR) maturation", cyp3a4:"CYP3A4 maturation", ugt2b7:"UGT2B7 maturation"};
+const PATHWAY_LABEL = {renal_gfr:"renal (GFR) maturation", cyp3a4:"CYP3A4 maturation", ugt2b7:"UGT2B7 maturation", ugt1a_sult:"UGT1A + sulphation maturation", cyp2d6:"CYP2D6 maturation", gsta1:"GSTA1 maturation", cyp1a2:"CYP1A2 maturation", renal_secretion:"renal tubular secretion maturation", dexmedetomidine:"dexmedetomidine clearance maturation", clindamycin:"clindamycin clearance maturation", ibuprofen:"ibuprofen clearance maturation"};
 function paramUncertaintyHtml(pu, finalDpk){
   const q = pu && pu.dose_mg_per_kg_per_day;
   if(!q || q.p05==null || q.p50==null || q.p95==null) return "";

@@ -14,6 +14,8 @@ Assumptions (stated, not hidden):
     TM50 a negative correlation would make the true spread narrower than shown; above
     TM50 it would make it wider. The direction of the error is therefore age-dependent.
   * The allometric exponent stays fixed at 0.75 (theory-based; Anderson & Holford 2008).
+  * A TM50 or Hill with no uncertainty in its source is held at its point value, and the
+    result names it (pathways_without_uncertainty, method). The interval is then too narrow.
   * The interval covers PARAMETER uncertainty in the maturation curves only. It is not a
     between-subject variability (prediction) interval and says nothing about errors in the
     retrieved adult PK, the pathway split (fm) or the reference dose.
@@ -94,6 +96,11 @@ def dose_uncertainty_interval(
     if point.blocked:
         return None
     maturing = [p for p in (case.get("fm") or {}) if p in MATURATION]
+    # Parameters whose source printed no uncertainty stay at their point value (never invented).
+    fixed = {p: [f for f, ci in (("TM50", "tm50_ci95"), ("Hill", "hill_ci95"))
+                 if not MATURATION[p].get(ci)] for p in maturing}
+    without_uncertainty = [p for p in maturing if len(fixed[p]) == 2]
+    fixed_note = "; ".join(f"{p} ({', '.join(fs)})" for p, fs in fixed.items() if fs)
     # Draws describe the engine dose, so safety bounds must not truncate them: they are
     # removed for sampling and reported as the share of draws past each bound instead.
     toxic, effective = (case.get(k) for k in SAFETY_BOUNDS)
@@ -135,7 +142,10 @@ def dose_uncertainty_interval(
             f"Monte Carlo, {n_draws} draws (seed {seed}); TM50 and Hill sampled independently "
             "from split log-normals matching the published 95% CIs; allometric exponent fixed "
             "at 0.75. Not a between-subject variability interval."
+            + (f" Held at the point value (no published uncertainty): {fixed_note}."
+               if fixed_note else "")
         ),
+        "pathways_without_uncertainty": without_uncertainty,
         "level": 0.90,
         "n_draws": n_draws,
         "n_valid": len(dose_kg),

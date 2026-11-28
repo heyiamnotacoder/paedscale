@@ -75,6 +75,9 @@ def test_sampled_curves_reproduce_the_published_95_cis():
     for key, params in MATURATION.items():
         draws = [sample_curve(params, rng) for _ in range(40000)]
         for field, ci in (("tm50_weeks", params["tm50_ci95"]), ("hill", params["hill_ci95"])):
+            if ci is None:  # nothing published: the parameter must stay at its point value
+                assert all(d[field] == params[field] for d in draws), (key, field)
+                continue
             xs = sorted(d[field] for d in draws)
             lo, med, hi = xs[int(0.025 * len(xs))], xs[len(xs) // 2], xs[int(0.975 * len(xs))]
             assert abs(lo / ci[0] - 1) < 0.01, (key, field, lo, ci)

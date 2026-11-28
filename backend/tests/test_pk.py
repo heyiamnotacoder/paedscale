@@ -78,7 +78,11 @@ def test_refuses_unknown_pathway():
 def test_only_published_pathways():
     """MATURATION holds only opened Hill+TM50 primaries — no approximate extras."""
     from engine.constants import MATURATION
-    assert set(MATURATION) == {"renal_gfr", "cyp3a4", "ugt2b7"}
+    assert set(MATURATION) == {
+        "renal_gfr", "cyp3a4", "ugt2b7",  # original three (benchmark inputs)
+        "ugt1a_sult", "cyp2d6", "gsta1", "cyp1a2", "renal_secretion",  # see test_maturation_curves
+        "dexmedetomidine", "clindamycin", "ibuprofen",
+    }
     assert MATURATION["renal_gfr"]["tm50_weeks"] == 47.7
     assert MATURATION["renal_gfr"]["hill"] == 3.40
     assert MATURATION["cyp3a4"]["tm50_weeks"] == 73.6
@@ -89,11 +93,11 @@ def test_only_published_pathways():
         assert "PMID" in params["source"], key
         assert "approx" not in params["source"].lower()
         r = compute_pediatric_dose(
-            drug="probe", weight_kg=10, cl_adult_l_h=20, vd_adult_l=50,
+            drug=params["probe_drug"] or "probe", weight_kg=10, cl_adult_l_h=20, vd_adult_l=50,
             fm={key: 1.0}, age_years=1, adult_dose_mg_per_day=100,
         )
         assert r.cl_child_l_h > 0 and r.pathways[0].pathway == key
-    print("  published pathways only: renal_gfr / cyp3a4 / ugt2b7  OK")
+    print(f"  published pathways only: {len(MATURATION)} cited curves  OK")
 
 
 def test_pk_cache():

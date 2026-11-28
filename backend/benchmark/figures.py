@@ -110,6 +110,11 @@ def paired_difference_forest(results, out, prov=None):
     save_figure(fig, out, "fig3_paired_difference_by_drug", prov)
 
 
+# Figure 1 is pre-registered: it shows the three curves the benchmark uses (PROTOCOL.md).
+# Curves added to the engine later are not benchmark inputs and stay out of it.
+PREREGISTERED_CURVES = ("renal_gfr", "cyp3a4", "ugt2b7")
+
+
 def maturation_curves(out, prov=None):
     from engine.constants import MATURATION
     from engine.pk_engine import maturation_factor
@@ -120,7 +125,8 @@ def maturation_curves(out, prov=None):
     pma = [p for p in pma if p <= 52 * 18 + 40]
     rng = random.Random(1)
     colours = {"renal_gfr": BLUE, "cyp3a4": ORANGE, "ugt2b7": AQUA}
-    for key, params in MATURATION.items():
+    for key in PREREGISTERED_CURVES:
+        params = MATURATION[key]
         draws = [sample_curve(params, rng) for _ in range(400)]
         lo, hi, mid = [], [], []
         for p in pma:

@@ -15,6 +15,7 @@ import os
 
 from anthropic import Anthropic
 
+from engine.pathway_map import curve_catalogue
 from engine.pk_cache import CACHE as PK_CACHE
 from retrieval.retrieval_tools import TOOL_FUNCS, TOOL_SCHEMAS, openfda_label
 from skills import load_skill, list_skills
@@ -29,8 +30,10 @@ fill gaps with pubmed (skill 'pubmed') or web_fetch (skill 'webfetch') for a spe
 Load a skill with load_skill before using that method if you need the protocol.
 
 Cite-or-abstain: null any number you cannot source. Empty lists OK.
-Adult values = 70 kg. fm keys: renal_gfr, cyp3a4, ugt2b7
-(map real enzymes onto these; omit fm if no engine key — do not invent a curve)."""
+Adult values = 70 kg. fm keys (engine maturation curves):
+{curves}
+Map real enzymes onto these; a drug-specific key only for its own drug. Omit fm for a
+pathway with no key — do not invent a curve.""".format(curves=curve_catalogue())
 
 DOSSIER_TOOL = {
     "name": "submit_dossier",

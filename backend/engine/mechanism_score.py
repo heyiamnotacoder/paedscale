@@ -17,6 +17,8 @@ import json
 import os
 import re
 
+from engine.constants import MATURATION
+
 HERE = os.path.dirname(__file__)
 DIMENSIONS = ["elimination", "pathways", "enzymes",
               "transporters", "active_metabolites", "protein_binding"]
@@ -44,6 +46,15 @@ def _normset(xs) -> set[str]:
     return {_norm(x) for x in (xs or []) if str(x).strip()}
 
 
+# A drug-specific curve (e.g. "clindamycin") names the same pathway as its family ("cyp3a4"):
+# choosing the more specific curve is a dosing choice, not a different mechanism.
+_PATHWAY_FAMILY = {_norm(k): _norm(c.get("family", k)) for k, c in MATURATION.items()}
+
+
+def _pathwayset(xs) -> set[str]:
+    return {_PATHWAY_FAMILY.get(p, p) for p in _normset(xs)}
+
+
 def load_truth() -> dict:
     with open(os.path.join(HERE, "..", "eval_data", "mechanism_truth.json")) as f:
         return json.load(f)
@@ -55,7 +66,7 @@ def score_mechanism(model: dict, truth: dict, pb_tol_abs: float = 20.0) -> dict:
     out: dict[str, object] = {}
 
     out["elimination"] = _norm(model.get("elimination", "")) == _norm(truth["elimination"])
-    out["pathways"] = _normset(model.get("pathways")) == _normset(truth["pathways"])
+    out["pathways"] = _pathwayset(model.get("pathways")) == _pathwayset(truth["pathways"])
     out["enzymes"] = _normset(model.get("enzymes")) == _normset(truth["enzymes"])
     out["transporters"] = _normset(model.get("transporters")) == _normset(truth["transporters"])
 

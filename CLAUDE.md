@@ -27,6 +27,7 @@ backend/                    (run all commands from here; backend/ is the package
     edge_cases.py           deterministic flags: prodrug / obesity / protein-binding / illness
     pk_cache.py             bounded in-process LRU for live dossiers (Render single-dyno shared pool)
     mechanism_score.py      mechanistic-reasoning scorer (6 PRD dimensions)
+    pathway_map.py          drug / enzyme -> published maturation curve lookup (agent hint only)
     uncertainty.py          seeded 90% parameter-uncertainty interval (published TM50/Hill CIs only)
   retrieval/                retrieval subagent + tools (package; `import retrieval` → __init__.py)
     __init__.py             RETRIEVAL SUBAGENT → live | cache | abstain
@@ -74,7 +75,13 @@ MF(PMA)  = PMA^H / (TM50^H + PMA^H)      # normalised so adult ≈ 1
   **flags** unattributed clearance rather than hiding it. This is cite-or-abstain in code.
 
 Known pathway keys: `renal_gfr` (Rhodin 2009), `cyp3a4` (Anderson/Larsson 2011 midazolam),
-`ugt2b7` (Anand 2008 morphine). Extend MATURATION only with **published** TM50/Hill — never invent.
+`ugt2b7` (Anand 2008 morphine), `ugt1a_sult` (paracetamol), `cyp2d6` (tramadol), `gsta1`
+(busulfan), `cyp1a2` (olanzapine), `renal_secretion` (hydrochlorothiazide). Drug-specific keys
+(engine refuses them for any other drug): `clindamycin`, `dexmedetomidine`, `ibuprofen`.
+A pathway curve used for a drug other than its probe is flagged as a surrogate.
+`engine/pathway_map.py` looks up a curve by drug or enzyme; sources and how each number was read
+are in `docs/maturation_curves_2026-11.md`. Only the original three are benchmark inputs (Fig 1).
+Extend MATURATION only with **published** TM50/Hill — never invent.
 
 **Skills:** lean files in `backend/skills/` loaded via `load_skill` — keep agent SYSTEM short.
 **Edge cases:** `assess_edge_cases` flags prodrug/obesity/high-PB/illness when evidence exists.

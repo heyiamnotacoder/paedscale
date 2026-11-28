@@ -2,7 +2,10 @@
 
 Map drug → engine `fm` keys only when a maturation curve exists.
 
-**Keys:** `renal_gfr`, `cyp3a4`, `ugt2b7` only — each has a published TM50/Hill (Rhodin 2009; Anderson/Larsson 2011; Anand 2008). Do not map to CYP1A2/2D6/2C9/2C19/UGT1A1; those curves were removed (no opened Hill pair).
+**Keys:** the curves listed in the `compute_pediatric_dose` tool description — each a TM50/Hill pair read in its cited source (see `engine/constants.py`).
+- **Drug-specific key** (`clindamycin`, `dexmedetomidine`, `ibuprofen`): use it for that drug; the engine refuses it for any other drug.
+- **Pathway key**: a probe-drug curve. For another substrate it is a surrogate; the engine flags this, so say it in the rationale.
+- **No key for the enzyme** (CYP2C9, CYP2C19, CYP2B6, CYP2A6, UGT1A1, CES1, ...): never borrow a neighbouring isoform's curve; leave that fraction out (engine flags it) and grade down.
 
 **Rules**
 - `fm` fractions ≈ 1.0 for the cleared share; unmapped fraction → leave out (engine flags it).

@@ -19,6 +19,7 @@ from anthropic import Anthropic
 
 import retrieval
 from engine.formulation import attach_administration
+from engine.pathway_map import curve_catalogue
 from engine.pk_cache import CACHE as PK_CACHE
 from engine.uncertainty import dose_uncertainty_interval
 from engine.pk_engine import (
@@ -102,7 +103,11 @@ TOOLS = [
     },
     {
         "name": "compute_pediatric_dose",
-        "description": "Deterministic allometry × maturation engine. fm keys must exist in MATURATION.",
+        "description": (
+            "Deterministic allometry × maturation engine. fm keys must be one of these published "
+            "curves (a drug-specific key only for its own drug; others are flagged surrogates):\n"
+            + curve_catalogue()
+        ),
         "input_schema": {
             "type": "object",
             "properties": {

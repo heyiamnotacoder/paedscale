@@ -19,6 +19,7 @@ from typing import Optional
 from engine.constants import (
     ADULT_PMA_WEEKS,
     CL_EXPONENT,
+    DRUG_SPECIFIC,
     MATURATION,
     REFERENCE_WEIGHT_KG,
     VD_EXPONENT,
@@ -86,6 +87,18 @@ def maturation_factor(pma_weeks: float, tm50_weeks: float, hill: float) -> float
     mf = _hill(pma_weeks)
     mf_adult = _hill(ADULT_PMA_WEEKS)
     return mf / mf_adult if mf_adult else mf
+
+
+# International non-proprietary name <-> US name, for matching a drug to a curve's probe.
+_DRUG_ALIASES = {"acetaminophen": "paracetamol"}
+
+
+def is_probe_drug(drug: Optional[str], probe: Optional[str]) -> bool:
+    """True when `drug` names the curve's probe (salt and case ignored, INN/USAN aliased)."""
+    if not drug or not probe:
+        return False
+    words = [_DRUG_ALIASES.get(w, w) for w in drug.lower().replace("-", " ").split()]
+    return probe.lower() in words
 
 
 def allometric_scale(weight_kg: float, exponent: float) -> float:
@@ -254,6 +267,19 @@ def compute_pediatric_dose(
                 f"known pathways: {sorted(curves)}. Flag as a data gap instead."
             )
         params = curves[pathway]
+        probe = params.get("probe_drug")
+        if params.get("kind") == DRUG_SPECIFIC and not is_probe_drug(drug, probe):
+            raise ValueError(
+                f"Maturation curve '{pathway}' was estimated for {probe} only and is not "
+                f"valid for '{drug}'. Use a pathway curve or flag a data gap."
+            )
+        if probe and not is_probe_drug(drug, probe):
+            warnings.append(
+                f"SURROGATE maturation curve for {pathway}: estimated from {probe}; applying "
+                f"it to {drug} assumes the same age course for this pathway."
+            )
+        if params.get("caveats"):
+            warnings.append(f"Maturation curve note ({pathway}): {params['caveats']}")
         mf = maturation_factor(pma, params["tm50_weeks"], params["hill"])
         of = renal_function_fraction if pathway.startswith("renal") else hepatic_function_fraction
         cl_pathway = cl_adult_l_h * fraction * cl_scale * mf * of
