@@ -1780,6 +1780,26 @@ function fmtShare(f){ const p = f*100; return p>0 && p<1 ? "<1%" : p>99 && p<100
 const PU_FLAT_FOLD = 1.01;     // a 90% interval narrower than this is shown as "about X"
 const PU_ANCHOR_TOL = 0.05;    // final dose this far from the engine dose is called out
 const PATHWAY_LABEL = {renal_gfr:"renal (GFR) maturation", cyp3a4:"CYP3A4 maturation", ugt2b7:"UGT2B7 maturation"};
+const PARAM_INFO = {tm50_weeks:{label:"TM50", unit:" weeks PMA"}, hill:{label:"Hill coefficient", unit:""}};
+function paramName(key){
+  const [pw, field] = key.split(".");
+  return `${(PARAM_INFO[field]||{label:field}).label} of ${PATHWAY_LABEL[pw]||pw}`;
+}
+function parameterDriverHtml(pu){
+  const d = pu.dominant_parameter, shares = Object.entries(pu.parameter_share||{}).sort((a,b)=>b[1]-a[1]);
+  if(d && d.share!=null){
+    const info = PARAM_INFO[d.parameter]||{label:d.parameter, unit:""};
+    const ci = Array.isArray(d.ci95) && d.ci95.length===2 ? `, 95% CI ${fmtDose(d.ci95[0])}–${fmtDose(d.ci95[1])}` : "";
+    const cite = d.citation || "";
+    const val = d.value!=null ? ` (published ${fmtDose(d.value)}${info.unit}${ci}${cite ? "; "+cite : ""})` : "";
+    return `<div class="md" id="pu-driver" style="font-size:.9rem;margin-top:8px"${d.source ? ` title="${esc(d.source)}"` : ""}>`
+         + `Most of this spread (${fmtShare(d.share)}) comes from the <b>${esc(paramName(d.key))}</b>${esc(val)}. `
+         + `To first order, a narrower published CI for that parameter would shrink the interval the most.</div>`;
+  }
+  if(shares.length < 2) return "";
+  return `<div class="md" id="pu-driver" style="font-size:.9rem;margin-top:8px">No parameter clearly dominates. The spread is shared ${shares.length > 3 ? "mainly " : ""}by `
+       + shares.slice(0,3).map(([k,v])=>`the ${esc(paramName(k))} (${fmtShare(v)})`).join(", ").replace(/, (?=[^,]*$)/, " and ") + `.</div>`;
+}
 function paramUncertaintyHtml(pu, finalDpk){
   const q = pu && pu.dose_mg_per_kg_per_day;
   if(!q || q.p05==null || q.p50==null || q.p95==null) return "";
@@ -1820,10 +1840,11 @@ function paramUncertaintyHtml(pu, finalDpk){
        + (eff!=null ? `<span><span class="sw" style="background:var(--ink-2);width:3px"></span>Effective threshold</span>` : "") + `</div>`;
   }
   if(warns.length) h += `<div class="pu-warn" role="alert">${warns.join("<br>")}</div>`;
+  if(!flat) h += parameterDriverHtml(pu);
   const shares = Object.entries(pu.variance_share||{}).sort((a,b)=>b[1]-a[1]);
   const notes = [];
   if(pu.fold_width_90!=null && !flat) notes.push(`The interval spans ${pu.fold_width_90.toFixed(2)}-fold.`);
-  if(shares.length) notes.push(`Spread comes from ` + shares.map(([k,v])=>`${esc(PATHWAY_LABEL[k]||k)} (${Math.round(v*100)}%)`).join(", ") + `.`);
+  if(shares.length > 1) notes.push(`Spread comes from ` + shares.map(([k,v])=>`${esc(PATHWAY_LABEL[k]||k)} (${Math.round(v*100)}%)`).join(", ") + `.`);
   const eng = pu.engine_dose_mg_per_kg_per_day;
   if(finalDpk!=null && eng>0 && Math.abs(finalDpk/eng - 1) > PU_ANCHOR_TOL) notes.push(`The recommended dose differs from the engine estimate (${fmtDose(eng)} mg/kg/day), for example because it is guideline-anchored.`);
   notes.push(`This covers uncertainty in the published maturation-curve parameters only. It is not the range of doses that suit different children.`);

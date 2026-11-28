@@ -5,8 +5,10 @@ maturation parameters (TM50, Hill). Deterministic (seeded), no API key.
 Run:  python3 -m tests.test_uncertainty
 """
 
-from engine.pk_engine import compute_pediatric_dose
+import math
 import random
+
+from engine.pk_engine import compute_pediatric_dose
 
 from engine.constants import MATURATION
 from engine.uncertainty import dose_uncertainty_interval, sample_curve
@@ -138,3 +140,90 @@ def test_interval_names_the_engine_point_estimate_it_surrounds():
     pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **RENAL)
     assert pi["engine_dose_mg_per_kg_per_day"] == point
     assert "engine dose" in pi["kind"]
+
+
+# --- which maturation PARAMETER drives the spread -------------------------------------------
+# Expected shares come from the delta method on MF = PMA^H / (TM50^H + PMA^H), independent of the
+# Monte Carlo: d log MF / d log TM50 = -H(1-MF) and d log MF / d log H = H ln(PMA/TM50) (1-MF),
+# so share(TM50) = sd_T^2 / (sd_T^2 + (ln(PMA/TM50) sd_H)^2), with sd = log-width of the 95% CI / 3.92.
+
+PURE_RENAL = dict(RENAL, fm={"renal_gfr": 1.0})
+
+
+def _delta_share_tm50(pma, tm50=47.7, tm50_ci=(45.1, 50.5), hill_ci=(3.03, 3.80)):
+    sd_t = math.log(tm50_ci[1] / tm50_ci[0]) / (2 * 1.959963984540054)
+    sd_h = math.log(hill_ci[1] / hill_ci[0]) / (2 * 1.959963984540054)
+    return sd_t ** 2 / (sd_t ** 2 + (math.log(pma / tm50) * sd_h) ** 2)
+
+
+def test_tm50_drives_the_spread_near_tm50():
+    pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **PURE_RENAL)
+    share = pi["parameter_share"]
+    assert set(share) == {"renal_gfr.tm50_weeks", "renal_gfr.hill"}, share
+    assert abs(sum(share.values()) - 1.0) < 1e-6, share
+    assert abs(share["renal_gfr.tm50_weeks"] - _delta_share_tm50(42.0)) < 0.05, share   # ≈ 0.94
+    assert pi["dominant_parameter"]["key"] == "renal_gfr.tm50_weeks"
+
+
+def test_hill_drives_the_spread_well_past_tm50():
+    pi = dose_uncertainty_interval(weight_kg=12.0, pma_weeks=120.0, **PURE_RENAL)
+    share = pi["parameter_share"]
+    assert abs(share["renal_gfr.hill"] - (1 - _delta_share_tm50(120.0))) < 0.05, share      # ≈ 0.77
+    assert pi["dominant_parameter"]["key"] == "renal_gfr.hill"
+
+
+def test_dominant_parameter_cites_the_published_value_and_ci():
+    dom = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **PURE_RENAL)["dominant_parameter"]
+    assert dom["pathway"] == "renal_gfr" and dom["parameter"] == "tm50_weeks"
+    assert dom["value"] == 47.7 and tuple(dom["ci95"]) == (45.1, 50.5)
+    assert "Rhodin" in dom["source"] and "18846389" in dom["source"]
+
+
+def test_no_spread_means_no_parameter_attribution():
+    adult = dose_uncertainty_interval(weight_kg=70.0, age_years=40.0, **RENAL)
+    assert adult["parameter_share"] is None and adult["dominant_parameter"] is None
+
+
+def test_no_parameter_is_named_when_the_spread_is_shared():
+    # renal 0.6 + CYP3A4 0.4 at 42 weeks: three parameters each carry about a third of the spread,
+    # inside Monte Carlo noise of one another, so naming one as "the driver" would be false.
+    pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0,
+                                   **dict(RENAL, fm={"renal_gfr": 0.6, "cyp3a4": 0.4}))
+    share = pi["parameter_share"]
+    assert len(share) == 4 and abs(sum(share.values()) - 1.0) < 1e-6, share
+    assert max(share.values()) < 0.5, share
+    assert pi["dominant_parameter"] is None, pi["dominant_parameter"]
+
+
+def test_hill_drives_cyp3a4_spread_in_an_older_child():
+    # CYP3A4's TM50 CI is strongly asymmetric (59.4–80.0 around 73.6); at 300 weeks PMA the curve is
+    # far past TM50, where ln(PMA/TM50) ≈ 1.4 makes the Hill CI dominate (delta method ≈ 0.9).
+    dom = dose_uncertainty_interval(weight_kg=20.0, pma_weeks=300.0,
+                                    **dict(RENAL, fm={"cyp3a4": 1.0}))["dominant_parameter"]
+    assert dom["key"] == "cyp3a4.hill" and dom["share"] > 0.8, dom
+    assert "Anderson" in dom["source"] and tuple(dom["ci95"]) == (2.2, 4.1)
+
+
+def test_a_near_tie_never_names_a_driver_whatever_the_seed():
+    # Pure renal at 78 weeks PMA: ln(78/47.7) ≈ 0.49 puts TM50 and Hill at ≈ 0.51 / 0.49 by the
+    # delta method. With one pathway the top share is always ≥ 0.5, so a majority rule alone
+    # would name whichever parameter the seed favoured.
+    for seed in range(6):
+        pi = dose_uncertainty_interval(weight_kg=10.0, pma_weeks=78.0, seed=seed, **PURE_RENAL)
+        assert pi["dominant_parameter"] is None, (seed, pi["parameter_share"])
+
+
+def test_dominant_parameter_carries_a_short_citation():
+    dom = dose_uncertainty_interval(weight_kg=20.0, pma_weeks=300.0,
+                                    **dict(RENAL, fm={"cyp3a4": 1.0}))["dominant_parameter"]
+    assert dom["citation"] == "Anderson & Larsson 2011", dom
+
+
+def test_every_curve_has_a_short_citation_drawn_from_its_source():
+    for key, curve in MATURATION.items():
+        cite = curve.get("citation")
+        assert cite, key
+        *names, year = cite.split()
+        assert f" {year};" in curve["source"], (key, cite)            # the journal's "2009;24:67"
+        for name in names:
+            assert name == "&" or name in curve["source"], (key, name)
