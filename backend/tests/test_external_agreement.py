@@ -40,3 +40,16 @@ def test_a_different_number_of_observations_is_a_value_disagreement():
     r1 = {"pediatric": [_study("1", "include", [_o(0.1), _o(0.2, pna=100)])], "adult": []}
     r2 = {"pediatric": [_study("1", "include", [_o(0.1)])], "adult": []}
     assert [d["pmid"] for d in ag.compare(r1, r2)["value_disagreements"]] == ["1"]
+
+
+def test_a_flag_recorded_on_the_study_or_on_each_observation_is_the_same_value():
+    a = _study("1", "include", [_o(0.1)]) | {"flags": ["pca_as_pma"]}
+    b = _study("1", "include", [_o(0.1) | {"flags": ["pca_as_pma"]}])
+    c = ag.compare({"pediatric": [a], "adult": []}, {"pediatric": [b], "adult": []})
+    assert c["value_disagreements"] == [] and c["value_agreements"] == 1
+
+
+def test_integer_and_float_forms_of_a_number_agree():
+    a = _study("1", "include", [_o(1, w=3)])
+    b = _study("1", "include", [_o(1.0, w=3.0)])
+    assert ag.compare({"pediatric": [a], "adult": []}, {"pediatric": [b], "adult": []})["value_agreements"] == 1

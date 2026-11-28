@@ -33,16 +33,28 @@ def kappa(pairs: list[tuple[str, str]]) -> Optional[float]:
     return None if pe >= 1 else (po - pe) / (1 - pe)
 
 
-def _key(item: dict, fields: tuple[str, ...]) -> tuple:
+def _num(v):
+    """30 and 30.0 are the same number; lists element-wise."""
+    if isinstance(v, bool) or v is None:
+        return v
+    if isinstance(v, (int, float)):
+        return float(v)
+    if isinstance(v, list):
+        return [_num(x) for x in v]
+    return v
+
+
+def _key(item: dict, fields: tuple[str, ...], study_flags=()) -> tuple:
     cl = item.get("cl") or {}
-    return (cl.get("value"), cl.get("unit"), cl.get("summary"),
-            *(json.dumps(item.get(f)) for f in fields), tuple(sorted(item.get("flags") or [])))
+    flags = set(item.get("flags") or []) | set(study_flags)      # a study flag applies to each item
+    return (_num(cl.get("value")), cl.get("unit"), cl.get("summary"),
+            *(json.dumps(_num(item.get(f))) for f in fields), tuple(sorted(flags)))
 
 
 def _items_key(study: dict, kind: str) -> tuple:
     fields = PED_FIELDS if kind == "pediatric" else ADULT_FIELDS
-    return (tuple(sorted(study.get("flags") or [])),
-            tuple(sorted(_key(i, fields) for i in study.get(KINDS[kind]) or [])))
+    sf = study.get("flags") or []
+    return tuple(sorted(_key(i, fields, sf) for i in study.get(KINDS[kind]) or []))
 
 
 def compare(r1: dict, r2: dict) -> dict:
