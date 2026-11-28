@@ -76,8 +76,14 @@ def test_screening_past_a_stop_point_is_a_problem():
     assert check.stop_problems({"pediatric": all_ped, "adult": extra}, snap)   # past five qualifying
 
 
+def _tmp_extraction(monkeypatch, tmp_path):
+    from dataclasses import replace
+    from benchmark.external.curation import trees
+    monkeypatch.setattr(trees, "PRIMARY", replace(trees.PRIMARY, extraction=str(tmp_path)))
+
+
 def test_a_missing_record_file_is_a_problem(tmp_path, monkeypatch):
-    monkeypatch.setattr(check, "EXTRACTION_DIR", str(tmp_path))
+    _tmp_extraction(monkeypatch, tmp_path)
     assert check.check_drug("nosuchpass", "vancomycin")
 
 
@@ -91,7 +97,7 @@ def test_a_malformed_study_before_others_is_reported_not_raised(tmp_path, monkey
     (tmp_path / "p" / "vancomycin.json").write_text(json.dumps({"pediatric": [
         {"pmid": first, "observations": [{"pma_weeks": [30]}]},
         {"pmid": second, "decision": "exclude", "reason": "P1", "observations": []}], "adult": []}))
-    monkeypatch.setattr(check, "EXTRACTION_DIR", str(tmp_path))
+    _tmp_extraction(monkeypatch, tmp_path)
     assert check.check_drug("p", "vancomycin")
 
 

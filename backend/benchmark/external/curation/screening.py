@@ -88,13 +88,14 @@ def _cli():
     import json
     import os
     import sys
-    from benchmark.external.curation.search import ABSTRACT_DIR, SEARCH_DIR
+    from benchmark.external.curation.trees import tree_of
     if len(sys.argv) < 4 or sys.argv[1] != "next":
         sys.exit("usage: python3 -m benchmark.external.curation.screening next <pass> <drug> [n]")
     _, cmd, pass_name, drug, *rest = sys.argv
     n = int(rest[0]) if rest else 3
-    snap = json.load(open(os.path.join(SEARCH_DIR, f"{drug}.json"), encoding="utf-8"))
-    path = os.path.join(os.path.dirname(SEARCH_DIR), "extraction", pass_name, f"{drug}.json")
+    tree = tree_of(drug)                    # primary or extension (Amendment 19 §4)
+    snap = json.load(open(os.path.join(tree.search, f"{drug}.json"), encoding="utf-8"))
+    path = os.path.join(tree.extraction, pass_name, f"{drug}.json")
     rec = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"drug": drug, "pediatric": [], "adult": []}
     kind, todo = next_up(snap, rec)
     print(f"{drug} [{pass_name}] full strata: {sorted(full_strata(rec)) or 'none'}; "
@@ -105,7 +106,7 @@ def _cli():
     print(f"-- {kind}: {len(todo)} unscreened of {len(order(snap[kind]))} pre-filtered")
     for p in todo[:n]:
         print(f"\n=== {kind} PMID {p} ===")
-        print(snapshot_text(ABSTRACT_DIR, drug, p, snap))
+        print(snapshot_text(tree.abstracts, drug, p, snap))
 
 if __name__ == "__main__":
     _cli()

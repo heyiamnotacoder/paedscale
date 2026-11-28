@@ -423,3 +423,19 @@ This pre-registers an **extension set** of drugs. It changes nothing in the prim
    * **PE1, PE2** (pooled): the same on the primary and extension drugs together. They are descriptive, because the primary part had already been scored when this amendment was written.
    * The secondary endpoints, per-stratum results and sensitivity analyses E1–E9 are computed for the extension and the pooled set as for the primary set, and written to `output/extension/` and `output/pooled/`.
    * The manuscript reports the primary analysis as primary and the extension as a pre-registered secondary validation.
+
+### Amendment 20 — 2026-11-28, after the extension labels were fetched and the extension search snapshot was taken, before any extension abstract was read
+
+This records how Amendment 19 §3 was applied and the tool changes it needed. Nothing in the primary analysis changes.
+
+1. **Eligibility of the 12 candidates** (`extension/extension_set.json`, written by `curation/make_extension_set.py`; every quote is checked against its label snapshot by `tests/test_external_extension.py`).
+   * **Alfentanil** is excluded: no openFDA label has an `openfda.generic_name` of alfentanil with an intravenous route, so the selection rule returns no label.
+   * **Linezolid** is excluded under E4: its label says "A small degree of nonlinearity in clearance was observed with increasing doses of linezolid".
+   * The other **10** are included: cefazolin (fe 0.75), cefotaxime (0.28), ceftriaxone (0.50), digoxin (0.60), fentanyl (0.05, CYP3A4), ganciclovir (0.913), levofloxacin (0.87), metronidazole (0.14), milrinone (0.83) and sufentanil (0.02, CYP3A4). The non-renal fraction of cefotaxime (desacetylation), ceftriaxone (biliary), digoxin (non-CYP metabolism) and metronidazole (oxidation and glucuronidation, no single enzyme named) stays unattributed and is scaled by size only.
+2. **Three input rules the label benchmark did not need.** They were set when the labels were read, before any extension abstract was read.
+   * An fe stated only as an upper bound ("less than 10%", fentanyl) is scored at the midpoint of [0, bound], flagged `fe_upper_bound`.
+   * An fe the label gives only as a share of urinary recovery (metronidazole: unchanged drug "approximately 20% of the total" of the 60–80% of the dose recovered in urine) is the product, 0.20 × 0.70 = 0.14, flagged `fe_derived`.
+   * An fe the label gives only after oral dosing (levofloxacin, milrinone) is used, flagged `fe_after_oral`.
+   * The CYP3A4 identity for fentanyl and sufentanil comes from cited literature (Labroo et al., Drug Metab Dispos 1997;25:1072–80; Tateishi et al., Anesth Analg 1996;82:167–72), because their label sections on pharmacokinetics name the liver but not the enzyme.
+3. **Search.** The extension snapshot was taken on 2026-11-28 (`extension/search/`). It holds 197 pediatric records (103 pre-filtered) and 384 adult records (183 pre-filtered).
+4. **Tool changes** (Amendment 11 §3 froze the tools; this amendment authorizes these). `curation/trees.py` names two trees with the same layout, the primary one and `extension/`; a drug's files are read from its own tree. `screening`, `check`, `adjudicate`, `agreement`, `search` (`restore|authors|snapshot extension`) and `score` (`dataset` = primary, extension or pooled) take the tree, and the extension snapshot is never overwritten once written. For the primary tree, the rebuilt final record is identical, `dataset/agreement.json` recomputes identically, and `output/results.json` and `output/observations.csv` regenerate identically apart from provenance.

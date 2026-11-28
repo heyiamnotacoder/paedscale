@@ -1,7 +1,7 @@
 """External validation, step 3c: the final record from the two passes and the adjudication log
 (PROTOCOL.md, Amendment 12 §9, Amendment 14).
 
-    cd backend && python3 -m benchmark.external.curation.adjudicate     # -> extraction/final/
+    cd backend && python3 -m benchmark.external.curation.adjudicate [extension]   # -> extraction/final/
 
 The final record follows the seeded order and stops where its own queue stops. An abstract
 both passes decided the same way, with the same values, keeps that decision. Every other
@@ -20,12 +20,8 @@ import json
 import os
 import sys
 
-from benchmark.external.curation import screening
+from benchmark.external.curation import screening, trees
 from benchmark.external.curation.agreement import items_key
-
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EXTRACTION = os.path.join(HERE, "extraction")
-LOG = os.path.join(EXTRACTION, "adjudication.json")
 
 
 def _choose(kind: str, pmid: str, a: dict | None, b: dict | None, entry: dict | None):
@@ -110,39 +106,39 @@ def write_final(passes: dict, snaps: dict, out_dir: str) -> list[str]:
     return []
 
 
-def main() -> int:
-    """Rebuild extraction/final/ from scratch; any failure, including an exception, leaves it empty."""
-    final = os.path.join(EXTRACTION, "final")
-    clear_final(final)
+def main(tree_name: str = "primary") -> int:
+    """Rebuild a tree's extraction/final/ from scratch (the primary dataset, or the extension of
+    Amendment 19); any failure, including an exception, leaves it empty."""
+    tree = trees.by_name(tree_name)
+    clear_final(tree.final)
     try:
-        return _main()
+        return _main(tree)
     except BaseException:
-        clear_final(final)
+        clear_final(tree.final)
         raise
 
 
-def _main() -> int:
+def _main(tree: trees.Tree) -> int:
     from benchmark.external.curation import check
-    from benchmark.external.curation.search import SEARCH_DIR
-    log = json.load(open(LOG, encoding="utf-8")) if os.path.exists(LOG) else {}
-    d1, d2 = (sorted(f for f in os.listdir(os.path.join(EXTRACTION, p)) if f.endswith(".json"))
+    log = json.load(open(tree.adjudication_log, encoding="utf-8")) if os.path.exists(tree.adjudication_log) else {}
+    d1, d2 = (sorted(f for f in os.listdir(os.path.join(tree.extraction, p)) if f.endswith(".json"))
               for p in ("pass1", "pass2"))
     if d1 != d2:
-        clear_final(os.path.join(EXTRACTION, "final"))
+        clear_final(tree.final)
         print(f"the passes cover different drugs: {sorted(set(d1) ^ set(d2))}")
         return 1
     unknown = sorted(set(log) - {f[:-5] for f in d1})
     if unknown:
-        clear_final(os.path.join(EXTRACTION, "final"))
+        clear_final(tree.final)
         print(f"the log names drugs no pass covers: {unknown}")
         return 1
     passes, snaps = {}, {}
     for fn in d1:
         drug = fn[:-5]
-        p1, p2 = (json.load(open(os.path.join(EXTRACTION, p, fn), encoding="utf-8")) for p in ("pass1", "pass2"))
+        p1, p2 = (json.load(open(os.path.join(tree.extraction, p, fn), encoding="utf-8")) for p in ("pass1", "pass2"))
         passes[drug] = (p1, p2, log.get(drug, {}))
-        snaps[drug] = json.load(open(os.path.join(SEARCH_DIR, fn), encoding="utf-8"))
-    open_items = write_final(passes, snaps, os.path.join(EXTRACTION, "final"))
+        snaps[drug] = json.load(open(os.path.join(tree.search, fn), encoding="utf-8"))
+    open_items = write_final(passes, snaps, tree.final)
     for item in open_items:
         print(item)
     if open_items:
@@ -152,7 +148,7 @@ def _main() -> int:
     for p in problems:
         print(p)
     if problems:
-        clear_final(os.path.join(EXTRACTION, "final"))
+        clear_final(tree.final)
         print(f"{len(problems)} check problem(s); extraction/final/ was removed")
         return 1
     print("OK")
@@ -160,4 +156,4 @@ def _main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(*sys.argv[1:2]))

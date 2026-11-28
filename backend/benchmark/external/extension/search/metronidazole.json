@@ -1,0 +1,292 @@
+{
+ "drug": "metronidazole",
+ "retrieved": "2026-11-28",
+ "queries": {
+  "pediatric": "metronidazole[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "metronidazole[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "1478003",
+   "year": "1992",
+   "sha256": "7b3291dc63f6ae1dbc326ea699a6163a635d94474bac2fa28014036e936d046c",
+   "prefilter": false
+  },
+  {
+   "pmid": "1732076",
+   "year": "1992",
+   "sha256": "1e130d440ec5b897e02f953679268c19d01cca3cbf1d8a07f3fa995b04305116",
+   "prefilter": true
+  },
+  {
+   "pmid": "2208898",
+   "year": "1990",
+   "sha256": "ef5c953969e54b2f39ab2268afffe70204bc20548386d1b982db37f54cdd306f",
+   "prefilter": false
+  },
+  {
+   "pmid": "8055682",
+   "year": "1994",
+   "sha256": "86cf1a7bb50debde70060d2111bf2d519e5384962fe7d73950e30fe36387ba67",
+   "prefilter": false
+  },
+  {
+   "pmid": "8460335",
+   "year": "1993",
+   "sha256": "806d795629d97f04a9f1f2ccd694ce8913e174b9155a66e74879b48c36e8d598",
+   "prefilter": false
+  },
+  {
+   "pmid": "8703652",
+   "year": "1995",
+   "sha256": "2bcb594bf50bd482cfe358ef362a5dcc04d5cb99abfb4aa292132c159ca80592",
+   "prefilter": false
+  },
+  {
+   "pmid": "12662125",
+   "year": "2003",
+   "sha256": "085c122fd66eca405e09d96bfc3b401206ed15c217baa2ead392caa50af2b15c",
+   "prefilter": true
+  },
+  {
+   "pmid": "21220396",
+   "year": "2011",
+   "sha256": "52f7c0d0cda4fc7150949e6b7d026a42009ec5ec37d46aaf01e0706f921cee50",
+   "prefilter": false
+  },
+  {
+   "pmid": "22252819",
+   "year": "2012",
+   "sha256": "c0eb62198c5f507db5c2000226c61dcc17fce89c31817631166c059c29666e08",
+   "prefilter": false
+  },
+  {
+   "pmid": "23587979",
+   "year": "2013",
+   "sha256": "414d48c87ba3f9de0a7ea13b7da3220e078f1e8c5a0fc48aeb5ff84c807057a6",
+   "prefilter": true
+  },
+  {
+   "pmid": "31432468",
+   "year": "2020",
+   "sha256": "f9bbaf353f6f6ae3a37cde78106f3f7722f25b01b09c71069c106a438befb109",
+   "prefilter": false
+  },
+  {
+   "pmid": "38477706",
+   "year": "2024",
+   "sha256": "b0607f14721e1ce6e4409a4a57c070d5d0b5e5aa8920a17ba391e3be4532412c",
+   "prefilter": false
+  },
+  {
+   "pmid": "38955794",
+   "year": "2024",
+   "sha256": "0a701e86e1947c8c5f784ecea3c2b9f7ca6105f3445f6bf6b2c43decd2ee65c3",
+   "prefilter": false
+  },
+  {
+   "pmid": "39403008",
+   "year": "2025",
+   "sha256": "13ee4685d8952f9ac36f59198bece5f1bbf413ae0bce4c8f3d8b40fcfe823350",
+   "prefilter": false
+  }
+ ],
+ "query_translation": {
+  "pediatric": "\"metronidazole\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "\"metronidazole\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "1478003",
+   "year": "1992",
+   "sha256": "7b3291dc63f6ae1dbc326ea699a6163a635d94474bac2fa28014036e936d046c",
+   "prefilter": false
+  },
+  {
+   "pmid": "3220096",
+   "year": "1988",
+   "sha256": "01f8120c45ea9950e463d31454abddb3fee7f96638e9ccf3a8e2743cf8ff202e",
+   "prefilter": false
+  },
+  {
+   "pmid": "3563404",
+   "year": "1987",
+   "sha256": "206eac8339d11403cf9e24a17137a4a0ecefb9715ae472e7cb2926bb105489e2",
+   "prefilter": true
+  },
+  {
+   "pmid": "3582467",
+   "year": "1987",
+   "sha256": "54289ec0f28213a51bc66d442319559c97f875613e7fdd557d2094efe969527a",
+   "prefilter": false
+  },
+  {
+   "pmid": "3731917",
+   "year": "1986",
+   "sha256": "0db4065b815fcb3e2639117f1167236d5cf29b638139a80f1d7e4cb26ff6026e",
+   "prefilter": true
+  },
+  {
+   "pmid": "3986078",
+   "year": "1985",
+   "sha256": "a9fef9b7c887602f3a228ae53833f59aaef4c953416e8b551f869b69de3581c1",
+   "prefilter": false
+  },
+  {
+   "pmid": "4451343",
+   "year": "1974",
+   "sha256": "d6150072ef618aef6ed812139c1ab35270c974ff43fdcb2b8894ffe4c0190afe",
+   "prefilter": true
+  },
+  {
+   "pmid": "6588488",
+   "year": "1984",
+   "sha256": "1f42ec1ca25eb765aa11c986e56125651bf842ed94c4099c8d4fc63f4936ebcc",
+   "prefilter": false
+  },
+  {
+   "pmid": "6588489",
+   "year": "1984",
+   "sha256": "a103167fdd57c6705b1f5a9bc46593255cef085fbc11d37b2b003ffeeb00150c",
+   "prefilter": false
+  },
+  {
+   "pmid": "6745863",
+   "year": "1984",
+   "sha256": "aa1364eb89c3921df9e4bb57c2f7827e28b05cb0f25519b8b4657e7351b2bdbb",
+   "prefilter": false
+  },
+  {
+   "pmid": "6870221",
+   "year": "1983",
+   "sha256": "2c7355ebe057470478bd668e3a02c3e4e5d30e0ea9309e7eeb4907184f928c4f",
+   "prefilter": true
+  },
+  {
+   "pmid": "7249785",
+   "year": "1981",
+   "sha256": "b2ba0260ccbead4db2695e93f2b8424746700ae2d02963858b9bdb8a06d16675",
+   "prefilter": true
+  },
+  {
+   "pmid": "8055682",
+   "year": "1994",
+   "sha256": "86cf1a7bb50debde70060d2111bf2d519e5384962fe7d73950e30fe36387ba67",
+   "prefilter": false
+  },
+  {
+   "pmid": "8513649",
+   "year": "1993",
+   "sha256": "3f643bdbe0768e1049452b56dc215845d74bd856fd1ba2411ee1bc9465d6ddf1",
+   "prefilter": true
+  },
+  {
+   "pmid": "8690200",
+   "year": "1996",
+   "sha256": "72ff1ef85a7a8242e0a3d0dc5990e69a225f938454a66995de2804d4e6da3fc4",
+   "prefilter": false
+  },
+  {
+   "pmid": "8703652",
+   "year": "1995",
+   "sha256": "2bcb594bf50bd482cfe358ef362a5dcc04d5cb99abfb4aa292132c159ca80592",
+   "prefilter": false
+  },
+  {
+   "pmid": "8891123",
+   "year": "1996",
+   "sha256": "6c1eb50051d4b73d0abdb9068f6141ab1fdf3bcf738811b238fd76692f4ea14a",
+   "prefilter": true
+  },
+  {
+   "pmid": "8897081",
+   "year": "1996",
+   "sha256": "32001031a796097983b53ad91b008bf2f77aade77c8eb1e448eb7785d7d36abd",
+   "prefilter": false
+  },
+  {
+   "pmid": "9690724",
+   "year": "1998",
+   "sha256": "a97716ec4ade595188e5dac6bcaf9b2913ac846b29fa3ff345a09cedd0ddbb8d",
+   "prefilter": false
+  },
+  {
+   "pmid": "10384859",
+   "year": "1999",
+   "sha256": "32b31b5bf953585066a2a901156c34c8c7424eaf5fcccac4b24c611bb4cc9b52",
+   "prefilter": false
+  },
+  {
+   "pmid": "11380067",
+   "year": "2001",
+   "sha256": "11c827b32a7452f716882ba6c6d9fe90bf808545d18f90d2e9a07b7a805158ee",
+   "prefilter": false
+  },
+  {
+   "pmid": "12662125",
+   "year": "2003",
+   "sha256": "085c122fd66eca405e09d96bfc3b401206ed15c217baa2ead392caa50af2b15c",
+   "prefilter": true
+  },
+  {
+   "pmid": "15561831",
+   "year": "2004",
+   "sha256": "16460b0bc725857d9cfc40337f25986be62092fede105411bfa68239c71a4f79",
+   "prefilter": true
+  },
+  {
+   "pmid": "20306185",
+   "year": "2010",
+   "sha256": "c63cd65f6e0a59cd42645cac80999cddab83476bc21298dc0a4c32dc4b09f637",
+   "prefilter": false
+  },
+  {
+   "pmid": "23371303",
+   "year": "2013",
+   "sha256": "abc4fe125dc3ea6f713940fad8aa5835274d0076936a5317946d516122269441",
+   "prefilter": false
+  },
+  {
+   "pmid": "24341948",
+   "year": "2014",
+   "sha256": "586b1d7f7069df88de034b6b7f89f18f19e677c626957314fafcffe6fd851a8a",
+   "prefilter": false
+  },
+  {
+   "pmid": "29462685",
+   "year": "2018",
+   "sha256": "d7f5bf6f328d8776cc0d1b3386ce28cf9728d2c6cc4a781bb0097cd3005f4f12",
+   "prefilter": false
+  },
+  {
+   "pmid": "31432468",
+   "year": "2020",
+   "sha256": "f9bbaf353f6f6ae3a37cde78106f3f7722f25b01b09c71069c106a438befb109",
+   "prefilter": false
+  },
+  {
+   "pmid": "31828337",
+   "year": "2020",
+   "sha256": "b9bf845c0d623c90c9c71fdd04c63cd280fbc557c6ded4b10eeaf0fbecd2feee",
+   "prefilter": true
+  },
+  {
+   "pmid": "38955794",
+   "year": "2024",
+   "sha256": "0a701e86e1947c8c5f784ecea3c2b9f7ca6105f3445f6bf6b2c43decd2ee65c3",
+   "prefilter": false
+  },
+  {
+   "pmid": "39403008",
+   "year": "2025",
+   "sha256": "13ee4685d8952f9ac36f59198bece5f1bbf413ae0bce4c8f3d8b40fcfe823350",
+   "prefilter": false
+  },
+  {
+   "pmid": "40111454",
+   "year": "2025",
+   "sha256": "d68ac0f2708a57484bb364991baca67dd3d32fba9e18ad30cba446ce33da4b28",
+   "prefilter": false
+  }
+ ]
+}

@@ -1,0 +1,226 @@
+{
+ "drug": "ganciclovir",
+ "retrieved": "2026-11-28",
+ "queries": {
+  "pediatric": "ganciclovir[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "ganciclovir[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "8380762",
+   "year": "1993",
+   "sha256": "6f464734124450de4007205992aa4d04dea1375a61afae959201d620f0ed3658",
+   "prefilter": true
+  },
+  {
+   "pmid": "8878608",
+   "year": "1996",
+   "sha256": "c384c6fe5fae9c04ec636eae664f0dfdab85b3317bb0d4b92cafc2bc4abb186d",
+   "prefilter": true
+  },
+  {
+   "pmid": "14749553",
+   "year": "2004",
+   "sha256": "cfc6098faa9a1cba47710b95f047d939fe2271eb5ba54fb5952f2d68b4989d9e",
+   "prefilter": false
+  },
+  {
+   "pmid": "16085374",
+   "year": "2005",
+   "sha256": "c5ec2d5b9ec3e5c0355ca873360a59e256c782b3f037c96e74df307571b198c7",
+   "prefilter": true
+  },
+  {
+   "pmid": "16368917",
+   "year": "2006",
+   "sha256": "869d87d4a789bdf95fbb92b1f28999ea592562d71b75cc90e81e863ac72379fa",
+   "prefilter": true
+  },
+  {
+   "pmid": "17392728",
+   "year": "2007",
+   "sha256": "d5ccb5e4fe7fc134e9d91633e30d137b20fa9841767c2059e4ff8319613d1397",
+   "prefilter": false
+  },
+  {
+   "pmid": "18089334",
+   "year": "2007",
+   "sha256": "a0b6b952e8fd70258a1129dc30b663500422f84103928bc6d3af0a2c1ac19f9a",
+   "prefilter": true
+  },
+  {
+   "pmid": "19260840",
+   "year": "2009",
+   "sha256": "323e556608325744be0c57d3b34f9d9c127902f5c66473466fc2bafe83dd16d0",
+   "prefilter": false
+  },
+  {
+   "pmid": "19566115",
+   "year": "2009",
+   "sha256": "469d82d30468ff1880451233c8e33c7e4fc7adc891f3dba3b3e3b9a94b593364",
+   "prefilter": true
+  },
+  {
+   "pmid": "19725597",
+   "year": "2009",
+   "sha256": "eef19627558bc6aa18adaf19318abc51f4f8a3e10ba502fdb9d0ff04ce4c33d6",
+   "prefilter": false
+  },
+  {
+   "pmid": "20002356",
+   "year": "2010",
+   "sha256": "1b409d8671e04f244f9bc13a80bf810bcb00b8f6bd61784b1d92d7b1439f839a",
+   "prefilter": false
+  },
+  {
+   "pmid": "24528138",
+   "year": "2014",
+   "sha256": "0220dbce3b867339a6e8e0dcbc9fae7d972aa703403fc6633c990ad3be9e1766",
+   "prefilter": true
+  },
+  {
+   "pmid": "27450227",
+   "year": "2016",
+   "sha256": "f925c4ba3bd02d4b3507f021af2a6607b71f30eaaf729d0d118d3b21c10b1ed9",
+   "prefilter": false
+  },
+  {
+   "pmid": "30354026",
+   "year": "2019",
+   "sha256": "e00c7e1315b09391a9002b7a33bde0f95ebd94f0c144d17569453df8938168a3",
+   "prefilter": false
+  },
+  {
+   "pmid": "33373493",
+   "year": "2021",
+   "sha256": "427345736b8594eb429f65052b470a17ee1ac6ee719430f280b41f8ffd3c9640",
+   "prefilter": false
+  },
+  {
+   "pmid": "40344019",
+   "year": "2025",
+   "sha256": "32f145596ebed579feb04770ff8c36c979e349e9049f178dec13309a4a76b9c8",
+   "prefilter": false
+  },
+  {
+   "pmid": "41071930",
+   "year": "2026",
+   "sha256": "f9ccd22ba20b86e420061e8f3f5d92508147616b3da047aeb492142b8f423039",
+   "prefilter": false
+  },
+  {
+   "pmid": "41364029",
+   "year": "2026",
+   "sha256": "07d7b3929de9ee5cfef57e58127e7a0925ed777d3bac3636bcd82292dbe2da88",
+   "prefilter": false
+  }
+ ],
+ "query_translation": {
+  "pediatric": "\"ganciclovir\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "\"ganciclovir\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "9495222",
+   "year": "1998",
+   "sha256": "823acb13f387a8d0a154a9ed0347efaae0d18b0aae05c0e0abeba0efb9195402",
+   "prefilter": false
+  },
+  {
+   "pmid": "12189361",
+   "year": "2002",
+   "sha256": "670f21a24fbe7f33447f6b94e6e52c76c09cfd7ea82ac17cc325236d55267275",
+   "prefilter": false
+  },
+  {
+   "pmid": "16085374",
+   "year": "2005",
+   "sha256": "c5ec2d5b9ec3e5c0355ca873360a59e256c782b3f037c96e74df307571b198c7",
+   "prefilter": true
+  },
+  {
+   "pmid": "18089334",
+   "year": "2007",
+   "sha256": "a0b6b952e8fd70258a1129dc30b663500422f84103928bc6d3af0a2c1ac19f9a",
+   "prefilter": true
+  },
+  {
+   "pmid": "19260840",
+   "year": "2009",
+   "sha256": "323e556608325744be0c57d3b34f9d9c127902f5c66473466fc2bafe83dd16d0",
+   "prefilter": false
+  },
+  {
+   "pmid": "19650679",
+   "year": "2009",
+   "sha256": "d67b177e664ce9bf8489748eb414404d5363255e1a5b46d37cd4f2201b77dfcc",
+   "prefilter": true
+  },
+  {
+   "pmid": "19725597",
+   "year": "2009",
+   "sha256": "eef19627558bc6aa18adaf19318abc51f4f8a3e10ba502fdb9d0ff04ce4c33d6",
+   "prefilter": false
+  },
+  {
+   "pmid": "20002356",
+   "year": "2010",
+   "sha256": "1b409d8671e04f244f9bc13a80bf810bcb00b8f6bd61784b1d92d7b1439f839a",
+   "prefilter": false
+  },
+  {
+   "pmid": "22946868",
+   "year": "2013",
+   "sha256": "5ea76b0deef3728f0f9c05b696a731c53aac542ccd7956ecc8e3263d1c0c9457",
+   "prefilter": false
+  },
+  {
+   "pmid": "24305626",
+   "year": "2014",
+   "sha256": "55a070602de13d38900bbe941ea4853e9cb32ed6670829cdc0df6b66df6e8cb5",
+   "prefilter": false
+  },
+  {
+   "pmid": "24528138",
+   "year": "2014",
+   "sha256": "0220dbce3b867339a6e8e0dcbc9fae7d972aa703403fc6633c990ad3be9e1766",
+   "prefilter": true
+  },
+  {
+   "pmid": "26824942",
+   "year": "2016",
+   "sha256": "2483a5b5054fced5b96b7d9f3b5b74e0ad015c110dcb6d13c4a189620acaa637",
+   "prefilter": false
+  },
+  {
+   "pmid": "27450227",
+   "year": "2016",
+   "sha256": "f925c4ba3bd02d4b3507f021af2a6607b71f30eaaf729d0d118d3b21c10b1ed9",
+   "prefilter": false
+  },
+  {
+   "pmid": "29546589",
+   "year": "2018",
+   "sha256": "4d989976ce638f6395b262429287af1061be5343eb7cb70f97deaf15e7f0c479",
+   "prefilter": true
+  },
+  {
+   "pmid": "32926418",
+   "year": "2021",
+   "sha256": "5882f5086584792ed75063580ea9e4f00cbba11a5a44f17798314dc85f23302b",
+   "prefilter": true
+  },
+  {
+   "pmid": "36815858",
+   "year": "2023",
+   "sha256": "a815c4e0b10fb695113fb25c8df4f450f5a191727527d44412f2ada853a2cfd5",
+   "prefilter": false
+  },
+  {
+   "pmid": "40021573",
+   "year": "2025",
+   "sha256": "a69c2af0e9a8763e1d6124230de51e12898357af530078d0eaedc04ee8e81221",
+   "prefilter": false
+  }
+ ]
+}

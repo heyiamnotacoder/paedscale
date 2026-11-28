@@ -19,20 +19,22 @@ import xml.etree.ElementTree as ET
 
 import httpx
 
+from benchmark.external.curation import trees
 from benchmark.external.curation.prefilter import has_clearance_value
 
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 HERE = os.path.dirname(os.path.abspath(__file__))
 EXTERNAL = os.path.dirname(HERE)
 REFSET = os.path.join(os.path.dirname(EXTERNAL), "reference_set.json")
-SEARCH_DIR = os.path.join(EXTERNAL, "search")
-ABSTRACT_DIR = os.path.join(EXTERNAL, "abstracts")
+SEARCH_DIR = trees.PRIMARY.search
+ABSTRACT_DIR = trees.PRIMARY.abstracts
 
 CURVE_SOURCE_DRUGS = {"morphine"}          # UGT2B7 curve source (Anand 2008)
 SEARCH_TERM = {"piperacillin_tazobactam": "piperacillin[tiab]",
                "penicillin_g": '(benzylpenicillin[tiab] OR "penicillin G"[tiab])',
                "acyclovir": "(acyclovir[tiab] OR aciclovir[tiab])",              # Amendment 2
-               "zidovudine": "(zidovudine[tiab] OR azidothymidine[tiab])"}       # Amendment 2
+               "zidovudine": "(zidovudine[tiab] OR azidothymidine[tiab])",       # Amendment 2
+               "cefazolin": "(cefazolin[tiab] OR cephazolin[tiab])"}             # Amendment 19 §4
 # NCBI asks clients to identify themselves. A generic project address only, never a person's.
 NCBI = {"tool": "paedscale", "email": os.environ.get("NCBI_EMAIL", "paedscale@example.com")}
 if os.environ.get("NCBI_API_KEY"):
@@ -173,13 +175,14 @@ def matching_texts(rows: list[dict], recs: dict) -> dict[str, str]:
 def restore(drug: str) -> int:
     """Re-fetch the abstract texts of a committed snapshot into ABSTRACT_DIR (gitignored),
     checking each against its committed hash. Returns the number of texts written."""
-    with open(os.path.join(SEARCH_DIR, f"{drug}.json"), encoding="utf-8") as f:
+    tree = trees.tree_of(drug)
+    with open(os.path.join(tree.search, f"{drug}.json"), encoding="utf-8") as f:
         snap = json.load(f)
-    os.makedirs(os.path.join(ABSTRACT_DIR, drug), exist_ok=True)
+    os.makedirs(os.path.join(tree.abstracts, drug), exist_ok=True)
     rows = snap["pediatric"] + snap["adult"]
     texts = matching_texts(rows, _abstracts(sorted({r["pmid"] for r in rows}, key=int)))
     for p, t in texts.items():
-        with open(os.path.join(ABSTRACT_DIR, drug, f"{p}.txt"), "w", encoding="utf-8") as f:
+        with open(os.path.join(tree.abstracts, drug, f"{p}.txt"), "w", encoding="utf-8") as f:
             f.write(t)
     return len(texts)
 
@@ -187,7 +190,8 @@ def restore(drug: str) -> int:
 def snapshot(drug: str, today: str) -> dict:
     ped_q, adult_q = queries(drug)
     record = {"drug": drug, "retrieved": today, "queries": {"pediatric": ped_q, "adult": adult_q}}
-    os.makedirs(os.path.join(ABSTRACT_DIR, drug), exist_ok=True)
+    abstract_dir = trees.tree_of(drug).abstracts
+    os.makedirs(os.path.join(abstract_dir, drug), exist_ok=True)
     for kind, q in (("pediatric", ped_q), ("adult", adult_q)):
         pmids, translation = _esearch(q)
         recs = _abstracts(pmids)
@@ -195,7 +199,7 @@ def snapshot(drug: str, today: str) -> dict:
         rows = []
         for p in pmids:
             t = recs[p]["text"]
-            with open(os.path.join(ABSTRACT_DIR, drug, f"{p}.txt"), "w", encoding="utf-8") as f:
+            with open(os.path.join(abstract_dir, drug, f"{p}.txt"), "w", encoding="utf-8") as f:
                 f.write(t)
             rows.append({"pmid": p, "year": recs[p]["year"], "sha256": hashlib.sha256(t.encode()).hexdigest(),
                          "prefilter": has_clearance_value(t)})
@@ -204,32 +208,53 @@ def snapshot(drug: str, today: str) -> dict:
     return record
 
 
+def write_authors(tree: trees.Tree) -> None:
+    """E7: the author lists of a frozen dataset's included pediatric studies."""
+    pmids = sorted({s["pmid"] for fn in os.listdir(tree.final) if fn.endswith(".json")
+                    for s in json.load(open(os.path.join(tree.final, fn), encoding="utf-8"))["pediatric"]
+                    if s["decision"] == "include"}, key=int)
+    os.makedirs(tree.dataset, exist_ok=True)
+    with open(tree.authors, "w", encoding="utf-8") as f:
+        json.dump(fetch_authors(pmids), f, indent=1, sort_keys=True)
+
+
+def write_snapshots(names: list[str], search_dir: str) -> None:
+    os.makedirs(search_dir, exist_ok=True)
+    today = dt.date.today().isoformat()
+    for d in names:
+        rec = snapshot(d, today)
+        with open(os.path.join(search_dir, f"{d}.json"), "w", encoding="utf-8") as f:
+            json.dump(rec, f, indent=1)
+        print(d, "pediatric", len(rec["pediatric"]), sum(r["prefilter"] for r in rec["pediatric"]),
+              "adult", len(rec["adult"]), sum(r["prefilter"] for r in rec["adult"]))
+
+
 def main(argv: list[str]) -> None:
-    """`restore` re-fetches the committed snapshot's abstracts; `authors` writes dataset/authors.json for the frozen dataset (E7); `snapshot` re-runs the searches
-    and overwrites the committed snapshot. Anything else stops, so a typo never re-searches."""
+    """`restore` re-fetches the committed snapshot's abstracts; `authors` writes dataset/authors.json
+    for the frozen dataset (E7); `snapshot` re-runs the searches and overwrites the committed
+    snapshot. Each takes `extension` to act on the extension tree (Amendment 19) instead; the
+    extension snapshot is written once and never overwritten. Anything else stops, so a typo
+    never re-searches."""
     if argv == ["restore"]:
         for d in drugs():
             print(d, restore(d))
         return
-    if argv == ["authors"]:                # E7: authors of the frozen dataset's pediatric studies
-        final = os.path.join(EXTERNAL, "extraction", "final")
-        pmids = sorted({s["pmid"] for fn in os.listdir(final) if fn.endswith(".json")
-                        for s in json.load(open(os.path.join(final, fn), encoding="utf-8"))["pediatric"]
-                        if s["decision"] == "include"}, key=int)
-        os.makedirs(os.path.join(EXTERNAL, "dataset"), exist_ok=True)
-        with open(os.path.join(EXTERNAL, "dataset", "authors.json"), "w", encoding="utf-8") as f:
-            json.dump(fetch_authors(pmids), f, indent=1, sort_keys=True)
+    if argv == ["restore", "extension"]:
+        for d in trees.extension_drugs():
+            print(d, restore(d))
+        return
+    if argv in (["authors"], ["authors", "extension"]):
+        write_authors(trees.EXTENSION if argv[1:] else trees.PRIMARY)
+        return
+    if argv == ["snapshot", "extension"]:
+        ext = trees.EXTENSION
+        if os.path.isdir(ext.search) and any(f.endswith(".json") for f in os.listdir(ext.search)):
+            raise SystemExit(f"{ext.search} already holds the extension snapshot; it is never overwritten")
+        write_snapshots(trees.extension_drugs(), ext.search)
         return
     if argv != ["snapshot"]:
-        raise SystemExit("usage: python3 -m benchmark.external.curation.search restore|authors|snapshot")
-    os.makedirs(SEARCH_DIR, exist_ok=True)
-    today = dt.date.today().isoformat()
-    for d in drugs():
-        rec = snapshot(d, today)
-        with open(os.path.join(SEARCH_DIR, f"{d}.json"), "w", encoding="utf-8") as f:
-            json.dump(rec, f, indent=1)
-        print(d, "pediatric", len(rec["pediatric"]), sum(r["prefilter"] for r in rec["pediatric"]),
-              "adult", len(rec["adult"]), sum(r["prefilter"] for r in rec["adult"]))
+        raise SystemExit("usage: python3 -m benchmark.external.curation.search restore|authors|snapshot [extension]")
+    write_snapshots(drugs(), SEARCH_DIR)
 
 
 if __name__ == "__main__":

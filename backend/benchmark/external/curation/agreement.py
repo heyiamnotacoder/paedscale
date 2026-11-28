@@ -1,7 +1,7 @@
 """External validation, step 3b: agreement between the two blinded passes (PROTOCOL.md,
 Amendment 1 §9, Amendment 2 §8).
 
-    cd backend && python3 -m benchmark.external.curation.agreement pass1 pass2
+    cd backend && python3 -m benchmark.external.curation.agreement pass1 pass2 [extension]
 
 Inclusion agreement is Cohen's κ over the abstracts both passes read. For abstracts both
 included, the extracted numbers are compared value by value. This module never imports the
@@ -132,9 +132,10 @@ def compare(r1: dict, r2: dict) -> dict:
             "only_pass1": only1, "only_pass2": only2}
 
 
-def main(p1: str, p2: str) -> dict:
-    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    d1, d2 = (os.path.join(here, "extraction", p) for p in (p1, p2))
+def main(p1: str, p2: str, tree=None) -> dict:
+    from benchmark.external.curation import trees
+    tree = tree or trees.PRIMARY            # or the extension of Amendment 19
+    d1, d2 = (os.path.join(tree.extraction, p) for p in (p1, p2))
     per_drug, all_pairs = {}, []
     for fn in sorted(set(os.listdir(d1)) & set(os.listdir(d2))):
         if not fn.endswith(".json"):
@@ -154,4 +155,5 @@ def main(p1: str, p2: str) -> dict:
 
 
 if __name__ == "__main__":
-    print(json.dumps(main(*sys.argv[1:3]), indent=1))
+    from benchmark.external.curation import trees
+    print(json.dumps(main(*sys.argv[1:3], tree=trees.by_name(sys.argv[3]) if sys.argv[3:] else None), indent=1))

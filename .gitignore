@@ -22,3 +22,4 @@ demo video/
 
 # External validation abstracts (copyright; re-fetch with benchmark.external.curation.search)
 /backend/benchmark/external/abstracts/
+/backend/benchmark/external/extension/abstracts/

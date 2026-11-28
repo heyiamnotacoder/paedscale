@@ -1,0 +1,184 @@
+{
+ "drug": "milrinone",
+ "retrieved": "2026-11-28",
+ "queries": {
+  "pediatric": "milrinone[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "milrinone[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "9459233",
+   "year": "1998",
+   "sha256": "19db2f50d50a4860a53dc587b9b8d4a37e8c3036b4b850c6f41cfab9061ac800",
+   "prefilter": true
+  },
+  {
+   "pmid": "9506650",
+   "year": "1998",
+   "sha256": "64134a54b75bb407a1cee76f6aa4dc7833a17062048cd76c7b7beebae01f5a4a",
+   "prefilter": true
+  },
+  {
+   "pmid": "10201672",
+   "year": "1999",
+   "sha256": "7f32cf236fe57ee337cf0ad69ec119b7551e82a0612b8fb9d0c8f85282357552",
+   "prefilter": false
+  },
+  {
+   "pmid": "15346851",
+   "year": "2004",
+   "sha256": "132e81a9cf12d5b9d0f1ec180cbfcc9a85382fefe473614508df0db0788d97c9",
+   "prefilter": true
+  },
+  {
+   "pmid": "16551899",
+   "year": "2006",
+   "sha256": "ba42639bf759b9d614503e02077534fe386a3fd1ac5a565f1d2b6f8cd768602c",
+   "prefilter": true
+  },
+  {
+   "pmid": "16690639",
+   "year": "2007",
+   "sha256": "f87cb04c884ab72ab44e6cb47a2c4bf862e79cd4e5e6fcb868e2f5261500ad6d",
+   "prefilter": true
+  },
+  {
+   "pmid": "23132395",
+   "year": "2013",
+   "sha256": "387a841b39492be518b1d16ec3abe7242eae8fcfc8f0636e57786c53c6659f01",
+   "prefilter": true
+  },
+  {
+   "pmid": "23839530",
+   "year": "2014",
+   "sha256": "cd644cfe35f33f67dcee1121944f41c9112b0f0a8da0e28c779cf4267216f364",
+   "prefilter": false
+  },
+  {
+   "pmid": "24456639",
+   "year": "2014",
+   "sha256": "a1e056a6c97a4ee7016d57a3f4785f70e0a4efdfd9f08a12683f5745858aacd5",
+   "prefilter": false
+  },
+  {
+   "pmid": "25860636",
+   "year": "2015",
+   "sha256": "15820f31c55c23b4064cb8b8c539b5f90b237bec8634fe6f365fc7a68b6175c0",
+   "prefilter": true
+  },
+  {
+   "pmid": "27490706",
+   "year": "2017",
+   "sha256": "b3b23b0217614a5252c08153239cc4467dae9bc1caf2fd8aa98e951b6172ea83",
+   "prefilter": false
+  },
+  {
+   "pmid": "28099979",
+   "year": "2017",
+   "sha256": "64742a692d4ef7f1201cc6225e378e1cd1b483fb9324bb64f135cdda2f8efcc5",
+   "prefilter": true
+  },
+  {
+   "pmid": "30607889",
+   "year": "2019",
+   "sha256": "bbc9845ffb6ed09946226daa66e613bf2e355a28fdcdb25404cb4ad784bd7621",
+   "prefilter": false
+  },
+  {
+   "pmid": "30664589",
+   "year": "2019",
+   "sha256": "ec46363d9ed1257309313a8a9c0632637dcdddb00a917b6255e98cfd21f3390c",
+   "prefilter": true
+  },
+  {
+   "pmid": "31317556",
+   "year": "2019",
+   "sha256": "af819ccae38964fccddf141a4b37ca4174c74c32ddb5c2842898b6f0e853d491",
+   "prefilter": true
+  },
+  {
+   "pmid": "38613610",
+   "year": "2024",
+   "sha256": "1ca75e473c1bc7616709e246d7cd6913265eb57dd9d366fb334a7afc00ad2e4f",
+   "prefilter": true
+  }
+ ],
+ "query_translation": {
+  "pediatric": "\"milrinone\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "\"milrinone\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "3304772",
+   "year": "1987",
+   "sha256": "db0312bd66312384eee638e31490d3f71119dae6e08ddc1637a98c5a9a953390",
+   "prefilter": false
+  },
+  {
+   "pmid": "3510771",
+   "year": "1986",
+   "sha256": "0e3c270b156026b31bf9fcb25ee0743df2c640f0de8c58cbbd7aeda8b88541cc",
+   "prefilter": true
+  },
+  {
+   "pmid": "3956560",
+   "year": "1986",
+   "sha256": "6822ff474aefd1ce8fbd31881f79810c53be4dc5311597a790a6c7e9ebd5d46d",
+   "prefilter": true
+  },
+  {
+   "pmid": "6502494",
+   "year": "1984",
+   "sha256": "748f57c1a3bbba186ea2c7a9d95a65c547553b617cd58be24eeb6c18d54c5dfb",
+   "prefilter": true
+  },
+  {
+   "pmid": "7669958",
+   "year": "1995",
+   "sha256": "ed6a073506d75245558086551db2271a23090a8517bd4cc3df7bce8285a6bded",
+   "prefilter": true
+  },
+  {
+   "pmid": "8092507",
+   "year": "1994",
+   "sha256": "8b9f9b3dbcfabef47857744a6d4db5c2f62d5ed18e767b438da97b5ac8a9b1f3",
+   "prefilter": true
+  },
+  {
+   "pmid": "9459233",
+   "year": "1998",
+   "sha256": "19db2f50d50a4860a53dc587b9b8d4a37e8c3036b4b850c6f41cfab9061ac800",
+   "prefilter": true
+  },
+  {
+   "pmid": "23344981",
+   "year": "2013",
+   "sha256": "b88c20879fdec595ada8b3088d9e364574c8020ffce17fbd85cc97ebd26102b2",
+   "prefilter": false
+  },
+  {
+   "pmid": "23839530",
+   "year": "2014",
+   "sha256": "cd644cfe35f33f67dcee1121944f41c9112b0f0a8da0e28c779cf4267216f364",
+   "prefilter": false
+  },
+  {
+   "pmid": "31317556",
+   "year": "2019",
+   "sha256": "af819ccae38964fccddf141a4b37ca4174c74c32ddb5c2842898b6f0e853d491",
+   "prefilter": true
+  },
+  {
+   "pmid": "36566129",
+   "year": "2023",
+   "sha256": "56f1709f787d4a51aca8a9e32c8bac0a27088a20dc1f78bf25330d4446b53189",
+   "prefilter": true
+  },
+  {
+   "pmid": "41289763",
+   "year": "2025",
+   "sha256": "3c909f559b29e8f46a25d4b9b23d463c242e964b2e1fbcae4aa5549adc26fdf4",
+   "prefilter": true
+  }
+ ]
+}

@@ -1,0 +1,208 @@
+{
+ "drug": "cefazolin",
+ "retrieved": "2026-11-28",
+ "queries": {
+  "pediatric": "(cefazolin[tiab] OR cephazolin[tiab]) AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "(cefazolin[tiab] OR cephazolin[tiab]) AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "1936061",
+   "year": "1991",
+   "sha256": "45f6ca9c9cf007488d97030cb9d8dfcaa8ef3210b779da23449fd7de88bd357d",
+   "prefilter": true
+  },
+  {
+   "pmid": "24492261",
+   "year": "2014",
+   "sha256": "c1a24d3398a3dd29e30f4bd5a6d7e6204aab685d97d3ee59778ec2729f491432",
+   "prefilter": false
+  },
+  {
+   "pmid": "24733461",
+   "year": "2014",
+   "sha256": "0efd4fa6c5f001e121c11b6f925bcd8b9f4ea1e3f0e02b96070097cd90ead2e5",
+   "prefilter": true
+  },
+  {
+   "pmid": "25941220",
+   "year": "2015",
+   "sha256": "3e05d1659ade1d8c5bfba3f4a36a570ce3db573f0fe8b079dbafedbe51c40aa8",
+   "prefilter": true
+  },
+  {
+   "pmid": "27999040",
+   "year": "2017",
+   "sha256": "b9efa5b5bef617e54b270583214999ac199a50a5148564f3386b5dd54c012262",
+   "prefilter": true
+  },
+  {
+   "pmid": "28079262",
+   "year": "2017",
+   "sha256": "d53835db97be8a69c03f821e5e794dc0ae79704c1b3658e541c97edb1a6a56fa",
+   "prefilter": false
+  },
+  {
+   "pmid": "30944398",
+   "year": "2019",
+   "sha256": "3b896f6d5437ac20b4e78da68bda82746c62cc9c9780a192fd74fab9b0b053c9",
+   "prefilter": true
+  },
+  {
+   "pmid": "32360445",
+   "year": "2021",
+   "sha256": "08e782fe12c473d8d36f1d6673ab5573749ad3ba2a34a1de1f18bb3ac7ab939a",
+   "prefilter": true
+  },
+  {
+   "pmid": "32593420",
+   "year": "2020",
+   "sha256": "ce8e7edd79c795ad53ed43cf2d8b408182c9b2268fd2ba70d6d76362d2c0ad96",
+   "prefilter": false
+  },
+  {
+   "pmid": "33202066",
+   "year": "2021",
+   "sha256": "9414780a90a5e56f72528a0e766617acc81861da1fee5705bb050827d040db48",
+   "prefilter": false
+  },
+  {
+   "pmid": "33948771",
+   "year": "2021",
+   "sha256": "3461a3ec9fab421063ae2890c6564b9fc54e4e13f32e8939c81d03332b709786",
+   "prefilter": false
+  },
+  {
+   "pmid": "38962872",
+   "year": "2024",
+   "sha256": "39bfdb8dedd697b10fb9a3b732958fd6d3c22204a61a899fd16230887cfe2c71",
+   "prefilter": true
+  },
+  {
+   "pmid": "41036866",
+   "year": "2025",
+   "sha256": "03f58d12e9cd9c69d8a8e8e648825309335e4d2eb9b9349bae7d067681d1c315",
+   "prefilter": true
+  }
+ ],
+ "query_translation": {
+  "pediatric": "(\"cefazolin\"[Title/Abstract] OR \"cephazolin\"[Title/Abstract]) AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "(\"cefazolin\"[Title/Abstract] OR \"cephazolin\"[Title/Abstract]) AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "3207857",
+   "year": "1988",
+   "sha256": "6a9b302b5195199374526773c80b9232f7fb6969d359ffa44aad9ffc43c0fb9b",
+   "prefilter": false
+  },
+  {
+   "pmid": "4793878",
+   "year": "1973",
+   "sha256": "3478c9781ae7292f2fb8c4735419c9270dd3557051b85adc54826fc37bb632e3",
+   "prefilter": true
+  },
+  {
+   "pmid": "6357074",
+   "year": "1983",
+   "sha256": "b36018f41edcb2abfd25af0e4a073e1f29dbf85fb0ed3ed0de973654307cfb67",
+   "prefilter": true
+  },
+  {
+   "pmid": "6454387",
+   "year": "1981",
+   "sha256": "d1ddfc725004cbb347ccf86b5c046f9ba9735d27ab1c9bb96d98e059505342cb",
+   "prefilter": true
+  },
+  {
+   "pmid": "8017411",
+   "year": "1994",
+   "sha256": "899ee5c8f7d301f56a192fee3bfb71e239cae8a8344a86abad7e69ab14081d65",
+   "prefilter": false
+  },
+  {
+   "pmid": "8911256",
+   "year": "1996",
+   "sha256": "613354c5e9ea5510f9b30052a75f9ae67a2fa70bd99495b29691661d7de9bb8e",
+   "prefilter": false
+  },
+  {
+   "pmid": "10201343",
+   "year": "1999",
+   "sha256": "0aacf5ac4004466ff1afccd6875fa457a4201849f7850ae5da6ac86b197a8f81",
+   "prefilter": true
+  },
+  {
+   "pmid": "11772242",
+   "year": "2001",
+   "sha256": "8255f14c41dec107784fd919ad727eecc2f20f817ac8873070df6d36978b70dd",
+   "prefilter": false
+  },
+  {
+   "pmid": "24733461",
+   "year": "2014",
+   "sha256": "0efd4fa6c5f001e121c11b6f925bcd8b9f4ea1e3f0e02b96070097cd90ead2e5",
+   "prefilter": true
+  },
+  {
+   "pmid": "25608584",
+   "year": "2015",
+   "sha256": "128d3d9b0e642618f57e6302f895b7e9c57d7977e7eebe266c10d500d3cf0d5a",
+   "prefilter": true
+  },
+  {
+   "pmid": "25941220",
+   "year": "2015",
+   "sha256": "3e05d1659ade1d8c5bfba3f4a36a570ce3db573f0fe8b079dbafedbe51c40aa8",
+   "prefilter": true
+  },
+  {
+   "pmid": "28079262",
+   "year": "2017",
+   "sha256": "d53835db97be8a69c03f821e5e794dc0ae79704c1b3658e541c97edb1a6a56fa",
+   "prefilter": false
+  },
+  {
+   "pmid": "33202066",
+   "year": "2021",
+   "sha256": "9414780a90a5e56f72528a0e766617acc81861da1fee5705bb050827d040db48",
+   "prefilter": false
+  },
+  {
+   "pmid": "33211137",
+   "year": "2021",
+   "sha256": "2cb4a9169828d8c3fe9ebf9f232a5e12bd3fceb00526a2fe7d1c6f1c297d5387",
+   "prefilter": false
+  },
+  {
+   "pmid": "33948771",
+   "year": "2021",
+   "sha256": "3461a3ec9fab421063ae2890c6564b9fc54e4e13f32e8939c81d03332b709786",
+   "prefilter": false
+  },
+  {
+   "pmid": "34169370",
+   "year": "2021",
+   "sha256": "2aec236ec6e485532e598fdf664ca88fb3f60d8e835d8ae8ac06bb108f8ba85b",
+   "prefilter": false
+  },
+  {
+   "pmid": "34231117",
+   "year": "2021",
+   "sha256": "fd000df56381db92146348c54a6be7a440c29ef0bcd8666395fd6e00d2edf814",
+   "prefilter": true
+  },
+  {
+   "pmid": "34611213",
+   "year": "2021",
+   "sha256": "342db2e893266a530d9c27686d52d46e364a8136ec603f459ccdd8d4ad258a67",
+   "prefilter": false
+  },
+  {
+   "pmid": "40448546",
+   "year": "2025",
+   "sha256": "4b71a26b9839bf14bd7303df25fbdcfab6549447a49809a3264119f5bbc90b76",
+   "prefilter": true
+  }
+ ]
+}

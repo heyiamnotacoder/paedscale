@@ -1,6 +1,6 @@
 """Validate a screening pass's records (SCREENING_GUIDE.md; PROTOCOL.md, Amendments 3-7).
 
-Usage (from backend/): python3 -m benchmark.external.curation.check <pass> [<drug> ...]
+Usage (from backend/): python3 -m benchmark.external.curation.check <pass> [<drug> ...|extension]
 Checks that decisions follow the seeded order with no gaps and stop where the queue stops, that
 every abstract read still has the committed hash, and that every included study's observations
 pass extraction.problems. Problems are reported, never raised.
@@ -12,10 +12,7 @@ import json
 import os
 import sys
 
-from benchmark.external.curation import extraction, screening
-from benchmark.external.curation.search import ABSTRACT_DIR, SEARCH_DIR
-
-EXTRACTION_DIR = os.path.join(os.path.dirname(SEARCH_DIR), "extraction")
+from benchmark.external.curation import extraction, screening, trees
 ITEMS = {"pediatric": "observations", "adult": "values"}
 
 
@@ -82,12 +79,13 @@ def check_drug(pass_name: str, drug: str) -> list[str]:
 
 
 def _check_drug(pass_name: str, drug: str) -> list[str]:
-    path = os.path.join(EXTRACTION_DIR, pass_name, f"{drug}.json")
+    tree = trees.tree_of(drug)              # primary or extension (Amendment 19 §4)
+    path = os.path.join(tree.extraction, pass_name, f"{drug}.json")
     if not os.path.exists(path):
         return [f"no record file {path}"]
     with open(path, encoding="utf-8") as f:
         rec = json.load(f)
-    with open(os.path.join(SEARCH_DIR, f"{drug}.json"), encoding="utf-8") as f:
+    with open(os.path.join(tree.search, f"{drug}.json"), encoding="utf-8") as f:
         snap = json.load(f)
     hashes = {r["pmid"]: r["sha256"] for kind in ITEMS for r in snap[kind]}
     out = []
@@ -102,7 +100,7 @@ def _check_drug(pass_name: str, drug: str) -> list[str]:
             if not isinstance(s.get("pmid"), str) or s["pmid"] not in hashes:
                 out.append(f"{kind} {s.get('pmid')}: not in the search snapshot")
                 continue
-            with open(os.path.join(ABSTRACT_DIR, drug, f"{s['pmid']}.txt"), encoding="utf-8") as f:
+            with open(os.path.join(tree.abstracts, drug, f"{s['pmid']}.txt"), encoding="utf-8") as f:
                 text = f.read()
             if hashlib.sha256(text.encode()).hexdigest() != hashes[s["pmid"]]:
                 out.append(f"{kind} {s['pmid']}: abstract text differs from the committed hash")
@@ -116,7 +114,10 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         sys.exit("usage: python3 -m benchmark.external.curation.check <pass> [<drug> ...]")
     pass_name = sys.argv[1]
-    drugs = sys.argv[2:] or sorted(f[:-5] for f in os.listdir(SEARCH_DIR) if f.endswith(".json"))
+    if sys.argv[2:] == ["extension"]:
+        drugs = trees.extension_drugs()
+    else:
+        drugs = sys.argv[2:] or sorted(f[:-5] for f in os.listdir(trees.PRIMARY.search) if f.endswith(".json"))
     bad = 0
     for d in drugs:
         for p in check_drug(pass_name, d):

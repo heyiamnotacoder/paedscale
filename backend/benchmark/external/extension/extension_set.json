@@ -1,0 +1,148 @@
+{
+ "_about": "PaedScale external validation, extension set (PROTOCOL.md Amendment 19). Engine inputs from FDA label snapshots (paths relative to backend/benchmark/); every quote is checked by tests/test_external_extension.py. Harness only: never read by the product path.",
+ "drugs": {
+  "cefazolin": {
+   "included": true,
+   "label": "labels/cefazolin.json",
+   "fe": {
+    "value": 0.75,
+    "quote": "In the first 6 hours approximately 60% of the drug is excreted in the urine and this increases to 70% to 80% within 24 hours",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "notes": "Label: 'excreted unchanged in the urine'. Longest collection (24 h), range midpoint."
+  },
+  "digoxin": {
+   "included": true,
+   "label": "labels/digoxin.json",
+   "fe": {
+    "value": 0.6,
+    "quote": "Following intravenous administration to healthy volunteers, 50-70% of a digoxin dose is excreted unchanged in the urine",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "notes": "Non-renal fraction: label says metabolism is not CYP-dependent, so it stays unattributed."
+  },
+  "fentanyl": {
+   "included": true,
+   "label": "labels/fentanyl.json",
+   "fe": {
+    "value": 0.05,
+    "quote": "mostly as metabolites with less than 10% representing the unchanged drug",
+    "flags": [
+     "fe_upper_bound"
+    ]
+   },
+   "nonrenal_enzyme": "cyp3a4",
+   "enzyme_evidence": "literature: fentanyl metabolism by hepatic CYP3A4 (Labroo et al., Drug Metab Dispos 1997;25:1072-80, PMID 9311623)",
+   "notes": "fe stated only as an upper bound (<10%); scored at the midpoint of [0, 10%]."
+  },
+  "alfentanil": {
+   "included": false,
+   "label": null,
+   "excluded_by": "label",
+   "reason": "No openFDA label has openfda.generic_name alfentanil with an intravenous route, so the selection rule returns no label and E3 cannot be assessed.",
+   "quote": null
+  },
+  "sufentanil": {
+   "included": true,
+   "label": "external/extension/labels/sufentanil.json",
+   "fe": {
+    "value": 0.02,
+    "quote": "only 2% of the dose is eliminated as unchanged drug",
+    "flags": []
+   },
+   "nonrenal_enzyme": "cyp3a4",
+   "enzyme_evidence": "literature: CYP3A4 N-dealkylation of fentanyl and sufentanil (Tateishi et al., Anesth Analg 1996;82:167-72, PMID 8712396)",
+   "notes": ""
+  },
+  "ganciclovir": {
+   "included": true,
+   "label": "external/extension/labels/ganciclovir.json",
+   "fe": {
+    "value": 0.913,
+    "quote": "91.3 ± 5.0% (n = 4) of intravenously administered ganciclovir was recovered unmetabolized in the urine",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "notes": ""
+  },
+  "cefotaxime": {
+   "included": true,
+   "label": "external/extension/labels/cefotaxime.json",
+   "fe": {
+    "value": 0.28,
+    "quote": "Approximately 20-36% of an intravenously administered dose of 14 C-cefotaxime is excreted by the kidney as unchanged cefotaxime",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "notes": "Non-renal fraction (desacetylation) is not CYP3A4 or UGT2B7, so it stays unattributed."
+  },
+  "levofloxacin": {
+   "included": true,
+   "label": "external/extension/labels/levofloxacin.json",
+   "fe": {
+    "value": 0.87,
+    "quote": "approximately 87% of an administered dose was recovered as unchanged drug in urine within 48 hours",
+    "flags": [
+     "fe_after_oral"
+    ]
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "notes": "The label's only quantitative fe follows oral dosing."
+  },
+  "milrinone": {
+   "included": true,
+   "label": "external/extension/labels/milrinone.json",
+   "fe": {
+    "value": 0.83,
+    "quote": "The major urinary excretions of orally administered milrinone in man are milrinone (83%) and its 0-glucuronide metabolite (12%)",
+    "flags": [
+     "fe_after_oral"
+    ]
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "notes": "The label's only quantitative fe follows oral dosing."
+  },
+  "ceftriaxone": {
+   "included": true,
+   "label": "external/extension/labels/ceftriaxone.json",
+   "fe": {
+    "value": 0.5,
+    "quote": "Thirty-three percent to 67% of a ceftriaxone dose was excreted in the urine as unchanged drug and the remainder was secreted in the bile",
+    "flags": []
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "notes": "Non-renal fraction is biliary, not enzymatic, so it stays unattributed."
+  },
+  "linezolid": {
+   "included": false,
+   "label": "external/extension/labels/linezolid.json",
+   "excluded_by": "E4",
+   "reason": "The label states that clearance is nonlinear with dose.",
+   "quote": "A small degree of nonlinearity in clearance was observed with increasing doses of linezolid"
+  },
+  "metronidazole": {
+   "included": true,
+   "label": "external/extension/labels/metronidazole.json",
+   "fe": {
+    "value": 0.14,
+    "quote": "unchanged metronidazole accounting for approximately 20% of the total",
+    "flags": [
+     "fe_derived"
+    ],
+    "quote_2": "The major route of elimination of metronidazole and its metabolites is via the urine (60 to 80% of the dose)"
+   },
+   "nonrenal_enzyme": null,
+   "enzyme_evidence": null,
+   "notes": "Unchanged drug is about 20% of urinary recovery, which is 60 to 80% of the dose (quote_2): fe = 0.20 × 0.70. Oxidation and glucuronidation are not attributed to a curve."
+  }
+ }
+}

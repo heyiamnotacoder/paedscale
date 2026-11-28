@@ -1,6 +1,7 @@
 """External validation, step 4: score every method against published pediatric clearance.
 
-    cd backend && python3 -m benchmark.external.score      # -> benchmark/external/output/
+    cd backend && python3 -m benchmark.external.score [n_boot] [primary|extension|pooled]
+                                                           # -> benchmark/external/output/[extension|pooled/]
 
 Implements benchmark/external/PROTOCOL.md (Amendments 1-15). Reads only the frozen dataset
 (extraction/final/<drug>.json, dataset/authors.json) and the committed search snapshot. It is
@@ -16,6 +17,7 @@ import statistics
 from typing import Optional
 
 from benchmark.external.curation import extraction as ex
+from benchmark.external.curation import trees
 from benchmark.external.curation.screening import replay
 from benchmark.growth import median_weight_kg
 from benchmark.methods import pathway_fractions
@@ -24,11 +26,7 @@ from benchmark.run import _holm
 from engine.pk_engine import compute_pediatric_dose
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FINAL_DIR = os.path.join(HERE, "extraction", "final")
-AUTHORS = os.path.join(HERE, "dataset", "authors.json")
-SEARCH_DIR = os.path.join(HERE, "search")
-REFSET = os.path.join(os.path.dirname(HERE), "reference_set.json")
-OUT = os.path.join(HERE, "output")
+OUT = trees.PRIMARY.output
 
 SEED = 20261127
 REF_KG = 70.0
@@ -263,22 +261,35 @@ def by_method(rows: list[dict], n_boot: int) -> dict:
 
 # ---------------------------------------------------------------- the dataset
 
-def load_dataset(final_dir: str = FINAL_DIR) -> dict:
-    with open(REFSET, encoding="utf-8") as f:
-        ref = json.load(f)["drugs"]
-    if not os.path.exists(AUTHORS):
-        raise FileNotFoundError(f"{AUTHORS} is missing: run `search authors` (needed for E7)")
-    authors = json.load(open(AUTHORS, encoding="utf-8"))
+def load_dataset(tree: trees.Tree | None = None) -> dict:
+    """A frozen dataset with its engine inputs: the primary one (reference_set.json) or the
+    extension of Amendment 19 (extension_set.json)."""
+    tree = tree or trees.PRIMARY
+    ref = tree.engine_inputs()
+    if not os.path.exists(tree.authors):
+        raise FileNotFoundError(f"{tree.authors} is missing: run `search authors` (needed for E7)")
+    authors = json.load(open(tree.authors, encoding="utf-8"))
     out = {}
-    for fn in sorted(os.listdir(final_dir)):
+    for fn in sorted(os.listdir(tree.final)):
         if not fn.endswith(".json"):
             continue
         drug = fn[:-5]
-        rec = json.load(open(os.path.join(final_dir, fn), encoding="utf-8"))
-        snap = json.load(open(os.path.join(SEARCH_DIR, fn), encoding="utf-8"))
+        rec = json.load(open(os.path.join(tree.final, fn), encoding="utf-8"))
+        snap = json.load(open(os.path.join(tree.search, fn), encoding="utf-8"))
         years = {r["pmid"]: r["year"] for k in ("pediatric", "adult") for r in snap[k]}
         out[drug] = {"record": rec, "drug": ref[drug], "years": years, "authors": authors}
     return out
+
+
+def datasets(name: str) -> dict:
+    """`primary`, `extension`, or `pooled` (both; Amendment 19 §5)."""
+    if name == "pooled":
+        return {**load_dataset(trees.PRIMARY), **load_dataset(trees.EXTENSION)}
+    return load_dataset(trees.by_name(name))
+
+
+def output_dir(name: str) -> str:
+    return os.path.join(OUT, "pooled") if name == "pooled" else trees.by_name(name).output
 
 
 def study_year(years: dict, pmid: str) -> int:
@@ -421,10 +432,11 @@ def analyze(ds: dict, n_boot: int = 10000) -> dict:
 CSV_FIELDS = ["drug", "pmid", "obs", "method", "stratum", "under2", "pna_days", "obs_l_h", "pred_l_h", "fe", "flags"]
 
 
-def main(n_boot: int = 10000, out: str = OUT) -> dict:
+def main(n_boot: int = 10000, out: str | None = None, dataset: str = "primary") -> dict:
     import csv
     from benchmark.run import provenance
-    ds = load_dataset()
+    ds = datasets(dataset)
+    out = out or output_dir(dataset)
     res, rows = analyze(ds, n_boot)
     res["provenance"] = provenance(n_boot)
     os.makedirs(out, exist_ok=True)
@@ -442,4 +454,5 @@ def main(n_boot: int = 10000, out: str = OUT) -> dict:
 
 if __name__ == "__main__":
     import sys
-    main(n_boot=int(sys.argv[1]) if len(sys.argv) > 1 else 10000)
+    main(n_boot=int(sys.argv[1]) if len(sys.argv) > 1 else 10000,
+         dataset=sys.argv[2] if len(sys.argv) > 2 else "primary")

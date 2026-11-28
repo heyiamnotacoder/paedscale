@@ -1,0 +1,172 @@
+{
+ "drug": "sufentanil",
+ "retrieved": "2026-11-28",
+ "queries": {
+  "pediatric": "sufentanil[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (neonat*[tiab] OR infant*[tiab] OR child*[tiab] OR pediatric*[tiab] OR paediatric*[tiab]) AND humans[mh] AND english[la] AND hasabstract",
+  "adult": "sufentanil[tiab] AND clearance[tiab] AND pharmacokinetic*[tiab] AND (healthy[tiab] OR volunteer*[tiab] OR adult*[tiab]) AND humans[mh] AND english[la] AND hasabstract"
+ },
+ "pediatric": [
+  {
+   "pmid": "1531117",
+   "year": "1992",
+   "sha256": "bc2ddcdf0bf5dbe06e4481312d671b007aaddc8425ab3c8585659b91e0070b4a",
+   "prefilter": true
+  },
+  {
+   "pmid": "2950809",
+   "year": "1987",
+   "sha256": "a8b026de894f47eae1d4dc08d72cc174786ee671c66c4e8819030bb8766baa77",
+   "prefilter": true
+  },
+  {
+   "pmid": "2959170",
+   "year": "1987",
+   "sha256": "1c69e1dde5d4dff49fa01a251968ea15d7e99eedae5f7ce75a3fc5bc1fb63889",
+   "prefilter": true
+  },
+  {
+   "pmid": "20849451",
+   "year": "2011",
+   "sha256": "69ab802b5b2ac2408e89ee1d115680391d01a9e9034c7b382aa41fa1a0715a32",
+   "prefilter": false
+  },
+  {
+   "pmid": "26105145",
+   "year": "2016",
+   "sha256": "c5f43860c60d6e750d19263a12e5173c2659c6c75810b6ffa6487331fd7093da",
+   "prefilter": true
+  },
+  {
+   "pmid": "28510304",
+   "year": "2017",
+   "sha256": "d5be53774939f7a34000752afa5b139b55189c5aca2901e1b35192e7d75e9826",
+   "prefilter": true
+  },
+  {
+   "pmid": "28688027",
+   "year": "2018",
+   "sha256": "1625013607c4750b65a41d0ac4f9729e0820eedd8fc1f9e75ce8215da8735224",
+   "prefilter": true
+  },
+  {
+   "pmid": "30632944",
+   "year": "2019",
+   "sha256": "7ce7bc903b8dba8c96011ec029ce13068939af8122004ff6e3c1e5c83d972c80",
+   "prefilter": true
+  },
+  {
+   "pmid": "34077940",
+   "year": "2021",
+   "sha256": "ef5c969e846ff16e5c64a0dfdd670fa30a40569ce9c9883801954339f9790164",
+   "prefilter": true
+  }
+ ],
+ "query_translation": {
+  "pediatric": "\"sufentanil\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"neonat*\"[Title/Abstract] OR \"infant*\"[Title/Abstract] OR \"child*\"[Title/Abstract] OR \"pediatric*\"[Title/Abstract] OR \"paediatric*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]",
+  "adult": "\"sufentanil\"[Title/Abstract] AND \"clearance\"[Title/Abstract] AND \"pharmacokinetic*\"[Title/Abstract] AND (\"healthy\"[Title/Abstract] OR \"volunteer*\"[Title/Abstract] OR \"adult*\"[Title/Abstract]) AND \"humans\"[MeSH Terms] AND \"english\"[Language] AND \"hasabstract\"[All Fields]"
+ },
+ "adult": [
+  {
+   "pmid": "1531117",
+   "year": "1992",
+   "sha256": "bc2ddcdf0bf5dbe06e4481312d671b007aaddc8425ab3c8585659b91e0070b4a",
+   "prefilter": true
+  },
+  {
+   "pmid": "2569886",
+   "year": "1989",
+   "sha256": "706b55cf912add922f8d6d0262f182fd655d7de56baf9245221e118935590200",
+   "prefilter": true
+  },
+  {
+   "pmid": "3512140",
+   "year": "1986",
+   "sha256": "824514699bb00107222a0cd28cf585ec48ed8dfd692e74a719b850034211c734",
+   "prefilter": true
+  },
+  {
+   "pmid": "7902033",
+   "year": "1993",
+   "sha256": "1c19a7b877feb21e53b3e74caf93ccc40a351bca9cae128e192a1d4d6012013f",
+   "prefilter": true
+  },
+  {
+   "pmid": "8050423",
+   "year": "1994",
+   "sha256": "72088d3941289b1e2296a52237f75610f58ad00305c4540a5e383a839d297f10",
+   "prefilter": false
+  },
+  {
+   "pmid": "8669668",
+   "year": "1996",
+   "sha256": "98fe94680ba20c8d2e5f04b5e3d995479c43cd97d02dd67cb14e7f2bc37069d2",
+   "prefilter": true
+  },
+  {
+   "pmid": "19236806",
+   "year": "2009",
+   "sha256": "ab1173b089a02f9d89822af5cd765849ee4605f47273155ae4c6cdfdcf85d60d",
+   "prefilter": true
+  },
+  {
+   "pmid": "19781381",
+   "year": "2009",
+   "sha256": "ff173c4d82df5081087ec759905549059aabfc1aa347d70b2f4086e77da1f6d1",
+   "prefilter": true
+  },
+  {
+   "pmid": "20849451",
+   "year": "2011",
+   "sha256": "69ab802b5b2ac2408e89ee1d115680391d01a9e9034c7b382aa41fa1a0715a32",
+   "prefilter": false
+  },
+  {
+   "pmid": "21079936",
+   "year": "2011",
+   "sha256": "9f35ae15ddfc8c932a96a60349701661e13d86d5cf3a1076fbfd48e2499ac6f8",
+   "prefilter": true
+  },
+  {
+   "pmid": "23780500",
+   "year": "2013",
+   "sha256": "e2c8d5b0d65151264b65f44c2b24b4709b70c6dd7d5be66a5295c8ee30292aac",
+   "prefilter": false
+  },
+  {
+   "pmid": "25977992",
+   "year": "2015",
+   "sha256": "1b80a1d1e0b525fd205cebd4204444825c39759d25adc23dabeb8ca2b2e9d82a",
+   "prefilter": true
+  },
+  {
+   "pmid": "26105145",
+   "year": "2016",
+   "sha256": "c5f43860c60d6e750d19263a12e5173c2659c6c75810b6ffa6487331fd7093da",
+   "prefilter": true
+  },
+  {
+   "pmid": "29498947",
+   "year": "2018",
+   "sha256": "7f6552a7c0fc7e9c12b6b2f08c53098106fd082db13fb0e80ad45e8020c418f1",
+   "prefilter": false
+  },
+  {
+   "pmid": "30173953",
+   "year": "2018",
+   "sha256": "edca2a91e2668d63d76208854564aa8b6187765b115629bc8eecf8da7530dabb",
+   "prefilter": true
+  },
+  {
+   "pmid": "39039947",
+   "year": "2024",
+   "sha256": "18cd0053132079a332f347c2002d8fdb8d39ed0cd73aac3c5ba066c18dee8e46",
+   "prefilter": false
+  },
+  {
+   "pmid": "42765041",
+   "year": "2026",
+   "sha256": "2a5578c0589549ca1a07cc14de1e750e219c959f4bd4a9e2574b0e7efe364bc4",
+   "prefilter": false
+  }
+ ]
+}

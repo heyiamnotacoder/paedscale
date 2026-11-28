@@ -1,6 +1,6 @@
 # Screening and extraction guide (operational)
 
-This guide says *how* to record screening decisions. The rules themselves are in `PROTOCOL.md`, Amendments 1 to 16. Where the two differ, PROTOCOL.md wins. Each pass works only from PROTOCOL.md, this guide and the abstract texts. A pass never opens another pass's folder.
+This guide says *how* to record screening decisions. The rules themselves are in `PROTOCOL.md`, Amendments 1 to 19. Where the two differ, PROTOCOL.md wins. Each pass works only from PROTOCOL.md, this guide and the abstract texts. A pass never opens another pass's folder.
 
 ## Commands (from `backend/`)
 
@@ -9,6 +9,8 @@ python3 -m benchmark.external.curation.search restore                    # once 
 python3 -m benchmark.external.curation.screening next <pass> <drug> 3   # next abstracts in the seeded order
 python3 -m benchmark.external.curation.check <pass> [<drug>]            # validate a pass's records
 ```
+
+**Extension set (Amendment 19).** The same commands work for an extension drug (cefazolin, cefotaxime, ceftriaxone, digoxin, fentanyl, ganciclovir, levofloxacin, metronidazole, milrinone, sufentanil): its snapshot, abstracts and records live under `extension/` instead, so the record file is `extension/extraction/<pass>/<drug>.json`. Restore its abstracts once with `search restore extension`, and check all of a pass's extension records with `check <pass> extension`. The rules are the same.
 
 `next` prints pediatric abstracts while any stratum is open. Once every stratum is full, or the list is exhausted, it prints adult abstracts until five qualify or the list is exhausted. Screen strictly in the printed order, and record a decision for every abstract you read before asking for more.
 
