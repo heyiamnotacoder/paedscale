@@ -1,0 +1,234 @@
+{
+ "drug": "tobramycin",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "16972966",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35481751",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "24789450",
+   "decision": "exclude",
+   "reason": "no age: typical value for a 'full term neonate of 4 kg' without a stated postnatal age or PMA; route not stated as IV",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "17995972",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9337435",
+   "decision": "exclude",
+   "reason": "P2: clearance pooled across gentamicin and tobramycin, no tobramycin-only value; route not stated; age only 'aged 15 years or less'",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "24395072",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3964533",
+   "decision": "exclude",
+   "reason": "P1: route of administration not stated as intravenous in the abstract (postnatal age also garbled: '3 X 4 days')",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "6883955",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "31648297",
+   "decision": "exclude",
+   "reason": "P2: no tobramycin-specific group clearance (pooled tobramycin/gentamicin per-1.73 m2 medians by ARC status); no group age",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": []
+  },
+  {
+   "pmid": "11360026",
+   "decision": "exclude",
+   "reason": "P1: route of administration not stated as intravenous in the abstract (zero-order input model only)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "27585963",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3709337",
+   "decision": "exclude",
+   "reason": "range only: total clearance given only as a range (0.74 to 1.19 ml/min/kg)",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "16168626",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalized patients, not healthy and normal renal function not stated; age not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "14748900",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "34882292",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21143502",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill ICU patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8885120",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients aged 21-55 y; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32049889",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "972269",
+   "decision": "exclude",
+   "reason": "not total IV CL: no numeric clearance reported (half-life only)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9831970",
+   "decision": "exclude",
+   "reason": "adult criteria: infected patients 'aged 18 years or older' (no upper age, not shown within 18-65 y); route not stated as IV",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "27585963",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis children/young adults",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "36062536",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients on CRRT",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "24789450",
+   "decision": "exclude",
+   "reason": "adult criteria: pediatric population (1 day-18 years)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6376743",
+   "decision": "exclude",
+   "reason": "adult criteria: unit - per 1.73 m2 only; adolescent/young adult controls without stated adult age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9259030",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients; no numeric total clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "28647460",
+   "decision": "exclude",
+   "reason": "adult criteria: burn patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3606064",
+   "decision": "exclude",
+   "reason": "adult criteria: route of administration not stated as IV in the abstract",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7655128",
+   "decision": "exclude",
+   "reason": "not total IV CL: clearance not reported numerically (only ke)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10926440",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalized patients aged 57+/-18 y, renal function not stated normal",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10365637",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients; per-m2 only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35481751",
+   "decision": "exclude",
+   "reason": "adult criteria: children with cystic fibrosis <5 y",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3557729",
+   "decision": "exclude",
+   "reason": "adult criteria: chronic hemodialysis patients",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

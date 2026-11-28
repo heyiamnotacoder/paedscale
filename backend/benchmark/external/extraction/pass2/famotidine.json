@@ -1,0 +1,291 @@
+{
+ "drug": "famotidine",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "12520622",
+   "decision": "exclude",
+   "reason": "P4: chronic renal insufficiency",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8932543",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "children 1.1-12.9 y, stress-ulcer prophylaxis",
+     "preterm": false,
+     "cl": {
+      "value": 0.7,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "Plasma clearance (Cl) and renal clearance (ClR) were 0.70 +/- 0.34 L/hr/kg"
+     },
+     "pna_days": [
+      401.775,
+      4711.725
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "12 children (1.1-12.9 years of age",
+     "weight_kg": 27.6,
+     "weight_quote": "mean weight +/- standard deviation = 27.6 +/- 21.2 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "11301560",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "infants 5-19 days, stress-ulcer prophylaxis",
+     "preterm": false,
+     "cl": {
+      "value": 0.132,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "Plasma clearance (Cl) and renal clearance (ClR) were 0.132 +/- 0.061 L/hr/kg"
+     },
+     "pna_days": [
+      5,
+      19
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "10 infants ranging from 5 to 19 days of age",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "2311331",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": [
+    {
+     "label": "children 2-7 y after cardiac surgery, normal kidney function",
+     "preterm": false,
+     "cl": {
+      "value": 0.3,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "total plasma clearance of famotidine averaged 1.4 +/- 1.0 L/kg and 0.3 +/- 0.17 L/h/kg"
+     },
+     "pna_days": [
+      730.5,
+      2556.75
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "age range 2 to 7 years",
+     "weight_kg": [
+      14,
+      25
+     ],
+     "weight_quote": "bodyweight 14 to 25 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "2893637",
+   "decision": "exclude",
+   "reason": "adult criteria: theophylline clearance, no famotidine clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2568929",
+   "decision": "exclude",
+   "reason": "adult criteria: oral dosing; renal clearance only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "11301560",
+   "decision": "exclude",
+   "reason": "adult criteria: infants",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2866097",
+   "decision": "exclude",
+   "reason": "adult criteria: diazepam/procainamide clearance, no famotidine clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1986553",
+   "decision": "exclude",
+   "reason": "adult criteria: no numeric famotidine clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2303581",
+   "decision": "exclude",
+   "reason": "probenecid; oral dosing, no total IV clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2888738",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 309,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "the total plasma Cl of 309 ml/min"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "8932543",
+   "decision": "exclude",
+   "reason": "adult criteria: children",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2104076",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 370,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "compared with the control group, 370 (154-612) ml/min"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "2892251",
+   "decision": "exclude",
+   "reason": "adult criteria: nizatidine/diazepam study, no famotidine clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8513846",
+   "decision": "exclude",
+   "reason": "adult criteria: reflux oesophagitis patients, no stated age or renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2311331",
+   "decision": "exclude",
+   "reason": "adult criteria: children",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2892544",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 463,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "Plasma clearance averaged 463 ml min-1"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "1781278",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 541,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "Mean renal and plasma clearance were 416 and 541 ml.min-1 respectively"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ]
+}

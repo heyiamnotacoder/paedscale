@@ -1,0 +1,336 @@
+{
+ "drug": "zidovudine",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "8098905",
+   "decision": "exclude",
+   "reason": "P2: clearance reported is maternal (pregnant women); no neonatal clearance value",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "15905735",
+   "decision": "exclude",
+   "reason": "P2: no zidovudine clearance (nelfinavir oral clearance only)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9559787",
+   "decision": "exclude",
+   "reason": "P1: route of zidovudine administration not stated as intravenous",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "23877688",
+   "decision": "exclude",
+   "reason": "CL/F: apparent clearance after oral dosing",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "21920159",
+   "decision": "exclude",
+   "reason": "P2: no zidovudine clearance (nevirapine only)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "42467063",
+   "decision": "exclude",
+   "reason": "P2: no zidovudine clearance (atazanavir only)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2120418",
+   "decision": "exclude",
+   "reason": "P1: newborn macaques, not human patients",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "15551216",
+   "decision": "exclude",
+   "reason": "P2: no zidovudine clearance (stavudine oral clearance only)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2643914",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "HIV-infected children 14 months-12 years, 1-h IV bolus",
+     "preterm": false,
+     "cl": {
+      "value": 705,
+      "unit": "mL/min/m2",
+      "summary": "mean",
+      "quote": "a total clearance of 705 +/- 330 mL/min.m2"
+     },
+     "pna_days": [
+      426.125,
+      4383.0
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "Twenty-one children (seventeen boys) ranging in age from 14 months to 12 years",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "8419601",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "infants <= 14 days",
+     "preterm": false,
+     "cl": {
+      "value": 10.9,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "The total body clearance of zidovudine increased significantly with age, from an average of 10.9 ml/min per kilogram in infants < or = 14 days of age to 19.0 ml/min per kilogram in older infants"
+     },
+     "pna_days": [
+      0,
+      14
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "from an average of 10.9 ml/min per kilogram in infants < or = 14 days of age",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "older infants, >14 days to <3 months (enrolment age)",
+     "preterm": false,
+     "cl": {
+      "value": 19.0,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "The total body clearance of zidovudine increased significantly with age, from an average of 10.9 ml/min per kilogram in infants < or = 14 days of age to 19.0 ml/min per kilogram in older infants"
+     },
+     "pna_days": [
+      14,
+      91.3125
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "Thirty-two symptom-free infants were enrolled before 3 months of age.",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "2715903",
+   "decision": "exclude",
+   "reason": "no age: children of unstated age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "16085374",
+   "decision": "exclude",
+   "reason": "P1: narrative review of other studies, not a primary pharmacokinetic study",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2357867",
+   "decision": "exclude",
+   "reason": "P1: adults with liver cirrhosis, oral dosing",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "18474496",
+   "decision": "exclude",
+   "reason": "P1: pregnant women; nelfinavir oral clearance only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "31693190",
+   "decision": "exclude",
+   "reason": "P1: PBPK simulation study; cited observed value from another study without route or age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "11742433",
+   "decision": "exclude",
+   "reason": "P1: pregnant women; saquinavir CL/F only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9989342",
+   "decision": "exclude",
+   "reason": "P1: review of lamivudine, no pediatric zidovudine clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2197818",
+   "decision": "exclude",
+   "reason": "P1: review, adult range-only values, no pediatric zidovudine clearance",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "9989342",
+   "decision": "exclude",
+   "reason": "adult criteria: lamivudine review, no zidovudine clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "16085374",
+   "decision": "exclude",
+   "reason": "adult criteria: neonatal review; adult value without stated route or population",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2758728",
+   "decision": "exclude",
+   "reason": "adult criteria: oral dosing; renal impairment study",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8098905",
+   "decision": "exclude",
+   "reason": "adult criteria: pregnant HIV-infected women, parenteral and oral pooled, no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42467063",
+   "decision": "exclude",
+   "reason": "adult criteria: children; atazanavir only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1283384",
+   "decision": "exclude",
+   "reason": "adult criteria: antipyrine clearance only, no zidovudine clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "11310515",
+   "decision": "exclude",
+   "reason": "CL/F: oral clearance only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2357867",
+   "decision": "exclude",
+   "reason": "CL/F: oral clearance; cirrhosis study",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7511360",
+   "decision": "exclude",
+   "reason": "CL/F: oral clearance, range only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17962426",
+   "decision": "exclude",
+   "reason": "CL/F: oral clearance only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "15905735",
+   "decision": "exclude",
+   "reason": "adult criteria: infants; nelfinavir oral clearance only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2197818",
+   "decision": "exclude",
+   "reason": "range only: review giving a 20-40 mL/min/kg range",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "18333866",
+   "decision": "exclude",
+   "reason": "adult criteria: maraviroc renal clearance only, no zidovudine clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2715903",
+   "decision": "exclude",
+   "reason": "adult criteria: children; per-m2 values",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17225002",
+   "decision": "exclude",
+   "reason": "adult criteria: didanosine oral clearance only, no zidovudine clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8593010",
+   "decision": "exclude",
+   "reason": "adult criteria: HIV patients with hepatic disease; only oral CL/F reported",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2120418",
+   "decision": "exclude",
+   "reason": "adult criteria: macaques, not humans",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

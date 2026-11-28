@@ -1,0 +1,275 @@
+{
+ "drug": "levetiracetam",
+ "pass": "pass1",
+ "pediatric": [
+  {
+   "pmid": "22669118",
+   "decision": "exclude",
+   "reason": "CL/F: oral model, apparent clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38902005",
+   "decision": "include",
+   "flags": [],
+   "observations": [
+    {
+     "label": "term neonates with seizures, typical value at 3.34 kg and PNA 5.5 d",
+     "preterm": false,
+     "cl": {
+      "value": 0.0538,
+      "unit": "L/h",
+      "summary": "typical",
+      "quote": "CL and Vd were estimated to be 0.0538 L/hour and 0.832 L, respectively"
+     },
+     "pna_days": 5.5,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "CL (L/hour)=0.0538×(weight in kg/3.34)0.75×(postnatal age in days/5.5) 0.402",
+     "weight_kg": 3.34,
+     "weight_quote": "CL (L/hour)=0.0538×(weight in kg/3.34)0.75×(postnatal age in days/5.5) 0.402",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ],
+   "reason": ""
+  },
+  {
+   "pmid": "33447943",
+   "decision": "exclude",
+   "reason": "P1: systematic review; apparent clearance, range only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "22495532",
+   "decision": "exclude",
+   "reason": "no age: CL reported by study day (day 1, day 7); postnatal age or PMA at those days not stated numerically",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "29393846",
+   "decision": "exclude",
+   "reason": "P2: typical CL at unstated covariate medians (no weight/age); IV route not stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "17442002",
+   "decision": "exclude",
+   "reason": "CL/F: oral single dose, apparent clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34247386",
+   "decision": "exclude",
+   "reason": "P1: simulation of adult critically ill patients on CRRT; P4 CRRT",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34753796",
+   "decision": "exclude",
+   "reason": "P1: route not stated (TDM data, may be oral CL/F); ages to 18 y",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26913593",
+   "decision": "exclude",
+   "reason": "CL/F: oral clearance; mixed pediatric/adult 1-89 y",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38194771",
+   "decision": "exclude",
+   "reason": "P2: lacosamide study, no levetiracetam CL",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "11879369",
+   "decision": "exclude",
+   "reason": "CL/F: apparent clearance after a single dose, IV route not stated",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "34247386",
+   "decision": "exclude",
+   "reason": "adult criteria: CRRT simulation, no numeric total CL",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "22171585",
+   "decision": "exclude",
+   "reason": "CL/F: eslicarbazepine study, no levetiracetam CL",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "39928152",
+   "decision": "exclude",
+   "reason": "CL/F: oral apparent clearance in epilepsy patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32208795",
+   "decision": "exclude",
+   "reason": "CL/F: oral levetiracetam",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "26908152",
+   "decision": "exclude",
+   "reason": "CL/F: topiramate study, no levetiracetam CL",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "29965883",
+   "decision": "exclude",
+   "reason": "CL/F: apparent oral clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33217623",
+   "decision": "exclude",
+   "reason": "adult criteria: CRRT/SLED, kidney injury",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32113977",
+   "decision": "exclude",
+   "reason": "CL/F: oral levetiracetam, no numeric CL",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "26913593",
+   "decision": "exclude",
+   "reason": "CL/F: oral clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "11879369",
+   "decision": "exclude",
+   "reason": "adult criteria: children; no adult CL value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "22495532",
+   "decision": "exclude",
+   "reason": "adult criteria: neonates",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17442002",
+   "decision": "exclude",
+   "reason": "adult criteria: infants, oral",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "39969140",
+   "decision": "exclude",
+   "reason": "adult criteria: review in critically ill; approximate healthy value, route not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "39932425",
+   "decision": "exclude",
+   "reason": "CL/F: apparent clearance in refractory epilepsy patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17573925",
+   "decision": "exclude",
+   "reason": "CL/F: apparent oral clearance in outpatients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "28279893",
+   "decision": "exclude",
+   "reason": "CL/F: oral dosing",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38166710",
+   "decision": "exclude",
+   "reason": "adult criteria: TBI patients with ARC, no numeric total CL",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21950640",
+   "decision": "exclude",
+   "reason": "adult criteria: neurocritical care patients, not healthy",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19054418",
+   "decision": "exclude",
+   "reason": "adult criteria: status epilepticus patients, median age 60 y, not healthy",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33428169",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill TBI/SAH; model pools oral (F estimated)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "25312351",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (per 1.73 m2 only); route not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "23891703",
+   "decision": "exclude",
+   "reason": "CL/F: topiramate study, no levetiracetam CL",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33447943",
+   "decision": "exclude",
+   "reason": "CL/F: systematic review of apparent clearance, range only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "14530892",
+   "decision": "exclude",
+   "reason": "CL/F: oral dosing, range only",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

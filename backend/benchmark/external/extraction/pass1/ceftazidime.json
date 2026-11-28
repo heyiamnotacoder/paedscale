@@ -1,0 +1,475 @@
+{
+ "drug": "ceftazidime",
+ "pass": "pass1",
+ "pediatric": [
+  {
+   "pmid": "8703647",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "preterm infants GA 28.7 wk, day 3",
+     "preterm": true,
+     "cl": {
+      "value": 30.7,
+      "unit": "mL/h/kg",
+      "summary": "mean",
+      "quote": "30.7 +/- 5.9 vs 41.6 +/- 9.0 ml h-1 kg-1"
+     },
+     "pna_days": 3,
+     "pna_range_days": null,
+     "ga_weeks": 28.7,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "23 preterm infants (gestational age 28.7 +/- 1.7 weeks; weight 1086 +/- 311 g) on day 3 and day 10 after birth",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "preterm infants GA 28.7 wk, day 10",
+     "preterm": true,
+     "cl": {
+      "value": 41.6,
+      "unit": "mL/h/kg",
+      "summary": "mean",
+      "quote": "30.7 +/- 5.9 vs 41.6 +/- 9.0 ml h-1 kg-1"
+     },
+     "pna_days": 10,
+     "pna_range_days": null,
+     "ga_weeks": 28.7,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "23 preterm infants (gestational age 28.7 +/- 1.7 weeks; weight 1086 +/- 311 g) on day 3 and day 10 after birth",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "41864361",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34687548",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value reported (pooled adult-pediatric model)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8787874",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis; ciprofloxacin clearance only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8529330",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "preterm infants, day 3 of life",
+     "preterm": true,
+     "cl": {
+      "value": 37.3,
+      "unit": "mL/h/kg",
+      "summary": "mean",
+      "quote": "55.7 +/- 34.4 ml/hr (37.3 +/- 11.9 ml/hr/kg)"
+     },
+     "pna_days": 3,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "evaluated in 136 preterm infants on day 3 of life",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "30838391",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2862190",
+   "decision": "exclude",
+   "reason": "range only: clearance 0.13-2.10 mL/min/kg; IV or IM",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "6348228",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38178624",
+   "decision": "exclude",
+   "reason": "P4: CRRT (case report)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8552453",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": [
+    {
+     "label": "severely asphyxiated term infants, day 3",
+     "preterm": false,
+     "cl": {
+      "value": 40.9,
+      "unit": "mL/h/kg",
+      "summary": "mean",
+      "quote": "CAZ clearance per kg (40.9 +/- 6.1 mL/h/kg versus 60.8 +/- 8.3 mL/h/kg)"
+     },
+     "pna_days": 3,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "studied in 10 severely asphyxiated term infants with suspected septicemia on d 3 of life",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "term infants without asphyxia (controls), day 3",
+     "preterm": false,
+     "cl": {
+      "value": 60.8,
+      "unit": "mL/h/kg",
+      "summary": "mean",
+      "quote": "CAZ clearance per kg (40.9 +/- 6.1 mL/h/kg versus 60.8 +/- 8.3 mL/h/kg)"
+     },
+     "pna_days": 3,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "Nine term infants with suspected septicemia but without asphyxia served as controls",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "36239478",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance value; renal impairment simulations",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2673663",
+   "decision": "exclude",
+   "reason": "P2: cefetamet review, no ceftazidime clearance",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "30670413",
+   "decision": "exclude",
+   "reason": "adult criteria: review, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2667099",
+   "decision": "exclude",
+   "reason": "adult criteria: elderly 63-76 y; per-1.73 m2 only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40795198",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19802998",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 111,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "The total clearance of ceftazidime was 111 ml/min (S.D. 16.6)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "7030200",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 111,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "Plasma clearance was 111 ml/min for ceftazidime"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "42129898",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill, median age 77 y; no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20065059",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 6.68,
+      "unit": "L/h",
+      "summary": "typical",
+      "quote": "6.68 liters/h for healthy volunteers with 53 kg fat-free mass"
+     },
+     "weight_kg": 66.2,
+     "weight_quote": "seven healthy volunteers (WT = 66.2 +/- 4.9 kg)",
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "28784670",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9915275",
+   "decision": "exclude",
+   "reason": "adult criteria: CAPD patients, intraperitoneal dosing",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "34687548",
+   "decision": "exclude",
+   "reason": "adult criteria: pediatric-focused model, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "36239478",
+   "decision": "exclude",
+   "reason": "adult criteria: pediatric renal impairment, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "37919244",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients incl. obese, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30712199",
+   "decision": "exclude",
+   "reason": "adult criteria: cefiderocol review, no ceftazidime clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8239592",
+   "decision": "exclude",
+   "reason": "not total IV CL: only renal clearance per 1.73 m2 reported for ceftazidime",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30739396",
+   "decision": "exclude",
+   "reason": "adult criteria: PBPK model; clearance taken from package insert, not measured",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17966838",
+   "decision": "exclude",
+   "reason": "adult criteria: burn patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1769947",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 83.6,
+      "unit": "mL/h/kg",
+      "summary": "mean",
+      "quote": "(81.4 +/- 30.3 ml/h/kg vs. 83.6 +/- 24.9 ml/h/kg)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "3042246",
+   "decision": "exclude",
+   "reason": "not total IV CL: renal clearance per 1.73 m2 only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8843294",
+   "decision": "exclude",
+   "reason": "adult criteria: seriously ill elderly patients; covariate slope only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35522422",
+   "decision": "exclude",
+   "reason": "adult criteria: dogs, not humans",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "25769615",
+   "decision": "exclude",
+   "reason": "adult criteria: avibactam clearance only, no ceftazidime",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6275776",
+   "decision": "exclude",
+   "reason": "probenecid: study coadministers probenecid in one arm; volunteers not described as healthy",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30351195",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill ICU patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2088186",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 0.115,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "total body clearance was 0.115 liter/h.kg (SD, 0.022)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    },
+    {
+     "cl": {
+      "value": 0.113,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "The total body clearance was 0.113 liter/h . kg (SD, 0.018)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ]
+}

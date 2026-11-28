@@ -1,0 +1,85 @@
+{
+ "drug": "cefuroxime",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "29761538",
+   "decision": "exclude",
+   "reason": "P4: cardiopulmonary bypass surgery (Amendment 14 §2)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "41182478",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age (PNA-maturation model, cohort range from 31 days, no GA)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "7159072",
+   "decision": "exclude",
+   "reason": "no age: infants and children with no stated age; clearance per 1.73 m2 as a range",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "20864357",
+   "decision": "exclude",
+   "reason": "P4: cardiopulmonary bypass surgery (Amendment 14 §2)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "1617036",
+   "decision": "exclude",
+   "reason": "P2: review of oral cefprozil, no cefuroxime clearance",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "9017772",
+   "decision": "exclude",
+   "reason": "CL/F: oral cefuroxime axetil",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "19528278",
+   "decision": "exclude",
+   "reason": "CL/F: oral cefuroxime axetil",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1363640",
+   "decision": "exclude",
+   "reason": "CL/F: oral cefuroxime axetil",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1617036",
+   "decision": "exclude",
+   "reason": "adult criteria: review of oral cefprozil, no cefuroxime clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17589665",
+   "decision": "exclude",
+   "reason": "adult criteria: CABG patients, no stated age or normal renal function (Amendment 14 §8)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "590309",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (clearance only per 1.73 m2)",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

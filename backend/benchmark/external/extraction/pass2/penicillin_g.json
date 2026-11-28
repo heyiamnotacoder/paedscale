@@ -1,0 +1,103 @@
+{
+ "drug": "penicillin_g",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "40629558",
+   "decision": "exclude",
+   "reason": "P1: pregnant women in labour, not patients younger than 18 years",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "29378710",
+   "decision": "exclude",
+   "reason": "P4: therapeutic hypothermia",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "29463540",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "neonates GA >=32 wk, postnatal age <72 h (noncompartmental)",
+     "preterm": false,
+     "cl": {
+      "value": 0.21,
+      "unit": "L/h",
+      "summary": "median",
+      "quote": "the median clearance (CL) was 0.21 liters/h"
+     },
+     "pna_days": [
+      0,
+      3
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "neonates with a gestational age (GA) of ≥32 weeks and a postnatal age of <72 h",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "17646418",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "preterm GA <32 wk, day 3 of life (population estimate)",
+     "preterm": true,
+     "cl": {
+      "value": 0.103,
+      "unit": "L/h",
+      "summary": "typical",
+      "quote": "0.774 +/- 0.28 liter/h, and 0.103 +/- 0.01 liter/h (mean +/- standard error), respectively"
+     },
+     "pna_days": 3,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "20 preterm neonates with a gestational age of less than 32 weeks on day 3 of life",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "29112711",
+   "decision": "exclude",
+   "reason": "adult criteria: severely ill hospitalized patients with variable renal function (CrCl 3-195); no numeric PEN clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "24487120",
+   "decision": "exclude",
+   "reason": "not total IV CL: 6beta-hydroxycortisol renal clearance, no benzylpenicillin clearance",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

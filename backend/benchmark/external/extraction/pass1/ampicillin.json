@@ -1,0 +1,241 @@
+{
+ "drug": "ampicillin",
+ "pass": "pass1",
+ "pediatric": [
+  {
+   "pmid": "17347177",
+   "decision": "exclude",
+   "reason": "P2: gentamicin CL/F after IM dosing only; no ampicillin clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38747600",
+   "decision": "exclude",
+   "reason": "P2: gentamicin clearance only; no ampicillin clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "33591074",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": [
+    {
+     "label": "neonates GA 32-42 wk, first week of life (NCA)",
+     "preterm": false,
+     "cl": {
+      "value": 0.2,
+      "unit": "L/h",
+      "summary": "mean",
+      "quote": "clearance (CL) 0.20 ± 0.13 L/h"
+     },
+     "pna_days": [
+      1,
+      7
+     ],
+     "ga_weeks": [
+      32,
+      42
+     ],
+     "pma_weeks": null,
+     "age_quote": "During First Week of Life",
+     "weight_kg": 2.873,
+     "weight_quote": "mean BW 2873 g",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "10223940",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "children 1-12 y (ampicillin with sulbactam)",
+     "preterm": false,
+     "cl": {
+      "value": 4.76,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "The mean total clearance, steady-state distribution volume, and half-life were 4.76 ml/min/kg"
+     },
+     "pna_days": [
+      365.25,
+      4383.0
+     ],
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "The ages ranged from 1 to 6 years for 10 patients, 6.1 to 10 years for 9 patients, and 10.1 to 12 years for 9 patients",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "28226400",
+   "decision": "exclude",
+   "reason": "P4: therapeutic hypothermia",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "6716226",
+   "decision": "exclude",
+   "reason": "P2: mezlocillin clearance only; no ampicillin clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34670320",
+   "decision": "exclude",
+   "reason": "P1: adult peripartum women, not patients under 18",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35107141",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age; only component clearance terms (CLGFR plus additional term) without stated covariate age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "21831986",
+   "decision": "exclude",
+   "reason": "P2: oral ciprofloxacin CL/F only; no ampicillin clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3609118",
+   "decision": "exclude",
+   "reason": "P2: flucloxacillin clearance only; no ampicillin clearance",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "6357074",
+   "decision": "exclude",
+   "reason": "adult criteria: ceftazidime study, no ampicillin clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40903201",
+   "decision": "exclude",
+   "reason": "range only: systematic review reporting clearance range across studies, not a study population",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "36853585",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalised patients aged 40-82 y with a wide range of renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6716226",
+   "decision": "exclude",
+   "reason": "adult criteria: newborn infants, mezlocillin study",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3954933",
+   "decision": "exclude",
+   "reason": "adult criteria: elderly volunteers aged 69-83 y; clearance per 1.73 m2 only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6845399",
+   "decision": "exclude",
+   "reason": "adult criteria: third-trimester pregnant patients, not stated healthy or of normal renal function; no age stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2613605",
+   "decision": "exclude",
+   "reason": "adult criteria: unit; young-adult total clearance given only per 1.73 m2",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3609118",
+   "decision": "exclude",
+   "reason": "adult criteria: newborn infants, flucloxacillin study",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10223940",
+   "decision": "exclude",
+   "reason": "adult criteria: pediatric patients aged 1-12 y",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "36715134",
+   "decision": "exclude",
+   "reason": "adult criteria: cardiac surgery patients (not healthy volunteers) with no stated age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "4455125",
+   "decision": "exclude",
+   "reason": "not total IV CL: only renal clearance reported for ampicillin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "27001408",
+   "decision": "exclude",
+   "reason": "adult criteria: anuric dialysis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2112643",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "values": [
+    {
+     "cl": {
+      "value": 4.7,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "total body clearance of 4.7 +/- 0.6 ml/min/kg"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": [
+      20,
+      28
+     ],
+     "age_quote": "Seven healthy volunteers (four males, 20-28 years)",
+     "flags": []
+    }
+   ]
+  }
+ ]
+}

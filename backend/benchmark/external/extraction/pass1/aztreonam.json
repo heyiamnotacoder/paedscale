@@ -1,0 +1,207 @@
+{
+ "drug": "aztreonam",
+ "pass": "pass1",
+ "pediatric": [
+  {
+   "pmid": "8162661",
+   "decision": "exclude",
+   "reason": "P1: review; no pediatric numeric clearance for a defined group",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3286083",
+   "decision": "exclude",
+   "reason": "P1: review; neonatal value approximate and group age not stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3774385",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "1952838",
+   "decision": "exclude",
+   "reason": "no age: groups defined by gestational age and birth weight only, no postnatal age or PMA",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "25769615",
+   "decision": "exclude",
+   "reason": "adult criteria: avibactam clearance only, no aztreonam",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6684898",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 1,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "The total serum clearance averaged 1 ml/min per kg"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "38252170",
+   "decision": "exclude",
+   "reason": "adult criteria: simulation/dose selection, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6685452",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 107,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "ranged from a mean value of 107 ml/min in normal subjects"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "2795125",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 84.2,
+      "unit": "mL/h/kg",
+      "summary": "mean",
+      "quote": "from 84.2 +/- 7.8 ml/h/kg in healthy volunteers"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "4039117",
+   "decision": "exclude",
+   "reason": "range only: infected patients, clearance range per 70 kg",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8162661",
+   "decision": "exclude",
+   "reason": "adult criteria: review; approximate value, not a study group mean",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "31828337",
+   "decision": "exclude",
+   "reason": "adult criteria: cIAI patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3286083",
+   "decision": "exclude",
+   "reason": "adult criteria: review; approximate value, not a study group mean",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10890260",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "values": [
+    {
+     "cl": {
+      "value": 6.1,
+      "unit": "L/h",
+      "summary": "mean",
+      "quote": "total body clearance, 6.1+/-1.2 L/h"
+     },
+     "weight_kg": 74.6,
+     "weight_quote": "mean weight, 74.6+/-14.0 kg",
+     "age_years": 29.3,
+     "age_quote": "The subjects' mean (+/- SD) age was 29.3+/-4.4 years",
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "27530649",
+   "decision": "exclude",
+   "reason": "adult criteria: pooled healthy and renally impaired; typical value without stated covariate point or age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "4039189",
+   "decision": "exclude",
+   "reason": "adult criteria: aged 65-75 y, outside 18-65",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "17576827",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 76.2,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "76.2 +/- 7.4 ml/min in healthy subjects"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ]
+}

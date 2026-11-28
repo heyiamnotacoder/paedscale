@@ -1,0 +1,550 @@
+{
+ "drug": "amikacin",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "29569124",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "children 1-12 y",
+     "preterm": false,
+     "cl": {
+      "value": 1.2,
+      "unit": "L/h",
+      "summary": "typical",
+      "quote": "1.2 l/h and 6.5 l for total body clearance (CL)"
+     },
+     "pna_days": 1497.525,
+     "pna_range_days": [
+      365.25,
+      4383.0
+     ],
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "mean \u00b1 standard deviation age of 4.1 \u00b1 3.9 years",
+     "weight_kg": 15,
+     "weight_quote": "bodyweight of 15 \u00b1 8.4 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "41350991",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "41973123",
+   "decision": "exclude",
+   "reason": "no age: no numeric age stated for the PICU group",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "36811146",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": [
+    {
+     "label": "newborns, suspected sepsis, PMA 38.3 wk",
+     "preterm": false,
+     "cl": {
+      "value": 0.16,
+      "unit": "L/h",
+      "summary": "typical",
+      "quote": "clearance (Cl = 0.16 L/h)"
+     },
+     "pna_days": null,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": 38.3,
+     "pma_range_weeks": [
+      32,
+      42.4
+     ],
+     "age_quote": "postmenstrual age [PMA] 38.3, range 32-42.4 weeks",
+     "weight_kg": 2.8,
+     "weight_quote": "weight 2.8, range 1.6-3.8 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "10749517",
+   "decision": "exclude",
+   "reason": "P2: isepamicin review, no amikacin clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8787874",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis; ciprofloxacin clearance, not amikacin",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "23876785",
+   "decision": "exclude",
+   "reason": "P4: burns",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "16446602",
+   "decision": "exclude",
+   "reason": "no age: GA only, no postnatal age or PMA",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "25884534",
+   "decision": "exclude",
+   "reason": "P2: no amikacin clearance (meropenem case report)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "30299427",
+   "decision": "exclude",
+   "reason": "no age: no numeric age stated (burn and cancer children)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "21353108",
+   "decision": "exclude",
+   "reason": "P2: gentamicin study, no amikacin clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3780832",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "15249757",
+   "decision": "exclude",
+   "reason": "no age: GA only (<31 wk), postnatal age not stated numerically",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "36943583",
+   "decision": "exclude",
+   "reason": "P2: no numeric amikacin clearance (model predictive-performance study)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "533263",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "children 1-17 y with malignancy, normal renal function",
+     "preterm": false,
+     "cl": {
+      "value": 131,
+      "unit": "mL/min/1.73m2",
+      "summary": "mean",
+      "quote": "total body clearance rate was 131 +/- 10 ml/min per 1.73 m2"
+     },
+     "pna_days": [
+      365.25,
+      6209.25
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "50 pediatric patients (1 to 17 years of age)",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "21198719",
+   "decision": "exclude",
+   "reason": "no age: GA >=36 wk only, postnatal age not stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "32893815",
+   "decision": "exclude",
+   "reason": "no age: no numeric age stated (oncology cohort)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3117703",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "non-CF children 1-12 y (controls)",
+     "preterm": false,
+     "cl": {
+      "value": 155,
+      "unit": "mL/min/1.73m2",
+      "summary": "mean",
+      "quote": "clearance = 155 ml/min/1.73 m2 (SD = 17.4 ml/min/1.73 m2)"
+     },
+     "pna_days": [
+      365.25,
+      4383.0
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "four non-CF children, one to 12 years old",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "39821208",
+   "decision": "exclude",
+   "reason": "P2: review pooling published models; typical value at a weight only, no age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "8807062",
+   "decision": "exclude",
+   "reason": "P2: no numeric pediatric clearance (mixed adult-pediatric ICU model)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "16390350",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "allometric_standardized"
+   ],
+   "observations": [
+    {
+     "label": "extreme preterm at birth, PCA 24 wk",
+     "preterm": true,
+     "cl": {
+      "value": 0.486,
+      "unit": "L/h/70kg",
+      "summary": "typical",
+      "quote": "Clearance (CL) increased from 0.486 l h(-1) per 70 kg at 24 weeks PCA to 0.940 l h(-1) per 70 kg by 30 weeks PCA"
+     },
+     "pna_days": [
+      0,
+      3
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": 24,
+     "pma_range_weeks": null,
+     "age_quote": "0.486 l h(-1) per 70 kg at 24 weeks PCA",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": [
+      "pca_as_pma"
+     ]
+    },
+    {
+     "label": "extreme preterm at birth, PCA 30 wk",
+     "preterm": true,
+     "cl": {
+      "value": 0.94,
+      "unit": "L/h/70kg",
+      "summary": "typical",
+      "quote": "Clearance (CL) increased from 0.486 l h(-1) per 70 kg at 24 weeks PCA to 0.940 l h(-1) per 70 kg by 30 weeks PCA"
+     },
+     "pna_days": [
+      0,
+      3
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": 30,
+     "pma_range_weeks": null,
+     "age_quote": "0.940 l h(-1) per 70 kg by 30 weeks PCA",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": [
+      "pca_as_pma"
+     ]
+    }
+   ]
+  },
+  {
+   "pmid": "38031322",
+   "decision": "exclude",
+   "reason": "P2: typical value only at an adult covariate point (70 kg, 176 cm), pooled neonates-adults",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "7828449",
+   "decision": "exclude",
+   "reason": "P1: intramuscular administration",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "7145504",
+   "decision": "exclude",
+   "reason": "no age: GA only, no postnatal age or PMA",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "24441865",
+   "decision": "exclude",
+   "reason": "no age: full-term neonates, no numeric postnatal age for the group",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9861567",
+   "decision": "exclude",
+   "reason": "no age: no numeric age stated (neutropenic children)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9516033",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "neonates, mean GA 35.1 wk, mean age 3.1 d",
+     "preterm": false,
+     "cl": {
+      "value": 0.048,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "Mean (95% CI) values of CL, V and half-life were 0.048 (0.045, 0.051) l.h(-1).kg(-1)"
+     },
+     "pna_days": 3.1,
+     "pna_range_days": null,
+     "ga_weeks": 35.1,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "mean gestational age of 35.1 weeks and mean age at the start of treatment of 3.1 days",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "25185930",
+   "decision": "exclude",
+   "reason": "no age: no numeric age stated (burn and non-burn children)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2327775",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "preterm infants <2500 g, PCA 30.5 wk",
+     "preterm": true,
+     "cl": {
+      "value": 0.84,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "total body clearance (0.84 +/- 0.28 ml/min per kg)"
+     },
+     "pna_days": null,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": 30.5,
+     "pma_range_weeks": null,
+     "age_quote": "postconceptional age, 30.50 +/- 2.86 weeks",
+     "weight_kg": 1.38,
+     "weight_quote": "mean +/- standard deviation, 1.38 +/- 0.47 kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": [
+      "pca_as_pma"
+     ]
+    }
+   ]
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "9559795",
+   "decision": "exclude",
+   "reason": "adult criteria: febrile neutropenic patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "34882292",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients, no stated age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8787874",
+   "decision": "exclude",
+   "reason": "adult criteria: children with cystic fibrosis; ciprofloxacin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "18789586",
+   "decision": "exclude",
+   "reason": "adult criteria: severe burn patients; subeschar tissue fluid clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "993627",
+   "decision": "exclude",
+   "reason": "adult criteria: intramuscular dosing",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38031322",
+   "decision": "exclude",
+   "reason": "adult criteria: pooled neonates to elderly, standardized typical value, not healthy adults 18-65",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41521829",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalized patients, pooled amikacin/gentamicin, no age or renal-function criterion",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10749517",
+   "decision": "exclude",
+   "reason": "adult criteria: isepamicin review, no amikacin clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "36062536",
+   "decision": "exclude",
+   "reason": "adult criteria: CRRT/dialysis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30061295",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis patients, no stated age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8723474",
+   "decision": "exclude",
+   "reason": "adult criteria: teicoplanin study, no amikacin clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21612744",
+   "decision": "exclude",
+   "reason": "adult criteria: patient population, no stated age or normal renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "37256410",
+   "decision": "exclude",
+   "reason": "adult criteria: no stated age; patients (critically ill cancer / validation), not healthy volunteers",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8807062",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU, ages 0.5-85 y pooled, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "23876785",
+   "decision": "exclude",
+   "reason": "adult criteria: pediatric burn patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3169115",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients with severe infection, no stated age or normal renal function",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

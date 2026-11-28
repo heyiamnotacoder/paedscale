@@ -1,0 +1,660 @@
+{
+ "drug": "meropenem",
+ "pass": "pass2",
+ "pediatric": [
+  {
+   "pmid": "42526657",
+   "decision": "exclude",
+   "reason": "no age: no numeric age stated for the neonates",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "25884534",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "2-year-old girl, ventriculitis, continuous infusion (case report)",
+     "preterm": false,
+     "cl": {
+      "value": 10.2,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "estimated meropenem clearance from the serum of 10.2 ml/kg/minute"
+     },
+     "pna_days": 730.5,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "a 2-year-old girl",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "40272699",
+   "decision": "exclude",
+   "reason": "P1: group age range 0.6-19.6 y extends beyond 18 y",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "31654149",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age (age range 1.4-187.2 months)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "30300440",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "4-year-old boy, KPC bacteremia, meropenem-vaborbactam (case report)",
+     "preterm": false,
+     "cl": {
+      "value": 13.1,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "a clearance of 13.1 ml/min/kg"
+     },
+     "pna_days": 1461.0,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "a 4-year-old male patient",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "32417590",
+   "decision": "exclude",
+   "reason": "P4: ECMO and continuous haemodialysis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "36251162",
+   "decision": "exclude",
+   "reason": "P4: continuous renal replacement therapy",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "19581463",
+   "decision": "exclude",
+   "reason": "P2: covariate equation only, no typical value at a stated covariate point; GA only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "31279154",
+   "decision": "exclude",
+   "reason": "P2: no numeric total plasma clearance (only assumed CSF clearance)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "7486908",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "hospitalized infants and children 2 months-12 years",
+     "preterm": false,
+     "cl": {
+      "value": 5.63,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "clearance, 5.63 +/- 0.75 ml/min/kg"
+     },
+     "pna_days": [
+      60.875,
+      4383.0
+     ],
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "four age groups were enrolled in the study: 2 to 5 months, 6 to 23 months, 2 to 5 years, and 6 to 12 years",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "33199385",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": [
+    {
+     "label": "PICU patients, median age 1.4 y",
+     "preterm": false,
+     "cl": {
+      "value": 0.45,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "The mean CL, Vc, and peripheral volume of distribution (Vp) were 0.45 liters/kg/h"
+     },
+     "pna_days": 511.35,
+     "pna_range_days": [
+      10.9575,
+      5332.65
+     ],
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "The median (range) age and body weight were 1.4 (0.03 to 14.6) years",
+     "weight_kg": 8.9,
+     "weight_quote": "The median (range) age and body weight were 1.4 (0.03 to 14.6) years and 8.9 (2.7 to 40.9) kg",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "18645546",
+   "decision": "exclude",
+   "reason": "P2: covariate equation only, no typical value at a stated covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "33314163",
+   "decision": "exclude",
+   "reason": "P4: continuous renal replacement therapy",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "42775993",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age (sigmoidal maturation model, 7 d-14.5 y)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34966143",
+   "decision": "exclude",
+   "reason": "P4: ECMO and CVVHDF",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26124157",
+   "decision": "exclude",
+   "reason": "P2: no numeric meropenem clearance; no age stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "31306179",
+   "decision": "exclude",
+   "reason": "P1: ex vivo CRRT circuit, no patients",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "37725827",
+   "decision": "exclude",
+   "reason": "P4: end-stage renal disease with intermittent renal replacement therapy",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "22733063",
+   "decision": "exclude",
+   "reason": "no age: GA <32 wk only, no numeric postnatal age or PMA for the typical value",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "20094749",
+   "decision": "exclude",
+   "reason": "P2: covariate equation only, no typical value at a stated covariate point; no age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34089712",
+   "decision": "exclude",
+   "reason": "P2: covariate equation only (CL vs creatinine clearance); no age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26416780",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26222329",
+   "decision": "exclude",
+   "reason": "P4: continuous renal replacement therapy",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "34419581",
+   "decision": "exclude",
+   "reason": "no age: no numeric age stated for the critically ill infants",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "11360025",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "premature neonates, mean postnatal age 21 d, first dose",
+     "preterm": true,
+     "cl": {
+      "value": 0.157,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "Mean total body clearance was 0.157 L/kg per hour"
+     },
+     "pna_days": 21,
+     "pna_range_days": null,
+     "ga_weeks": null,
+     "ga_range_weeks": null,
+     "pma_weeks": null,
+     "pma_range_weeks": null,
+     "age_quote": "mean postnatal age 21 days",
+     "weight_kg": 0.925,
+     "weight_quote": "mean birth weight 925 g",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "35294769",
+   "decision": "exclude",
+   "reason": "adult criteria: sulopenem review, no meropenem clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1816187",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 292.1,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "clearance after the third dose of intermittent infusion were 62.7 (11.4) min, 43.5 (7.1) mg.h/L and 292.1 (36.8) mL/min respectively"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    },
+    {
+     "cl": {
+      "value": 338.3,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "The clearance was 338.3 (45.6) mL/min for serum"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "42508095",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill burn patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "28961812",
+   "decision": "exclude",
+   "reason": "adult criteria: septic shock patients, no numeric meropenem clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20408498",
+   "decision": "exclude",
+   "reason": "adult criteria: valproic acid clearance, no meropenem clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "25636084",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients on ECMO/RRT, not healthy, no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "30712199",
+   "decision": "exclude",
+   "reason": "adult criteria: cefiderocol review, no meropenem clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "36005753",
+   "decision": "exclude",
+   "reason": "adult criteria: CRRT patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "27527080",
+   "decision": "exclude",
+   "reason": "adult criteria: vaborbactam clearance, no meropenem clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41808662",
+   "decision": "exclude",
+   "reason": "adult criteria: ECMO/RRT patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "38349160",
+   "decision": "exclude",
+   "reason": "adult criteria: AKI/ESKD patients on SLED",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "20082106",
+   "decision": "exclude",
+   "reason": "adult criteria: patients, covariate equation only, no age or typical value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41162440",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "35789108",
+   "decision": "exclude",
+   "reason": "adult criteria: patients undergoing plasma exchange, no stated age, not healthy",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21366653",
+   "decision": "exclude",
+   "reason": "adult criteria: hospital patients, no stated age or normal renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "34600585",
+   "decision": "exclude",
+   "reason": "adult criteria: ceftolozane/tazobactam outcomes trial, no meropenem clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "27530916",
+   "decision": "exclude",
+   "reason": "adult criteria: obese/nonobese patients, no numeric clearance or age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1482147",
+   "decision": "exclude",
+   "reason": "adult criteria: no numeric total clearance for the healthy group (only dialysis clearance)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1864280",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 188,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "The plasma clearance for meropenem was 188 (SD 31) ml/min"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "24731745",
+   "decision": "exclude",
+   "reason": "adult criteria: septic critically ill patients, median age 73 y",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "37195225",
+   "decision": "exclude",
+   "reason": "adult criteria: hemodialysis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "31090024",
+   "decision": "exclude",
+   "reason": "adult criteria: pneumonia patients (GFR 65 typical), no stated age, not healthy",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8141572",
+   "decision": "exclude",
+   "reason": "adult criteria: patients with intra-abdominal infection, no stated age or renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "33314163",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill children on CRRT",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1510440",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (clearance only per 1.73 m2)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "23642005",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2055812",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 277,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "mean plasma clearance 277 ml/min"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "36226944",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill patients, no stated age or normal renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42730518",
+   "decision": "exclude",
+   "reason": "adult criteria: PBPK simulation in septic CRRT patients, no measured clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9447900",
+   "decision": "exclude",
+   "reason": "adult criteria: febrile neutropenic patients; nonrenal clearance per 1.73 m2 only",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8537263",
+   "decision": "exclude",
+   "reason": "adult criteria: infected surgical patients, normal renal function not stated",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "32301057",
+   "decision": "exclude",
+   "reason": "adult criteria: CRRT patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "25753628",
+   "decision": "exclude",
+   "reason": "adult criteria: septic critically ill patients, no stated age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "18645546",
+   "decision": "exclude",
+   "reason": "adult criteria: neonates",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10752806",
+   "decision": "exclude",
+   "reason": "adult criteria: acute renal failure on CRRT",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40405288",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients, no numeric clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "26416780",
+   "decision": "exclude",
+   "reason": "adult criteria: children with cystic fibrosis",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "25542059",
+   "decision": "exclude",
+   "reason": "adult criteria: ECMO and ICU controls, no stated age or normal renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "42243645",
+   "decision": "exclude",
+   "reason": "adult criteria: infected patients, no stated age or normal renal function",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "1510451",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (healthy-group clearance only per 1.73 m2)",
+   "flags": [],
+   "values": []
+  }
+ ]
+}
