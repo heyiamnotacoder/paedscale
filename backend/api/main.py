@@ -24,8 +24,9 @@ from pydantic import BaseModel, Field
 
 load_dotenv()  # pulls ANTHROPIC_API_KEY from backend/.env
 
-from agents.agent import ORCHESTRATOR_MODEL, run_case  # noqa: E402  (after load_dotenv)
+from agents.agent import AGENT_UNCERTAINTY_DRAWS, ORCHESTRATOR_MODEL, run_case  # noqa: E402  (after load_dotenv)
 from engine.child_pugh import hi_gate_error  # noqa: E402
+from engine.uncertainty import dose_uncertainty_interval  # noqa: E402
 from engine.pk_engine import (  # noqa: E402
     compute_pediatric_dose,
     renal_function_fraction_from_labs,
@@ -289,7 +290,7 @@ def pk(case: Case):
     seed = oracle.get(case.drug.strip().lower())
     if not seed:
         raise HTTPException(404, f"'{case.drug}' not in eval oracle {sorted(oracle)}")
-    r = compute_pediatric_dose(
+    kwargs = dict(
         drug=case.drug, weight_kg=case.weight_kg,
         cl_adult_l_h=seed["cl_adult_l_h"], vd_adult_l=seed["vd_adult_l"],
         fm=seed["fm"], target_metric=seed["target_metric"],
@@ -304,4 +305,12 @@ def pk(case: Case):
         toxic_dose_mg_per_kg_per_day=seed.get("toxic_dose_mg_per_kg_per_day"),
         effective_dose_mg_per_kg_per_day=seed.get("effective_dose_mg_per_kg_per_day"),
     )
-    return result_to_dict(r)
+    out = result_to_dict(compute_pediatric_dose(**kwargs))
+    if not out.get("blocked"):
+        # Same seeded 90% parameter-uncertainty interval the agent attaches. Optional context:
+        # a failure here must never discard the engine dose.
+        try:
+            out["parameter_uncertainty"] = dose_uncertainty_interval(n_draws=AGENT_UNCERTAINTY_DRAWS, **kwargs)
+        except Exception:
+            out["parameter_uncertainty"] = None
+    return out

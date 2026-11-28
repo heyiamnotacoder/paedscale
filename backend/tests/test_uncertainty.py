@@ -5,8 +5,10 @@ maturation parameters (TM50, Hill). Deterministic (seeded), no API key.
 Run:  python3 -m tests.test_uncertainty
 """
 
-from engine.pk_engine import compute_pediatric_dose
+import math
 import random
+
+from engine.pk_engine import compute_pediatric_dose
 
 from engine.constants import MATURATION
 from engine.uncertainty import dose_uncertainty_interval, sample_curve
@@ -138,3 +140,45 @@ def test_interval_names_the_engine_point_estimate_it_surrounds():
     pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **RENAL)
     assert pi["engine_dose_mg_per_kg_per_day"] == point
     assert "engine dose" in pi["kind"]
+
+
+# --- which maturation PARAMETER drives the spread -------------------------------------------
+# Expected shares come from the delta method on MF = PMA^H / (TM50^H + PMA^H), independent of the
+# Monte Carlo: d log MF / d log TM50 = -H(1-MF) and d log MF / d log H = H ln(PMA/TM50) (1-MF),
+# so share(TM50) = sd_T^2 / (sd_T^2 + (ln(PMA/TM50) sd_H)^2), with sd = log-width of the 95% CI / 3.92.
+
+PURE_RENAL = dict(RENAL, fm={"renal_gfr": 1.0})
+
+
+def _delta_share_tm50(pma, tm50=47.7, tm50_ci=(45.1, 50.5), hill_ci=(3.03, 3.80)):
+    sd_t = math.log(tm50_ci[1] / tm50_ci[0]) / (2 * 1.959963984540054)
+    sd_h = math.log(hill_ci[1] / hill_ci[0]) / (2 * 1.959963984540054)
+    return sd_t ** 2 / (sd_t ** 2 + (math.log(pma / tm50) * sd_h) ** 2)
+
+
+def test_tm50_drives_the_spread_near_tm50():
+    pi = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **PURE_RENAL)
+    share = pi["parameter_share"]
+    assert set(share) == {"renal_gfr.tm50_weeks", "renal_gfr.hill"}, share
+    assert abs(sum(share.values()) - 1.0) < 1e-6, share
+    assert abs(share["renal_gfr.tm50_weeks"] - _delta_share_tm50(42.0)) < 0.05, share   # ≈ 0.94
+    assert pi["dominant_parameter"]["key"] == "renal_gfr.tm50_weeks"
+
+
+def test_hill_drives_the_spread_well_past_tm50():
+    pi = dose_uncertainty_interval(weight_kg=12.0, pma_weeks=120.0, **PURE_RENAL)
+    share = pi["parameter_share"]
+    assert abs(share["renal_gfr.hill"] - (1 - _delta_share_tm50(120.0))) < 0.05, share      # ≈ 0.77
+    assert pi["dominant_parameter"]["key"] == "renal_gfr.hill"
+
+
+def test_dominant_parameter_cites_the_published_value_and_ci():
+    dom = dose_uncertainty_interval(weight_kg=3.5, pma_weeks=42.0, **PURE_RENAL)["dominant_parameter"]
+    assert dom["pathway"] == "renal_gfr" and dom["parameter"] == "tm50_weeks"
+    assert dom["value"] == 47.7 and tuple(dom["ci95"]) == (45.1, 50.5)
+    assert "Rhodin" in dom["source"] and "18846389" in dom["source"]
+
+
+def test_no_spread_means_no_parameter_attribution():
+    adult = dose_uncertainty_interval(weight_kg=70.0, age_years=40.0, **RENAL)
+    assert adult["parameter_share"] is None and adult["dominant_parameter"] is None
