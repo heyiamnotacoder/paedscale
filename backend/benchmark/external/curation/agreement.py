@@ -67,11 +67,15 @@ def _fields(kind: str) -> tuple[str, ...]:
 
 
 def _sorted_items(study: dict, kind: str) -> list[dict]:
-    """Items in a fixed order: by who they are (age, weight and the other covariates) first, so a
-    differing clearance cannot reorder them, then by the rest of the key."""
+    """Items in a fixed order: by who they are (age, weight and the other covariates), then their
+    flags, summary statistic and unit, and only then their clearance value, so a differing
+    clearance cannot reorder them. A differing covariate can."""
     fields, sf = _fields(kind), study.get("flags") or []
     return sorted(study.get(KINDS[kind]) or [],
-                  key=lambda i: (tuple(_sortable(i.get(f)) for f in fields), _key(i, fields, sf)))
+                  key=lambda i: (tuple(_sortable(i.get(f)) for f in fields),
+                                 tuple(sorted(set(i.get("flags") or []) | set(sf))),
+                                 _sortable((i.get("cl") or {}).get("summary")), _sortable((i.get("cl") or {}).get("unit")),
+                                 _sortable((i.get("cl") or {}).get("value"))))
 
 
 def items_key(study: dict, kind: str) -> tuple:

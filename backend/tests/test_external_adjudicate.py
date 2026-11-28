@@ -107,3 +107,9 @@ def test_a_failed_run_leaves_no_final_record_behind(tmp_path):
     (out / "old.json").write_text("{}")
     assert adj.write_final({"d": (p1, p2, {})}, {"d": snap}, str(out))
     assert list(out.iterdir()) == []
+
+
+def test_an_empty_log_entry_is_not_silently_ignored():
+    p1 = {"pediatric": [_s("1", "include", 0.1)], "adult": []}
+    _, unresolved = adj.build(p1, p1, {"pediatric": {"1": {}}}, ["1"], [], stop=lambda r, k: False)
+    assert unresolved == [("pediatric", "1", "log entry has no reason")]

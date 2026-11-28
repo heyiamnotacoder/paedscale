@@ -73,7 +73,7 @@ def _grams_in(kg: float, quote: str) -> bool:
     for q in (re.sub(r"(?<=\d),(?=\d{3}\b)", "", text), text.replace(",", ".")):
         for pattern in (num + unit, num + r"\s*(?:\+/-|±)\s*\d+(?:\.\d+)?" + unit,
                         num + r"\s*\(\s*\d+(?:\.\d+)?\s*\)" + unit,
-                        num + r"\s*\(\s*SD\s*\)?\s*\d+(?:\.\d+)?\s*\)?" + unit):
+                        num + r"\s*\(\s*(?i:sd)\s*\)?\s*\d+(?:\.\d+)?\s*\)?" + unit):
             if any(math.isclose(float(n), kg * 1000, rel_tol=1e-9) for n in re.findall(pattern, q)):
                 return True
     return False

@@ -91,3 +91,10 @@ def test_items_sort_by_number_not_by_text():
     r1 = {"pediatric": [_study("1", "include", [_o(0.1, pna=1), _o(0.2, pna=7), _o(0.3, pna=13)])], "adult": []}
     r2 = {"pediatric": [_study("1", "include", [_o(0.1, pna=1), _o(0.2, pna=7), _o(0.3, pna=13, w=4.0)])], "adult": []}
     assert ag.compare(r1, r2)["values_differ"] == 1
+
+
+def test_items_with_the_same_covariates_pair_on_their_flags_before_their_clearance():
+    a = dict(_o(0.1), flags=["critically_ill"])
+    r1 = {"pediatric": [_study("1", "include", [a, _o(0.2)])], "adult": []}
+    r2 = {"pediatric": [_study("1", "include", [dict(_o(0.35), flags=["critically_ill"]), _o(0.2)])], "adult": []}
+    assert ag.compare(r1, r2)["values_differ"] == 1

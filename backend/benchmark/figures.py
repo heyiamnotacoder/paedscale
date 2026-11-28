@@ -27,7 +27,7 @@ SHOWN = [("weight_linear", "Weight-linear", GRAY, "s"),
          ("paedscale", "PaedScale (allometry × maturation)", BLUE, "o")]
 
 
-def _style(ax):
+def style_axes(ax):
     for s in ("top", "right"):
         ax.spines[s].set_visible(False)
     for s in ("left", "bottom"):
@@ -38,8 +38,8 @@ def _style(ax):
     ax.set_axisbelow(True)
 
 
-def _save(fig, out, name, prov=None):
-    note = f"PaedScale label benchmark; engine_commit={(prov or {}).get('engine_commit', 'n/a')}"
+def save_figure(fig, out, name, prov=None, study="PaedScale label benchmark"):
+    note = f"{study}; engine_commit={(prov or {}).get('engine_commit', 'n/a')}"
     for ext, meta in (("png", {"Description": note}), ("pdf", {"Subject": note})):
         fig.savefig(os.path.join(out, f"{name}.{ext}"), dpi=300, bbox_inches="tight", metadata=meta)
     plt.close(fig)
@@ -47,7 +47,7 @@ def _save(fig, out, name, prov=None):
 
 def fold_error_by_stratum(rows, out, prov=None):
     fig, ax = plt.subplots(figsize=(7.2, 4.2))
-    _style(ax)
+    style_axes(ax)
     lo, hi = CONCORDANCE_BAND
     ax.axhspan(lo, hi, color="#eef4fc", zorder=0, label=f"Concordance band {lo:g}–{hi:g}×")
     ax.axhline(1.0, color=INK2, linewidth=0.8)
@@ -74,7 +74,7 @@ def fold_error_by_stratum(rows, out, prov=None):
     ax.set_ylabel("Fold error (predicted ÷ labeled dose)", color=INK)
     # Below the axes, so no data point is ever hidden behind it.
     ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=2)
-    _save(fig, out, "fig2_fold_error_by_stratum", prov)
+    save_figure(fig, out, "fig2_fold_error_by_stratum", prov)
 
 
 def paired_difference_forest(results, out, prov=None):
@@ -84,7 +84,7 @@ def paired_difference_forest(results, out, prov=None):
         return
     items = sorted((d, k) for k, d in h3["per_drug_mean_d"].items())
     fig, ax = plt.subplots(figsize=(6.4, 0.26 * len(items) + 1.4))
-    _style(ax)
+    style_axes(ax)
     ax.grid(axis="y", visible=False)
     ax.grid(axis="x", color="#e6e6e6", linewidth=0.6)
     ys = list(range(len(items)))
@@ -107,7 +107,7 @@ def paired_difference_forest(results, out, prov=None):
     ax.xaxis.set_minor_formatter(NullFormatter())
     ax.set_xlabel("Ratio of typical fold error, PaedScale ÷ allometry + class rule\n(<1 favours PaedScale)", color=INK)
     ax.set_ylim(-2, len(items))
-    _save(fig, out, "fig3_paired_difference_by_drug", prov)
+    save_figure(fig, out, "fig3_paired_difference_by_drug", prov)
 
 
 def maturation_curves(out, prov=None):
@@ -115,7 +115,7 @@ def maturation_curves(out, prov=None):
     from engine.pk_engine import maturation_factor
     from engine.uncertainty import sample_curve
     fig, ax = plt.subplots(figsize=(6.4, 3.8))
-    _style(ax)
+    style_axes(ax)
     pma = [24 * (1.02 ** i) for i in range(0, 175)]  # 24 wk -> ~ 25 y, log-spaced
     pma = [p for p in pma if p <= 52 * 18 + 40]
     rng = random.Random(1)
@@ -139,7 +139,7 @@ def maturation_curves(out, prov=None):
     ax.set_ylabel("Fraction of adult clearance\n(maturation factor)", color=INK)
     ax.set_xlabel("Postmenstrual age (log scale)", color=INK)
     ax.legend(frameon=False, fontsize=8, loc="lower right")
-    _save(fig, out, "fig1_maturation_curves", prov)
+    save_figure(fig, out, "fig1_maturation_curves", prov)
 
 
 def make_all(rows, results, out):

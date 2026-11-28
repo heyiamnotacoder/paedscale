@@ -30,8 +30,8 @@ LOG = os.path.join(EXTRACTION, "adjudication.json")
 
 def _choose(kind: str, pmid: str, a: dict | None, b: dict | None, entry: dict | None):
     """(study record or None, problem or None)."""
-    if entry:
-        if not str(entry.get("reason") or "").strip():
+    if entry is not None:
+        if not isinstance(entry, dict) or not str(entry.get("reason") or "").strip():
             return a or b, "log entry has no reason"
         if "record" in entry:
             rec = entry["record"]
@@ -111,6 +111,17 @@ def write_final(passes: dict, snaps: dict, out_dir: str) -> list[str]:
 
 
 def main() -> int:
+    """Rebuild extraction/final/ from scratch; any failure, including an exception, leaves it empty."""
+    final = os.path.join(EXTRACTION, "final")
+    clear_final(final)
+    try:
+        return _main()
+    except BaseException:
+        clear_final(final)
+        raise
+
+
+def _main() -> int:
     from benchmark.external.curation import check
     from benchmark.external.curation.search import SEARCH_DIR
     log = json.load(open(LOG, encoding="utf-8")) if os.path.exists(LOG) else {}

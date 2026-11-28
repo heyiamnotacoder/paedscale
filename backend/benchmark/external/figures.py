@@ -7,7 +7,8 @@ from __future__ import annotations
 
 import os
 
-from benchmark.figures import BLUE, GRAY, INK, INK2, ORANGE, _style, plt
+from benchmark.figures import save_figure
+from benchmark.figures import BLUE, GRAY, INK, INK2, ORANGE, plt, style_axes
 from benchmark.metrics import CONCORDANCE_BAND
 from matplotlib.ticker import NullFormatter
 
@@ -19,26 +20,22 @@ AGE_TICKS = [(1, "1 d"), (7, "1 wk"), (30.4, "1 mo"), (182.6, "6 mo"), (365.25, 
 
 
 def _save(fig, out, name, prov=None):
-    note = f"PaedScale external validation; engine_commit={(prov or {}).get('engine_commit', 'n/a')}"
-    for ext, meta in (("png", {"Description": note}), ("pdf", {"Subject": note})):
-        fig.savefig(os.path.join(out, f"{name}.{ext}"), dpi=300, bbox_inches="tight", metadata=meta)
-    plt.close(fig)
+    save_figure(fig, out, name, prov, study="PaedScale external validation")
 
 
-def _fold_ticks(ax, values, axis="y"):
+def _fold_ticks(ax, values):
     lo, hi = min([0.25] + values) / 1.15, max([4.0] + values) * 1.15
     ticks = [t for t in (0.0625, 0.125, 0.25, 0.5, 0.67, 1, 1.5, 2, 4, 8, 16, 32) if lo <= t <= hi]
-    if axis == "y":
-        ax.set_ylim(lo, hi)
-        ax.set_yticks(ticks)
-        ax.set_yticklabels([f"{t:g}×" for t in ticks])
-        ax.yaxis.set_minor_formatter(NullFormatter())
+    ax.set_ylim(lo, hi)
+    ax.set_yticks(ticks)
+    ax.set_yticklabels([f"{t:g}×" for t in ticks])
+    ax.yaxis.set_minor_formatter(NullFormatter())
 
 
 def fold_error_by_age(rows, out, prov=None):
     """Each observation's fold error against its central postnatal age, by method."""
     fig, ax = plt.subplots(figsize=(7.2, 4.2))
-    _style(ax)
+    style_axes(ax)
     lo, hi = CONCORDANCE_BAND
     ax.axhspan(lo, hi, color="#eef4fc", zorder=0, label=f"Within {lo:g}–{hi:g}×")
     ax.axhline(1.0, color=INK2, linewidth=0.8)
@@ -56,7 +53,8 @@ def fold_error_by_age(rows, out, prov=None):
     ax.set_xticks([x for x, _ in AGE_TICKS])
     ax.set_xticklabels([t for _, t in AGE_TICKS])
     ax.xaxis.set_minor_formatter(NullFormatter())
-    ax.set_xlabel("Central postnatal age of the study group (log scale; dotted line at 2 years)", color=INK)
+    ax.set_xlabel("Central postnatal age of the study group (log scale; dotted line at 2 years;\n"
+                  "groups at birth plotted at 1 day; methods offset slightly for legibility)", color=INK)
     ax.set_ylabel("Fold error (predicted ÷ observed clearance)", color=INK)
     ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=2)
     _save(fig, out, "fig4_external_fold_error_by_age", prov)
@@ -65,11 +63,11 @@ def fold_error_by_age(rows, out, prov=None):
 def paired_difference_forest(results, out, prov=None):
     """Per drug, under 2 years and at all ages: the ratio of typical fold errors, PaedScale ÷ allometry."""
     hyps = [("HE2_all_ages", "All ages", BLUE, "o"), ("HE1_under2", "Under 2 years", ORANGE, "^")]
-    drugs = sorted(results["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"])
-    if not drugs:
+    drugs = sorted(results["hypotheses"]["HE2_all_ages"].get("per_drug_mean_d") or {})
+    if not drugs or not all(results["hypotheses"][k].get("ci95") for k, *_ in hyps):
         return
     fig, ax = plt.subplots(figsize=(6.4, 0.3 * len(drugs) + 1.8))
-    _style(ax)
+    style_axes(ax)
     ax.grid(axis="y", visible=False)
     ax.grid(axis="x", color="#e6e6e6", linewidth=0.6)
     xs = []

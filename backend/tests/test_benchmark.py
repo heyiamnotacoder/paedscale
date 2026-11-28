@@ -464,7 +464,7 @@ def test_figures_keep_every_point_visible_and_use_plain_ratio_ticks(tmp_path, mo
     Fig 3: the ratio axis is labelled with plain numbers, not powers of ten."""
     from benchmark import figures
     saved = {}
-    monkeypatch.setattr(figures, "_save", lambda fig, out, name, prov=None: saved.__setitem__(name, fig))
+    monkeypatch.setattr(figures, "save_figure", lambda fig, out, name, prov=None, **kw: saved.__setitem__(name, fig))
     rows = score(_three_drug_set())
     rows.append({**rows[0], "fe": 7.5})            # a far outlier must stay in view
     res = analyze(rows, n_boot=40)

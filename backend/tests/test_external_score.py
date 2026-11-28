@@ -181,3 +181,9 @@ def test_the_external_figures_render(tmp_path):
                      str(tmp_path))
     assert {p.name for p in tmp_path.iterdir()} >= {"fig4_external_fold_error_by_age.png",
                                                     "fig5_external_paired_difference_by_drug.png"}
+
+
+def test_the_forest_figure_is_skipped_when_nothing_was_paired(tmp_path):
+    from benchmark.external import figures
+    figures.paired_difference_forest({"hypotheses": {"HE1_under2": {}, "HE2_all_ages": {}}}, str(tmp_path))
+    assert list(tmp_path.iterdir()) == []
