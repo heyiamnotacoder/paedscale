@@ -1,0 +1,1787 @@
+{
+ "adult_reference": {
+  "acyclovir": {
+   "first_l_h": null,
+   "median_l_h": null,
+   "n_abstracts": 0,
+   "per_abstract_l_h": []
+  },
+  "amikacin": {
+   "first_l_h": null,
+   "median_l_h": null,
+   "n_abstracts": 0,
+   "per_abstract_l_h": []
+  },
+  "ampicillin": {
+   "first_l_h": 19.74,
+   "median_l_h": 19.74,
+   "n_abstracts": 1,
+   "per_abstract_l_h": [
+    19.74
+   ]
+  },
+  "aztreonam": {
+   "first_l_h": 4.2,
+   "median_l_h": 5.815663159119025,
+   "n_abstracts": 5,
+   "per_abstract_l_h": [
+    4.2,
+    6.42,
+    5.894,
+    5.815663159119025,
+    4.572
+   ]
+  },
+  "cefepime": {
+   "first_l_h": 8.52,
+   "median_l_h": 6.42,
+   "n_abstracts": 3,
+   "per_abstract_l_h": [
+    8.52,
+    6.42,
+    6.21
+   ]
+  },
+  "cefoxitin": {
+   "first_l_h": 16.74,
+   "median_l_h": 16.74,
+   "n_abstracts": 1,
+   "per_abstract_l_h": [
+    16.74
+   ]
+  },
+  "ceftazidime": {
+   "first_l_h": 6.66,
+   "median_l_h": 6.66,
+   "n_abstracts": 5,
+   "per_abstract_l_h": [
+    6.66,
+    6.66,
+    6.965567424375648,
+    5.851999999999999,
+    7.98
+   ]
+  },
+  "cefuroxime": {
+   "first_l_h": null,
+   "median_l_h": null,
+   "n_abstracts": 0,
+   "per_abstract_l_h": []
+  },
+  "clindamycin": {
+   "first_l_h": 18.900000000000002,
+   "median_l_h": 22.25,
+   "n_abstracts": 2,
+   "per_abstract_l_h": [
+    18.900000000000002,
+    25.6
+   ]
+  },
+  "daptomycin": {
+   "first_l_h": 0.53,
+   "median_l_h": 0.574,
+   "n_abstracts": 3,
+   "per_abstract_l_h": [
+    0.53,
+    0.81,
+    0.574
+   ]
+  },
+  "famotidine": {
+   "first_l_h": 18.54,
+   "median_l_h": 24.99,
+   "n_abstracts": 4,
+   "per_abstract_l_h": [
+    18.54,
+    22.2,
+    27.779999999999998,
+    32.46
+   ]
+  },
+  "fluconazole": {
+   "first_l_h": 1.38,
+   "median_l_h": 1.3209,
+   "n_abstracts": 2,
+   "per_abstract_l_h": [
+    1.38,
+    1.2618
+   ]
+  },
+  "gentamicin": {
+   "first_l_h": 4.731999999999999,
+   "median_l_h": 4.731999999999999,
+   "n_abstracts": 1,
+   "per_abstract_l_h": [
+    4.731999999999999
+   ]
+  },
+  "levetiracetam": {
+   "first_l_h": null,
+   "median_l_h": null,
+   "n_abstracts": 0,
+   "per_abstract_l_h": []
+  },
+  "meropenem": {
+   "first_l_h": 18.912,
+   "median_l_h": 16.62,
+   "n_abstracts": 3,
+   "per_abstract_l_h": [
+    18.912,
+    11.28,
+    16.62
+   ]
+  },
+  "penicillin_g": {
+   "first_l_h": null,
+   "median_l_h": null,
+   "n_abstracts": 0,
+   "per_abstract_l_h": []
+  },
+  "piperacillin_tazobactam": {
+   "first_l_h": 13.559999999999999,
+   "median_l_h": 13.559999999999999,
+   "n_abstracts": 1,
+   "per_abstract_l_h": [
+    13.559999999999999
+   ]
+  },
+  "tobramycin": {
+   "first_l_h": 5.3999999999999995,
+   "median_l_h": 5.3999999999999995,
+   "n_abstracts": 1,
+   "per_abstract_l_h": [
+    5.3999999999999995
+   ]
+  },
+  "vancomycin": {
+   "first_l_h": 7.859999999999999,
+   "median_l_h": 7.13,
+   "n_abstracts": 2,
+   "per_abstract_l_h": [
+    7.859999999999999,
+    6.4
+   ]
+  },
+  "zidovudine": {
+   "first_l_h": null,
+   "median_l_h": null,
+   "n_abstracts": 0,
+   "per_abstract_l_h": []
+  }
+ },
+ "by_method": {
+  "all": {
+   "allometry": {
+    "aafe": 2.329219746692699,
+    "aafe_ci95": [
+     1.8013630837542263,
+     3.0066375613690584
+    ],
+    "afe": 1.898397834749818,
+    "afe_ci95": [
+     1.3444106675679686,
+     2.6217636351475004
+    ],
+    "n_drugs": 12,
+    "n_pairs": 54,
+    "within_1_5": 0.31547619047619047,
+    "within_1_5_ci95": [
+     0.1423611111111111,
+     0.5724206349206349
+    ],
+    "within_2": 0.5530753968253969,
+    "within_2_ci95": [
+     0.3630952380952381,
+     0.7336309523809524
+    ]
+   },
+   "bsa": {
+    "aafe": 2.6896263937179445,
+    "aafe_ci95": [
+     1.9738662784078433,
+     3.585343755394888
+    ],
+    "afe": 2.32991475472387,
+    "afe_ci95": [
+     1.5984154849629157,
+     3.2484928227444763
+    ],
+    "n_drugs": 12,
+    "n_pairs": 54,
+    "within_1_5": 0.42311507936507936,
+    "within_1_5_ci95": [
+     0.23214285714285712,
+     0.6666666666666666
+    ],
+    "within_2": 0.5322420634920635,
+    "within_2_ci95": [
+     0.345734126984127,
+     0.7256944444444445
+    ]
+   },
+   "paedscale": {
+    "aafe": 1.6913991426539576,
+    "aafe_ci95": [
+     1.5358655259643343,
+     1.8630641862415973
+    ],
+    "afe": 1.0830951206391495,
+    "afe_ci95": [
+     0.8323222757073728,
+     1.4025208055317975
+    ],
+    "n_drugs": 12,
+    "n_pairs": 54,
+    "within_1_5": 0.40029761904761907,
+    "within_1_5_ci95": [
+     0.21279761904761904,
+     0.6180555555555556
+    ],
+    "within_2": 0.7525793650793652,
+    "within_2_ci95": [
+     0.6430555555555556,
+     0.8650793650793651
+    ]
+   },
+   "weight_linear": {
+    "aafe": 1.8161144585951914,
+    "aafe_ci95": [
+     1.664221698583866,
+     2.021798388523552
+    ],
+    "afe": 0.9911509587092758,
+    "afe_ci95": [
+     0.7344757086070586,
+     1.327229736891388
+    ],
+    "n_drugs": 12,
+    "n_pairs": 54,
+    "within_1_5": 0.2698412698412698,
+    "within_1_5_ci95": [
+     0.14484126984126983,
+     0.39285714285714285
+    ],
+    "within_2": 0.6034722222222222,
+    "within_2_ci95": [
+     0.38055555555555554,
+     0.78125
+    ]
+   }
+  },
+  "under2": {
+   "allometry": {
+    "aafe": 3.008244894119614,
+    "aafe_ci95": [
+     2.0674174508720577,
+     4.319672616738189
+    ],
+    "afe": 2.9333977040108286,
+    "afe_ci95": [
+     1.9505927372569312,
+     4.260964362180075
+    ],
+    "n_drugs": 11,
+    "n_pairs": 40,
+    "within_1_5": 0.2963203463203463,
+    "within_1_5_ci95": [
+     0.11363636363636363,
+     0.5766233766233766
+    ],
+    "within_2": 0.3404761904761905,
+    "within_2_ci95": [
+     0.1567099567099567,
+     0.6025974025974026
+    ]
+   },
+   "bsa": {
+    "aafe": 3.709501645118164,
+    "aafe_ci95": [
+     2.392774900854404,
+     5.320945152639407
+    ],
+    "afe": 3.7087148248040696,
+    "afe_ci95": [
+     2.3961280733537604,
+     5.31981652994644
+    ],
+    "n_drugs": 11,
+    "n_pairs": 40,
+    "within_1_5": 0.2667748917748918,
+    "within_1_5_ci95": [
+     0.08495670995670995,
+     0.5584415584415584
+    ],
+    "within_2": 0.3145021645021645,
+    "within_2_ci95": [
+     0.13787878787878788,
+     0.5887445887445888
+    ]
+   },
+   "paedscale": {
+    "aafe": 1.8285720845966345,
+    "aafe_ci95": [
+     1.5672060090565634,
+     2.3075056955484747
+    ],
+    "afe": 1.394151719265502,
+    "afe_ci95": [
+     1.0010608421536342,
+     1.9569525206237968
+    ],
+    "n_drugs": 11,
+    "n_pairs": 40,
+    "within_1_5": 0.4201298701298701,
+    "within_1_5_ci95": [
+     0.22164502164502162,
+     0.6458874458874458
+    ],
+    "within_2": 0.603030303030303,
+    "within_2_ci95": [
+     0.3727272727272727,
+     0.7818181818181817
+    ]
+   },
+   "weight_linear": {
+    "aafe": 1.8961349475005655,
+    "aafe_ci95": [
+     1.6470877186763018,
+     2.436503302758058
+    ],
+    "afe": 1.3573306876943207,
+    "afe_ci95": [
+     0.9489910926614543,
+     1.943543664923047
+    ],
+    "n_drugs": 11,
+    "n_pairs": 40,
+    "within_1_5": 0.2261904761904762,
+    "within_1_5_ci95": [
+     0.10497835497835496,
+     0.3699134199134199
+    ],
+    "within_2": 0.5833333333333334,
+    "within_2_ci95": [
+     0.3151515151515152,
+     0.8075757575757575
+    ]
+   }
+  }
+ },
+ "by_stratum": {
+  "adolescent": {
+   "by_method": {
+    "allometry": {
+     "aafe": 4.072822415006544,
+     "afe": 0.2455299785022405,
+     "n_drugs": 1,
+     "n_pairs": 1,
+     "within_1_5": 0.0,
+     "within_2": 0.0
+    },
+    "bsa": {
+     "aafe": 3.6858830586518545,
+     "afe": 0.27130540608245973,
+     "n_drugs": 1,
+     "n_pairs": 1,
+     "within_1_5": 0.0,
+     "within_2": 0.0
+    },
+    "paedscale": {
+     "aafe": 4.088847839604245,
+     "afe": 0.24456767266174154,
+     "n_drugs": 1,
+     "n_pairs": 1,
+     "within_1_5": 0.0,
+     "within_2": 0.0
+    },
+    "weight_linear": {
+     "aafe": 5.3445184423404175,
+     "afe": 0.18710759646328212,
+     "n_drugs": 1,
+     "n_pairs": 1,
+     "within_1_5": 0.0,
+     "within_2": 0.0
+    }
+   },
+   "paedscale_vs_allometry": {
+    "n_drugs": 1,
+    "per_drug_mean_d": {
+     "vancomycin": 0.0017054750314285938
+    }
+   },
+   "paedscale_vs_bsa": {
+    "n_drugs": 1,
+    "per_drug_mean_d": {
+     "vancomycin": 0.04505939691252403
+    }
+   },
+   "paedscale_vs_weight_linear": {
+    "n_drugs": 1,
+    "per_drug_mean_d": {
+     "vancomycin": -0.11630763079879303
+    }
+   }
+  },
+  "child": {
+   "by_method": {
+    "allometry": {
+     "aafe": 1.5131227113526466,
+     "aafe_ci95": [
+      1.343685430153976,
+      1.6996098375042972
+     ],
+     "afe": 0.8613966126331809,
+     "afe_ci95": [
+      0.6571618148481411,
+      1.1314654847044865
+     ],
+     "n_drugs": 7,
+     "n_pairs": 13,
+     "within_1_5": 0.35714285714285715,
+     "within_1_5_ci95": [
+      0.07142857142857142,
+      0.7142857142857143
+     ],
+     "within_2": 1.0,
+     "within_2_ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "bsa": {
+     "aafe": 1.4949819402643816,
+     "aafe_ci95": [
+      1.3663149810660096,
+      1.6537916215927533
+     ],
+     "afe": 0.9645682151573406,
+     "afe_ci95": [
+      0.733394033850409,
+      1.2692165365093429
+     ],
+     "n_drugs": 7,
+     "n_pairs": 13,
+     "within_1_5": 0.6428571428571429,
+     "within_1_5_ci95": [
+      0.2857142857142857,
+      0.9285714285714286
+     ],
+     "within_2": 1.0,
+     "within_2_ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "paedscale": {
+     "aafe": 1.5365922197958592,
+     "aafe_ci95": [
+      1.3480008041424725,
+      1.743929861960431
+     ],
+     "afe": 0.8415984129769544,
+     "afe_ci95": [
+      0.6329125049611467,
+      1.1086486243419125
+     ],
+     "n_drugs": 7,
+     "n_pairs": 13,
+     "within_1_5": 0.32142857142857145,
+     "within_1_5_ci95": [
+      0.03571428571428571,
+      0.75
+     ],
+     "within_2": 1.0,
+     "within_2_ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "weight_linear": {
+     "aafe": 1.683409484018895,
+     "aafe_ci95": [
+      1.3510974760089787,
+      2.11989215235051
+     ],
+     "afe": 0.6247939190440869,
+     "afe_ci95": [
+      0.47954961348342545,
+      0.8092745354004595
+     ],
+     "n_drugs": 7,
+     "n_pairs": 13,
+     "within_1_5": 0.42857142857142855,
+     "within_1_5_ci95": [
+      0.14285714285714285,
+      0.7857142857142857
+     ],
+     "within_2": 0.6071428571428571,
+     "within_2_ci95": [
+      0.21428571428571427,
+      0.8928571428571429
+     ]
+    }
+   },
+   "paedscale_vs_allometry": {
+    "aafe_ratio": 1.0155106444884647,
+    "ci95": [
+     -0.00202332575739235,
+     0.029135327704631307
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "mean_abs_log10_diff": 0.006684479999195513,
+    "n_drugs": 7,
+    "n_obs": 13,
+    "per_drug_mean_d": {
+     "ampicillin": -0.009401859521118133,
+     "cefoxitin": 0.05006807495256815,
+     "famotidine": 0.0017807304046123934,
+     "fluconazole": 0.00021627446112548743,
+     "gentamicin": 0.005385778893765954,
+     "piperacillin_tazobactam": -0.0013711725095070099,
+     "vancomycin": 0.00011353331292174307
+    },
+    "sign_flip_p": 0.578125,
+    "wilcoxon_p_drug_level": 0.46875
+   },
+   "paedscale_vs_bsa": {
+    "aafe_ratio": 1.027833299126088,
+    "ci95": [
+     -0.025840522212058337,
+     0.05547057582440624
+    ],
+    "ci_method": "bca",
+    "comparator": "bsa",
+    "mean_abs_log10_diff": 0.011922683588938218,
+    "n_drugs": 7,
+    "n_obs": 13,
+    "per_drug_mean_d": {
+     "ampicillin": -0.05921353655293235,
+     "cefoxitin": 0.1001369143791741,
+     "famotidine": -0.0001692117922397346,
+     "fluconazole": 0.043388080470594836,
+     "gentamicin": 0.05185437185782943,
+     "piperacillin_tazobactam": -0.05422814281497507,
+     "vancomycin": 0.0016903095751162958
+    },
+    "sign_flip_p": 0.71875,
+    "wilcoxon_p_drug_level": 0.8125
+   },
+   "paedscale_vs_weight_linear": {
+    "aafe_ratio": 0.9127857686339447,
+    "ci95": [
+     -0.09410376790866425,
+     0.04872823173821381
+    ],
+    "ci_method": "bca",
+    "comparator": "weight_linear",
+    "mean_abs_log10_diff": -0.03963113968091192,
+    "n_drugs": 7,
+    "n_obs": 13,
+    "per_drug_mean_d": {
+     "ampicillin": 0.1461186468267066,
+     "cefoxitin": -0.131681457137301,
+     "famotidine": 0.020640039242449976,
+     "fluconazole": -0.09365706896856602,
+     "gentamicin": -0.13503229342279965,
+     "piperacillin_tazobactam": -0.034092513248199785,
+     "vancomycin": -0.04971333105867358
+    },
+    "sign_flip_p": 0.328125,
+    "wilcoxon_p_drug_level": 0.375
+   }
+  },
+  "infant_toddler": {
+   "by_method": {
+    "allometry": {
+     "aafe": 1.558037559462861,
+     "aafe_ci95": [
+      1.278757163312076,
+      1.9068591893139932
+     ],
+     "afe": 1.4887553304238792,
+     "afe_ci95": [
+      1.1557985988433535,
+      1.8762228319823575
+     ],
+     "n_drugs": 7,
+     "n_pairs": 12,
+     "within_1_5": 0.5476190476190477,
+     "within_1_5_ci95": [
+      0.23809523809523808,
+      0.8571428571428571
+     ],
+     "within_2": 0.7380952380952381,
+     "within_2_ci95": [
+      0.38095238095238093,
+      0.9523809523809524
+     ]
+    },
+    "bsa": {
+     "aafe": 1.7310855668163645,
+     "aafe_ci95": [
+      1.3070874244319521,
+      2.2113543892904293
+     ],
+     "afe": 1.7302201966396207,
+     "afe_ci95": [
+      1.3057809243086185,
+      2.2113543892904293
+     ],
+     "n_drugs": 7,
+     "n_pairs": 12,
+     "within_1_5": 0.40476190476190477,
+     "within_1_5_ci95": [
+      0.14285714285714285,
+      0.7619047619047619
+     ],
+     "within_2": 0.6904761904761905,
+     "within_2_ci95": [
+      0.35714285714285715,
+      0.9285714285714286
+     ]
+    },
+    "paedscale": {
+     "aafe": 1.2520400190159653,
+     "aafe_ci95": [
+      1.172220940421848,
+      1.3120765336692526
+     ],
+     "afe": 0.9309776624261044,
+     "afe_ci95": [
+      0.8188317648743324,
+      1.1085508217752815
+     ],
+     "n_drugs": 7,
+     "n_pairs": 12,
+     "within_1_5": 0.9523809523809524,
+     "within_1_5_ci95": [
+      0.8095238095238094,
+      1.0
+     ],
+     "within_2": 1.0,
+     "within_2_ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "weight_linear": {
+     "aafe": 1.3708612190657803,
+     "aafe_ci95": [
+      1.2832137964610073,
+      1.5056508746034496
+     ],
+     "afe": 0.8280039623669435,
+     "afe_ci95": [
+      0.704360991033426,
+      1.0119864547830355
+     ],
+     "n_drugs": 7,
+     "n_pairs": 12,
+     "within_1_5": 0.6666666666666667,
+     "within_1_5_ci95": [
+      0.35714285714285715,
+      0.880952380952381
+     ],
+     "within_2": 1.0,
+     "within_2_ci95": [
+      1.0,
+      1.0
+     ]
+    }
+   },
+   "paedscale_vs_allometry": {
+    "aafe_ratio": 0.8036006650876957,
+    "ci95": [
+     -0.16585620803645904,
+     -0.011542551798784472
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "mean_abs_log10_diff": -0.09495971248651032,
+    "n_drugs": 7,
+    "n_obs": 12,
+    "per_drug_mean_d": {
+     "cefepime": 0.06173095311768974,
+     "clindamycin": -0.22295130574095662,
+     "fluconazole": -0.16276335678181506,
+     "gentamicin": -0.014677902730682448,
+     "meropenem": 0.018939561765750568,
+     "piperacillin_tazobactam": -0.15193492273803083,
+     "vancomycin": -0.1930610142975276
+    },
+    "sign_flip_p": 0.109375,
+    "wilcoxon_p_drug_level": 0.15625
+   },
+   "paedscale_vs_bsa": {
+    "aafe_ratio": 0.7232687066524327,
+    "ci95": [
+     -0.23435110531852052,
+     -0.019039643679795177
+    ],
+    "ci_method": "bca",
+    "comparator": "bsa",
+    "mean_abs_log10_diff": -0.14070032492386028,
+    "n_drugs": 7,
+    "n_obs": 12,
+    "per_drug_mean_d": {
+     "cefepime": 0.09855436069405062,
+     "clindamycin": -0.279433609875138,
+     "fluconazole": -0.2778148015817145,
+     "gentamicin": -0.06771666470495175,
+     "meropenem": 0.01951739618359507,
+     "piperacillin_tazobactam": -0.20926710224037554,
+     "vancomycin": -0.268741852942488
+    },
+    "sign_flip_p": 0.09375,
+    "wilcoxon_p_drug_level": 0.109375
+   },
+   "paedscale_vs_weight_linear": {
+    "aafe_ratio": 0.9133236841211472,
+    "ci95": [
+     -0.07588289943777239,
+     0.0014584123982280559
+    ],
+    "ci_method": "bca",
+    "comparator": "weight_linear",
+    "mean_abs_log10_diff": -0.03937528017125675,
+    "n_drugs": 7,
+    "n_obs": 12,
+    "per_drug_mean_d": {
+     "cefepime": -0.11706300656357323,
+     "clindamycin": 0.038650240922218124,
+     "fluconazole": -0.03171520063732841,
+     "gentamicin": -0.06103030426756885,
+     "meropenem": -0.08678049344278915,
+     "piperacillin_tazobactam": -0.045599735257783096,
+     "vancomycin": 0.027911538048027373
+    },
+    "sign_flip_p": 0.125,
+    "wilcoxon_p_drug_level": 0.109375
+   }
+  },
+  "preterm_newborn": {
+   "by_method": {
+    "allometry": {
+     "aafe": 4.069155548267844,
+     "aafe_ci95": [
+      2.3339965137692027,
+      5.232441870787418
+     ],
+     "afe": 4.069155548267844,
+     "afe_ci95": [
+      2.3339965137692027,
+      5.232441870787418
+     ],
+     "n_drugs": 8,
+     "n_pairs": 17,
+     "within_1_5": 0.125,
+     "within_1_5_ci95": [
+      0.0,
+      0.5
+     ],
+     "within_2": 0.15625,
+     "within_2_ci95": [
+      0.0,
+      0.5625
+     ]
+    },
+    "bsa": {
+     "aafe": 5.8973051833489105,
+     "aafe_ci95": [
+      3.1352372840828764,
+      7.636734160624989
+     ],
+     "afe": 5.8973051833489105,
+     "afe_ci95": [
+      3.1352372840828764,
+      7.636734160624989
+     ],
+     "n_drugs": 8,
+     "n_pairs": 17,
+     "within_1_5": 0.125,
+     "within_1_5_ci95": [
+      0.0,
+      0.5
+     ],
+     "within_2": 0.125,
+     "within_2_ci95": [
+      0.0,
+      0.5
+     ]
+    },
+    "paedscale": {
+     "aafe": 1.9670621103986654,
+     "aafe_ci95": [
+      1.6233544341114712,
+      2.21886450127413
+     ],
+     "afe": 1.425006055992463,
+     "afe_ci95": [
+      0.8613634707664419,
+      2.0042880096389704
+     ],
+     "n_drugs": 8,
+     "n_pairs": 17,
+     "within_1_5": 0.1875,
+     "within_1_5_ci95": [
+      0.0,
+      0.5625
+     ],
+     "within_2": 0.3541666666666667,
+     "within_2_ci95": [
+      0.10416666666666666,
+      0.6875
+     ]
+    },
+    "weight_linear": {
+     "aafe": 1.9142049996423969,
+     "aafe_ci95": [
+      1.6523080245277777,
+      2.1745313503734462
+     ],
+     "afe": 1.5492399793625284,
+     "afe_ci95": [
+      0.9395944572204524,
+      2.0102769746197318
+     ],
+     "n_drugs": 8,
+     "n_pairs": 17,
+     "within_1_5": 0.0625,
+     "within_1_5_ci95": [
+      0.0,
+      0.25
+     ],
+     "within_2": 0.4791666666666667,
+     "within_2_ci95": [
+      0.1875,
+      0.7916666666666666
+     ]
+    }
+   },
+   "paedscale_vs_allometry": {
+    "aafe_ratio": 0.48340794227834394,
+    "ci95": [
+     -0.39613832617457767,
+     -0.1412410619000125
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "mean_abs_log10_diff": -0.3156862185139645,
+    "n_drugs": 8,
+    "n_obs": 17,
+    "per_drug_mean_d": {
+     "ceftazidime": -0.5182252916535491,
+     "clindamycin": -0.39406217434644597,
+     "daptomycin": 0.09179628616665701,
+     "fluconazole": -0.36498661751703737,
+     "gentamicin": -0.3665904220941813,
+     "meropenem": -0.2702633342189339,
+     "piperacillin_tazobactam": -0.3316837685391617,
+     "vancomycin": -0.37147442590906343
+    },
+    "sign_flip_p": 0.015625,
+    "wilcoxon_p_drug_level": 0.015625
+   },
+   "paedscale_vs_bsa": {
+    "aafe_ratio": 0.3335527074218036,
+    "ci95": [
+     -0.565136373070049,
+     -0.27167152480569856
+    ],
+    "ci_method": "bca",
+    "comparator": "bsa",
+    "mean_abs_log10_diff": -0.47683552986201266,
+    "n_drugs": 8,
+    "n_obs": 17,
+    "per_drug_mean_d": {
+     "ceftazidime": -0.6913072868564858,
+     "clindamycin": -0.5076533646832934,
+     "daptomycin": -0.011816067073292469,
+     "fluconazole": -0.5958615884905676,
+     "gentamicin": -0.5149396122952644,
+     "meropenem": -0.4964191185557447,
+     "piperacillin_tazobactam": -0.45497987050403155,
+     "vancomycin": -0.5417073304374214
+    },
+    "sign_flip_p": 0.0078125,
+    "wilcoxon_p_drug_level": 0.0078125
+   },
+   "paedscale_vs_weight_linear": {
+    "aafe_ratio": 1.0276130878177325,
+    "ci95": [
+     -0.05804437602588891,
+     0.08270767216493431
+    ],
+    "ci_method": "bca",
+    "comparator": "weight_linear",
+    "mean_abs_log10_diff": 0.011829626862141755,
+    "n_drugs": 8,
+    "n_obs": 17,
+    "per_drug_mean_d": {
+     "ceftazidime": -0.08608379333706051,
+     "clindamycin": -0.01214098562584559,
+     "daptomycin": -0.15691969696739197,
+     "fluconazole": -0.012069084963770533,
+     "gentamicin": 0.045604985907514384,
+     "meropenem": 0.19947574259987197,
+     "piperacillin_tazobactam": 0.058878826327228684,
+     "vancomycin": 0.0578910209565876
+    },
+    "sign_flip_p": 0.734375,
+    "wilcoxon_p_drug_level": 0.84375
+   }
+  },
+  "term_newborn": {
+   "by_method": {
+    "allometry": {
+     "aafe": 4.060821869849639,
+     "aafe_ci95": [
+      3.1059178354075354,
+      5.823869697988345
+     ],
+     "afe": 4.060821869849639,
+     "afe_ci95": [
+      3.1059178354075354,
+      5.823869697988345
+     ],
+     "n_drugs": 7,
+     "n_pairs": 11,
+     "within_1_5": 0.0,
+     "within_1_5_ci95": [
+      0.0,
+      0.0
+     ],
+     "within_2": 0.0,
+     "within_2_ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "bsa": {
+     "aafe": 4.862596720682691,
+     "aafe_ci95": [
+      3.7387769910226067,
+      7.100860698506517
+     ],
+     "afe": 4.862596720682691,
+     "afe_ci95": [
+      3.7387769910226067,
+      7.100860698506517
+     ],
+     "n_drugs": 7,
+     "n_pairs": 11,
+     "within_1_5": 0.0,
+     "within_1_5_ci95": [
+      0.0,
+      0.0
+     ],
+     "within_2": 0.0,
+     "within_2_ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "paedscale": {
+     "aafe": 2.077009257999644,
+     "aafe_ci95": [
+      1.622586854777615,
+      2.665631182110234
+     ],
+     "afe": 1.7242940893619363,
+     "afe_ci95": [
+      1.0013441134840768,
+      2.46234842983252
+     ],
+     "n_drugs": 7,
+     "n_pairs": 11,
+     "within_1_5": 0.14285714285714285,
+     "within_1_5_ci95": [
+      0.0,
+      0.5714285714285714
+     ],
+     "within_2": 0.5952380952380952,
+     "within_2_ci95": [
+      0.23809523809523808,
+      0.8571428571428571
+     ]
+    },
+    "weight_linear": {
+     "aafe": 1.8897238135443175,
+     "aafe_ci95": [
+      1.4369476081573636,
+      2.658346323035338
+     ],
+     "afe": 1.8837091191676614,
+     "afe_ci95": [
+      1.42580742212218,
+      2.6577425394000933
+     ],
+     "n_drugs": 7,
+     "n_pairs": 11,
+     "within_1_5": 0.2619047619047619,
+     "within_1_5_ci95": [
+      0.07142857142857142,
+      0.6428571428571429
+     ],
+     "within_2": 0.6428571428571429,
+     "within_2_ci95": [
+      0.2857142857142857,
+      0.9285714285714286
+     ]
+    }
+   },
+   "paedscale_vs_allometry": {
+    "aafe_ratio": 0.511475096561315,
+    "ci95": [
+     -0.3566329047739723,
+     -0.25509182142584214
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "mean_abs_log10_diff": -0.2911755069944322,
+    "n_drugs": 7,
+    "n_obs": 11,
+    "per_drug_mean_d": {
+     "ampicillin": -0.426093892119326,
+     "ceftazidime": -0.33860786741380555,
+     "clindamycin": -0.2580532593942258,
+     "famotidine": -0.23326005825431373,
+     "gentamicin": -0.2560579802765008,
+     "piperacillin_tazobactam": -0.2363444119789213,
+     "vancomycin": -0.28981107952393187
+    },
+    "sign_flip_p": 0.015625,
+    "wilcoxon_p_drug_level": 0.015625
+   },
+   "paedscale_vs_bsa": {
+    "aafe_ratio": 0.4271399372202183,
+    "ci95": [
+     -0.4380774596392501,
+     -0.3303724829549329
+    ],
+    "ci_method": "bca",
+    "comparator": "bsa",
+    "mean_abs_log10_diff": -0.369429820510686,
+    "n_drugs": 7,
+    "n_obs": 11,
+    "per_drug_mean_d": {
+     "ampicillin": -0.5114981988925893,
+     "ceftazidime": -0.4153041502419045,
+     "clindamycin": -0.33168632349986665,
+     "famotidine": -0.30608991640400174,
+     "gentamicin": -0.3325670561319131,
+     "piperacillin_tazobactam": -0.30999464268539795,
+     "vancomycin": -0.37886845571912897
+    },
+    "sign_flip_p": 0.015625,
+    "wilcoxon_p_drug_level": 0.015625
+   },
+   "paedscale_vs_weight_linear": {
+    "aafe_ratio": 1.0991073103450282,
+    "ci95": [
+     -0.01770042406440877,
+     0.07369374430825827
+    ],
+    "ci_method": "bca",
+    "comparator": "weight_linear",
+    "mean_abs_log10_diff": 0.04104009644126943,
+    "n_drugs": 7,
+    "n_obs": 11,
+    "per_drug_mean_d": {
+     "ampicillin": -0.07940328861374868,
+     "ceftazidime": -0.0068663872495315775,
+     "clindamycin": 0.06699748630051017,
+     "famotidine": 0.09057783053977664,
+     "gentamicin": 0.07530837290513144,
+     "piperacillin_tazobactam": 0.08793536222243163,
+     "vancomycin": 0.05273129898431638
+    },
+    "sign_flip_p": 0.15625,
+    "wilcoxon_p_drug_level": 0.21875
+   }
+  }
+ },
+ "hypotheses": {
+  "HE1_under2": {
+   "aafe_ratio": 0.6078534657105368,
+   "ci95": [
+    -0.30279999309781996,
+    -0.10334420857754828
+   ],
+   "ci_method": "bca",
+   "comparator": "allometry",
+   "confirmatory": true,
+   "evidence_against": false,
+   "mean_abs_log10_diff": -0.21620110280520677,
+   "n_drugs": 11,
+   "n_obs": 40,
+   "per_drug_mean_d": {
+    "ampicillin": -0.426093892119326,
+    "cefepime": 0.06173095311768974,
+    "ceftazidime": -0.4463783219576517,
+    "clindamycin": -0.2916889131605428,
+    "daptomycin": 0.09179628616665701,
+    "famotidine": -0.23326005825431373,
+    "fluconazole": -0.27831950577337067,
+    "gentamicin": -0.23716262657167636,
+    "meropenem": -0.07746140356247759,
+    "piperacillin_tazobactam": -0.2575982567548394,
+    "vancomycin": -0.28377639198742277
+   },
+   "sign_flip_p": 0.005859375,
+   "success": true,
+   "wilcoxon_p_drug_level": 0.0068359375
+  },
+  "HE2_all_ages": {
+   "aafe_ratio": 0.7261655518143384,
+   "ci95": [
+    -0.2240117733749695,
+    -0.05481899161642673
+   ],
+   "ci_method": "bca",
+   "comparator": "allometry",
+   "confirmatory": true,
+   "evidence_against": false,
+   "mean_abs_log10_diff": -0.13896435720196723,
+   "n_drugs": 12,
+   "n_obs": 54,
+   "per_drug_mean_d": {
+    "ampicillin": -0.2177478758202221,
+    "cefepime": 0.06173095311768974,
+    "cefoxitin": 0.05006807495256815,
+    "ceftazidime": -0.4463783219576517,
+    "clindamycin": -0.2916889131605428,
+    "daptomycin": 0.09179628616665701,
+    "famotidine": -0.07656619914836298,
+    "fluconazole": -0.24350253324405863,
+    "gentamicin": -0.1563131580831956,
+    "meropenem": -0.07746140356247759,
+    "piperacillin_tazobactam": -0.18439051839903012,
+    "vancomycin": -0.17711867728498024
+   },
+   "sign_flip_p": 0.0107421875,
+   "success": true,
+   "tested": true,
+   "wilcoxon_p_drug_level": 0.01220703125
+  }
+ },
+ "n_drugs": 12,
+ "n_obs": 54,
+ "provenance": {
+  "engine_commit": "13391feb118d1230b11bd3ed0341160f5513f7e5",
+  "n_boot": 10000,
+  "seed": 20261127,
+  "versions": {
+   "matplotlib": "3.11.2",
+   "numpy": "2.5.3",
+   "python": "3.13.18",
+   "scipy": "1.18.1"
+  },
+  "working_tree_dirty": false
+ },
+ "secondary": {
+  "bsa": {
+   "aafe_ratio": 0.6288602560580505,
+   "ci95": [
+    -0.30930989780671625,
+    -0.0907185932077555
+   ],
+   "ci_method": "bca",
+   "comparator": "bsa",
+   "mean_abs_log10_diff": -0.20144585179729113,
+   "n_drugs": 12,
+   "n_obs": 54,
+   "per_drug_mean_d": {
+    "ampicillin": -0.28535586772276084,
+    "cefepime": 0.09855436069405062,
+    "cefoxitin": 0.1001369143791741,
+    "ceftazidime": -0.5809060322106532,
+    "clindamycin": -0.37292443268609937,
+    "daptomycin": -0.011816067073292469,
+    "famotidine": -0.1021427799961604,
+    "fluconazole": -0.39668783477960234,
+    "gentamicin": -0.20587798727167653,
+    "meropenem": -0.15246144206285153,
+    "piperacillin_tazobactam": -0.2639532020355978,
+    "vancomycin": -0.24391585080202388
+   },
+   "sign_flip_p": 0.00537109375,
+   "wilcoxon_p_drug_level": 0.0048828125,
+   "wilcoxon_p_holm": 0.009765625
+  },
+  "weight_linear": {
+   "aafe_ratio": 0.9313284934487531,
+   "ci95": [
+    -0.07428577527145032,
+    0.0022102420777121443
+   ],
+   "ci_method": "bca",
+   "comparator": "weight_linear",
+   "mean_abs_log10_diff": -0.030897109856990953,
+   "n_drugs": 12,
+   "n_obs": 54,
+   "per_drug_mean_d": {
+    "ampicillin": 0.033357679106478966,
+    "cefepime": -0.11706300656357323,
+    "cefoxitin": -0.131681457137301,
+    "ceftazidime": -0.05439683090204894,
+    "clindamycin": 0.031168913865627566,
+    "daptomycin": -0.15691969696739197,
+    "famotidine": 0.04395263634155886,
+    "fluconazole": -0.029634876341954174,
+    "gentamicin": -0.02495414214903324,
+    "meropenem": 0.008638251904764555,
+    "piperacillin_tazobactam": 0.02569194504930542,
+    "vancomycin": 0.0010752655096757692
+   },
+   "sign_flip_p": 0.16650390625,
+   "wilcoxon_p_drug_level": 0.423828125,
+   "wilcoxon_p_holm": 0.423828125
+  }
+ },
+ "sensitivity": {
+  "E1_exclude_imputed_weight_or_ga": {
+   "HE1_under2": {
+    "aafe_ratio": 0.4832234159484461,
+    "ci95": [
+     -0.42619500423953505,
+     -0.07558251888716482
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": false,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.315852028917552,
+    "n_drugs": 6,
+    "n_obs": 11,
+    "per_drug_mean_d": {
+     "ampicillin": -0.426093892119326,
+     "ceftazidime": -0.5368090256850979,
+     "fluconazole": -0.36498661751703737,
+     "gentamicin": -0.34623573221532555,
+     "meropenem": 0.08439634907834362,
+     "vancomycin": -0.30538325504686864
+    },
+    "sign_flip_p": 0.0625,
+    "success": false,
+    "wilcoxon_p_drug_level": 0.0625
+   },
+   "HE2_all_ages": {
+    "aafe_ratio": 0.5970389159261191,
+    "ci95": [
+     -0.3673908497314184,
+     -0.07748121791894749
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": false,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.22399735995749204,
+    "n_drugs": 8,
+    "n_obs": 15,
+    "per_drug_mean_d": {
+     "ampicillin": -0.426093892119326,
+     "ceftazidime": -0.5368090256850979,
+     "famotidine": 0.0017807304046123934,
+     "fluconazole": -0.36498661751703737,
+     "gentamicin": -0.34623573221532555,
+     "meropenem": 0.08439634907834362,
+     "piperacillin_tazobactam": -0.0005616963405643133,
+     "vancomycin": -0.2034689952655412
+    },
+    "sign_flip_p": 0.0546875,
+    "success": false,
+    "tested": false,
+    "wilcoxon_p_drug_level": 0.078125
+   }
+  },
+  "E2_exclude_critically_ill": {
+   "HE1_under2": {
+    "aafe_ratio": 0.6085446041130307,
+    "ci95": [
+     -0.3079759725836167,
+     -0.09868842293986704
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.2157075840564005,
+    "n_drugs": 10,
+    "n_obs": 33,
+    "per_drug_mean_d": {
+     "cefepime": 0.06173095311768974,
+     "ceftazidime": -0.5182252916535491,
+     "clindamycin": -0.2916889131605428,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.23326005825431373,
+     "fluconazole": -0.27831950577337067,
+     "gentamicin": -0.2818184531257748,
+     "meropenem": -0.15839027988288817,
+     "piperacillin_tazobactam": -0.2651241860104896,
+     "vancomycin": -0.28377639198742277
+    },
+    "sign_flip_p": 0.0078125,
+    "success": true,
+    "wilcoxon_p_drug_level": 0.009765625
+   },
+   "HE2_all_ages": {
+    "aafe_ratio": 0.7125685968687957,
+    "ci95": [
+     -0.24965903651937296,
+     -0.058061148896309284
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.14717332106318484,
+    "n_drugs": 12,
+    "n_obs": 43,
+    "per_drug_mean_d": {
+     "ampicillin": -0.009401859521118133,
+     "cefepime": 0.06173095311768974,
+     "cefoxitin": 0.05006807495256815,
+     "ceftazidime": -0.5182252916535491,
+     "clindamycin": -0.2916889131605428,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.11374035844577511,
+     "fluconazole": -0.24350253324405863,
+     "gentamicin": -0.1669367603179585,
+     "meropenem": -0.15839027988288817,
+     "piperacillin_tazobactam": -0.2651241860104896,
+     "vancomycin": -0.20266498475875291
+    },
+    "sign_flip_p": 0.0126953125,
+    "success": true,
+    "tested": true,
+    "wilcoxon_p_drug_level": 0.01611328125
+   }
+  },
+  "E3_exclude_standardized_or_fixed": {
+   "HE1_under2": {
+    "aafe_ratio": 0.6078534657105368,
+    "ci95": [
+     -0.30279999309781996,
+     -0.10334420857754828
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.21620110280520677,
+    "n_drugs": 11,
+    "n_obs": 40,
+    "per_drug_mean_d": {
+     "ampicillin": -0.426093892119326,
+     "cefepime": 0.06173095311768974,
+     "ceftazidime": -0.4463783219576517,
+     "clindamycin": -0.2916889131605428,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.23326005825431373,
+     "fluconazole": -0.27831950577337067,
+     "gentamicin": -0.23716262657167636,
+     "meropenem": -0.07746140356247759,
+     "piperacillin_tazobactam": -0.2575982567548394,
+     "vancomycin": -0.28377639198742277
+    },
+    "sign_flip_p": 0.005859375,
+    "success": true,
+    "wilcoxon_p_drug_level": 0.0068359375
+   },
+   "HE2_all_ages": {
+    "aafe_ratio": 0.7199596356243684,
+    "ci95": [
+     -0.22766135328915307,
+     -0.056433844252288666
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.1426918515090115,
+    "n_drugs": 12,
+    "n_obs": 52,
+    "per_drug_mean_d": {
+     "ampicillin": -0.2177478758202221,
+     "cefepime": 0.06173095311768974,
+     "cefoxitin": 0.05006807495256815,
+     "ceftazidime": -0.4463783219576517,
+     "clindamycin": -0.2916889131605428,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.07656619914836298,
+     "fluconazole": -0.24350253324405863,
+     "gentamicin": -0.17067477814763,
+     "meropenem": -0.07746140356247759,
+     "piperacillin_tazobactam": -0.21475883001912685,
+     "vancomycin": -0.17711867728498024
+    },
+    "sign_flip_p": 0.01025390625,
+    "success": true,
+    "tested": true,
+    "wilcoxon_p_drug_level": 0.01220703125
+   }
+  },
+  "E4_first_adult_abstract": {
+   "HE1_under2": {
+    "aafe_ratio": 0.6160735309097153,
+    "ci95": [
+     -0.2950038252343052,
+     -0.09685814028709729
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.21036744990938683,
+    "n_drugs": 11,
+    "n_obs": 40,
+    "per_drug_mean_d": {
+     "ampicillin": -0.426093892119326,
+     "cefepime": -0.06173095311768975,
+     "ceftazidime": -0.4463783219576517,
+     "clindamycin": -0.1499524908731303,
+     "daptomycin": 0.16106833176102558,
+     "famotidine": -0.23326005825431373,
+     "fluconazole": -0.3001266097298219,
+     "gentamicin": -0.23716262657167636,
+     "meropenem": -0.0790306793984088,
+     "piperacillin_tazobactam": -0.2575982567548394,
+     "vancomycin": -0.2837763919874227
+    },
+    "sign_flip_p": 0.005859375,
+    "success": true,
+    "wilcoxon_p_drug_level": 0.0068359375
+   },
+   "HE2_all_ages": {
+    "aafe_ratio": 0.7355468082369688,
+    "ci95": [
+     -0.2130187697412681,
+     -0.049437575086261044
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.13338968471458593,
+    "n_drugs": 12,
+    "n_obs": 54,
+    "per_drug_mean_d": {
+     "ampicillin": -0.2177478758202221,
+     "cefepime": -0.06173095311768975,
+     "cefoxitin": 0.05006807495256815,
+     "ceftazidime": -0.4463783219576517,
+     "clindamycin": -0.1499524908731303,
+     "daptomycin": 0.16106833176102558,
+     "famotidine": -0.076566199148363,
+     "fluconazole": -0.2625837492059535,
+     "gentamicin": -0.1563131580831956,
+     "meropenem": -0.0790306793984088,
+     "piperacillin_tazobactam": -0.18439051839903012,
+     "vancomycin": -0.17711867728498015
+    },
+    "sign_flip_p": 0.0107421875,
+    "success": true,
+    "tested": true,
+    "wilcoxon_p_drug_level": 0.01220703125
+   }
+  },
+  "E5_study_weighted": {
+   "HE1_under2": {
+    "aafe_ratio": 0.618904264264932,
+    "ci95": [
+     -0.2970457359295759,
+     -0.09900946817538533
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.20837652499768636,
+    "n_drugs": 11,
+    "n_obs": 40,
+    "per_drug_mean_d": {
+     "ampicillin": -0.426093892119326,
+     "cefepime": 0.06173095311768974,
+     "ceftazidime": -0.4521582388964518,
+     "clindamycin": -0.2916889131605428,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.23326005825431373,
+     "fluconazole": -0.24305643776617442,
+     "gentamicin": -0.21074587754388352,
+     "meropenem": -0.07746140356247759,
+     "piperacillin_tazobactam": -0.22742780096830395,
+     "vancomycin": -0.28377639198742277
+    },
+    "sign_flip_p": 0.005859375,
+    "success": true,
+    "wilcoxon_p_drug_level": 0.0068359375
+   },
+   "HE2_all_ages": {
+    "aafe_ratio": 0.7388143555453974,
+    "ci95": [
+     -0.21857779801861246,
+     -0.05192992454552466
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.1314646745832035,
+    "n_drugs": 12,
+    "n_obs": 54,
+    "per_drug_mean_d": {
+     "ampicillin": -0.2177478758202221,
+     "cefepime": 0.06173095311768974,
+     "cefoxitin": 0.05006807495256815,
+     "ceftazidime": -0.4521582388964518,
+     "clindamycin": -0.2916889131605428,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.07656619914836298,
+     "fluconazole": -0.19440189532071442,
+     "gentamicin": -0.15702305645681974,
+     "meropenem": -0.07746140356247759,
+     "piperacillin_tazobactam": -0.13700514958478519,
+     "vancomycin": -0.17711867728498024
+    },
+    "sign_flip_p": 0.01220703125,
+    "success": true,
+    "tested": true,
+    "wilcoxon_p_drug_level": 0.01220703125
+   }
+  },
+  "E6_leave_one_drug_out": {
+   "HE1_under2": {
+    "by_left_out_drug": {
+     "ampicillin": -0.19521182387379482,
+     "cefepime": -0.2439943083974964,
+     "cefoxitin": -0.21620110280520677,
+     "ceftazidime": -0.19318338088996226,
+     "clindamycin": -0.20865232176967313,
+     "daptomycin": -0.24700084170239314,
+     "famotidine": -0.21449520726029606,
+     "fluconazole": -0.20998926250839034,
+     "gentamicin": -0.2141049504285598,
+     "meropenem": -0.23007507272947966,
+     "piperacillin_tazobactam": -0.2120613874102435,
+     "vancomycin": -0.20944357388698515
+    },
+    "max": -0.19318338088996226,
+    "min": -0.24700084170239314
+   },
+   "HE2_all_ages": {
+    "by_left_out_drug": {
+     "ampicillin": -0.13180221914576223,
+     "cefepime": -0.15720938541284515,
+     "cefoxitin": -0.15614912376147047,
+     "ceftazidime": -0.11101763313326864,
+     "clindamycin": -0.12508030666027856,
+     "daptomycin": -0.1599425975082058,
+     "famotidine": -0.14463691702502215,
+     "fluconazole": -0.1294608866526862,
+     "gentamicin": -0.13738719348549194,
+     "meropenem": -0.1445555348055572,
+     "piperacillin_tazobactam": -0.13483470618405244,
+     "vancomycin": -0.13549578264896606
+    },
+    "max": -0.11101763313326864,
+    "min": -0.1599425975082058
+   }
+  },
+  "E7_exclude_curve_source_authors": {
+   "HE1_under2": {
+    "aafe_ratio": 0.6078534657105368,
+    "ci95": [
+     -0.30279999309781996,
+     -0.10334420857754828
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.21620110280520677,
+    "n_drugs": 11,
+    "n_obs": 40,
+    "per_drug_mean_d": {
+     "ampicillin": -0.426093892119326,
+     "cefepime": 0.06173095311768974,
+     "ceftazidime": -0.4463783219576517,
+     "clindamycin": -0.2916889131605428,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.23326005825431373,
+     "fluconazole": -0.27831950577337067,
+     "gentamicin": -0.23716262657167636,
+     "meropenem": -0.07746140356247759,
+     "piperacillin_tazobactam": -0.2575982567548394,
+     "vancomycin": -0.28377639198742277
+    },
+    "sign_flip_p": 0.005859375,
+    "success": true,
+    "wilcoxon_p_drug_level": 0.0068359375
+   },
+   "HE2_all_ages": {
+    "aafe_ratio": 0.7261655518143384,
+    "ci95": [
+     -0.2240117733749695,
+     -0.05481899161642673
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.13896435720196723,
+    "n_drugs": 12,
+    "n_obs": 54,
+    "per_drug_mean_d": {
+     "ampicillin": -0.2177478758202221,
+     "cefepime": 0.06173095311768974,
+     "cefoxitin": 0.05006807495256815,
+     "ceftazidime": -0.4463783219576517,
+     "clindamycin": -0.2916889131605428,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.07656619914836298,
+     "fluconazole": -0.24350253324405863,
+     "gentamicin": -0.1563131580831956,
+     "meropenem": -0.07746140356247759,
+     "piperacillin_tazobactam": -0.18439051839903012,
+     "vancomycin": -0.17711867728498024
+    },
+    "sign_flip_p": 0.0107421875,
+    "success": true,
+    "tested": true,
+    "wilcoxon_p_drug_level": 0.01220703125
+   }
+  },
+  "E8_exclude_before_1995": {
+   "HE1_under2": {
+    "aafe_ratio": 0.5964534706660335,
+    "ci95": [
+     -0.32689011769077253,
+     -0.09874701905711733
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.2244234299838467,
+    "n_drugs": 10,
+    "n_obs": 26,
+    "per_drug_mean_d": {
+     "ampicillin": -0.426093892119326,
+     "cefepime": 0.06173095311768974,
+     "ceftazidime": -0.4463783219576517,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.23326005825431373,
+     "fluconazole": -0.40942672303278477,
+     "gentamicin": -0.31132420118534104,
+     "meropenem": -0.07746140356247759,
+     "piperacillin_tazobactam": -0.22749453973223854,
+     "vancomycin": -0.2663223992786805
+    },
+    "sign_flip_p": 0.01171875,
+    "success": true,
+    "wilcoxon_p_drug_level": 0.013671875
+   },
+   "HE2_all_ages": {
+    "aafe_ratio": 0.699871424751438,
+    "ci95": [
+     -0.2645038125819465,
+     -0.061333316504282955
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.15498173805697102,
+    "n_drugs": 10,
+    "n_obs": 36,
+    "per_drug_mean_d": {
+     "ampicillin": -0.2177478758202221,
+     "cefepime": 0.06173095311768974,
+     "ceftazidime": -0.4463783219576517,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.11374035844577511,
+     "fluconazole": -0.40942672303278477,
+     "gentamicin": -0.18464020915369822,
+     "meropenem": -0.07746140356247759,
+     "piperacillin_tazobactam": -0.07674562825041752,
+     "vancomycin": -0.17720409963102998
+    },
+    "sign_flip_p": 0.017578125,
+    "success": true,
+    "tested": true,
+    "wilcoxon_p_drug_level": 0.01953125
+   }
+  },
+  "E9_exclude_route_unstated": {
+   "HE1_under2": {
+    "aafe_ratio": 0.5744518182540813,
+    "ci95": [
+     -0.3244883489622619,
+     -0.11817847059016443
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.24074639159518096,
+    "n_drugs": 11,
+    "n_obs": 25,
+    "per_drug_mean_d": {
+     "ampicillin": -0.426093892119326,
+     "cefepime": 0.06173095311768974,
+     "ceftazidime": -0.4463783219576517,
+     "clindamycin": -0.2916889131605428,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.23326005825431373,
+     "fluconazole": -0.1799890928288101,
+     "gentamicin": -0.3011468562459132,
+     "meropenem": -0.2702633342189339,
+     "piperacillin_tazobactam": -0.2651241860104896,
+     "vancomycin": -0.38779289203535644
+    },
+    "sign_flip_p": 0.00390625,
+    "success": true,
+    "wilcoxon_p_drug_level": 0.0048828125
+   },
+   "HE2_all_ages": {
+    "aafe_ratio": 0.687878511591014,
+    "ci95": [
+     -0.24601144966348432,
+     -0.06807593310204008
+    ],
+    "ci_method": "bca",
+    "comparator": "allometry",
+    "confirmatory": true,
+    "evidence_against": false,
+    "mean_abs_log10_diff": -0.16248825711997314,
+    "n_drugs": 12,
+    "n_obs": 33,
+    "per_drug_mean_d": {
+     "ampicillin": -0.2177478758202221,
+     "cefepime": 0.06173095311768974,
+     "cefoxitin": 0.05006807495256815,
+     "ceftazidime": -0.4463783219576517,
+     "clindamycin": -0.2916889131605428,
+     "daptomycin": 0.09179628616665701,
+     "famotidine": -0.07656619914836298,
+     "fluconazole": -0.14394801937082297,
+     "gentamicin": -0.3011468562459132,
+     "meropenem": -0.2702633342189339,
+     "piperacillin_tazobactam": -0.2122116880765045,
+     "vancomycin": -0.19350319167763858
+    },
+    "sign_flip_p": 0.0078125,
+    "success": true,
+    "tested": true,
+    "wilcoxon_p_drug_level": 0.00927734375
+   }
+  }
+ },
+ "uncertainty_coverage": {
+  "coverage_90_drug_weighted": 0.020833333333333332,
+  "n_drugs": 12,
+  "n_obs": 54
+ }
+}
