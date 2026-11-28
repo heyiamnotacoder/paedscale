@@ -274,10 +274,15 @@ def drug_table(refset: dict) -> str:
     return "\n".join(rows)
 
 
+def _label_criterion(criterion: str) -> str:
+    """The label protocol's exclusion criteria E1–E4 are L1–L4 in the paper, apart from the clearance E1–E9."""
+    return re.sub(r"\bE(\d)\b", r"L\1", criterion)
+
+
 def exclusion_table(results: dict) -> str:
     rows = ["| Drug | Criterion | Reason |", "|---|---|---|"]
     for name, e in sorted(results["excluded"].items()):
-        rows.append(f"| {drug_name(name)} | {re.sub(r"\bE(\d)\b", r"L\1", e['criterion'])} | {e['reason']} |")
+        rows.append(f"| {drug_name(name)} | {_label_criterion(e['criterion'])} | {e['reason']} |")
     return "\n".join(rows)
 
 
