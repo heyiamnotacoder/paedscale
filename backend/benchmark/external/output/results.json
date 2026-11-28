@@ -1169,7 +1169,7 @@
  "n_drugs": 12,
  "n_obs": 54,
  "provenance": {
-  "engine_commit": "d56dd00d98902c31cb45036cba8025c20e0ac2b5",
+  "engine_commit": "1dd134f63e9ba89a56557519e7f9736d717b3c71",
   "n_boot": 10000,
   "seed": 20261127,
   "versions": {
@@ -1178,7 +1178,7 @@
    "python": "3.13.18",
    "scipy": "1.18.1"
   },
-  "working_tree_dirty": true
+  "working_tree_dirty": false
  },
  "secondary": {
   "bsa": {
