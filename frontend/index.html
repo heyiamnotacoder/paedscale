@@ -803,7 +803,7 @@
           <tr><th>MF(PMA)</th><td>Maturation fraction from postmenstrual age. Sigmoid Hill function reaches ~1 in adults.</td></tr>
           <tr><th>PMA</th><td>Postmenstrual age in weeks (gestational + postnatal). Required for under-2s; if unknown we assume term and flag it.</td></tr>
           <tr><th>TM50, H</th><td>Age at 50% maturation and Hill coefficient for a pathway (e.g. renal_gfr, cyp3a4). Published parameters only — the engine refuses unknown pathways.</td></tr>
-          <tr><th>OF</th><td>Organ-function modifier. Renal: bedside Schwartz eGFR from height + creatinine. Hepatic: Child-Pugh noted only (drug-specific; no silent OF invent).</td></tr>
+          <tr><th>OF</th><td>Organ-function modifier. Renal: Schwartz eGFR from height + creatinine, divided by the GFR expected for age and size (Rhodin 2009), so immaturity is not counted twice. Hepatic: Child-Pugh noted only (drug-specific; no silent OF invent).</td></tr>
           <tr><th>Target metric</th><td>Css/AUC scale dose rate on clearance; Cmax on volume; time&gt;MIC uses the Css solve but is flagged as a proxy for fT&gt;MIC.</td></tr>
         </tbody>
       </table>
@@ -1139,7 +1139,7 @@
             <input id="height" type="number" step="0.5" min="0" placeholder="e.g. 110">
           </div>
         </div>
-        <div class="hint">Uses bedside Schwartz eGFR from height and creatinine.</div>
+        <div class="hint">Schwartz eGFR from height and creatinine (k=0.31 for term babies under 4 weeks, 0.413 after), compared with the GFR expected for this child's age and size. Not estimated for preterm-born infants or in the first 5 days.</div>
       </div>
 
       <div class="neo info" id="hepatic-detail">

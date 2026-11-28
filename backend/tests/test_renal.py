@@ -89,3 +89,106 @@ def test_missing_labs_means_nothing_to_assess():
                                  serum_creatinine_mg_dl=1.0, age_years=6) is None
     assert assess_renal_function(weight_kg=20, height_cm=120,
                                  serum_creatinine_mg_dl=0, age_years=6) is None
+
+
+def test_estimate_in_first_days_is_reported_but_not_applied():
+    # Day 2: creatinine still reflects the mother's, so it must not cut the dose.
+    r = assess_renal_function(
+        weight_kg=3.4, height_cm=50, serum_creatinine_mg_dl=0.8,
+        gestational_age_weeks=39, postnatal_age_weeks=2 / 7,
+    )
+    assert r.egfr_ml_min_1_73m2 == pytest.approx(19.4, abs=0.1)  # 0.31*50/0.8
+    assert r.status == "abstained"
+    assert r.renal_function_fraction == 1.0
+
+
+def test_pma_only_cannot_choose_a_coefficient_so_abstains():
+    r = assess_renal_function(weight_kg=1.6, height_cm=41, serum_creatinine_mg_dl=0.8,
+                              pma_weeks=32)
+    assert r.status == "abstained" and r.renal_function_fraction == 1.0
+    assert any("postnatal age" in n.lower() for n in r.notes)
+
+
+def test_preterm_born_infant_under_one_year_abstains():
+    # GA 28 wk, now 2 months old, age given in years: still no cited coefficient.
+    r = assess_renal_function(weight_kg=2.8, height_cm=47, serum_creatinine_mg_dl=0.4,
+                              gestational_age_weeks=28, age_years=2 / 12)
+    assert r.status == "abstained" and r.renal_function_fraction == 1.0
+    assert any("preterm" in n.lower() for n in r.notes)
+
+
+def test_assumed_term_is_surfaced_for_under_twos():
+    r = assess_renal_function(weight_kg=6.5, height_cm=63, serum_creatinine_mg_dl=0.3,
+                              age_years=4 / 12)
+    assert r.status == "estimated"
+    assert any("assumed term" in n.lower() for n in r.notes)
+
+
+def test_postnatal_age_alone_does_not_crash():
+    r = assess_renal_function(weight_kg=3.6, height_cm=51, serum_creatinine_mg_dl=0.4,
+                              postnatal_age_weeks=2)
+    assert r.status == "estimated" and r.schwartz_k == pytest.approx(0.31)
+    assert any("assumed term" in n.lower() for n in r.notes)
+
+
+@pytest.mark.parametrize("kwargs", [
+    dict(serum_creatinine_mg_dl=float("nan"), age_years=6),
+    dict(serum_creatinine_mg_dl=1.0, age_years=-1),
+    dict(serum_creatinine_mg_dl=1.0, pma_weeks=30, postnatal_age_weeks=40),  # PMA < PNA
+    dict(serum_creatinine_mg_dl=1.0),                                         # no age at all
+])
+def test_unusable_inputs_never_cut_the_dose(kwargs):
+    r = assess_renal_function(weight_kg=20, height_cm=120, **kwargs)
+    assert r is None or (r.status == "abstained" and r.renal_function_fraction == 1.0)
+
+
+# --- Wiring: the agent's case normaliser, its deterministic flags, and the /pk endpoint ------
+
+def _case(**kw):
+    c = {"drug": "vancomycin", "calculator_mode": "pediatric", "hepatic_impairment": False}
+    c.update(kw)
+    return c
+
+
+def test_agent_case_uses_age_expected_gfr_for_a_healthy_neonate():
+    from agents.agent import _normalize_case
+
+    n = _normalize_case(_case(
+        age_years=0.04, weight_kg=3.8, height_cm=52, serum_creatinine_mg_dl=0.35,
+        renal_impairment=True, gestational_age_weeks=40, postnatal_age_weeks=2,
+    ))
+    assert n["renal_function_fraction"] == 1.0           # was 0.46 against a fixed 100
+
+
+def test_creatinine_is_used_even_when_the_renal_box_is_not_ticked():
+    from agents.agent import _normalize_case, _organ_function_flags
+
+    n = _normalize_case(_case(age_years=6, weight_kg=20, height_cm=120,
+                              serum_creatinine_mg_dl=1.5))
+    assert n["renal_function_fraction"] == pytest.approx(0.33, abs=0.01)
+    flags = " ".join(_organ_function_flags(n))
+    assert "RENAL" in flags and "expected" in flags and "0.33" in flags
+
+
+def test_abstention_reason_reaches_the_flags():
+    from agents.agent import _normalize_case, _organ_function_flags
+
+    n = _normalize_case(_case(
+        age_years=0.02, weight_kg=1.4, height_cm=39, serum_creatinine_mg_dl=0.9,
+        renal_impairment=True, gestational_age_weeks=30, postnatal_age_weeks=1,
+    ))
+    assert n["renal_function_fraction"] == 1.0
+    flags = " ".join(_organ_function_flags(n))
+    assert "PRETERM" in flags and "NOT used" in flags
+
+
+def test_pk_endpoint_applies_the_same_renal_adjustment():
+    from fastapi.testclient import TestClient
+    from api.main import app
+
+    c = TestClient(app)
+    base = {"drug": "vancomycin", "age_years": 6, "weight_kg": 20}
+    normal = c.post("/pk", json=base).json()
+    impaired = c.post("/pk", json={**base, "height_cm": 120, "serum_creatinine_mg_dl": 1.5}).json()
+    ratio = impaired["recommended_dose_mg_per_day"] / normal["recommended_dose_mg_per_day"]
+    assert ratio < 0.5, ratio   # vancomycin is mostly renal; OF 0.33 on that share

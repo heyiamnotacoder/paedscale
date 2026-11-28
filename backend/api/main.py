@@ -28,7 +28,7 @@ from agents.agent import ORCHESTRATOR_MODEL, run_case  # noqa: E402  (after load
 from engine.child_pugh import hi_gate_error  # noqa: E402
 from engine.pk_engine import (  # noqa: E402
     compute_pediatric_dose,
-    renal_function_fraction_from_labs,
+    renal_assessment_for_case,
     result_to_dict,
 )
 
@@ -64,12 +64,10 @@ def _oracle_pk() -> dict:
 
 
 def _renal_fraction(case: "Case") -> float:
-    """Renal organ-function modifier from labs (bedside Schwartz). No labs / no impairment
-    → 1.0 (no silent reduction). Mirrors agent._normalize_case for the /calculate path."""
-    if not case.renal_impairment:
-        return 1.0
-    frac = renal_function_fraction_from_labs(case.height_cm, case.serum_creatinine_mg_dl)
-    return frac if frac is not None else 1.0
+    """Renal organ-function modifier from labs vs the age-expected GFR. Same mapping as
+    agent._normalize_case; no labs or an abstained estimate → 1.0 (no silent reduction)."""
+    renal = renal_assessment_for_case(case.model_dump())
+    return renal.renal_function_fraction if renal else 1.0
 
 
 def _enforce_hi_gate(case: "Case") -> None:
@@ -89,7 +87,7 @@ class Case(BaseModel):
     postnatal_age_weeks: float | None = None
     renal_impairment: bool = False
     hepatic_impairment: bool = False
-    serum_creatinine_mg_dl: float | None = None  # for bedside-Schwartz eGFR when renal-impaired
+    serum_creatinine_mg_dl: float | None = None  # Schwartz eGFR vs age-expected GFR (renal OF)
     height_cm: float | None = None               # required alongside creatinine for Schwartz
     child_pugh: str | None = None                # "A" | "B" | "C" — noted only (drug-specific)
     # Child-Pugh calculate-from-labs mode (optional; server computes class when all three labs set)

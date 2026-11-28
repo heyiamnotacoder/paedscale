@@ -28,49 +28,12 @@ from engine.constants import (
 # ---------------------------------------------------------------------------
 # Renal function estimation (labs -> organ-function modifier)
 # ---------------------------------------------------------------------------
-# Bedside Schwartz constant (Schwartz GJ et al., J Am Soc Nephrol 2009): a
+# Bedside Schwartz constant (Schwartz GJ et al., J Am Soc Nephrol 2009;20:629-637,
+# PMID 19158356; derived in children aged 1-16 y with CKD): a
 # height/creatinine estimate validated in CHILDREN. Cockcroft-Gault is adult-
 # derived (uses 140 - age) and materially overestimates GFR in the young, so it
 # is deliberately NOT used here.
 SCHWARTZ_K_BEDSIDE = 0.413
-NORMAL_GFR_ML_MIN_1_73M2 = 100.0  # approx normal pediatric / young-adult GFR reference
-
-
-def estimate_gfr_bedside_schwartz(
-    height_cm: Optional[float],
-    serum_creatinine_mg_dl: Optional[float],
-) -> Optional[float]:
-    """Bedside Schwartz eGFR (mL/min/1.73 m^2) = 0.413 * height_cm / SCr(mg/dL).
-
-    Returns None when inputs are missing or non-physiological, so callers fall
-    back to a data-gap flag rather than a fabricated number.
-    """
-    try:
-        h = float(height_cm)
-        scr = float(serum_creatinine_mg_dl)
-    except (TypeError, ValueError):
-        return None
-    if h <= 0 or scr <= 0:
-        return None
-    return SCHWARTZ_K_BEDSIDE * h / scr
-
-
-def renal_function_fraction_from_labs(
-    height_cm: Optional[float],
-    serum_creatinine_mg_dl: Optional[float],
-    normal_gfr: float = NORMAL_GFR_ML_MIN_1_73M2,
-) -> Optional[float]:
-    """Renal organ-function modifier (OF) in (0, 1] from labs, relative to normal GFR.
-
-    OF multiplies the maturation-adjusted renal clearance in compute_pediatric_dose;
-    it represents impairment on top of age maturation. Clamped to [0.1, 1.0] (never
-    amplifies above normal). Returns None when GFR cannot be estimated.
-    """
-    egfr = estimate_gfr_bedside_schwartz(height_cm, serum_creatinine_mg_dl)
-    if egfr is None:
-        return None
-    return max(0.1, min(1.0, egfr / normal_gfr))
-
 
 # Smeets NJL et al., J Am Soc Nephrol 2022;33:1277-1292 (PMID 35474022): updated Schwartz
 # coefficient for healthy TERM-born neonates in the first 4 weeks after birth.
@@ -88,14 +51,15 @@ OF_FLOOR = 0.1
 
 @dataclass
 class RenalAssessment:
+    status: str                            # "estimated" (OF applied) | "abstained" (OF = 1.0)
     equation: str
     schwartz_k: Optional[float]
     egfr_ml_min_1_73m2: Optional[float]
     bsa_m2: Optional[float]
     gfr_ml_min: Optional[float]            # absolute, de-indexed from 1.73 m^2
-    expected_gfr_ml_min: float             # Rhodin 2009 for this weight and PMA
+    expected_gfr_ml_min: Optional[float]   # Rhodin 2009 for this weight and PMA
     gfr_ratio: Optional[float]             # measured / expected, unclamped
-    renal_function_fraction: float         # OF actually applied (1.0 when not estimable)
+    renal_function_fraction: float         # OF actually applied (1.0 when abstained)
     notes: list[str] = field(default_factory=list)
 
 
@@ -114,6 +78,63 @@ def expected_gfr_ml_min(weight_kg: float, pma_weeks: float) -> float:
     )
 
 
+def _positive(x) -> Optional[float]:
+    try:
+        v = float(x)
+    except (TypeError, ValueError):
+        return None
+    return v if math.isfinite(v) and v > 0 else None
+
+
+def _non_negative(x) -> Optional[float]:
+    try:
+        v = float(x)
+    except (TypeError, ValueError):
+        return None
+    return v if math.isfinite(v) and v >= 0 else None
+
+
+@dataclass
+class _Ages:
+    pma_weeks: Optional[float]
+    gestational_age_weeks: Optional[float]   # None = unknown
+    postnatal_age_weeks: Optional[float]     # None = unknown
+    notes: list[str]
+    problem: Optional[str] = None            # set when the ages are unusable
+
+
+def _resolve_ages(age_years, pma_weeks, gestational_age_weeks, postnatal_age_weeks) -> _Ages:
+    """Resolve PMA, GA and postnatal age ONCE, from whichever pair was supplied."""
+    pma = _non_negative(pma_weeks)
+    ga = _non_negative(gestational_age_weeks)
+    pna = _non_negative(postnatal_age_weeks)
+    age_y = _non_negative(age_years)
+    notes: list[str] = []
+    if age_years is not None and age_y is None:
+        return _Ages(None, None, None, notes, "age is negative or not a number")
+    if pna is None and age_y is not None:
+        pna = age_y * 52.0
+    if pna is None and pma is not None and ga is not None:
+        pna = pma - ga
+    if ga is None and pma is not None and pna is not None:
+        ga = pma - pna
+    if pma is None and pna is not None:
+        if ga is None:
+            if pna < 104.0:
+                notes.append(
+                    "Gestational age not given: ASSUMED TERM (40 wk) for postmenstrual age. "
+                    "For a preterm infant this overstates expected GFR."
+                )
+            pma = 40.0 + pna
+        else:
+            pma = ga + pna
+    if pma is None:
+        return _Ages(None, ga, pna, notes, "no age was given")
+    if pna is not None and pna < 0:
+        return _Ages(pma, ga, pna, notes, "postmenstrual age is less than postnatal age")
+    return _Ages(pma, ga, pna, notes)
+
+
 def assess_renal_function(
     *,
     weight_kg: float,
@@ -124,66 +145,67 @@ def assess_renal_function(
     gestational_age_weeks: Optional[float] = None,
     postnatal_age_weeks: Optional[float] = None,
 ) -> Optional[RenalAssessment]:
-    """Creatinine-based GFR → renal organ-function modifier, relative to the AGE-EXPECTED GFR.
+    """Creatinine-based GFR -> renal organ-function modifier, relative to the AGE-EXPECTED GFR.
 
-    Returns None when creatinine or height is missing or non-physiological (nothing to assess).
+    Returns None when creatinine, height or weight is missing (nothing to assess). Whenever the
+    labs cannot be interpreted with a cited equation the result is status="abstained" with
+    OF = 1.0: maturation alone governs, and the notes say why.
     """
-    try:
-        h = float(height_cm)
-        scr = float(serum_creatinine_mg_dl)
-        wt = float(weight_kg)
-    except (TypeError, ValueError):
-        return None
-    if h <= 0 or scr <= 0 or wt <= 0:
+    h = _positive(height_cm)
+    scr = _positive(serum_creatinine_mg_dl)
+    wt = _positive(weight_kg)
+    if h is None or scr is None or wt is None:
         return None
 
-    pna_weeks = postnatal_age_weeks
-    if pna_weeks is None and age_years is not None:
-        pna_weeks = float(age_years) * 52.0
-    pma, _ = _resolve_pma_weeks(
-        age_years, pma_weeks, gestational_age_weeks, postnatal_age_weeks,
-    )
-    expected = expected_gfr_ml_min(wt, pma)
+    ages = _resolve_ages(age_years, pma_weeks, gestational_age_weeks, postnatal_age_weeks)
+    notes = list(ages.notes)
 
-    ga = gestational_age_weeks
-    if ga is None and pma_weeks is not None and postnatal_age_weeks is not None:
-        ga = float(pma_weeks) - float(postnatal_age_weeks)
-    neonate = pna_weeks is not None and pna_weeks < NEONATAL_PERIOD_WEEKS
-    if neonate and ga is not None and ga < TERM_GA_WEEKS:
-        return RenalAssessment(
-            equation="none (abstained)", schwartz_k=None, egfr_ml_min_1_73m2=None,
-            bsa_m2=None, gfr_ml_min=None, expected_gfr_ml_min=expected, gfr_ratio=None,
-            renal_function_fraction=1.0,
-            notes=[
-                f"PRETERM neonate (GA {ga:.0f} wk): no cited creatinine-GFR coefficient "
-                "(bedside Schwartz 2009 covers ages 1-16 y; Smeets 2022 covers term-born "
-                "neonates). GFR was NOT estimated and NO renal reduction was applied beyond "
-                "maturation. Creatinine is not interpretable here without a validated "
-                "equation; use TDM for renally cleared drugs."
-            ],
+    def abstain(reason: str, *, k=None, egfr=None, expected=None, equation="none (abstained)"):
+        notes.append(
+            f"{reason} GFR was NOT used to adjust the dose (renal clearance follows maturation "
+            "only). Use TDM for renally cleared drugs."
         )
-    notes: list[str] = []
-    age_y = (pna_weeks / 52.0) if pna_weeks is not None else None
-    if neonate:
+        return RenalAssessment(
+            status="abstained", equation=equation, schwartz_k=k, egfr_ml_min_1_73m2=egfr,
+            bsa_m2=None, gfr_ml_min=None, expected_gfr_ml_min=expected, gfr_ratio=None,
+            renal_function_fraction=1.0, notes=notes,
+        )
+
+    if ages.problem:
+        return abstain(f"Ages are unusable ({ages.problem}).")
+    pma, ga, pna = ages.pma_weeks, ages.gestational_age_weeks, ages.postnatal_age_weeks
+    expected = expected_gfr_ml_min(wt, pma)
+    if pna is None:
+        return abstain(
+            "Postnatal age is unknown (only postmenstrual age given), so no Schwartz "
+            "coefficient can be chosen.", expected=expected,
+        )
+    preterm = ga is not None and ga < TERM_GA_WEEKS
+    if preterm and pna < 52.0:
+        return abstain(
+            f"PRETERM-born infant (GA {ga:.0f} wk, {pna:.0f} wk old): no cited creatinine-GFR "
+            "coefficient (bedside Schwartz 2009 covers ages 1-16 y; Smeets 2022 covers "
+            "term-born neonates).", expected=expected,
+        )
+
+    age_y = pna / 52.0
+    if pna < NEONATAL_PERIOD_WEEKS:
         k, equation = SCHWARTZ_K_TERM_NEONATE, "Schwartz, term-neonate k=0.31 (Smeets 2022)"
-        if ga is None:
-            notes.append(
-                "Gestational age not given: assumed TERM for the neonatal Schwartz coefficient "
-                "(k=0.31 is for term-born neonates only)."
-            )
         notes.append(
             "Neonatal eGFR uses k=0.31 (Smeets 2022), which its authors say still needs "
             "validation in a large neonatal cohort."
         )
-        if pna_weeks < FIRST_DAYS_WEEKS:
-            notes.append(
-                "First days after birth: creatinine partly reflects MATERNAL creatinine and GFR "
-                "roughly doubles over days 1-5 (Smeets 2022). Repeat creatinine before relying "
-                "on this estimate; use TDM."
+        if pna < FIRST_DAYS_WEEKS:
+            egfr = k * h / scr
+            return abstain(
+                f"First days after birth (eGFR ~{egfr:.0f} mL/min/1.73m^2 for information): "
+                "creatinine partly reflects MATERNAL creatinine and GFR roughly doubles over "
+                "days 1-5 (Smeets 2022). Repeat creatinine after day 5.",
+                k=k, egfr=egfr, expected=expected, equation=equation,
             )
     else:
         k, equation = SCHWARTZ_K_BEDSIDE, "bedside Schwartz k=0.413 (Schwartz 2009)"
-        if age_y is not None and not (1.0 <= age_y <= 16.0):
+        if not (1.0 <= age_y <= 16.0):
             notes.append(
                 f"Age {age_y:.1f} y is outside the 1-16 y range in which bedside Schwartz "
                 "was derived (Schwartz 2009, CKiD); the estimate is extrapolated."
@@ -202,14 +224,27 @@ def assess_renal_function(
         )
     elif ratio < OF_FLOOR:
         notes.append(
-            f"Estimated GFR is {ratio:.2f}x expected — below the engine floor of {OF_FLOOR}; "
+            f"Estimated GFR is {ratio:.2f}x expected, below the engine floor of {OF_FLOOR}; "
             "renal clearance was floored. Severe impairment or dialysis needs a specialist "
             "regimen and TDM, not this estimate."
         )
     return RenalAssessment(
-        equation=equation, schwartz_k=k, egfr_ml_min_1_73m2=egfr, bsa_m2=bsa,
-        gfr_ml_min=gfr_abs, expected_gfr_ml_min=expected, gfr_ratio=ratio,
+        status="estimated", equation=equation, schwartz_k=k, egfr_ml_min_1_73m2=egfr,
+        bsa_m2=bsa, gfr_ml_min=gfr_abs, expected_gfr_ml_min=expected, gfr_ratio=ratio,
         renal_function_fraction=frac, notes=notes,
+    )
+
+
+def renal_assessment_for_case(case: dict) -> Optional[RenalAssessment]:
+    """assess_renal_function from a case dict (agent and API share this mapping)."""
+    return assess_renal_function(
+        weight_kg=case.get("weight_kg"),
+        height_cm=case.get("height_cm"),
+        serum_creatinine_mg_dl=case.get("serum_creatinine_mg_dl"),
+        age_years=case.get("age_years"),
+        pma_weeks=case.get("pma_weeks"),
+        gestational_age_weeks=case.get("gestational_age_weeks"),
+        postnatal_age_weeks=case.get("postnatal_age_weeks"),
     )
 
 

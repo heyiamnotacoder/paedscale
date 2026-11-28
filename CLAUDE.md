@@ -23,7 +23,7 @@ backend/                    (run all commands from here; backend/ is the package
   engine/                   deterministic backbone (no I/O, no LLM)
     constants.py            MATURATION params (TM50/Hill) ONLY — engine backbone. NO per-drug PK.
     pk_engine.py            DETERMINISTIC math: allometry × maturation, dose solve, oral-F, safety,
-                            renal eGFR (bedside Schwartz) → organ-function modifier
+                            renal: Schwartz eGFR ÷ age-expected GFR (Rhodin) → organ-function modifier
     edge_cases.py           deterministic flags: prodrug / obesity / protein-binding / illness
     pk_cache.py             bounded in-process LRU for live dossiers (Render single-dyno shared pool)
     mechanism_score.py      mechanistic-reasoning scorer (6 PRD dimensions)

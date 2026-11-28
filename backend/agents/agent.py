@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import math
+from dataclasses import asdict
 from typing import Optional
 import os
 
@@ -23,8 +24,7 @@ from engine.pk_cache import CACHE as PK_CACHE
 from engine.uncertainty import dose_uncertainty_interval
 from engine.pk_engine import (
     compute_pediatric_dose,
-    estimate_gfr_bedside_schwartz,
-    renal_function_fraction_from_labs,
+    renal_assessment_for_case,
     result_to_dict,
 )
 from skills import load_skill, list_skills
@@ -605,15 +605,11 @@ def _normalize_case(case: dict) -> dict:
     if c["calculator_mode"] == "adult_hi":
         c["hepatic_impairment"] = True
     if "renal_function_fraction" not in c:
-        frac = None
-        if c.get("renal_impairment"):
-            frac = renal_function_fraction_from_labs(
-                c.get("height_cm"), c.get("serum_creatinine_mg_dl")
-            )
-            c["estimated_gfr_ml_min_1_73m2"] = estimate_gfr_bedside_schwartz(
-                c.get("height_cm"), c.get("serum_creatinine_mg_dl")
-            )
-        c["renal_function_fraction"] = frac if frac is not None else 1.0
+        renal = renal_assessment_for_case(c)
+        if renal is not None:
+            c["renal_assessment"] = asdict(renal)
+            c["estimated_gfr_ml_min_1_73m2"] = renal.egfr_ml_min_1_73m2
+        c["renal_function_fraction"] = renal.renal_function_fraction if renal else 1.0
     if "hepatic_function_fraction" not in c:
         c["hepatic_function_fraction"] = 1.0  # drug-specific; note instead of flat modifier
     # Child-Pugh: calculate from labs when present, else keep entered A/B/C
@@ -659,22 +655,15 @@ def _organ_function_flags(case: dict, applied_renal_frac: float | None = None) -
     `applied_renal_frac` is the fraction actually passed into the last compute (if any).
     """
     flags: list[str] = []
-    if case.get("renal_impairment"):
-        egfr = case.get("estimated_gfr_ml_min_1_73m2")
-        frac = applied_renal_frac if applied_renal_frac is not None else case.get("renal_function_fraction")
-        if egfr is not None and frac is not None:
-            flags.append(
-                f"RENAL impairment: estimated GFR ~{egfr:.0f} mL/min/1.73m^2 (bedside Schwartz "
-                f"from serum creatinine + height) → renal clearance scaled to ~{float(frac):.2f}x normal. "
-                "NOTE: Schwartz is the pediatric standard; Cockcroft-Gault (adult) is not used. "
-                "Reassess interval and TDM for renally-cleared / narrow-TI drugs."
-            )
-        else:
-            flags.append(
-                "RENAL impairment flagged but serum creatinine and/or height were not provided — "
-                "GFR was NOT estimated and NO clearance reduction was applied. Provide height + "
-                "serum creatinine for a Schwartz-based estimate; reassess interval and TDM."
-            )
+    renal = case.get("renal_assessment")
+    if renal:
+        flags.append(_renal_flag(renal, applied_renal_frac))
+    elif case.get("renal_impairment"):
+        flags.append(
+            "RENAL impairment flagged but serum creatinine and/or height were not provided — "
+            "GFR was NOT estimated and NO clearance reduction was applied. Provide height + "
+            "serum creatinine for a Schwartz-based estimate; reassess interval and TDM."
+        )
     if case.get("hepatic_impairment"):
         cp = case.get("child_pugh")
         src = case.get("child_pugh_source")
@@ -703,13 +692,29 @@ def _organ_function_flags(case: dict, applied_renal_frac: float | None = None) -
     return flags
 
 
+def _renal_flag(renal: dict, applied_renal_frac: float | None = None) -> str:
+    """One deterministic RENAL flag from the engine's RenalAssessment (as a dict)."""
+    notes = " ".join(renal.get("notes") or [])
+    if renal.get("status") != "estimated":
+        return f"RENAL function: {notes}".strip()
+    frac = applied_renal_frac if applied_renal_frac is not None else renal["renal_function_fraction"]
+    return (
+        f"RENAL function: eGFR ~{renal['egfr_ml_min_1_73m2']:.0f} mL/min/1.73m^2 "
+        f"({renal['equation']}) = ~{renal['gfr_ml_min']:.1f} mL/min vs ~"
+        f"{renal['expected_gfr_ml_min']:.1f} mL/min expected for this weight and age "
+        f"(Rhodin 2009) → renal clearance scaled to {float(frac):.2f}x. "
+        "Cockcroft-Gault (adult) is not used. Reassess interval and TDM for renally cleared / "
+        f"narrow-TI drugs. {notes}"
+    ).strip()
+
+
 def _apply_organ_function_flags(
     rec: dict, case: dict, applied_renal_frac: float | None = None,
 ) -> None:
     """Replace any renal/hepatic-impairment flags with the authoritative deterministic ones."""
     kept = [
         f for f in (rec.get("flags") or [])
-        if not str(f).startswith(("RENAL impairment", "HEPATIC impairment"))
+        if not str(f).startswith(("RENAL impairment", "RENAL function", "HEPATIC impairment"))
     ]
     kept.extend(_organ_function_flags(case, applied_renal_frac=applied_renal_frac))
     rec["flags"] = kept
