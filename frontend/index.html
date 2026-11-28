@@ -1797,7 +1797,7 @@ function parameterDriverHtml(pu){
          + `To first order, a narrower published CI for that parameter would shrink the interval the most.</div>`;
   }
   if(shares.length < 2) return "";
-  return `<div class="md" id="pu-driver" style="font-size:.9rem;margin-top:8px">No single parameter dominates. The spread is shared ${shares.length > 3 ? "mainly " : ""}by `
+  return `<div class="md" id="pu-driver" style="font-size:.9rem;margin-top:8px">No parameter clearly dominates. The spread is shared ${shares.length > 3 ? "mainly " : ""}by `
        + shares.slice(0,3).map(([k,v])=>`the ${esc(paramName(k))} (${fmtShare(v)})`).join(", ").replace(/, (?=[^,]*$)/, " and ") + `.</div>`;
 }
 function paramUncertaintyHtml(pu, finalDpk){

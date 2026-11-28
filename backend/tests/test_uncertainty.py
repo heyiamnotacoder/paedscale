@@ -217,3 +217,11 @@ def test_dominant_parameter_carries_a_short_citation():
     dom = dose_uncertainty_interval(weight_kg=20.0, pma_weeks=300.0,
                                     **dict(RENAL, fm={"cyp3a4": 1.0}))["dominant_parameter"]
     assert dom["citation"] == "Anderson & Larsson 2011", dom
+
+
+def test_every_curve_has_a_short_citation_drawn_from_its_source():
+    for key, curve in MATURATION.items():
+        cite = curve.get("citation")
+        assert cite, key
+        surname, year = cite.split()[0], cite.split()[-1]
+        assert surname in curve["source"] and year in curve["source"], (key, cite)

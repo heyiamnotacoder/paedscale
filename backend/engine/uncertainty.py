@@ -88,9 +88,11 @@ def _var(xs: list[float]) -> float:
 
 
 # A parameter is named as the driver only when it carries most of the spread AND clearly more
-# than the runner-up. Each share rests on a sample variance from max(500, n/2) draws (relative SE
-# ≈ sqrt(2/n) ≈ 6%), so a 1.5× margin keeps a near-tie from naming whichever parameter the seed
-# favoured. With one pathway the top share is always ≥ 0.5, so the margin does the work there.
+# than the runner-up. Each share rests on a sample variance from max(500, n/2) draws; the log of
+# the top/runner-up ratio has an SD of about 0.15 between seeds, so a 1.5× margin (log 0.41) keeps
+# a near-tie from naming whichever parameter the seed favoured. Cases near the margin can still
+# switch between "named" and None with the seed, never between two named parameters. With one
+# pathway the top share is always ≥ 0.5, so the margin does the work there.
 DOMINANT_SHARE = 0.5
 DOMINANT_MARGIN = 1.5
 
