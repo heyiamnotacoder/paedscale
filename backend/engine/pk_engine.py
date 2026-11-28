@@ -72,6 +72,147 @@ def renal_function_fraction_from_labs(
     return max(0.1, min(1.0, egfr / normal_gfr))
 
 
+# Smeets NJL et al., J Am Soc Nephrol 2022;33:1277-1292 (PMID 35474022): updated Schwartz
+# coefficient for healthy TERM-born neonates in the first 4 weeks after birth.
+SCHWARTZ_K_TERM_NEONATE = 0.31
+NEONATAL_PERIOD_WEEKS = 4.0
+TERM_GA_WEEKS = 37.0
+FIRST_DAYS_WEEKS = 5.0 / 7.0   # Smeets 2022: GFR doubles over days 1-5
+# Rhodin MM et al., Pediatr Nephrol 2009;24:67-76 (PMID 18846389): mature GFR with an
+# allometric exponent of 3/4 is 121.2 mL/min per 70 kg (95% CI 117-125). Same exponent and
+# maturation curve the engine applies to the renal_gfr pathway, so the ratio below is
+# "measured GFR / the GFR the engine already assumes for this child".
+ADULT_GFR_ML_MIN_PER_70KG = 121.2
+OF_FLOOR = 0.1
+
+
+@dataclass
+class RenalAssessment:
+    equation: str
+    schwartz_k: Optional[float]
+    egfr_ml_min_1_73m2: Optional[float]
+    bsa_m2: Optional[float]
+    gfr_ml_min: Optional[float]            # absolute, de-indexed from 1.73 m^2
+    expected_gfr_ml_min: float             # Rhodin 2009 for this weight and PMA
+    gfr_ratio: Optional[float]             # measured / expected, unclamped
+    renal_function_fraction: float         # OF actually applied (1.0 when not estimable)
+    notes: list[str] = field(default_factory=list)
+
+
+def mosteller_bsa_m2(height_cm: float, weight_kg: float) -> float:
+    """Mosteller RD, N Engl J Med 1987;317:1098 (PMID 3657876)."""
+    return math.sqrt(height_cm * weight_kg / 3600.0)
+
+
+def expected_gfr_ml_min(weight_kg: float, pma_weeks: float) -> float:
+    """GFR (mL/min) the engine assumes for this child: Rhodin 2009 size x maturation."""
+    p = MATURATION["renal_gfr"]
+    return (
+        ADULT_GFR_ML_MIN_PER_70KG
+        * allometric_scale(weight_kg, CL_EXPONENT)
+        * maturation_factor(pma_weeks, p["tm50_weeks"], p["hill"])
+    )
+
+
+def assess_renal_function(
+    *,
+    weight_kg: float,
+    height_cm: Optional[float],
+    serum_creatinine_mg_dl: Optional[float],
+    age_years: Optional[float] = None,
+    pma_weeks: Optional[float] = None,
+    gestational_age_weeks: Optional[float] = None,
+    postnatal_age_weeks: Optional[float] = None,
+) -> Optional[RenalAssessment]:
+    """Creatinine-based GFR → renal organ-function modifier, relative to the AGE-EXPECTED GFR.
+
+    Returns None when creatinine or height is missing or non-physiological (nothing to assess).
+    """
+    try:
+        h = float(height_cm)
+        scr = float(serum_creatinine_mg_dl)
+        wt = float(weight_kg)
+    except (TypeError, ValueError):
+        return None
+    if h <= 0 or scr <= 0 or wt <= 0:
+        return None
+
+    pna_weeks = postnatal_age_weeks
+    if pna_weeks is None and age_years is not None:
+        pna_weeks = float(age_years) * 52.0
+    pma, _ = _resolve_pma_weeks(
+        age_years, pma_weeks, gestational_age_weeks, postnatal_age_weeks,
+    )
+    expected = expected_gfr_ml_min(wt, pma)
+
+    ga = gestational_age_weeks
+    if ga is None and pma_weeks is not None and postnatal_age_weeks is not None:
+        ga = float(pma_weeks) - float(postnatal_age_weeks)
+    neonate = pna_weeks is not None and pna_weeks < NEONATAL_PERIOD_WEEKS
+    if neonate and ga is not None and ga < TERM_GA_WEEKS:
+        return RenalAssessment(
+            equation="none (abstained)", schwartz_k=None, egfr_ml_min_1_73m2=None,
+            bsa_m2=None, gfr_ml_min=None, expected_gfr_ml_min=expected, gfr_ratio=None,
+            renal_function_fraction=1.0,
+            notes=[
+                f"PRETERM neonate (GA {ga:.0f} wk): no cited creatinine-GFR coefficient "
+                "(bedside Schwartz 2009 covers ages 1-16 y; Smeets 2022 covers term-born "
+                "neonates). GFR was NOT estimated and NO renal reduction was applied beyond "
+                "maturation. Creatinine is not interpretable here without a validated "
+                "equation; use TDM for renally cleared drugs."
+            ],
+        )
+    notes: list[str] = []
+    age_y = (pna_weeks / 52.0) if pna_weeks is not None else None
+    if neonate:
+        k, equation = SCHWARTZ_K_TERM_NEONATE, "Schwartz, term-neonate k=0.31 (Smeets 2022)"
+        if ga is None:
+            notes.append(
+                "Gestational age not given: assumed TERM for the neonatal Schwartz coefficient "
+                "(k=0.31 is for term-born neonates only)."
+            )
+        notes.append(
+            "Neonatal eGFR uses k=0.31 (Smeets 2022), which its authors say still needs "
+            "validation in a large neonatal cohort."
+        )
+        if pna_weeks < FIRST_DAYS_WEEKS:
+            notes.append(
+                "First days after birth: creatinine partly reflects MATERNAL creatinine and GFR "
+                "roughly doubles over days 1-5 (Smeets 2022). Repeat creatinine before relying "
+                "on this estimate; use TDM."
+            )
+    else:
+        k, equation = SCHWARTZ_K_BEDSIDE, "bedside Schwartz k=0.413 (Schwartz 2009)"
+        if age_y is not None and not (1.0 <= age_y <= 16.0):
+            notes.append(
+                f"Age {age_y:.1f} y is outside the 1-16 y range in which bedside Schwartz "
+                "was derived (Schwartz 2009, CKiD); the estimate is extrapolated."
+            )
+
+    egfr = k * h / scr
+    bsa = mosteller_bsa_m2(h, wt)
+    gfr_abs = egfr * bsa / 1.73
+    ratio = gfr_abs / expected
+    frac = max(OF_FLOOR, min(1.0, ratio))
+    if ratio > 1.0:
+        notes.append(
+            f"Estimated GFR is {ratio:.2f}x the GFR expected for this weight and age. The "
+            "starting dose was NOT increased. If augmented renal clearance is suspected "
+            "(e.g. critical illness), use TDM to titrate."
+        )
+    elif ratio < OF_FLOOR:
+        notes.append(
+            f"Estimated GFR is {ratio:.2f}x expected — below the engine floor of {OF_FLOOR}; "
+            "renal clearance was floored. Severe impairment or dialysis needs a specialist "
+            "regimen and TDM, not this estimate."
+        )
+    return RenalAssessment(
+        equation=equation, schwartz_k=k, egfr_ml_min_1_73m2=egfr, bsa_m2=bsa,
+        gfr_ml_min=gfr_abs, expected_gfr_ml_min=expected, gfr_ratio=ratio,
+        renal_function_fraction=frac, notes=notes,
+    )
+
+
 # ---------------------------------------------------------------------------
 # Core maturation math
 # ---------------------------------------------------------------------------
