@@ -237,3 +237,9 @@ def test_grams_with_a_bracketed_spread_or_a_thousands_comma():
     for q in ("1086 (311) g", "birth weight 1,086 g", "1,086 +/- 311 g"):
         o = _obs(weight_kg=1.086, weight_quote=q)
         assert not any("weight" in p for p in ex.problems(o, ABSTRACT + " " + q)), q
+
+
+def test_grams_after_an_sd_label():
+    for q in ("1086 (SD) 311 g", "1086 (SD 311 g", "1086 (SD 311) g"):
+        o = _obs(weight_kg=1.086, weight_quote=q)
+        assert not any("weight" in p for p in ex.problems(o, ABSTRACT + " " + q)), q

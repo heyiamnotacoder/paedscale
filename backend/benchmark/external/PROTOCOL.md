@@ -383,3 +383,13 @@ By this point both passes' records, the agreement output and, during adjudicatio
    * one per-kg value used under Amendment 15 §1 (vancomycin 2630235).
 5. **"At birth."** A typical value stated "at birth" is recorded at a postnatal age of 0 days, so its PMA is its GA. The 1-day floor of Amendment 2 §7 applies only to the lower bound of a range.
 6. **Frozen dataset.** The final record, the adjudication log, the agreement output (`dataset/agreement.json`) and the author lists for E7 (`dataset/authors.json`) are committed before any prediction is made.
+
+### Amendment 17 — 2026-11-28, after scoring (the outputs of commit 5f45c11 had been read)
+
+This answers a second code review of the adjudication and agreement code. Nothing here changes the final record, the agreement output or any scored number: the final record was rebuilt and is identical, `dataset/agreement.json` was recomputed and is identical, and `results.json` was regenerated and is identical apart from its provenance.
+
+1. **Amendment 16 §3 corrected.** It said the grams rule only accepted more quotes. Its rewrite had in fact dropped the form "1086 (SD) 311 g". That form is accepted again. No record contains it.
+2. **Adjudication.** A log entry that the final queue never reaches (a misspelt PMID, or one past the stop) is now reported as unresolved, as is a log entry for a drug no pass covers. A `use` entry that names a pass which did not read the abstract no longer stops the listing of later items. A failed run now removes `extraction/final/`, so no record from an earlier run can be scored.
+3. **Agreement.** Items are paired for the value-by-value count in an order that sorts on the covariates first, and numbers as numbers, so one differing clearance cannot misalign the other pairs. A difference in the clearance's summary statistic (mean against median) makes the abstract a value disagreement but is not counted as a differing number, because it is not a number (Amendment 1 §9).
+4. **Amendment 16 §5** changed one record: fluconazole 18809946.
+5. **Figures and the observation table.** Two figures of the external validation (fold error by age; per-drug paired difference) and a column with each observation's central postnatal age in `output/observations.csv` were added after scoring. They present the scored numbers and change none.

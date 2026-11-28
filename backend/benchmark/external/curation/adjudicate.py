@@ -39,7 +39,7 @@ def _choose(kind: str, pmid: str, a: dict | None, b: dict | None, entry: dict | 
                 return a or b, f"log record is for PMID {rec.get('pmid') if isinstance(rec, dict) else None!r}"
             return rec, None
         src = a if entry.get("use") == "pass1" else b if entry.get("use") == "pass2" else None
-        return (src, None) if src else (None, f"log entry uses {entry.get('use')!r}, which did not read it")
+        return (src, None) if src else (a or b, f"log entry uses {entry.get('use')!r}, which did not read it")
     if a and b:
         if a["decision"] != b["decision"]:
             return a, "decisions differ"
@@ -69,12 +69,24 @@ def build(p1: dict, p2: dict, log: dict, ped_order: list[str], adult_order: list
             if study is None:
                 break
             rec[kind].append(study)
+        reached = {s["pmid"] for s in rec[kind]}
+        unresolved += [(kind, p, "log entry is never reached by the final queue")
+                       for p in sorted((log.get(kind) or {})) if p not in reached]
+    unresolved += [(k, "*", "log has an unknown kind") for k in sorted(set(log) - {"pediatric", "adult"})]
     return rec, unresolved
 
 
 def queue_stop(snap: dict):
     """Stop rule of the final record: the screening queue's own (screening.next_up)."""
     return lambda rec, kind: screening.next_up(snap, rec)[0] != kind
+
+
+def clear_final(out_dir: str) -> None:
+    """Remove every record a previous run left, so a failed run leaves nothing to score."""
+    if os.path.isdir(out_dir):
+        for fn in os.listdir(out_dir):
+            if fn.endswith(".json"):
+                os.remove(os.path.join(out_dir, fn))
 
 
 def write_final(passes: dict, snaps: dict, out_dir: str) -> list[str]:
@@ -88,6 +100,7 @@ def write_final(passes: dict, snaps: dict, out_dir: str) -> list[str]:
                                 screening.order(snap["adult"]), queue_stop(snap))
         open_items += [f"{drug} {kind} {pmid}: {why}" for kind, pmid, why in unresolved]
         recs[drug] = rec
+    clear_final(out_dir)
     if open_items:
         return open_items
     os.makedirs(out_dir, exist_ok=True)
@@ -101,9 +114,16 @@ def main() -> int:
     from benchmark.external.curation import check
     from benchmark.external.curation.search import SEARCH_DIR
     log = json.load(open(LOG, encoding="utf-8")) if os.path.exists(LOG) else {}
-    d1, d2 = (sorted(os.listdir(os.path.join(EXTRACTION, p))) for p in ("pass1", "pass2"))
+    d1, d2 = (sorted(f for f in os.listdir(os.path.join(EXTRACTION, p)) if f.endswith(".json"))
+              for p in ("pass1", "pass2"))
     if d1 != d2:
+        clear_final(os.path.join(EXTRACTION, "final"))
         print(f"the passes cover different drugs: {sorted(set(d1) ^ set(d2))}")
+        return 1
+    unknown = sorted(set(log) - {f[:-5] for f in d1})
+    if unknown:
+        clear_final(os.path.join(EXTRACTION, "final"))
+        print(f"the log names drugs no pass covers: {unknown}")
         return 1
     passes, snaps = {}, {}
     for fn in d1:
@@ -120,8 +140,12 @@ def main() -> int:
     problems = [f"{d} {p}" for d in sorted(passes) for p in check.check_drug("final", d)]
     for p in problems:
         print(p)
-    print("OK" if not problems else f"{len(problems)} check problem(s) in extraction/final/")
-    return 1 if problems else 0
+    if problems:
+        clear_final(os.path.join(EXTRACTION, "final"))
+        print(f"{len(problems)} check problem(s); extraction/final/ was removed")
+        return 1
+    print("OK")
+    return 0
 
 
 if __name__ == "__main__":

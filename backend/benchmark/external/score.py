@@ -315,6 +315,7 @@ def rows_for(ds: dict, *, adult: str = "median_l_h", keep=lambda u: True,
                 pred = predict(m, cl_adult, d["drug"], u["obs"])
                 rows.append({"drug": name, "pmid": u["pmid"], "obs": i, "method": m,
                              "stratum": u["stratum"], "under2": obs["pna_days"] < UNDER2_DAYS,
+                             "pna_days": obs["pna_days"],
                              "flags": obs["flags"], "pred_l_h": pred, "obs_l_h": obs["cl_l_h"],
                              "fe": pred / obs["cl_l_h"]})
     return rows, adults
@@ -417,6 +418,9 @@ def analyze(ds: dict, n_boot: int = 10000) -> dict:
             "n_drugs": len(by_drug(rows))}, rows
 
 
+CSV_FIELDS = ["drug", "pmid", "obs", "method", "stratum", "under2", "pna_days", "obs_l_h", "pred_l_h", "fe", "flags"]
+
+
 def main(n_boot: int = 10000, out: str = OUT) -> dict:
     import csv
     from benchmark.run import provenance
@@ -427,11 +431,12 @@ def main(n_boot: int = 10000, out: str = OUT) -> dict:
     with open(os.path.join(out, "results.json"), "w", encoding="utf-8") as f:
         json.dump(res, f, indent=1, sort_keys=True)
     with open(os.path.join(out, "observations.csv"), "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=["drug", "pmid", "obs", "method", "stratum", "under2",
-                                          "obs_l_h", "pred_l_h", "fe", "flags"])
+        w = csv.DictWriter(f, fieldnames=CSV_FIELDS)
         w.writeheader()
         for r in rows:
             w.writerow({**{k: r[k] for k in w.fieldnames if k != "flags"}, "flags": ";".join(r["flags"])})
+    from benchmark.external import figures
+    figures.make_all(rows, res, out)
     return res
 
 

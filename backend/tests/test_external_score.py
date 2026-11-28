@@ -160,3 +160,24 @@ def test_a_missing_year_or_author_list_stops_scoring():
     with pytest.raises(ValueError, match="author"):
         sc.study_authors({}, "1")
     assert sc.study_year({"1": "1999"}, "1") == 1999
+
+
+def test_each_scored_row_carries_the_central_postnatal_age_for_the_figure():
+    ds = {"d": {"record": {"pediatric": [{"pmid": "1", "decision": "include", "flags": [], "observations": [_obs()]}],
+                           "adult": [{"pmid": "2", "decision": "include", "flags": [], "values": [_adult(7.0)]}]},
+                "drug": {"fe": {"value": 1.0}, "nonrenal_enzyme": None},
+                "years": {"1": "2001", "2": "2001"}, "authors": {"1": ["Smith J"]}}}
+    rows, _ = sc.rows_for(ds)
+    assert {r["pna_days"] for r in rows} == {100}
+    assert "pna_days" in sc.CSV_FIELDS
+
+
+def test_the_external_figures_render(tmp_path):
+    from benchmark.external import figures
+    rows = [{"method": m, "pna_days": a, "fe": f} for m in ("weight_linear", "allometry", "paedscale")
+            for a, f in ((0, 3.0), (400, 0.8), (3000, 1.1))]
+    h = {"per_drug_mean_d": {"a": -0.2, "b": 0.05}, "mean_abs_log10_diff": -0.1, "ci95": [-0.2, -0.12]}
+    figures.make_all(rows, {"hypotheses": {"HE1_under2": {**h, "per_drug_mean_d": {"a": -0.3}}, "HE2_all_ages": h}},
+                     str(tmp_path))
+    assert {p.name for p in tmp_path.iterdir()} >= {"fig4_external_fold_error_by_age.png",
+                                                    "fig5_external_paired_difference_by_drug.png"}

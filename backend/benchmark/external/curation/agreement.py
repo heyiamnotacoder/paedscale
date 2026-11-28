@@ -52,17 +52,32 @@ def _key(item: dict, fields: tuple[str, ...], study_flags=()) -> tuple:
                                          *(_num(item.get(f)) for f in fields), sorted(flags)))
 
 
+def _sortable(v):
+    """A sort key that orders numbers as numbers (7 before 13) and puts None and text after them."""
+    v = _num(v)
+    if isinstance(v, list):
+        return (1, tuple(_sortable(x) for x in v))
+    if isinstance(v, float):
+        return (0, v)
+    return (2, json.dumps(v))
+
+
+def _fields(kind: str) -> tuple[str, ...]:
+    return PED_FIELDS if kind == "pediatric" else ADULT_FIELDS
+
+
 def _sorted_items(study: dict, kind: str) -> list[dict]:
-    fields = PED_FIELDS if kind == "pediatric" else ADULT_FIELDS
-    sf = study.get("flags") or []
-    return sorted(study.get(KINDS[kind]) or [], key=lambda i: _key(i, fields, sf))
+    """Items in a fixed order: by who they are (age, weight and the other covariates) first, so a
+    differing clearance cannot reorder them, then by the rest of the key."""
+    fields, sf = _fields(kind), study.get("flags") or []
+    return sorted(study.get(KINDS[kind]) or [],
+                  key=lambda i: (tuple(_sortable(i.get(f)) for f in fields), _key(i, fields, sf)))
 
 
 def items_key(study: dict, kind: str) -> tuple:
     """Two passes extracted the same items when these keys are equal (order does not matter)."""
-    fields = PED_FIELDS if kind == "pediatric" else ADULT_FIELDS
-    sf = study.get("flags") or []
-    return tuple(_key(i, fields, sf) for i in _sorted_items(study, kind))
+    fields, sf = _fields(kind), study.get("flags") or []
+    return tuple(sorted(_key(i, fields, sf) for i in study.get(KINDS[kind]) or []))
 
 
 NUMERIC = ("pna_days", "pna_range_days", "ga_weeks", "ga_range_weeks", "pma_weeks", "pma_range_weeks",
@@ -71,7 +86,7 @@ NUMERIC = ("pna_days", "pna_range_days", "ga_weeks", "ga_range_weeks", "pma_week
 
 def _value_counts(a: dict, b: dict, kind: str) -> tuple[int, int]:
     """Numbers compared one by one (Amendment 1 §9): when both passes recorded the same number
-    of items, they are paired in the sorted order of items_key; each clearance (value with its
+    of items, they are paired in a fixed order that sorts on the covariates first; each clearance (value with its
     unit) and each number either pass recorded counts once."""
     ia, ib = _sorted_items(a, kind), _sorted_items(b, kind)
     if len(ia) != len(ib):

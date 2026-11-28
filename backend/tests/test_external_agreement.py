@@ -79,3 +79,15 @@ def test_a_clearance_with_a_different_unit_counts_as_a_differing_value():
 def test_items_sort_when_a_value_or_unit_is_missing():
     r1 = {"pediatric": [_study("1", "include", [_o(None, unit=None), _o(0.1)])], "adult": []}
     assert ag.compare(r1, r1)["value_agreements"] == 1
+
+
+def test_one_differing_clearance_does_not_misalign_the_other_items():
+    r1 = {"pediatric": [_study("1", "include", [_o(0.1, pna=10, w=1.0), _o(0.3, pna=100, w=3.0)])], "adult": []}
+    r2 = {"pediatric": [_study("1", "include", [_o(0.35, pna=10, w=1.0), _o(0.3, pna=100, w=3.0)])], "adult": []}
+    assert ag.compare(r1, r2)["values_differ"] == 1
+
+
+def test_items_sort_by_number_not_by_text():
+    r1 = {"pediatric": [_study("1", "include", [_o(0.1, pna=1), _o(0.2, pna=7), _o(0.3, pna=13)])], "adult": []}
+    r2 = {"pediatric": [_study("1", "include", [_o(0.1, pna=1), _o(0.2, pna=7), _o(0.3, pna=13, w=4.0)])], "adult": []}
+    assert ag.compare(r1, r2)["values_differ"] == 1

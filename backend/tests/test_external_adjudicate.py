@@ -79,3 +79,31 @@ def test_the_final_record_is_written_only_when_nothing_is_unresolved(tmp_path):
     log = {"pediatric": {"1": {"use": "pass1", "reason": "re-read"}}}
     assert adj.write_final({"d": (p1, p2, log)}, {"d": snap}, str(out)) == []
     assert (out / "d.json").exists()
+
+
+def test_a_log_entry_the_final_queue_never_reaches_is_reported():
+    p1 = {"pediatric": [_s("1", "exclude")], "adult": []}
+    log = {"pediatric": {"1": {"use": "pass1", "reason": "r"}, "7": {"use": "pass1", "reason": "typo"}}}
+    _, unresolved = adj.build(p1, p1, log, ["1"], [], stop=lambda r, k: False)
+    assert unresolved == [("pediatric", "7", "log entry is never reached by the final queue")]
+
+
+def test_a_use_entry_for_a_pass_that_did_not_read_it_keeps_listing_later_items():
+    p1 = {"pediatric": [_s("1", "exclude"), _s("2", "include", 0.1)], "adult": []}
+    p2 = {"pediatric": [_s("2", "include", 0.2)], "adult": []}
+    log = {"pediatric": {"1": {"use": "pass2", "reason": "r"}}}
+    _, unresolved = adj.build(p1, p2, log, ["1", "2"], [], stop=lambda r, k: False)
+    assert [u[1] for u in unresolved] == ["1", "2"]
+    assert adj.build(p1, p2, {"pediatric": {"1": {"record": [1], "reason": "r"}}}, ["1"], [],
+                     stop=lambda r, k: False)[1][0][2].startswith("log record is for PMID")
+
+
+def test_a_failed_run_leaves_no_final_record_behind(tmp_path):
+    p1 = {"pediatric": [_s("1", "include", 0.1)], "adult": []}
+    p2 = {"pediatric": [_s("1", "include", 0.2)], "adult": []}
+    snap = {"pediatric": [{"pmid": "1", "prefilter": True}], "adult": []}
+    out = tmp_path / "final"
+    out.mkdir()
+    (out / "old.json").write_text("{}")
+    assert adj.write_final({"d": (p1, p2, {})}, {"d": snap}, str(out))
+    assert list(out.iterdir()) == []
