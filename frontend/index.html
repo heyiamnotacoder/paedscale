@@ -1781,9 +1781,6 @@ const PU_FLAT_FOLD = 1.01;     // a 90% interval narrower than this is shown as 
 const PU_ANCHOR_TOL = 0.05;    // final dose this far from the engine dose is called out
 const PATHWAY_LABEL = {renal_gfr:"renal (GFR) maturation", cyp3a4:"CYP3A4 maturation", ugt2b7:"UGT2B7 maturation"};
 const PARAM_INFO = {tm50_weeks:{label:"TM50", unit:" weeks PMA"}, hill:{label:"Hill coefficient", unit:""}};
-// "Rhodin MM et al., Pediatr Nephrol 2009;…" → "Rhodin 2009": first author and year, read from the
-// engine's own citation so a new maturation curve never shows a stale or missing reference.
-function shortCite(src){ const m = /^\s*([^\s,.]+)[^]*?\b((?:19|20)\d{2})\b/.exec(src||""); return m ? `${m[1]} ${m[2]}` : ""; }
 function paramName(key){
   const [pw, field] = key.split(".");
   return `${(PARAM_INFO[field]||{label:field}).label} of ${PATHWAY_LABEL[pw]||pw}`;
@@ -1793,14 +1790,14 @@ function parameterDriverHtml(pu){
   if(d && d.share!=null){
     const info = PARAM_INFO[d.parameter]||{label:d.parameter, unit:""};
     const ci = Array.isArray(d.ci95) && d.ci95.length===2 ? `, 95% CI ${fmtDose(d.ci95[0])}–${fmtDose(d.ci95[1])}` : "";
-    const cite = shortCite(d.source);
+    const cite = d.citation || "";
     const val = d.value!=null ? ` (published ${fmtDose(d.value)}${info.unit}${ci}${cite ? "; "+cite : ""})` : "";
     return `<div class="md" id="pu-driver" style="font-size:.9rem;margin-top:8px"${d.source ? ` title="${esc(d.source)}"` : ""}>`
          + `Most of this spread (${fmtShare(d.share)}) comes from the <b>${esc(paramName(d.key))}</b>${esc(val)}. `
-         + `A narrower published CI for that parameter would shrink the interval the most.</div>`;
+         + `To first order, a narrower published CI for that parameter would shrink the interval the most.</div>`;
   }
   if(shares.length < 2) return "";
-  return `<div class="md" id="pu-driver" style="font-size:.9rem;margin-top:8px">No single parameter dominates. The spread is shared by `
+  return `<div class="md" id="pu-driver" style="font-size:.9rem;margin-top:8px">No single parameter dominates. The spread is shared ${shares.length > 3 ? "mainly " : ""}by `
        + shares.slice(0,3).map(([k,v])=>`the ${esc(paramName(k))} (${fmtShare(v)})`).join(", ").replace(/, (?=[^,]*$)/, " and ") + `.</div>`;
 }
 function paramUncertaintyHtml(pu, finalDpk){

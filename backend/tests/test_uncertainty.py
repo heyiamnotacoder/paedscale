@@ -202,3 +202,18 @@ def test_hill_drives_cyp3a4_spread_in_an_older_child():
                                     **dict(RENAL, fm={"cyp3a4": 1.0}))["dominant_parameter"]
     assert dom["key"] == "cyp3a4.hill" and dom["share"] > 0.8, dom
     assert "Anderson" in dom["source"] and tuple(dom["ci95"]) == (2.2, 4.1)
+
+
+def test_a_near_tie_never_names_a_driver_whatever_the_seed():
+    # Pure renal at 78 weeks PMA: ln(78/47.7) ≈ 0.49 puts TM50 and Hill at ≈ 0.51 / 0.49 by the
+    # delta method. With one pathway the top share is always ≥ 0.5, so a majority rule alone
+    # would name whichever parameter the seed favoured.
+    for seed in range(6):
+        pi = dose_uncertainty_interval(weight_kg=10.0, pma_weeks=78.0, seed=seed, **PURE_RENAL)
+        assert pi["dominant_parameter"] is None, (seed, pi["parameter_share"])
+
+
+def test_dominant_parameter_carries_a_short_citation():
+    dom = dose_uncertainty_interval(weight_kg=20.0, pma_weeks=300.0,
+                                    **dict(RENAL, fm={"cyp3a4": 1.0}))["dominant_parameter"]
+    assert dom["citation"] == "Anderson & Larsson 2011", dom

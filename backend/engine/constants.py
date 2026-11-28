@@ -28,6 +28,7 @@ MATURATION = {
         "hill": 3.40,
         "tm50_ci95": (45.1, 50.5),
         "hill_ci95": (3.03, 3.80),
+        "citation": "Rhodin 2009",  # short form of source, for display
         "source": (
             "Rhodin MM et al., Pediatr Nephrol 2009;24:67-76. PMID 18846389. "
             "TM50 47.7 weeks PMA (95% CI 45.1–50.5), Hill 3.40 (95% CI 3.03–3.80)."
@@ -39,6 +40,7 @@ MATURATION = {
         "hill": 3.0,
         "tm50_ci95": (59.4, 80.0),
         "hill_ci95": (2.2, 4.1),
+        "citation": "Anderson & Larsson 2011",  # short form of source, for display
         "source": (
             "Anderson BJ, Larsson P. Paediatr Anaesth 2011;21:302-308. PMID 20704661. "
             "Midazolam IV CL: TM50 73.6 weeks PMA (95% CI 59.4–80.0), Hill 3 (95% CI 2.2–4.1)."
@@ -50,6 +52,7 @@ MATURATION = {
         "hill": 3.92,
         "tm50_ci95": (50.3, 60.5),
         "hill_ci95": (3.25, 4.40),
+        "citation": "Anand 2008",  # short form of source, for display
         "source": (
             "Anand KJS et al., Br J Anaesth 2008;101:680-689. PMID 18723857. "
             "Morphine (UGT2B7) CLmat50 54.2 weeks PMA (95% CI 50.3–60.5), Hill 3.92 (95% CI 3.25–4.40)."

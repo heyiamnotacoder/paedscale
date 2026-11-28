@@ -7,7 +7,7 @@ propagates them by Monte Carlo into a 90% *parameter-uncertainty interval* for t
 child's clearance, half-life and dose. It attributes the variance of log clearance to each
 pathway (`variance_share`) and to each published parameter (`parameter_share`, keyed
 "pathway.parameter"), and names the parameter that carries most of it (`dominant_parameter`,
-only when one parameter holds at least half; otherwise None, the spread is shared).
+only when one parameter holds at least half and 1.5× the runner-up; otherwise None).
 Both attributions are one-at-a-time and first-order: interactions are not counted, and the
 shares are normalised to sum to 1.
 
@@ -87,23 +87,28 @@ def _var(xs: list[float]) -> float:
     return sum((x - m) ** 2 for x in xs) / max(1, len(xs) - 1)
 
 
-# A parameter is named as the driver only when it carries most of the spread. Below this the
-# spread is shared, and the top shares are often within Monte Carlo noise of each other.
+# A parameter is named as the driver only when it carries most of the spread AND clearly more
+# than the runner-up. Each share rests on a sample variance from max(500, n/2) draws (relative SE
+# ≈ sqrt(2/n) ≈ 6%), so a 1.5× margin keeps a near-tie from naming whichever parameter the seed
+# favoured. With one pathway the top share is always ≥ 0.5, so the margin does the work there.
 DOMINANT_SHARE = 0.5
+DOMINANT_MARGIN = 1.5
 
 
 def _dominant_parameter(param_share: Optional[dict]) -> Optional[dict]:
     """The parameter carrying most of the spread, with its published value, CI and source."""
     if not param_share:
         return None
-    key = max(param_share, key=param_share.get)
-    if param_share[key] < DOMINANT_SHARE:
+    ranked = sorted(param_share, key=param_share.get, reverse=True)
+    key = ranked[0]
+    runner_up = param_share[ranked[1]] if len(ranked) > 1 else 0.0
+    if param_share[key] < DOMINANT_SHARE or param_share[key] < DOMINANT_MARGIN * runner_up:
         return None
     pw, field = key.split(".", 1)
     curve = MATURATION[pw]
     return {"key": key, "pathway": pw, "parameter": field, "share": param_share[key],
             "value": curve[field], "ci95": list(curve[PARAMETERS[field]]),
-            "source": curve.get("source")}
+            "citation": curve.get("citation"), "source": curve.get("source")}
 
 
 SAFETY_BOUNDS = ("toxic_dose_mg_per_kg_per_day", "effective_dose_mg_per_kg_per_day")
