@@ -116,3 +116,41 @@ def test_the_word_count_skips_tables_figures_and_captions():
 def test_the_clearance_validation_read_every_prefiltered_pediatric_abstract():
     flow = build.external_flow(build.EXT)
     assert flow["ped_screened"] == flow["ped_prefilter"]     # the manuscript says no list stopped early
+
+
+def test_exclusion_reasons_are_grouped_by_what_failed():
+    g = build._reason_group
+    assert g("CL/F: oral apparent clearance only") == g("P1: intramuscular administration")
+    assert g("P1: pregnant women, not patients under 18") != g("CL/F: oral")
+    assert g("not total IV CL: per 70 kg without age") != g("range only: CL 0.1-0.3")
+    assert g("P4/P2: single child with stated renal impairment") == g("P4: ECMO")
+    assert g("no age: GA only") != g("P2: no numeric clearance")
+
+
+def test_lists_end_with_and():
+    assert build._and(["a", "b", "c"]) == "a, b and c"
+    assert build._and(["a"]) == "a" and build._and([]) == "none"
+
+
+def test_the_bjcp_limits_are_checked_on_the_rendered_manuscript():
+    import os
+    results, refset = _committed()
+    with open(os.path.join(build.HERE, "manuscript.md")) as f:
+        text = build.render_manuscript(f.read(), build.all_values(results, refset, *build.load_external()))
+    assert build.bjcp_problems(text) == []
+    assert build.bjcp_problems(text.replace("**Aim.**", "**Aims.**"))         # a missing heading is caught
+
+
+def test_outputs_from_a_dirty_tree_stop_the_build():
+    with pytest.raises(ValueError, match="dirty"):
+        build.check_provenance({"working_tree_dirty": True, "engine_commit": "x"})
+
+
+def test_the_clearance_strata_use_the_clearance_protocol_ages():
+    assert "12–17" in build.external_stratum_table(_ext())
+
+
+def test_table_s1_uses_words_not_code_names():
+    results, refset = _committed()
+    t = build.drug_table(refset)
+    assert "css" not in t and "cyp3a4" not in t and "Average concentration" in t

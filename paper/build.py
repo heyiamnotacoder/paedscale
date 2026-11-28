@@ -1,7 +1,11 @@
-"""Build the PaedScale manuscript from the committed benchmark outputs.
+"""Build the PaedScale manuscript from the committed outputs of both evaluations.
 
-Every number in the manuscript comes from backend/benchmark/output/results.json and
-backend/benchmark/reference_set.json through a {{placeholder}}; none is typed by hand.
+Every result in the manuscript comes through a {{placeholder}} from the label benchmark
+(backend/benchmark/output/results.json, backend/benchmark/reference_set.json) or the clearance
+validation (backend/benchmark/external/output/results.json, dataset/agreement.json, the search
+snapshot and extraction/final/). Design constants of the protocols (curve parameters, seeds,
+grid sizes) are stated in the text. The build stops on outputs from a dirty tree and on a
+rendered text that breaks the journal's limits (bjcp_problems).
 
 Usage (from the repo root):  python3 -m paper.build [--pdf]
 Writes paper/build/manuscript.md, manuscript.html and, with --pdf, manuscript.pdf.
@@ -119,13 +123,13 @@ EXT_METHOD_LABEL = {**METHOD_LABEL, "allometry": "Allometry (primary comparator)
 
 def external_method_table(ext: dict) -> str:
     rows = ["| Method | Under 2 years: AAFE (95% CI) | Under 2 years: AFE (95% CI) | All ages: AAFE (95% CI) | "
-            "All ages: AFE (95% CI) | All ages: within 0.5–2× (95% CI) |",
-            "|---|---|---|---|---|---|"]
+            "All ages: AFE (95% CI) | All ages: within 0.67–1.5× (95% CI) | All ages: within 0.5–2× (95% CI) |",
+            "|---|---|---|---|---|---|---|"]
     for m in EXT_METHODS:
         u, a = ext["by_method"]["under2"][m], ext["by_method"]["all"][m]
         rows.append(f"| {EXT_METHOD_LABEL[m]} | {_fold(u['aafe'], u.get('aafe_ci95'))} | {_fold(u['afe'], u.get('afe_ci95'))} | "
                     f"{_fold(a['aafe'], a.get('aafe_ci95'))} | {_fold(a['afe'], a.get('afe_ci95'))} | "
-                    f"{_pct(a['within_2'], a.get('within_2_ci95'))} |")
+                    f"{_pct(a['within_1_5'], a.get('within_1_5_ci95'))} | {_pct(a['within_2'], a.get('within_2_ci95'))} |")
     return "\n".join(rows)
 
 
@@ -162,15 +166,23 @@ def external_flow(ext_dir: str) -> dict:
     return {**flow, "drugs": len(names), "ped_reasons": dict(reasons)}
 
 
+REASON_GROUPS = [   # (prefixes of the recorded reason, group shown in the manuscript)
+    (("cl/f", "p1: intramuscular"), "oral or intramuscular dosing, or apparent clearance (CL/F) only"),
+    (("p1",), "not a primary study of children given the drug (adults, pregnancy, animals, reviews, simulations)"),
+    (("p4",), "restricted population (extracorporeal support, hypothermia, organ impairment, burns, cystic fibrosis)"),
+    (("no age",), "no stated age"),
+    (("not total iv cl",), "per-70 kg value without an age, or a unit that cannot be converted"),
+    (("range only",), "clearance given only as a range"),
+    (("p2",), "no usable clearance (none reported, another drug, an equation only, or a typical value without its covariates)"),
+]
+
+
 def _reason_group(reason: str) -> str:
     r = reason.lower()
-    if r.startswith(("cl/f", "not total iv cl", "p1")) and not r.startswith("p1/p2"):
-        return "not total intravenous clearance (P1)"
-    if r.startswith("p4"):
-        return "restricted population (P4)"
-    if r.startswith(("no age", "range only")):
-        return "no usable age or clearance summary (P3)"
-    return "no group summary or typical value (P2)"
+    for prefixes, group in REASON_GROUPS:
+        if r.startswith(prefixes):
+            return group
+    raise ValueError(f"exclusion reason with no group: {reason!r}")
 
 
 def secondary_table(results: dict) -> str:
@@ -234,8 +246,14 @@ def s6_range(results: dict, population: str) -> str:
     return f"{_ratio(10 ** s6['min'])} to {_ratio(10 ** s6['max'])}"
 
 
+METRIC_NAME = {"css": "Average concentration", "cmax": "Peak concentration",
+               "time_mic": "Daily exposure (proxy for time above MIC)"}
+ENZYME_NAME = {"cyp3a4": "CYP3A4", "ugt2b7": "UGT2B7"}
+CLASS_NAME = {"beta-lactam": "β-lactam", "NRTI": "nucleoside reverse transcriptase inhibitor"}
+
+
 def drug_table(refset: dict) -> str:
-    rows = ["| Drug | Class | Target metric | fe (urine, unchanged) | Non-renal enzyme | Bands |",
+    rows = ["| Drug | Class | Target metric | fe (urine, unchanged) | Non-renal enzyme | Age bands |",
             "|---|---|---|---|---|---|"]
     for name, d in sorted(refset["drugs"].items()):
         if not d.get("included"):
@@ -244,8 +262,9 @@ def drug_table(refset: dict) -> str:
         fev = fe.get("value")
         note = {"fe_qualitative": " (qualitative)", "fe_not_in_label": " (not in label)"}
         tag = "".join(note[f] for f in fe.get("flags", []) if f in note)
-        rows.append(f"| {name.replace('_', ' ')} | {d.get('class', '')} | {d['target_metric']} | "
-                    f"{'—' if fev is None else f'{fev:.3f}{tag}'} | {d.get('nonrenal_enzyme') or '—'} | "
+        rows.append(f"| {drug_name(name)} | {CLASS_NAME.get(d.get('class', ''), d.get('class', ''))} | "
+                    f"{METRIC_NAME[d['target_metric']]} | "
+                    f"{'—' if fev is None else f'{fev:.3f}{tag}'} | {ENZYME_NAME.get(d.get('nonrenal_enzyme'), '—')} | "
                     f"{len(d.get('bands') or [])} |")
     return "\n".join(rows)
 
@@ -253,7 +272,7 @@ def drug_table(refset: dict) -> str:
 def exclusion_table(results: dict) -> str:
     rows = ["| Drug | Criterion | Reason |", "|---|---|---|"]
     for name, e in sorted(results["excluded"].items()):
-        rows.append(f"| {name} | {e['criterion']} | {e['reason']} |")
+        rows.append(f"| {drug_name(name)} | {e['criterion'].replace('E', 'L')} | {e['reason']} |")
     return "\n".join(rows)
 
 
@@ -277,6 +296,7 @@ def drug_name(d: str) -> str:
 
 
 EXT_STRATA = ["preterm_newborn", "term_newborn", "infant_toddler", "child", "adolescent"]
+EXT_STRATUM_LABEL = {**STRATUM_LABEL, "adolescent": "Adolescent 12–17 y"}     # clearance protocol strata
 
 
 def external_stratum_table(ext: dict) -> str:
@@ -289,7 +309,7 @@ def external_stratum_table(ext: dict) -> str:
         bm, h = v["by_method"], v["paedscale_vs_allometry"]
         cell = lambda m: f"{bm[m]['aafe']:.2f} ({bm[m]['afe']:.2f})"
         ratio = ratio_with_ci(h, label=False) if h.get("ci95") else "fewer than 5 drugs"
-        rows.append(f"| {STRATUM_LABEL[st]} | {bm['paedscale']['n_drugs']} | {bm['paedscale']['n_pairs']} | "
+        rows.append(f"| {EXT_STRATUM_LABEL[st]} | {bm['paedscale']['n_drugs']} | {bm['paedscale']['n_pairs']} | "
                     f"{cell('paedscale')} | {cell('allometry')} | {cell('weight_linear')} | {ratio} |")
     return "\n".join(rows)
 
@@ -297,13 +317,14 @@ def external_stratum_table(ext: dict) -> str:
 def external_drug_table(ext: dict, ext_dir: str) -> str:
     rows = ["| Drug | Qualifying adult abstracts | Adult reference clearance, L/h at 70 kg | Pediatric studies included | "
             "Observations | Scored |", "|---|---|---|---|---|---|"]
-    for d, a in sorted(ext["adult_reference"].items()):
+    for d, a in sorted(ext["adult_reference"].items(), key=lambda kv: drug_name(kv[0])):
         with open(os.path.join(ext_dir, "extraction", "final", f"{d}.json")) as f:
             fin = json.load(f)
         inc = [x for x in fin["pediatric"] if x["decision"] == "include"]
         n_obs = sum(len(x["observations"]) for x in inc)
         cl = "—" if a["median_l_h"] is None else f"{a['median_l_h']:.2f}"
-        scored = "Yes" if a["median_l_h"] is not None and n_obs else ("No adult reference" if a["median_l_h"] is None else "No observations")
+        scored = ("Yes" if d in ext["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"]
+                  else "No adult reference" if a["median_l_h"] is None else "No observations")
         rows.append(f"| {drug_name(d)} | {a['n_abstracts']} | {cl} | "
                     f"{len(inc)} | {n_obs} | {scored} |")
     return "\n".join(rows)
@@ -342,15 +363,20 @@ def external_values(ext: dict, agreement: dict, flow: dict) -> dict:
             v[f"ext_st_{st}_{m}_aafe"] = f"{bm['aafe']:.2f}" if bm else "—"
     adult = ext["adult_reference"]
     no_adult = sorted(d for d, a in adult.items() if a["median_l_h"] is None)
-    v["ext_no_adult"] = ", ".join(drug_name(d) for d in no_adult)
+    v["ext_no_adult"] = _and(sorted(drug_name(d) for d in no_adult))
     no_obs = sorted(d for d in adult if d not in ext["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"] and d not in no_adult)
-    v["ext_no_obs"] = ", ".join(drug_name(d) for d in no_obs)
-    v["ext_scored_drugs"] = ", ".join(drug_name(d) for d in sorted(ext["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"]))
+    v["ext_no_obs"] = _and(sorted(drug_name(d) for d in no_obs))
+    v["ext_n_no_obs"] = len(no_obs)
+    v["ext_scored_drugs"] = _and(sorted(drug_name(d) for d in ext["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"]))
+    v["ext_he1_status"] = "confirmatory" if ext["hypotheses"]["HE1_under2"]["confirmatory"] else "descriptive"
+    v["ext_e1_drugs"] = ext["sensitivity"]["E1_exclude_imputed_weight_or_ga"]["HE1_under2"]["n_drugs"]
+    v["ext_e1_status"] = ("descriptive" if not ext["sensitivity"]["E1_exclude_imputed_weight_or_ga"]["HE1_under2"].get("confirmatory")
+                          else "confirmatory")
     v["ext_n_no_adult"] = len(no_adult)
     v["ext_n_drugs"], v["ext_n_obs"] = ext["n_drugs"], ext["n_obs"]
     per = ext["hypotheses"]["HE2_all_ages"]["per_drug_mean_d"]
     v["ext_n_favour"] = sum(d < 0 for d in per.values())
-    v["ext_not_favour"] = _and([drug_name(k) for k, d in sorted(per.items()) if d >= 0])
+    v["ext_not_favour"] = _and(sorted(drug_name(k) for k, d in per.items() if d >= 0))
     v["ext_he1_reduction"] = f"{100 * (1 - 10 ** ext['hypotheses']['HE1_under2']['mean_abs_log10_diff']):.0f}%"
     e6 = ext["sensitivity"]["E6_leave_one_drug_out"]["HE1_under2"]
     v["ext_e6_he1"] = f"{_ratio(10 ** e6['min'])} to {_ratio(10 ** e6['max'])}"
@@ -423,10 +449,62 @@ def word_count(markdown: str) -> int:
     return len(body.split())
 
 
+def _main_text(markdown: str) -> str:
+    return markdown[markdown.index("# Introduction"):markdown.index("# Declarations")]
+
+
+def counts(markdown: str) -> dict:
+    """Main-text tables and figures, and the supporting ones."""
+    main, supp = _main_text(markdown), markdown[markdown.index("# Supporting information"):]
+    return {"tables": main.count("Table: **Table"), "figures": len(re.findall(r"!\[\*\*Figure", main)),
+            "supp_tables": len(re.findall(r"^## Table S", supp, flags=re.M)),
+            "supp_figures": len(re.findall(r"^## Figure S", supp, flags=re.M))}
+
+
+def _section(markdown: str, heading: str) -> str:
+    i = markdown.index(heading) + len(heading)
+    j = markdown.find("\n#", i)
+    return markdown[i:j if j >= 0 else None]
+
+
+def bjcp_problems(markdown: str) -> list[str]:
+    """The British Journal of Clinical Pharmacology limits (paper/BJCP_REQUIREMENTS.md)."""
+    out = []
+    title = re.search(r'^title: "(.*)"$', markdown, flags=re.M).group(1)
+    if len(title) > 150:
+        out.append(f"title has {len(title)} characters (limit 150)")
+    if re.search(r"\b[A-Z]{2,}\b", title):
+        out.append("title contains an abbreviation")
+    abstract = _section(markdown, "# Abstract")
+    if len(abstract.split()) > 250:
+        out.append(f"abstract has {len(abstract.split())} words (limit 250)")
+    for h in ("**Aim.**", "**Methods.**", "**Results.**", "**Conclusion.**"):
+        if h not in abstract:
+            out.append(f"abstract lacks {h}")
+    for box in ("## What is already known about this subject", "## What this study adds"):
+        bullets = [b for b in _section(markdown, box).splitlines() if b.startswith("- ")]
+        words = sum(len(b.split()) - 1 for b in bullets)
+        if len(bullets) > 3 or words > 50:
+            out.append(f"{box[3:]}: {len(bullets)} bullets, {words} words (limits 3 and 50)")
+    c = counts(markdown)
+    if c["tables"] + c["figures"] > 8:
+        out.append(f"{c['tables']} tables and {c['figures']} figures in the main text (limit 8)")
+    return out
+
+
 def render_manuscript(template: str, v: dict) -> str:
-    """Fill the template, with the word count of the filled text itself."""
-    n = word_count(render(template, {**v, "word_count": "0"}))
-    return render(template, {**v, "word_count": f"{n:,}"})
+    """Fill the template, with the word, table and figure counts of the filled text itself."""
+    draft = render(template, {**v, "word_count": "0", "n_tables": "0", "n_figures": "0",
+                              "n_supp_tables": "0", "n_supp_figures": "0"})
+    c = counts(draft)
+    return render(template, {**v, "word_count": f"{word_count(draft):,}", "n_tables": c["tables"],
+                             "n_figures": c["figures"], "n_supp_tables": c["supp_tables"],
+                             "n_supp_figures": c["supp_figures"]})
+
+
+def check_provenance(prov: dict) -> None:
+    if prov.get("working_tree_dirty"):
+        raise ValueError(f"outputs at {prov.get('engine_commit')} come from a dirty working tree; rerun from a clean commit")
 
 
 def load_external() -> tuple[dict, dict, dict]:
@@ -438,6 +516,8 @@ def load_external() -> tuple[dict, dict, dict]:
 
 
 def all_values(results: dict, refset: dict, ext: dict, agreement: dict, flow: dict) -> dict:
+    for prov in (results["provenance"], ext["provenance"]):
+        check_provenance(prov)
     v = {**values(results, refset), **external_values(ext, agreement, flow)}
     v["table_hypotheses"] = hypothesis_table(results, ext)
     v["table_sensitivity"] = sensitivity_table(results, ext)
@@ -445,6 +525,10 @@ def all_values(results: dict, refset: dict, ext: dict, agreement: dict, flow: di
     v["table_ext_strata"] = external_stratum_table(ext)
     v["table_ext_drugs"] = external_drug_table(ext, EXT)
     v["ext_engine_commit"] = ext["provenance"]["engine_commit"][:7]
+    if ext["provenance"]["versions"] != results["provenance"]["versions"]:
+        raise ValueError("the two evaluations' outputs were made with different software versions")
+    for pop in ("newborn", "under2", "all"):
+        v[f"table_label_methods_{pop}"] = method_table(results, pop)
     return v
 
 
@@ -460,6 +544,9 @@ def main(pdf: bool = False) -> None:
     with open(os.path.join(HERE, "manuscript.md")) as f:
         template = f.read()
     text = render_manuscript(template, all_values(results, refset, *load_external()))
+    problems = bjcp_problems(text)
+    if problems:
+        raise ValueError("the manuscript breaks the journal's limits: " + "; ".join(problems))
     os.makedirs(os.path.join(BUILD, "figures"), exist_ok=True)
     for src in (OUTPUT, EXT_OUTPUT):
         for name in os.listdir(src):
