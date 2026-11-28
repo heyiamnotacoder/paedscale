@@ -57,3 +57,25 @@ def test_an_abstract_neither_pass_read_needs_the_adjudicator():
     p1 = {"pediatric": [_s("1", "exclude")], "adult": []}
     _, unresolved = adj.build(p1, p1, {}, ORDER, [], stop=lambda rec, kind: False)
     assert unresolved == [("pediatric", "2", "read by neither pass")]
+
+
+def test_a_log_entry_needs_a_reason_and_a_record_must_be_for_its_own_pmid():
+    p1 = {"pediatric": [_s("1", "include", 0.1)], "adult": []}
+    p2 = {"pediatric": [_s("1", "include", 0.2)], "adult": []}
+    run = lambda log: adj.build(p1, p2, {"pediatric": {"1": log}}, ["1"], [], stop=lambda r, k: False)[1]
+    assert run({"use": "pass2"}) == [("pediatric", "1", "log entry has no reason")]
+    assert run({"record": _s("999", "exclude"), "reason": "r"}) == [
+        ("pediatric", "1", "log record is for PMID '999'")]
+    assert run({"use": "pass2", "reason": "re-read"}) == []
+
+
+def test_the_final_record_is_written_only_when_nothing_is_unresolved(tmp_path):
+    p1 = {"pediatric": [_s("1", "include", 0.1)], "adult": []}
+    p2 = {"pediatric": [_s("1", "include", 0.2)], "adult": []}
+    out = tmp_path / "final"
+    snap = {"pediatric": [{"pmid": "1", "prefilter": True}], "adult": []}
+    assert adj.write_final({"d": (p1, p2, {})}, {"d": snap}, str(out)) == ["d pediatric 1: values differ"]
+    assert not out.exists()
+    log = {"pediatric": {"1": {"use": "pass1", "reason": "re-read"}}}
+    assert adj.write_final({"d": (p1, p2, log)}, {"d": snap}, str(out)) == []
+    assert (out / "d.json").exists()

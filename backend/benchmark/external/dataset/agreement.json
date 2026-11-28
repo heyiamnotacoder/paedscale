@@ -1,0 +1,323 @@
+{
+ "kappa_overall": 0.9599710009838951,
+ "both_read": 773,
+ "n_decision_disagreements": 7,
+ "n_value_disagreements": 17,
+ "n_value_agreements": 80,
+ "n_values_compared": 259,
+ "n_values_differ": 23,
+ "drugs_missing_a_pass": [],
+ "per_drug": {
+  "acyclovir": {
+   "both_read": 19,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [
+    {
+     "kind": "pediatric",
+     "pmid": "24346595"
+    }
+   ],
+   "value_agreements": 0,
+   "values_compared": 3,
+   "values_differ": 1,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "amikacin": {
+   "both_read": 45,
+   "kappa": 0.8085106382978726,
+   "decision_disagreements": [
+    "pediatric 29569124",
+    "pediatric 9516033"
+   ],
+   "value_disagreements": [],
+   "value_agreements": 5,
+   "values_compared": 17,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "ampicillin": {
+   "both_read": 23,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [
+    {
+     "kind": "pediatric",
+     "pmid": "33591074"
+    }
+   ],
+   "value_agreements": 2,
+   "values_compared": 8,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "aztreonam": {
+   "both_read": 17,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [],
+   "value_agreements": 5,
+   "values_compared": 7,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "cefepime": {
+   "both_read": 49,
+   "kappa": 0.8778054862842892,
+   "decision_disagreements": [
+    "pediatric 11303847"
+   ],
+   "value_disagreements": [
+    {
+     "kind": "pediatric",
+     "pmid": "9257761"
+    }
+   ],
+   "value_agreements": 3,
+   "values_compared": 5,
+   "values_differ": 1,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "cefoxitin": {
+   "both_read": 3,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [],
+   "value_agreements": 2,
+   "values_compared": 4,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "ceftazidime": {
+   "both_read": 36,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [
+    {
+     "kind": "pediatric",
+     "pmid": "8703647"
+    },
+    {
+     "kind": "pediatric",
+     "pmid": "8529330"
+    },
+    {
+     "kind": "pediatric",
+     "pmid": "8552453"
+    }
+   ],
+   "value_agreements": 5,
+   "values_compared": 21,
+   "values_differ": 7,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "cefuroxime": {
+   "both_read": 11,
+   "kappa": 0.0,
+   "decision_disagreements": [
+    "pediatric 20864357"
+   ],
+   "value_disagreements": [],
+   "value_agreements": 0,
+   "values_compared": 0,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "clindamycin": {
+   "both_read": 9,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [],
+   "value_agreements": 3,
+   "values_compared": 10,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "daptomycin": {
+   "both_read": 20,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [
+    {
+     "kind": "adult",
+     "pmid": "30224525"
+    }
+   ],
+   "value_agreements": 3,
+   "values_compared": 7,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "famotidine": {
+   "both_read": 18,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [],
+   "value_agreements": 7,
+   "values_compared": 12,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "fluconazole": {
+   "both_read": 46,
+   "kappa": 0.8968609865470852,
+   "decision_disagreements": [
+    "pediatric 7739946"
+   ],
+   "value_disagreements": [
+    {
+     "kind": "pediatric",
+     "pmid": "8375121"
+    },
+    {
+     "kind": "pediatric",
+     "pmid": "8013270"
+    }
+   ],
+   "value_agreements": 3,
+   "values_compared": 18,
+   "values_differ": 7,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "gentamicin": {
+   "both_read": 76,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [
+    {
+     "kind": "pediatric",
+     "pmid": "21353108"
+    },
+    {
+     "kind": "adult",
+     "pmid": "8361865"
+    }
+   ],
+   "value_agreements": 8,
+   "values_compared": 41,
+   "values_differ": 3,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "levetiracetam": {
+   "both_read": 35,
+   "kappa": 0.6534653465346533,
+   "decision_disagreements": [
+    "pediatric 22495532"
+   ],
+   "value_disagreements": [],
+   "value_agreements": 1,
+   "values_compared": 3,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "meropenem": {
+   "both_read": 65,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [
+    {
+     "kind": "pediatric",
+     "pmid": "11360025"
+    }
+   ],
+   "value_agreements": 7,
+   "values_compared": 17,
+   "values_differ": 1,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "penicillin_g": {
+   "both_read": 6,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [],
+   "value_agreements": 2,
+   "values_compared": 4,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "piperacillin_tazobactam": {
+   "both_read": 62,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [
+    {
+     "kind": "pediatric",
+     "pmid": "38161045"
+    },
+    {
+     "kind": "pediatric",
+     "pmid": "23907263"
+    }
+   ],
+   "value_agreements": 7,
+   "values_compared": 28,
+   "values_differ": 1,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "tobramycin": {
+   "both_read": 32,
+   "kappa": null,
+   "decision_disagreements": [],
+   "value_disagreements": [],
+   "value_agreements": 0,
+   "values_compared": 0,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "vancomycin": {
+   "both_read": 166,
+   "kappa": 0.9695859289116895,
+   "decision_disagreements": [
+    "pediatric 32947559"
+   ],
+   "value_disagreements": [
+    {
+     "kind": "pediatric",
+     "pmid": "34612690"
+    },
+    {
+     "kind": "pediatric",
+     "pmid": "11549096"
+    },
+    {
+     "kind": "pediatric",
+     "pmid": "39352409"
+    }
+   ],
+   "value_agreements": 15,
+   "values_compared": 48,
+   "values_differ": 2,
+   "only_pass1": [],
+   "only_pass2": []
+  },
+  "zidovudine": {
+   "both_read": 35,
+   "kappa": 1.0,
+   "decision_disagreements": [],
+   "value_disagreements": [],
+   "value_agreements": 2,
+   "values_compared": 6,
+   "values_differ": 0,
+   "only_pass1": [],
+   "only_pass2": []
+  }
+ }
+}

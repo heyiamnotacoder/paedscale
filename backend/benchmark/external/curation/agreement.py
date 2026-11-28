@@ -45,16 +45,24 @@ def _num(v):
 
 
 def _key(item: dict, fields: tuple[str, ...], study_flags=()) -> tuple:
+    """Everything a pass extracted for one item, as strings so that items always sort."""
     cl = item.get("cl") or {}
     flags = set(item.get("flags") or []) | set(study_flags)      # a study flag applies to each item
-    return (_num(cl.get("value")), cl.get("unit"), cl.get("summary"),
-            *(json.dumps(_num(item.get(f))) for f in fields), tuple(sorted(flags)))
+    return tuple(json.dumps(x) for x in (_num(cl.get("value")), cl.get("unit"), cl.get("summary"),
+                                         *(_num(item.get(f)) for f in fields), sorted(flags)))
 
 
-def _items_key(study: dict, kind: str) -> tuple:
+def _sorted_items(study: dict, kind: str) -> list[dict]:
     fields = PED_FIELDS if kind == "pediatric" else ADULT_FIELDS
     sf = study.get("flags") or []
-    return tuple(sorted(_key(i, fields, sf) for i in study.get(KINDS[kind]) or []))
+    return sorted(study.get(KINDS[kind]) or [], key=lambda i: _key(i, fields, sf))
+
+
+def items_key(study: dict, kind: str) -> tuple:
+    """Two passes extracted the same items when these keys are equal (order does not matter)."""
+    fields = PED_FIELDS if kind == "pediatric" else ADULT_FIELDS
+    sf = study.get("flags") or []
+    return tuple(_key(i, fields, sf) for i in _sorted_items(study, kind))
 
 
 NUMERIC = ("pna_days", "pna_range_days", "ga_weeks", "ga_range_weeks", "pma_weeks", "pma_range_weeks",
@@ -62,15 +70,16 @@ NUMERIC = ("pna_days", "pna_range_days", "ga_weeks", "ga_range_weeks", "pma_week
 
 
 def _value_counts(a: dict, b: dict, kind: str) -> tuple[int, int]:
-    """Numbers compared one by one (Amendment 1 §9): items paired in recorded order when both
-    passes recorded the same number of items; each clearance and each number either pass
-    recorded counts once."""
-    ia, ib = a.get(KINDS[kind]) or [], b.get(KINDS[kind]) or []
+    """Numbers compared one by one (Amendment 1 §9): when both passes recorded the same number
+    of items, they are paired in the sorted order of items_key; each clearance (value with its
+    unit) and each number either pass recorded counts once."""
+    ia, ib = _sorted_items(a, kind), _sorted_items(b, kind)
     if len(ia) != len(ib):
         return 0, 0
     compared = differ = 0
     for x, y in zip(ia, ib):
-        pairs = [(_num((x.get("cl") or {}).get("value")), _num((y.get("cl") or {}).get("value")))]
+        cx, cy = x.get("cl") or {}, y.get("cl") or {}
+        pairs = [((_num(cx.get("value")), cx.get("unit")), (_num(cy.get("value")), cy.get("unit")))]
         pairs += [(_num(x.get(f)), _num(y.get(f))) for f in NUMERIC if x.get(f) is not None or y.get(f) is not None]
         compared += len(pairs)
         differ += sum(p != q for p, q in pairs)
@@ -94,7 +103,7 @@ def compare(r1: dict, r2: dict) -> dict:
             elif a[p]["decision"] == "include":
                 c, d = _value_counts(a[p], b[p], kind)
                 n_cmp, n_diff = n_cmp + c, n_diff + d
-                if _items_key(a[p], kind) == _items_key(b[p], kind):
+                if items_key(a[p], kind) == items_key(b[p], kind):
                     val_ok += 1
                 else:
                     val_dis.append({"kind": kind, "pmid": p})

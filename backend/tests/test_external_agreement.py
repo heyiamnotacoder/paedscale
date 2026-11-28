@@ -60,3 +60,22 @@ def test_extracted_numbers_are_also_counted_value_by_value():
     r2 = {"pediatric": [_study("1", "include", [_o(0.2, w=3.0)])], "adult": []}
     c = ag.compare(r1, r2)
     assert c["values_compared"] == 3 and c["values_differ"] == 1     # clearance differs; age and weight agree
+
+
+def test_value_counts_pair_observations_in_a_fixed_order_not_the_recorded_one():
+    r1 = {"pediatric": [_study("1", "include", [_o(0.1, pna=10), _o(0.3, pna=100)])], "adult": []}
+    r2 = {"pediatric": [_study("1", "include", [_o(0.3, pna=100), _o(0.1, pna=10)])], "adult": []}
+    c = ag.compare(r1, r2)
+    assert c["value_agreements"] == 1 and c["values_differ"] == 0
+
+
+def test_a_clearance_with_a_different_unit_counts_as_a_differing_value():
+    r1 = {"pediatric": [_study("1", "include", [_o(0.1, unit="L/h/kg")])], "adult": []}
+    r2 = {"pediatric": [_study("1", "include", [_o(0.1, unit="L/h")])], "adult": []}
+    c = ag.compare(r1, r2)
+    assert c["value_disagreements"] and c["values_differ"] == 1
+
+
+def test_items_sort_when_a_value_or_unit_is_missing():
+    r1 = {"pediatric": [_study("1", "include", [_o(None, unit=None), _o(0.1)])], "adult": []}
+    assert ag.compare(r1, r1)["value_agreements"] == 1

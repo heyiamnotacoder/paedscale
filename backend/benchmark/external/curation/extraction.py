@@ -63,16 +63,18 @@ def _number_in(value: float, quote: str) -> bool:
 
 
 def _grams_in(kg: float, quote: str) -> bool:
-    """The quote states this weight in grams: a number equal to kg × 1000 followed by g, gm or
-    gram(s), and not by a per-volume unit such as g/dL (Amendment 13 §2, Amendment 15)."""
-    q = _norm(quote).replace(",", ".")
-    for n in re.findall(r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:g|gm|grams?)\b(?!\s*/)", q):
-        if math.isclose(float(n), kg * 1000, rel_tol=1e-9):
-            return True
-    # "1086 +/- 311 g": the unit follows the spread, not the mean
-    for n in re.findall(r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:\+/-|±|\(SD\)?)\s*\d+(?:\.\d+)?\s*(?:g|gm|grams?)\b(?!\s*/)", q):
-        if math.isclose(float(n), kg * 1000, rel_tol=1e-9):
-            return True
+    """The quote states this weight in grams: a number equal to kg × 1000 with g, gm or gram(s)
+    on it, directly or after its spread ("1086 +/- 311 g", "1086 (311) g"), and not a per-volume
+    unit such as g/dL (Amendment 13 §2, Amendment 15 §4, Amendment 16). A comma between digits
+    is read both as a thousands separator and as a decimal point."""
+    unit = r"\s*(?:g|gm|grams?)\b(?!\s*/)"
+    num = r"(?<![\d.])(\d+(?:\.\d+)?)"
+    text = _norm(quote)
+    for q in (re.sub(r"(?<=\d),(?=\d{3}\b)", "", text), text.replace(",", ".")):
+        for pattern in (num + unit, num + r"\s*(?:\+/-|±)\s*\d+(?:\.\d+)?" + unit,
+                        num + r"\s*\(\s*\d+(?:\.\d+)?\s*\)" + unit):
+            if any(math.isclose(float(n), kg * 1000, rel_tol=1e-9) for n in re.findall(pattern, q)):
+                return True
     return False
 
 

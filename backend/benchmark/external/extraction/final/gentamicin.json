@@ -1,0 +1,961 @@
+{
+ "drug": "gentamicin",
+ "pass": "final",
+ "pediatric": [
+  {
+   "pmid": "23553582",
+   "decision": "exclude",
+   "reason": "P4: therapeutic hypothermia",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "940277",
+   "decision": "exclude",
+   "reason": "P4: peritoneal dialysis, chronic renal failure",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "15150171",
+   "decision": "exclude",
+   "reason": "P2: covariate equation only, no numeric CL at a stated covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "28533244",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2122409",
+   "decision": "exclude",
+   "reason": "P4: ECMO",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "decision": "include",
+   "flags": [
+    "route_unstated"
+   ],
+   "observations": [
+    {
+     "age_quote": "Sixty-eight newborn patients of 24- to 34-weeks gestational age and 600-3,100 g current weight in their first week of life",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "lower gentamicin clearance (0.0288 vs 0.0340 L h(-1) kg(-1))",
+      "summary": "mean",
+      "unit": "L/h/kg",
+      "value": 0.0288
+     },
+     "flags": [],
+     "ga_weeks": [
+      24,
+      30
+     ],
+     "height_cm": null,
+     "height_quote": null,
+     "label": "preterm GA <30 wk, first week of life",
+     "pma_weeks": null,
+     "pna_days": [
+      1,
+      7
+     ],
+     "preterm": true,
+     "weight_kg": null,
+     "weight_quote": null
+    },
+    {
+     "age_quote": "Sixty-eight newborn patients of 24- to 34-weeks gestational age and 600-3,100 g current weight in their first week of life",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "lower gentamicin clearance (0.0288 vs 0.0340 L h(-1) kg(-1))",
+      "summary": "mean",
+      "unit": "L/h/kg",
+      "value": 0.034
+     },
+     "flags": [],
+     "ga_weeks": [
+      30,
+      34
+     ],
+     "height_cm": null,
+     "height_quote": null,
+     "label": "preterm GA 30-34 wk, first week of life",
+     "pma_weeks": null,
+     "pna_days": [
+      1,
+      7
+     ],
+     "preterm": true,
+     "weight_kg": null,
+     "weight_quote": null
+    }
+   ],
+   "pmid": "11045889",
+   "reason": ""
+  },
+  {
+   "pmid": "24938850",
+   "decision": "exclude",
+   "reason": "P2: typical value at a weight but no stated age; group ages not stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "6716226",
+   "decision": "exclude",
+   "reason": "P2: clearance reported is of mezlocillin, not gentamicin",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "26763684",
+   "decision": "exclude",
+   "reason": "P4: therapeutic hypothermia",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "27420805",
+   "decision": "exclude",
+   "reason": "no age: children with malnutrition, no age stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3289859",
+   "decision": "exclude",
+   "reason": "no age: neonates, typical value without stated age (PCA only as covariate cut-off)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3608741",
+   "decision": "exclude",
+   "reason": "no age: VLBW neonates, no postnatal age or PMA stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "35107141",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "30882729",
+   "decision": "exclude",
+   "reason": "P2: typical value at a weight (20 kg) only, no stated age at the covariate point; no group clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "6883955",
+   "decision": "exclude",
+   "reason": "P4: cystic fibrosis",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3609118",
+   "decision": "exclude",
+   "reason": "P2: clearance reported is of flucloxacillin, not gentamicin",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "12848772",
+   "decision": "exclude",
+   "reason": "P1: intramuscular gentamicin, CL/F only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38031322",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg standardized to an adult covariate point, no pediatric age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "17347177",
+   "decision": "exclude",
+   "reason": "P1: intramuscular gentamicin, CL/F only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "21831986",
+   "decision": "exclude",
+   "reason": "P2: oral ciprofloxacin study, no gentamicin clearance",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "30300445",
+   "decision": "exclude",
+   "reason": "P4: therapeutic hypothermia",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3781676",
+   "decision": "exclude",
+   "reason": "no age: children (nephrotic and controls), no age stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "29781085",
+   "decision": "exclude",
+   "reason": "P4: therapeutic hypothermia (meta-analysis, mean difference only)",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9825879",
+   "decision": "exclude",
+   "reason": "no age: neonates, no postnatal age or PMA stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9383807",
+   "decision": "exclude",
+   "reason": "no age: children with cancer, no age stated; CL only in mL/min/BSA",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "12741432",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "neonates first 10 days of life, GA 23-42 wk",
+     "preterm": false,
+     "cl": {
+      "value": 0.0709,
+      "unit": "L/h",
+      "summary": "median",
+      "quote": "median (range) gentamicin total clearance, half-life, and volume of distribution of 0.0709 L/hour"
+     },
+     "pna_days": [
+      1,
+      10
+     ],
+     "ga_weeks": 32,
+     "ga_range_weeks": [
+      23,
+      42
+     ],
+     "pma_weeks": null,
+     "age_quote": "intravenous 24-hour gentamicin regimens during the first 10 days of life",
+     "weight_kg": 1.92,
+     "weight_quote": "The median (range) gestational age and birth weight, respectively, were 32 weeks (23-42 wks) and 1.92 kg (0.47-5.00 kg)",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "31102287",
+   "decision": "exclude",
+   "reason": "P2: review of published models, no defined group with stated age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "38747600",
+   "decision": "exclude",
+   "reason": "no age: term neonates, no postnatal age or PMA stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "15606440",
+   "decision": "exclude",
+   "reason": "no age: neonates, no postnatal age or PMA stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "7878693",
+   "decision": "exclude",
+   "reason": "P4: ECMO",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "decision": "include",
+   "flags": [
+    "route_unstated"
+   ],
+   "observations": [
+    {
+     "age_quote": "SGA infants treated early (\u22647days) (n = 29)",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "clearance (0.58 mL/kg/min vs. 0.68 mL/kg/min",
+      "summary": "median",
+      "unit": "mL/min/kg",
+      "value": 0.58
+     },
+     "flags": [],
+     "ga_weeks": null,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "SGA neonates treated at <=7 days",
+     "pma_weeks": null,
+     "pna_days": [
+      0,
+      7
+     ],
+     "preterm": false,
+     "weight_kg": null,
+     "weight_quote": null
+    },
+    {
+     "age_quote": "SGA infants treated early (\u22647days) (n = 29)",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "clearance (0.58 mL/kg/min vs. 0.68 mL/kg/min",
+      "summary": "median",
+      "unit": "mL/min/kg",
+      "value": 0.68
+     },
+     "flags": [],
+     "ga_weeks": null,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "AGA neonates treated at <=7 days",
+     "pma_weeks": null,
+     "pna_days": [
+      0,
+      7
+     ],
+     "preterm": false,
+     "weight_kg": null,
+     "weight_quote": null
+    }
+   ],
+   "pmid": "24122736",
+   "reason": ""
+  },
+  {
+   "pmid": "1608849",
+   "decision": "exclude",
+   "reason": "no age: neonates; covariate equation only",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "32032171",
+   "decision": "exclude",
+   "reason": "no age: GA alone (mean 35 weeks), no postnatal age or PMA",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "23503448",
+   "decision": "exclude",
+   "reason": "P4: therapeutic hypothermia; comparator group has no stated age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "39821208",
+   "decision": "exclude",
+   "reason": "P2: review of published models, no defined group with stated age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "decision": "include",
+   "flags": [
+    "route_unstated"
+   ],
+   "observations": [
+    {
+     "age_quote": "in 7 infants and children (1 month to 8 years)",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "respectively, 12.8 vs. 50.4 ml/min/1.73 m2",
+      "summary": "mean",
+      "unit": "mL/min/1.73m2",
+      "value": 50.4
+     },
+     "flags": [],
+     "ga_weeks": null,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "infants and children 1 month to 8 years",
+     "pma_weeks": null,
+     "pna_days": [
+      30.4375,
+      2922
+     ],
+     "preterm": false,
+     "weight_kg": null,
+     "weight_quote": null
+    }
+   ],
+   "pmid": "6927546",
+   "reason": ""
+  },
+  {
+   "decision": "include",
+   "flags": [
+    "allometric_standardized",
+    "route_unstated"
+   ],
+   "observations": [
+    {
+     "age_quote": "median (interquartile range) age 3.7 years (2.2-8.9)",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "Median (interquartile range) gentamicin clearance and volume of distribution were 8.1 L\u00b7h\u00b770 kg (5.8-12.4)",
+      "summary": "median",
+      "unit": "L/h/70kg",
+      "value": 8.1
+     },
+     "flags": [],
+     "ga_weeks": null,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "children with febrile neutropenia, median 3.7 y",
+     "pma_weeks": null,
+     "pna_days": 1351.425,
+     "pna_range_days": [
+      803.55,
+      3250.725
+     ],
+     "preterm": false,
+     "weight_kg": null,
+     "weight_quote": null
+    }
+   ],
+   "pmid": "27851686",
+   "reason": ""
+  },
+  {
+   "pmid": "41490684",
+   "decision": "exclude",
+   "reason": "P2: no numeric clearance reported",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "21353108",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "critically_ill"
+   ],
+   "observations": [
+    {
+     "label": "group 1, GA <34 wk, first week of life",
+     "preterm": true,
+     "cl": {
+      "value": 0.47,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "Mean gentamicin clearance measured after dose 1 (0.47 [0.23], 0.66 [0.26], and 0.76 [0.32] mL/min/kg)"
+     },
+     "pna_days": [
+      1,
+      7
+     ],
+     "ga_weeks": [
+      24,
+      34
+     ],
+     "pma_weeks": null,
+     "age_quote": "included neonates critically ill during the first week of life",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "group 2, GA 34-38 wk, first week of life",
+     "preterm": true,
+     "cl": {
+      "value": 0.66,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "Mean gentamicin clearance measured after dose 1 (0.47 [0.23], 0.66 [0.26], and 0.76 [0.32] mL/min/kg)"
+     },
+     "pna_days": [
+      1,
+      7
+     ],
+     "ga_weeks": [
+      34,
+      38
+     ],
+     "pma_weeks": null,
+     "age_quote": "included neonates critically ill during the first week of life",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    },
+    {
+     "label": "group 3, GA >38 wk (full-term), first week of life",
+     "preterm": false,
+     "cl": {
+      "value": 0.76,
+      "unit": "mL/min/kg",
+      "summary": "mean",
+      "quote": "Mean gentamicin clearance measured after dose 1 (0.47 [0.23], 0.66 [0.26], and 0.76 [0.32] mL/min/kg)"
+     },
+     "pna_days": [
+      1,
+      7
+     ],
+     "ga_weeks": [
+      38,
+      42
+     ],
+     "pma_weeks": null,
+     "age_quote": "included neonates critically ill during the first week of life",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "31648297",
+   "decision": "exclude",
+   "reason": "no age: PICU patients, no age stated; pooled tobramycin/gentamicin",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3416751",
+   "decision": "exclude",
+   "reason": "range only: clearance given as a range across PCA groups, not per group",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9034263",
+   "decision": "exclude",
+   "reason": "no age: GA <36 wk only, no postnatal age or PMA stated",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "decision": "include",
+   "flags": [
+    "critically_ill",
+    "route_unstated"
+   ],
+   "observations": [
+    {
+     "age_quote": "44 PICU patients (0.8 month to 14 years old)",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "Mean clearance (+/- SD) and volume of distribution for all 44 patients were 0.123 +/- 0.041 liter/hour/kg",
+      "summary": "mean",
+      "unit": "L/h/kg",
+      "value": 0.123
+     },
+     "flags": [],
+     "ga_weeks": null,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "PICU patients 0.8 month to 14 years",
+     "pma_weeks": null,
+     "pna_days": [
+      24.35,
+      5113.5
+     ],
+     "preterm": false,
+     "weight_kg": null,
+     "weight_quote": null
+    }
+   ],
+   "pmid": "8414796",
+   "reason": ""
+  },
+  {
+   "decision": "include",
+   "flags": [
+    "route_unstated"
+   ],
+   "observations": [
+    {
+     "age_quote": "mean gestational age of 35.1 weeks and mean age at the time of sampling of 4.2 days",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "Mean (95% confidence interval) values of CL and half-life were 0.042 l h(-1) kg(-1)",
+      "summary": "mean",
+      "unit": "L/h/kg",
+      "value": 0.042
+     },
+     "flags": [],
+     "ga_weeks": 35.1,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "neonates mean age 4.2 days, GA 35.1 wk",
+     "pma_weeks": null,
+     "pna_days": 4.2,
+     "preterm": false,
+     "weight_kg": 2.1,
+     "weight_quote": "79 neonates with a mean birth weight of 2.1 kg"
+    }
+   ],
+   "pmid": "14566440",
+   "reason": ""
+  },
+  {
+   "pmid": "9337435",
+   "decision": "exclude",
+   "reason": "P2: clearance pooled across gentamicin and tobramycin",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "6383749",
+   "decision": "exclude",
+   "reason": "no age: GA only (25-33 wk), no postnatal age or PMA",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "3991255",
+   "decision": "exclude",
+   "reason": "no age: GA only (mean 31.6 wk), no postnatal age or PMA",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "24789450",
+   "decision": "exclude",
+   "reason": "P2: typical value for a 4 kg full-term neonate, no numeric age at the covariate point",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "9383742",
+   "decision": "exclude",
+   "reason": "P2: clearance reported is of amoxicillin, not gentamicin",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "decision": "include",
+   "flags": [
+    "route_unstated"
+   ],
+   "observations": [
+    {
+     "age_quote": "in children (age 1-18 yrs) with cancer and in controls",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "patients receiving prior nephrotoxic chemotherapy appeared to have a lower mean clearance (98.2 ml/min/1.73 m2) than those exposed to nonnephrotoxic chemotherapy (117.4 ml/min/1.73 m2) and controls (113.3 ml/min/1.73 m2",
+      "summary": "mean",
+      "unit": "mL/min/1.73m2",
+      "value": 98.2
+     },
+     "flags": [],
+     "ga_weeks": null,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "cancer, nephrotoxic chemotherapy, 1-18 y",
+     "pma_weeks": null,
+     "pna_days": [
+      365.25,
+      6574.5
+     ],
+     "preterm": false,
+     "weight_kg": null,
+     "weight_quote": null
+    },
+    {
+     "age_quote": "in children (age 1-18 yrs) with cancer and in controls",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "patients receiving prior nephrotoxic chemotherapy appeared to have a lower mean clearance (98.2 ml/min/1.73 m2) than those exposed to nonnephrotoxic chemotherapy (117.4 ml/min/1.73 m2) and controls (113.3 ml/min/1.73 m2",
+      "summary": "mean",
+      "unit": "mL/min/1.73m2",
+      "value": 117.4
+     },
+     "flags": [],
+     "ga_weeks": null,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "cancer, nonnephrotoxic chemotherapy, 1-18 y",
+     "pma_weeks": null,
+     "pna_days": [
+      365.25,
+      6574.5
+     ],
+     "preterm": false,
+     "weight_kg": null,
+     "weight_quote": null
+    },
+    {
+     "age_quote": "in children (age 1-18 yrs) with cancer and in controls",
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "cl": {
+      "quote": "patients receiving prior nephrotoxic chemotherapy appeared to have a lower mean clearance (98.2 ml/min/1.73 m2) than those exposed to nonnephrotoxic chemotherapy (117.4 ml/min/1.73 m2) and controls (113.3 ml/min/1.73 m2",
+      "summary": "mean",
+      "unit": "mL/min/1.73m2",
+      "value": 113.3
+     },
+     "flags": [],
+     "ga_weeks": null,
+     "height_cm": null,
+     "height_quote": null,
+     "label": "controls without cancer, 1-18 y",
+     "pma_weeks": null,
+     "pna_days": [
+      365.25,
+      6574.5
+     ],
+     "preterm": false,
+     "weight_kg": null,
+     "weight_quote": null
+    }
+   ],
+   "pmid": "8602384",
+   "reason": ""
+  },
+  {
+   "pmid": "27270281",
+   "decision": "exclude",
+   "reason": "not total IV CL: per 70 kg without age",
+   "flags": [],
+   "observations": []
+  },
+  {
+   "pmid": "2012712",
+   "decision": "exclude",
+   "reason": "P4: ECMO",
+   "flags": [],
+   "observations": []
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "32124673",
+   "decision": "exclude",
+   "reason": "adult criteria: single burn patient with septic shock",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8361865",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "values": [
+    {
+     "cl": {
+      "value": 0.0676,
+      "unit": "L/h/kg",
+      "summary": "mean",
+      "quote": "clearance (0.0754, 0.0676 L/kg/hr)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": [
+      28,
+      43
+     ],
+     "age_quote": "Five healthy men between 28 and 43 years of age",
+     "flags": []
+    }
+   ]
+  },
+  {
+   "pmid": "38031322",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (per 70 kg standardized only; mixed ages)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "21501204",
+   "decision": "exclude",
+   "reason": "not total IV CL: no gentamicin clearance reported (sickle cell patients)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9558133",
+   "decision": "exclude",
+   "reason": "adult criteria: cancer patients, not healthy or stated normal renal function; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "14871157",
+   "decision": "exclude",
+   "reason": "adult criteria: haemodialysis patients",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "22546767",
+   "decision": "exclude",
+   "reason": "adult criteria: CVVH, acute kidney injury",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "15164971",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalized patients, renal function not stated normal; no age range within 18-65",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9831970",
+   "decision": "exclude",
+   "reason": "adult criteria: age 18 years or older with no upper bound, not shown within 18-65",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "708018",
+   "decision": "exclude",
+   "reason": "not total IV CL: netilmicin study, no gentamicin clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "8863331",
+   "decision": "exclude",
+   "reason": "adult criteria: CAPD patients, intraperitoneal dosing",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6376743",
+   "decision": "exclude",
+   "reason": "not total IV CL: tobramycin study, no gentamicin clearance",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "41521829",
+   "decision": "exclude",
+   "reason": "adult criteria: hospitalized patients, pooled gentamicin/amikacin, renal function not stated normal; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "40383727",
+   "decision": "exclude",
+   "reason": "adult criteria: ICU patients, renal function not normal; no gentamicin CL value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "6716226",
+   "decision": "exclude",
+   "reason": "adult criteria: newborn mezlocillin study, not adults",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "10365637",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis, ages 14-35, per-m2 only, pooled with tobramycin",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "34882292",
+   "decision": "exclude",
+   "reason": "adult criteria: cystic fibrosis, pooled aminoglycosides",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7989408",
+   "decision": "exclude",
+   "reason": "adult criteria: critically ill with normal or moderately reduced renal function; no age",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "7273064",
+   "decision": "exclude",
+   "reason": "adult criteria: trauma patients aged 15-82, varied renal function; no gentamicin CL value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "24789450",
+   "decision": "exclude",
+   "reason": "adult criteria: pediatric population (1 day-18 years), not adults",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9383742",
+   "decision": "exclude",
+   "reason": "adult criteria: preterm amoxicillin study, not adults",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "9145878",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (per 1.73 m2 only)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "28475651",
+   "decision": "exclude",
+   "reason": "adult criteria: endocarditis patients; no total CL value",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "3609118",
+   "decision": "exclude",
+   "reason": "adult criteria: newborn flucloxacillin study, not adults",
+   "flags": [],
+   "values": []
+  }
+ ]
+}

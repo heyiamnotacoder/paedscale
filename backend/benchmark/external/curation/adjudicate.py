@@ -21,7 +21,7 @@ import os
 import sys
 
 from benchmark.external.curation import screening
-from benchmark.external.curation.agreement import _items_key
+from benchmark.external.curation.agreement import items_key
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EXTRACTION = os.path.join(HERE, "extraction")
@@ -31,14 +31,19 @@ LOG = os.path.join(EXTRACTION, "adjudication.json")
 def _choose(kind: str, pmid: str, a: dict | None, b: dict | None, entry: dict | None):
     """(study record or None, problem or None)."""
     if entry:
+        if not str(entry.get("reason") or "").strip():
+            return a or b, "log entry has no reason"
         if "record" in entry:
-            return entry["record"], None
+            rec = entry["record"]
+            if not isinstance(rec, dict) or rec.get("pmid") != pmid:
+                return a or b, f"log record is for PMID {rec.get('pmid') if isinstance(rec, dict) else None!r}"
+            return rec, None
         src = a if entry.get("use") == "pass1" else b if entry.get("use") == "pass2" else None
         return (src, None) if src else (None, f"log entry uses {entry.get('use')!r}, which did not read it")
     if a and b:
         if a["decision"] != b["decision"]:
             return a, "decisions differ"
-        if a["decision"] == "include" and _items_key(a, kind) != _items_key(b, kind):
+        if a["decision"] == "include" and items_key(a, kind) != items_key(b, kind):
             return a, "values differ"
         return a, None
     if a or b:
@@ -72,24 +77,51 @@ def queue_stop(snap: dict):
     return lambda rec, kind: screening.next_up(snap, rec)[0] != kind
 
 
+def write_final(passes: dict, snaps: dict, out_dir: str) -> list[str]:
+    """Build every drug's final record from {drug: (pass1, pass2, log)} and {drug: snapshot}.
+    The records are written to out_dir only when nothing is unresolved; returns the open items."""
+    recs, open_items = {}, []
+    for drug in sorted(passes):
+        p1, p2, log = passes[drug]
+        snap = snaps[drug]
+        rec, unresolved = build(p1, p2, log, screening.order(snap["pediatric"]),
+                                screening.order(snap["adult"]), queue_stop(snap))
+        open_items += [f"{drug} {kind} {pmid}: {why}" for kind, pmid, why in unresolved]
+        recs[drug] = rec
+    if open_items:
+        return open_items
+    os.makedirs(out_dir, exist_ok=True)
+    for drug, rec in recs.items():
+        with open(os.path.join(out_dir, f"{drug}.json"), "w", encoding="utf-8") as f:
+            json.dump({"drug": drug, "pass": "final", **rec}, f, indent=1)
+    return []
+
+
 def main() -> int:
+    from benchmark.external.curation import check
     from benchmark.external.curation.search import SEARCH_DIR
     log = json.load(open(LOG, encoding="utf-8")) if os.path.exists(LOG) else {}
-    os.makedirs(os.path.join(EXTRACTION, "final"), exist_ok=True)
-    n_open = 0
-    for fn in sorted(os.listdir(os.path.join(EXTRACTION, "pass1"))):
+    d1, d2 = (sorted(os.listdir(os.path.join(EXTRACTION, p))) for p in ("pass1", "pass2"))
+    if d1 != d2:
+        print(f"the passes cover different drugs: {sorted(set(d1) ^ set(d2))}")
+        return 1
+    passes, snaps = {}, {}
+    for fn in d1:
         drug = fn[:-5]
         p1, p2 = (json.load(open(os.path.join(EXTRACTION, p, fn), encoding="utf-8")) for p in ("pass1", "pass2"))
-        snap = json.load(open(os.path.join(SEARCH_DIR, fn), encoding="utf-8"))
-        rec, unresolved = build(p1, p2, log.get(drug, {}), screening.order(snap["pediatric"]),
-                                screening.order(snap["adult"]), queue_stop(snap))
-        for kind, pmid, why in unresolved:
-            print(f"{drug} {kind} {pmid}: {why}")
-        n_open += len(unresolved)
-        with open(os.path.join(EXTRACTION, "final", fn), "w", encoding="utf-8") as f:
-            json.dump({"drug": drug, "pass": "final", **rec}, f, indent=1)
-    print("OK" if not n_open else f"{n_open} unresolved")
-    return 1 if n_open else 0
+        passes[drug] = (p1, p2, log.get(drug, {}))
+        snaps[drug] = json.load(open(os.path.join(SEARCH_DIR, fn), encoding="utf-8"))
+    open_items = write_final(passes, snaps, os.path.join(EXTRACTION, "final"))
+    for item in open_items:
+        print(item)
+    if open_items:
+        print(f"{len(open_items)} unresolved; extraction/final/ was not written")
+        return 1
+    problems = [f"{d} {p}" for d in sorted(passes) for p in check.check_drug("final", d)]
+    for p in problems:
+        print(p)
+    print("OK" if not problems else f"{len(problems)} check problem(s) in extraction/final/")
+    return 1 if problems else 0
 
 
 if __name__ == "__main__":

@@ -231,3 +231,9 @@ def test_the_grams_rule_needs_the_gram_unit_on_that_number():
     o = _obs(weight_kg=0.01, weight_quote="Hb 10 g/dL, weight 1.2 kg")
     abstract = ABSTRACT + " Hb 10 g/dL, weight 1.2 kg"
     assert any("weight 0.01 does not appear" in p for p in ex.problems(o, abstract))
+
+
+def test_grams_with_a_bracketed_spread_or_a_thousands_comma():
+    for q in ("1086 (311) g", "birth weight 1,086 g", "1,086 +/- 311 g"):
+        o = _obs(weight_kg=1.086, weight_quote=q)
+        assert not any("weight" in p for p in ex.problems(o, ABSTRACT + " " + q)), q

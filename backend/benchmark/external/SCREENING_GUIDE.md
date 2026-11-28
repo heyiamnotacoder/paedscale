@@ -1,6 +1,6 @@
 # Screening and extraction guide (operational)
 
-This guide says *how* to record screening decisions. The rules themselves are in `PROTOCOL.md`, Amendments 1 to 15. Where the two differ, PROTOCOL.md wins. Each pass works only from PROTOCOL.md, this guide and the abstract texts. A pass never opens another pass's folder.
+This guide says *how* to record screening decisions. The rules themselves are in `PROTOCOL.md`, Amendments 1 to 16. Where the two differ, PROTOCOL.md wins. Each pass works only from PROTOCOL.md, this guide and the abstract texts. A pass never opens another pass's folder.
 
 ## Commands (from `backend/`)
 

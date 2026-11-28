@@ -1,0 +1,72 @@
+{
+ "drug": "cefoxitin",
+ "pass": "final",
+ "pediatric": [
+  {
+   "pmid": "7396456",
+   "decision": "include",
+   "reason": "",
+   "flags": [],
+   "observations": [
+    {
+     "label": "infants and children 3-151 months, IV dose",
+     "preterm": false,
+     "cl": {
+      "value": 242,
+      "unit": "mL/min/m2",
+      "summary": "mean",
+      "quote": "Mean plasma clearance was 242 and 257 ml/min per m(2) after intravenous and intramuscular doses"
+     },
+     "pna_days": 791.375,
+     "pna_range_days": [
+      91.3125,
+      4596.0625
+     ],
+     "ga_weeks": null,
+     "pma_weeks": null,
+     "age_quote": "Thirty-two infants and children ranging in age from 3 to 151 months (mean, 26 months)",
+     "weight_kg": null,
+     "weight_quote": null,
+     "bsa_m2": null,
+     "bsa_quote": null,
+     "height_cm": null,
+     "height_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ],
+ "adult": [
+  {
+   "pmid": "7325641",
+   "decision": "exclude",
+   "reason": "adult criteria: unit (per 1.73 m2 only)",
+   "flags": [],
+   "values": []
+  },
+  {
+   "pmid": "2729930",
+   "decision": "include",
+   "reason": "",
+   "flags": [
+    "adult_age_unstated",
+    "adult_weight_missing"
+   ],
+   "values": [
+    {
+     "cl": {
+      "value": 279,
+      "unit": "mL/min",
+      "summary": "mean",
+      "quote": "lower systemic clearance (111.7 +/- 4.7 versus 279 +/- 12 ml/min)"
+     },
+     "weight_kg": null,
+     "weight_quote": null,
+     "age_years": null,
+     "age_quote": null,
+     "flags": []
+    }
+   ]
+  }
+ ]
+}

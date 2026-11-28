@@ -1,0 +1,1875 @@
+{
+ "acyclovir": {
+  "pediatric": {
+   "24346595": {
+    "reason": "Values: the abstract states the cohort's median GA (30 weeks); pass 1 recorded it. PMA 31.3 weeks is the model's stated covariate point.",
+    "use": "pass1"
+   }
+  }
+ },
+ "amikacin": {
+  "pediatric": {
+   "29569124": {
+    "reason": "A14 \u00a71: CL not CL/F and no non-IV dosing mentioned, so IV flagged route_unstated; A14 \u00a74: typical value at the cohort's mean age and weight",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated",
+      "typical_at_cohort_median"
+     ],
+     "observations": [
+      {
+       "age_quote": "mean \u00b1 standard deviation age of 4.1 \u00b1 3.9 years",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "1.2 l/h and 6.5 l for total body clearance (CL)",
+        "summary": "typical",
+        "unit": "L/h",
+        "value": 1.2
+       },
+       "flags": [],
+       "ga_range_weeks": null,
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "children 1-12 y",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 1497.525,
+       "pna_range_days": [
+        365.25,
+        4383.0
+       ],
+       "preterm": false,
+       "weight_kg": 15,
+       "weight_quote": "bodyweight of 15 \u00b1 8.4 kg"
+      }
+     ],
+     "pmid": "29569124",
+     "reason": ""
+    }
+   },
+   "9516033": {
+    "reason": "A14 \u00a71: CL not CL/F and no non-IV dosing mentioned in the abstract, so IV flagged route_unstated; mean per-kg CL as pass 2",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "mean gestational age of 35.1 weeks and mean age at the start of treatment of 3.1 days",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "Mean (95% CI) values of CL, V and half-life were 0.048 (0.045, 0.051) l.h(-1).kg(-1)",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.048
+       },
+       "flags": [],
+       "ga_range_weeks": null,
+       "ga_weeks": 35.1,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "neonates, mean GA 35.1 wk, mean age 3.1 d",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 3.1,
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "9516033",
+     "reason": ""
+    }
+   }
+  }
+ },
+ "ampicillin": {
+  "pediatric": {
+   "33591074": {
+    "reason": "Values: the weight is a birth weight in a first-week group, so it is used and flagged birth_weight (Amendment 14 \u00a75).",
+    "use": "pass2"
+   }
+  }
+ },
+ "aztreonam": {
+  "adult": {
+   "17576827": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "adult_age_unstated",
+      "adult_weight_missing",
+      "route_unstated"
+     ],
+     "pmid": "17576827",
+     "reason": "",
+     "values": [
+      {
+       "age_quote": null,
+       "age_years": null,
+       "cl": {
+        "quote": "76.2 +/- 7.4 ml/min in healthy subjects",
+        "summary": "mean",
+        "unit": "mL/min",
+        "value": 76.2
+       },
+       "flags": [],
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ]
+    }
+   }
+  }
+ },
+ "cefepime": {
+  "pediatric": {
+   "11303847": {
+    "reason": "Decision: a review pooling three earlier studies, one of them PMID 9257761; not the abstract's own data (Amendment 14 \u00a77).",
+    "use": "pass1"
+   },
+   "9257761": {
+    "reason": "Values: 2.1 months is 63.92 days at 30.4375 d/month; pass 1 rounded to 63.9.",
+    "use": "pass2"
+   }
+  }
+ },
+ "ceftazidime": {
+  "pediatric": {
+   "8529330": {
+    "reason": "Values: per-kg value used when both per kg and absolute are given; no weight is stated.",
+    "use": "pass1"
+   },
+   "8552453": {
+    "reason": "Values: per-kg values used when both per kg and absolute are given; no weight is stated.",
+    "use": "pass1"
+   },
+   "8703647": {
+    "reason": "Values: per-kg values (rule: per kg is used when an abstract gives both per kg and absolute, so the observed and predicted clearance share the weight), with the stated weight 1086 g that pass 2 recorded (Amendment 13 \u00a72).",
+    "record": {
+     "decision": "include",
+     "flags": [],
+     "observations": [
+      {
+       "age_quote": "23 preterm infants (gestational age 28.7 +/- 1.7 weeks; weight 1086 +/- 311 g) on day 3 and day 10 after birth",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "30.7 +/- 5.9 vs 41.6 +/- 9.0 ml h-1 kg-1",
+        "summary": "mean",
+        "unit": "mL/h/kg",
+        "value": 30.7
+       },
+       "flags": [],
+       "ga_weeks": 28.7,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "preterm infants GA 28.7 wk, day 3",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 3,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": 1.086,
+       "weight_quote": "weight 1086 +/- 311 g"
+      },
+      {
+       "age_quote": "23 preterm infants (gestational age 28.7 +/- 1.7 weeks; weight 1086 +/- 311 g) on day 3 and day 10 after birth",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "30.7 +/- 5.9 vs 41.6 +/- 9.0 ml h-1 kg-1",
+        "summary": "mean",
+        "unit": "mL/h/kg",
+        "value": 41.6
+       },
+       "flags": [],
+       "ga_weeks": 28.7,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "preterm infants GA 28.7 wk, day 10",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 10,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": 1.086,
+       "weight_quote": "weight 1086 +/- 311 g"
+      }
+     ],
+     "pmid": "8703647",
+     "reason": ""
+    }
+   }
+  }
+ },
+ "cefuroxime": {
+  "pediatric": {
+   "20864357": {
+    "reason": "A14 \u00a72: population restricted to cardiopulmonary bypass surgery, excluded under P4",
+    "use": "pass2"
+   }
+  }
+ },
+ "daptomycin": {
+  "adult": {
+   "15273084": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "adult_age_unstated",
+      "adult_weight_missing",
+      "route_unstated"
+     ],
+     "pmid": "15273084",
+     "reason": "",
+     "values": [
+      {
+       "age_quote": null,
+       "age_years": null,
+       "cl": {
+        "quote": "CL among dialysis subjects was approximately one-third that of healthy subjects (0.27 versus 0.81 liter/h)",
+        "summary": "typical",
+        "unit": "L/h",
+        "value": 0.81
+       },
+       "flags": [],
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ]
+    }
+   },
+   "30224525": {
+    "reason": "Values: the two values are the same twelve volunteers before and after rifampin; the baseline (drug alone) value is used.; A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "adult_age_unstated",
+      "adult_weight_missing",
+      "route_unstated"
+     ],
+     "pmid": "30224525",
+     "reason": "",
+     "values": [
+      {
+       "age_quote": null,
+       "age_years": null,
+       "cl": {
+        "quote": "clearance (0.53 versus 0.55 liters/h, P = 1.00)",
+        "summary": "mean",
+        "unit": "L/h",
+        "value": 0.53
+       },
+       "flags": [],
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ]
+    }
+   }
+  }
+ },
+ "fluconazole": {
+  "pediatric": {
+   "18809946": {
+    "reason": "A14 \u00a71: typical clearances (not CL/F) with no non-IV dosing mentioned; included, flagged route_unstated. Values are typical values at stated covariate points (GA, PNA); 'birth' is PNA 0, so PMA equals GA (Amendment 16 \u00a75)",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "CL doubles between birth and 28 days of age from 0.008 to 0.016 and from 0.010 to 0.022 liter/kg/h for typical 24- and 32-week-gestation infants, respectively",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "CL doubles between birth and 28 days of age from 0.008 to 0.016 and from 0.010 to 0.022 liter/kg/h for typical 24- and 32-week-gestation infants, respectively",
+        "summary": "typical",
+        "unit": "L/h/kg",
+        "value": 0.008
+       },
+       "flags": [],
+       "ga_range_weeks": null,
+       "ga_weeks": 24,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "typical 24-wk GA infant at birth",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 0,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      },
+      {
+       "age_quote": "CL doubles between birth and 28 days of age from 0.008 to 0.016 and from 0.010 to 0.022 liter/kg/h for typical 24- and 32-week-gestation infants, respectively",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "CL doubles between birth and 28 days of age from 0.008 to 0.016 and from 0.010 to 0.022 liter/kg/h for typical 24- and 32-week-gestation infants, respectively",
+        "summary": "typical",
+        "unit": "L/h/kg",
+        "value": 0.016
+       },
+       "flags": [],
+       "ga_range_weeks": null,
+       "ga_weeks": 24,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "typical 24-wk GA infant at 28 d",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 28,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      },
+      {
+       "age_quote": "CL doubles between birth and 28 days of age from 0.008 to 0.016 and from 0.010 to 0.022 liter/kg/h for typical 24- and 32-week-gestation infants, respectively",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "CL doubles between birth and 28 days of age from 0.008 to 0.016 and from 0.010 to 0.022 liter/kg/h for typical 24- and 32-week-gestation infants, respectively",
+        "summary": "typical",
+        "unit": "L/h/kg",
+        "value": 0.01
+       },
+       "flags": [],
+       "ga_range_weeks": null,
+       "ga_weeks": 32,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "typical 32-wk GA infant at birth",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 0,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      },
+      {
+       "age_quote": "CL doubles between birth and 28 days of age from 0.008 to 0.016 and from 0.010 to 0.022 liter/kg/h for typical 24- and 32-week-gestation infants, respectively",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "CL doubles between birth and 28 days of age from 0.008 to 0.016 and from 0.010 to 0.022 liter/kg/h for typical 24- and 32-week-gestation infants, respectively",
+        "summary": "typical",
+        "unit": "L/h/kg",
+        "value": 0.022
+       },
+       "flags": [],
+       "ga_range_weeks": null,
+       "ga_weeks": 32,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "typical 32-wk GA infant at 28 d",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 28,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "18809946",
+     "reason": ""
+    }
+   },
+   "35074829": {
+    "reason": "A14 \u00a71: clearance (not CL/F) with no non-IV dosing mentioned; included, flagged route_unstated. A14 \u00a74: typical value at 0.87 kg with the cohort's median GA and PNA, flagged typical_at_cohort_median",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated",
+      "typical_at_cohort_median"
+     ],
+     "observations": [
+      {
+       "age_quote": "median (range) gestational age 25.3 (24.0-35.1) weeks and median postnatal age (PNA) at treatment initiation 1.4 (0.2-32.5) days",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "an estimated clearance of 0.0147 L/hour for a typical infant of 0.87 kg",
+        "summary": "typical",
+        "unit": "L/h",
+        "value": 0.0147
+       },
+       "flags": [],
+       "ga_range_weeks": null,
+       "ga_weeks": 25.3,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "preterm neonates, typical infant 0.87 kg, median PNA 1.4 d",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 1.4,
+       "pna_range_days": [
+        0.2,
+        32.5
+       ],
+       "preterm": true,
+       "weight_kg": 0.87,
+       "weight_quote": "a typical infant of 0.87 kg"
+      }
+     ],
+     "pmid": "35074829",
+     "reason": ""
+    }
+   },
+   "7739946": {
+    "reason": "Decision: the clearance comes from one model fitted to the IV dose and seven oral doses together, with F estimated; no IV-only value (Amendment 1 \u00a75).",
+    "use": "pass1"
+   },
+   "8013270": {
+    "reason": "Values: 4.4 months is 133.93 days at 30.4375 d/month; pass 1 rounded to 133.9.",
+    "use": "pass2"
+   },
+   "8375121": {
+    "reason": "Values: ages day 1, 7 and 13 follow from the stated schedule (from the first day of life, every 72 hours; doses 1, 3 and 5); the mean birth weight 912 g is used for these first-two-weeks groups, flagged birth_weight (Amendment 14 \u00a75).",
+    "record": {
+     "decision": "include",
+     "flags": [],
+     "observations": [
+      {
+       "age_quote": "receiving fluconazole prophylactically from the first day of life were enrolled in an open phase I-II pharmacokinetics, safety, and tolerance trial. Up to 5 doses of 6 mg/kg were administered intravenously every 72 hours during the first 2 weeks of life",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "The mean total clearance corrected for weight (CL/kg) was 0.18 ml/min/kg (n = 7), 0.33 ml/min/kg (n = 7), and 0.52 ml/min/kg (n = 4; p = 0.02)",
+        "summary": "mean",
+        "unit": "mL/min/kg",
+        "value": 0.18
+       },
+       "flags": [
+        "birth_weight"
+       ],
+       "ga_weeks": 27.4,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "VLBW preterm, after dose 1 (day 1 of life)",
+       "pma_weeks": null,
+       "pna_days": 1,
+       "preterm": true,
+       "weight_kg": 0.912,
+       "weight_quote": "mean birth weight, 912 gm"
+      },
+      {
+       "age_quote": "receiving fluconazole prophylactically from the first day of life were enrolled in an open phase I-II pharmacokinetics, safety, and tolerance trial. Up to 5 doses of 6 mg/kg were administered intravenously every 72 hours during the first 2 weeks of life",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "The mean total clearance corrected for weight (CL/kg) was 0.18 ml/min/kg (n = 7), 0.33 ml/min/kg (n = 7), and 0.52 ml/min/kg (n = 4; p = 0.02)",
+        "summary": "mean",
+        "unit": "mL/min/kg",
+        "value": 0.33
+       },
+       "flags": [
+        "birth_weight"
+       ],
+       "ga_weeks": 27.4,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "VLBW preterm, after dose 3 (day 7, q72h from day 1)",
+       "pma_weeks": null,
+       "pna_days": 7,
+       "preterm": true,
+       "weight_kg": 0.912,
+       "weight_quote": "mean birth weight, 912 gm"
+      },
+      {
+       "age_quote": "receiving fluconazole prophylactically from the first day of life were enrolled in an open phase I-II pharmacokinetics, safety, and tolerance trial. Up to 5 doses of 6 mg/kg were administered intravenously every 72 hours during the first 2 weeks of life",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "The mean total clearance corrected for weight (CL/kg) was 0.18 ml/min/kg (n = 7), 0.33 ml/min/kg (n = 7), and 0.52 ml/min/kg (n = 4; p = 0.02)",
+        "summary": "mean",
+        "unit": "mL/min/kg",
+        "value": 0.52
+       },
+       "flags": [
+        "birth_weight"
+       ],
+       "ga_weeks": 27.4,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "VLBW preterm, after dose 5 (day 13, q72h from day 1)",
+       "pma_weeks": null,
+       "pna_days": 13,
+       "preterm": true,
+       "weight_kg": 0.912,
+       "weight_quote": "mean birth weight, 912 gm"
+      }
+     ],
+     "pmid": "8375121",
+     "reason": ""
+    }
+   }
+  }
+ },
+ "gentamicin": {
+  "adult": {
+   "8361865": {
+    "reason": "Values: a crossover in the same five volunteers; the normobaric (usual-conditions) value is used, not the hyperbaric one.",
+    "use": "pass2"
+   }
+  },
+  "pediatric": {
+   "11045889": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "Sixty-eight newborn patients of 24- to 34-weeks gestational age and 600-3,100 g current weight in their first week of life",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "lower gentamicin clearance (0.0288 vs 0.0340 L h(-1) kg(-1))",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.0288
+       },
+       "flags": [],
+       "ga_weeks": [
+        24,
+        30
+       ],
+       "height_cm": null,
+       "height_quote": null,
+       "label": "preterm GA <30 wk, first week of life",
+       "pma_weeks": null,
+       "pna_days": [
+        1,
+        7
+       ],
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      },
+      {
+       "age_quote": "Sixty-eight newborn patients of 24- to 34-weeks gestational age and 600-3,100 g current weight in their first week of life",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "lower gentamicin clearance (0.0288 vs 0.0340 L h(-1) kg(-1))",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.034
+       },
+       "flags": [],
+       "ga_weeks": [
+        30,
+        34
+       ],
+       "height_cm": null,
+       "height_quote": null,
+       "label": "preterm GA 30-34 wk, first week of life",
+       "pma_weeks": null,
+       "pna_days": [
+        1,
+        7
+       ],
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "11045889",
+     "reason": ""
+    }
+   },
+   "14566440": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "mean gestational age of 35.1 weeks and mean age at the time of sampling of 4.2 days",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "Mean (95% confidence interval) values of CL and half-life were 0.042 l h(-1) kg(-1)",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.042
+       },
+       "flags": [],
+       "ga_weeks": 35.1,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "neonates mean age 4.2 days, GA 35.1 wk",
+       "pma_weeks": null,
+       "pna_days": 4.2,
+       "preterm": false,
+       "weight_kg": 2.1,
+       "weight_quote": "79 neonates with a mean birth weight of 2.1 kg"
+      }
+     ],
+     "pmid": "14566440",
+     "reason": ""
+    }
+   },
+   "21353108": {
+    "reason": "Values: 'first week of life' is [1, 7] days (Amendment 14 \u00a76). The group GA bounds come from the stated cohort range 24-42 weeks.",
+    "use": "pass1"
+   },
+   "24122736": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "SGA infants treated early (\u22647days) (n = 29)",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "clearance (0.58 mL/kg/min vs. 0.68 mL/kg/min",
+        "summary": "median",
+        "unit": "mL/min/kg",
+        "value": 0.58
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "SGA neonates treated at <=7 days",
+       "pma_weeks": null,
+       "pna_days": [
+        0,
+        7
+       ],
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      },
+      {
+       "age_quote": "SGA infants treated early (\u22647days) (n = 29)",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "clearance (0.58 mL/kg/min vs. 0.68 mL/kg/min",
+        "summary": "median",
+        "unit": "mL/min/kg",
+        "value": 0.68
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "AGA neonates treated at <=7 days",
+       "pma_weeks": null,
+       "pna_days": [
+        0,
+        7
+       ],
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "24122736",
+     "reason": ""
+    }
+   },
+   "27851686": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "allometric_standardized",
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "median (interquartile range) age 3.7 years (2.2-8.9)",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "Median (interquartile range) gentamicin clearance and volume of distribution were 8.1 L\u00b7h\u00b770 kg (5.8-12.4)",
+        "summary": "median",
+        "unit": "L/h/70kg",
+        "value": 8.1
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "children with febrile neutropenia, median 3.7 y",
+       "pma_weeks": null,
+       "pna_days": 1351.425,
+       "pna_range_days": [
+        803.55,
+        3250.725
+       ],
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "27851686",
+     "reason": ""
+    }
+   },
+   "6927546": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "in 7 infants and children (1 month to 8 years)",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "respectively, 12.8 vs. 50.4 ml/min/1.73 m2",
+        "summary": "mean",
+        "unit": "mL/min/1.73m2",
+        "value": 50.4
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "infants and children 1 month to 8 years",
+       "pma_weeks": null,
+       "pna_days": [
+        30.4375,
+        2922
+       ],
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "6927546",
+     "reason": ""
+    }
+   },
+   "8414796": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "critically_ill",
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "44 PICU patients (0.8 month to 14 years old)",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "Mean clearance (+/- SD) and volume of distribution for all 44 patients were 0.123 +/- 0.041 liter/hour/kg",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.123
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "PICU patients 0.8 month to 14 years",
+       "pma_weeks": null,
+       "pna_days": [
+        24.35,
+        5113.5
+       ],
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "8414796",
+     "reason": ""
+    }
+   },
+   "8602384": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "in children (age 1-18 yrs) with cancer and in controls",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "patients receiving prior nephrotoxic chemotherapy appeared to have a lower mean clearance (98.2 ml/min/1.73 m2) than those exposed to nonnephrotoxic chemotherapy (117.4 ml/min/1.73 m2) and controls (113.3 ml/min/1.73 m2",
+        "summary": "mean",
+        "unit": "mL/min/1.73m2",
+        "value": 98.2
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "cancer, nephrotoxic chemotherapy, 1-18 y",
+       "pma_weeks": null,
+       "pna_days": [
+        365.25,
+        6574.5
+       ],
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      },
+      {
+       "age_quote": "in children (age 1-18 yrs) with cancer and in controls",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "patients receiving prior nephrotoxic chemotherapy appeared to have a lower mean clearance (98.2 ml/min/1.73 m2) than those exposed to nonnephrotoxic chemotherapy (117.4 ml/min/1.73 m2) and controls (113.3 ml/min/1.73 m2",
+        "summary": "mean",
+        "unit": "mL/min/1.73m2",
+        "value": 117.4
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "cancer, nonnephrotoxic chemotherapy, 1-18 y",
+       "pma_weeks": null,
+       "pna_days": [
+        365.25,
+        6574.5
+       ],
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      },
+      {
+       "age_quote": "in children (age 1-18 yrs) with cancer and in controls",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "patients receiving prior nephrotoxic chemotherapy appeared to have a lower mean clearance (98.2 ml/min/1.73 m2) than those exposed to nonnephrotoxic chemotherapy (117.4 ml/min/1.73 m2) and controls (113.3 ml/min/1.73 m2",
+        "summary": "mean",
+        "unit": "mL/min/1.73m2",
+        "value": 113.3
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "controls without cancer, 1-18 y",
+       "pma_weeks": null,
+       "pna_days": [
+        365.25,
+        6574.5
+       ],
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "8602384",
+     "reason": ""
+    }
+   }
+  }
+ },
+ "levetiracetam": {
+  "pediatric": {
+   "22495532": {
+    "reason": "Clearance is reported by study day (day 1, day 7), not by postnatal age; the age at study entry is not stated, so no age can be recorded (A15 \u00a73 needs a stated start)",
+    "use": "pass1"
+   },
+   "34753796": {
+    "reason": "A14 \u00a71: clearance is not stated as apparent (CL/F) and no non-IV dosing is mentioned; included, flagged route_unstated (TDM data; E9 removes it)",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "56 patients aged from 47 days to 18 years",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "The median (IQR) volume of distribution and clearance of levetiracetam were 0.7 (0.58-0.85) L/kg and 0.123 (0.085-0.167) L/hour/kg",
+        "summary": "median",
+        "unit": "L/h/kg",
+        "value": 0.123
+       },
+       "flags": [],
+       "ga_range_weeks": null,
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "children 47 d to 18 y (TDM)",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": [
+        47,
+        6574.5
+       ],
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "34753796",
+     "reason": ""
+    }
+   }
+  }
+ },
+ "meropenem": {
+  "pediatric": {
+   "11360025": {
+    "reason": "A14 \u00a75: mean birth weight 925 g is the group's weight because the central postnatal age (21 d) is under 28 d, flagged birth_weight",
+    "record": {
+     "decision": "include",
+     "flags": [],
+     "observations": [
+      {
+       "age_quote": "mean postnatal age 21 days",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "Mean total body clearance was 0.157 L/kg per hour",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.157
+       },
+       "flags": [
+        "birth_weight"
+       ],
+       "ga_range_weeks": null,
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "premature neonates, mean postnatal age 21 d, first dose",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 21,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": 0.925,
+       "weight_quote": "mean birth weight 925 g"
+      }
+     ],
+     "pmid": "11360025",
+     "reason": ""
+    }
+   },
+   "25884534": {
+    "reason": "A14 \u00a73: a single-patient report is not a group summary; excluded under P2",
+    "record": {
+     "decision": "exclude",
+     "flags": [],
+     "observations": [],
+     "pmid": "25884534",
+     "reason": "P2: single-patient report (Amendment 14 \u00a73)"
+    }
+   },
+   "30300440": {
+    "reason": "A14 \u00a73: a single-patient report is not a group summary; excluded under P2",
+    "record": {
+     "decision": "exclude",
+     "flags": [],
+     "observations": [],
+     "pmid": "30300440",
+     "reason": "P2: single-patient report (Amendment 14 \u00a73)"
+    }
+   },
+   "33199385": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated (infusion is named only for simulated regimens)",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "critically_ill",
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "The median (range) age and body weight were 1.4 (0.03 to 14.6) years and 8.9 (2.7 to 40.9) kg",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "The mean CL, Vc, and peripheral volume of distribution (Vp) were 0.45 liters/kg/h",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.45
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "PICU patients, median 1.4 y",
+       "pma_weeks": null,
+       "pna_days": 511.35,
+       "pna_range_days": [
+        10.9575,
+        5332.65
+       ],
+       "preterm": false,
+       "weight_kg": 8.9,
+       "weight_quote": "The median (range) age and body weight were 1.4 (0.03 to 14.6) years and 8.9 (2.7 to 40.9) kg"
+      }
+     ],
+     "pmid": "33199385",
+     "reason": ""
+    }
+   },
+   "7486908": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "73 infants and children in four age groups were enrolled in the study: 2 to 5 months, 6 to 23 months, 2 to 5 years, and 6 to 12 years",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "clearance, 5.63 +/- 0.75 ml/min/kg",
+        "summary": "mean",
+        "unit": "mL/min/kg",
+        "value": 5.63
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "infants and children 2 months-12 years (pooled)",
+       "pma_weeks": null,
+       "pna_days": [
+        60.875,
+        4383.0
+       ],
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "7486908",
+     "reason": ""
+    }
+   }
+  }
+ },
+ "penicillin_g": {
+  "pediatric": {
+   "17646418": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "20 preterm neonates with a gestational age of less than 32 weeks on day 3 of life",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "and the total body clearance were 0.359 +/- 0.06 liter, 0.152 +/- 0.03 liter, 0.774 +/- 0.28 liter/h, and 0.103 +/- 0.01 liter/h",
+        "summary": "typical",
+        "unit": "L/h",
+        "value": 0.103
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "preterm GA <32 wk, day 3 of life (population estimate)",
+       "pma_weeks": null,
+       "pna_days": 3,
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "17646418",
+     "reason": ""
+    }
+   }
+  }
+ },
+ "piperacillin_tazobactam": {
+  "pediatric": {
+   "23354809": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "critically_ill",
+      "route_unstated",
+      "with_tazobactam"
+     ],
+     "observations": [
+      {
+       "age_quote": "For neonates and young infants less than 2 months of age",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "the median central clearance was 0.133 and 0.149 L/h/kg for piperacillin and tazobactam",
+        "summary": "median",
+        "unit": "L/h/kg",
+        "value": 0.133
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "NICU neonates and infants < 2 months",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": [
+        0,
+        60.875
+       ],
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "23354809",
+     "reason": ""
+    }
+   },
+   "23907263": {
+    "reason": "Passes differ only in rounding of 9 months (273.9375 d); the exact conversion is kept",
+    "use": "pass1"
+   },
+   "38161045": {
+    "reason": "A15 \u00a72: the same children under high-frequency intra-operative dosing and usual q6h post-operative dosing; the usual-condition (post-operative) value is used; A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "allometric_standardized",
+      "critically_ill",
+      "route_unstated",
+      "with_tazobactam"
+     ],
+     "observations": [
+      {
+       "age_quote": "median age: 3.1 years",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "clearance: 15.8 \u00b1 7.2 vs. 12.6 \u00b1 6.3 L/h/70 kg",
+        "summary": "mean",
+        "unit": "L/h/70kg",
+        "value": 12.6
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "children, post-operative phase, median age 3.1 y",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 1132.275,
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "38161045",
+     "reason": ""
+    }
+   }
+  }
+ },
+ "tobramycin": {
+  "adult": {
+   "3606064": {
+    "reason": "A14 \u00a71: healthy volunteers, total body clearance (not CL/F) with no non-IV dosing mentioned; included, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "pmid": "3606064",
+     "reason": "",
+     "values": [
+      {
+       "age_quote": null,
+       "age_years": null,
+       "cl": {
+        "quote": "Netilmicin exhibited significantly lower total body clearance (48 versus 90 ml/min)",
+        "summary": "mean",
+        "unit": "mL/min",
+        "value": 90
+       },
+       "flags": [
+        "adult_weight_missing",
+        "adult_age_unstated"
+       ],
+       "label": "normal volunteers",
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ]
+    }
+   }
+  },
+  "pediatric": {
+   "3964533": {
+    "reason": "A14 \u00a71 removes the route reason; still excluded because the postnatal age is unreadable",
+    "record": {
+     "decision": "exclude",
+     "flags": [],
+     "observations": [],
+     "pmid": "3964533",
+     "reason": "no age: the postnatal age is printed as '3 X 4 days', which gives no readable number"
+    }
+   }
+  }
+ },
+ "vancomycin": {
+  "adult": {
+   "3365918": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "adult_age_unstated",
+      "adult_weight_missing",
+      "route_unstated"
+     ],
+     "pmid": "3365918",
+     "reason": "",
+     "values": [
+      {
+       "age_quote": null,
+       "age_years": null,
+       "cl": {
+        "quote": "The systemic clearance of vancomycin was 131 +/- 7 ml/min",
+        "summary": "mean",
+        "unit": "mL/min",
+        "value": 131
+       },
+       "flags": [],
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ]
+    }
+   }
+  },
+  "pediatric": {
+   "11549096": {
+    "reason": "The typical infant is defined by a stated GA of 33.5 wk, which sets stratum and GA; the abstract does not describe the group as preterm, so preterm is false (no effect with GA stated); A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "For the typical study infant (age = 27 days, CR = 0.6, WT= 1.8 kg, gestational age = 33.5 weeks)",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "this results in VdSS = 0.79 l/kg and Cl = 0.066 l/h/kg",
+        "summary": "typical",
+        "unit": "L/h/kg",
+        "value": 0.066
+       },
+       "flags": [],
+       "ga_weeks": 33.5,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "typical study infant: age 27 d, GA 33.5 wk, WT 1.8 kg, CR 0.6",
+       "pma_weeks": null,
+       "pna_days": 27,
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": 1.8,
+       "weight_quote": "WT= 1.8 kg"
+      }
+     ],
+     "pmid": "11549096",
+     "reason": ""
+    }
+   },
+   "16869817": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "allometric_standardized",
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "at 24 weeks PMA",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "Clearance (CL) increased from 0.897 l h(-1) 70 kg(-1) at 24 weeks PMA",
+        "summary": "typical",
+        "unit": "L/h/70kg",
+        "value": 0.897
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "premature neonates, typical CL at PMA 24 wk",
+       "pma_weeks": 24,
+       "pna_days": null,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      },
+      {
+       "age_quote": "by 34 weeks PMA",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "to 2.02 l h(-1) 70 kg(-1) by 34 weeks PMA",
+        "summary": "typical",
+        "unit": "L/h/70kg",
+        "value": 2.02
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "premature neonates, typical CL at PMA 34 wk",
+       "pma_weeks": 34,
+       "pna_days": null,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "16869817",
+     "reason": ""
+    }
+   },
+   "26079639": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "mean age was 6 \u00b1 2.5 (SD) years",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "Mean baseline (\u00b1SD) vancomycin CL was 0.20 \u00b1 0.07 L/h/kg",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.2
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "pediatric cancer patients, mean age 6 y",
+       "pma_weeks": null,
+       "pna_days": 2191.5,
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": 19.6,
+       "weight_quote": "mean weight was 19.6 \u00b1 6.9(SD) kg"
+      }
+     ],
+     "pmid": "26079639",
+     "reason": ""
+    }
+   },
+   "2630235": {
+    "reason": "A15 \u00a71: the abstract gives the group's clearance per kg (1.07 mL/min/kg) and absolute (1.37 mL/min); the per-kg value is used",
+    "record": {
+     "decision": "include",
+     "flags": [],
+     "observations": [
+      {
+       "age_quote": "Postconceptional age (PCA) at the time of the study ranged from 26 to 44 weeks",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "When standardized for patient weight, the CL and Vdss values were 1.07 ml/min/kg and 0.48 liters/kg",
+        "summary": "mean",
+        "unit": "mL/min/kg",
+        "value": 1.07
+       },
+       "flags": [
+        "pca_as_pma"
+       ],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "infants GA < 36 wk, PCA 26-44 wk",
+       "pma_weeks": [
+        26,
+        44
+       ],
+       "pna_days": null,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "2630235",
+     "reason": ""
+    }
+   },
+   "29602981": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "with a PMA of 39.8 weeks",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "The typical population parameter estimates of clearance and distribution volume for an infant weighing 2.73 kg with a PMA of 39.8 weeks and serum creatinine of 0.28 mg/dL were 0.103 L/h/kg",
+        "summary": "typical",
+        "unit": "L/h/kg",
+        "value": 0.103
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "typical infant: 2.73 kg, PMA 39.8 wk, SCr 0.28 mg/dL",
+       "pma_weeks": 39.8,
+       "pna_days": null,
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": 2.73,
+       "weight_quote": "an infant weighing 2.73 kg"
+      }
+     ],
+     "pmid": "29602981",
+     "reason": ""
+    }
+   },
+   "30950674": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "critically_ill",
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "Median (IQR) postnatal age was 157 (112-238) days",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "The median (IQR) volume of distribution and clearance for vancomycin were 0.50 (0.39-0.94) L/kg and 0.112 (0.095-0.133) L/h/kg",
+        "summary": "median",
+        "unit": "L/h/kg",
+        "value": 0.112
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "infants with suspected or proven sepsis, median PNA 157 d",
+       "pma_weeks": null,
+       "pna_days": 157,
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "30950674",
+     "reason": ""
+    }
+   },
+   "32266599": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated (infusion is named only for simulated regimens); A14 \u00a74: typical value at 1.48 kg with the age taken as the cohort median 14 d, flagged typical_at_cohort_median",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated",
+      "typical_at_cohort_median"
+     ],
+     "observations": [
+      {
+       "age_quote": "19 preterm neonates were enrolled in the study with a median age of 14 (3-58) days",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "Volume of distribution and clearance was 0.88 L and 0.1 L/h, respectively, for a typical neonate weighing 1.48 kg",
+        "summary": "typical",
+        "unit": "L/h",
+        "value": 0.1
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "preterm neonates, typical neonate 1.48 kg, median age 14 d",
+       "pma_weeks": null,
+       "pna_days": 14,
+       "pna_range_days": [
+        3,
+        58
+       ],
+       "preterm": true,
+       "weight_kg": 1.48,
+       "weight_quote": "a typical neonate weighing 1.48 kg"
+      }
+     ],
+     "pmid": "32266599",
+     "reason": ""
+    }
+   },
+   "32947559": {
+    "reason": "A14 \u00a74: final-model typical CL with the cohort's median age (12.7 y) stated and no separate covariate point; accepted at the cohort median, flagged typical_at_cohort_median",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "critically_ill",
+      "typical_at_cohort_median"
+     ],
+     "observations": [
+      {
+       "age_quote": "enrolled critically ill patients (2-18 years) receiving intravenous vancomycin at the Children's Hospital of Philadelphia during December 2015-November 2017. Vancomycin levels were collected during clinical care and at 3 times during a single dosing interval. Plasma CysC was measured within 24 hours before intravenous vancomycin (baseline) initiation or immediately after enrollment and along with the third pharmacokinetic sample. Nonlinear mixed effects modeling was performed using NONMEM software. Covariate selection was used to test model fit with inclusion of the estimated glomerular filtration rate (eGFR) on CL using bedside Schwartz versus various published CysC-based equations. RESULTS: In total, 83 vancomycin levels were obtained from 20 children. The median age was 12.7 years",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "Final model pharmacokinetic indices were CL = 0.29 L/h/kg",
+        "summary": "typical",
+        "unit": "L/h/kg",
+        "value": 0.29
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "critically ill children 2-18 y, median age 12.7 y (final model CL)",
+       "pma_weeks": null,
+       "pna_days": 4638.675,
+       "pna_range_days": [
+        730.5,
+        6574.5
+       ],
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "32947559",
+     "reason": ""
+    }
+   },
+   "34612690": {
+    "reason": "Passes differ only in converting 13.3 months; 13.3 x 30.4375 = 404.82875 d (pass 1) is exact; A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "The median age was 13.3 (interquartile range, 7.6 to 53.5) months",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "the average clearance and volume of distribution were 0.18 liters/h/kg",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.18
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "pediatric liver transplant recipients, median age 13.3 mo (post hoc mean CL)",
+       "pma_weeks": null,
+       "pna_days": 404.82875,
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "34612690",
+     "reason": ""
+    }
+   },
+   "39352409": {
+    "reason": "Stated enrolment range 90 d to <18 y kept (pass 1); A14 \u00a74: typical value at 20 kg with the age taken as the cohort median 6.0 y, flagged typical_at_cohort_median",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "critically_ill",
+      "typical_at_cohort_median"
+     ],
+     "observations": [
+      {
+       "age_quote": "Children 90 days old or older to younger than 18 years who received IV vancomycin treatment, irrespective of the indication for use, in the ICUs at the University of Maryland Children's Hospital and Texas Children's Hospital were enrolled. INTERVENTIONS: Vancomycin was prescribed at doses and intervals chosen by the treating clinicians. MEASUREMENTS AND MAIN RESULTS: A median of four serum levels of vancomycin per patient were collected along with other variables for up to 7 days following the first administration. These data were used to characterize vancomycin pharmacokinetics and evaluate the factors affecting the variability in achieving AUC24/MIC ratio greater than or equal to 400 in PICU patients who are not on extracorporeal therapy. A total of 302 children with a median age of 6.0 years",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "the clearance of 2.76 L/hr for a typical patient weighing 20 kg",
+        "summary": "typical",
+        "unit": "L/h",
+        "value": 2.76
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "PICU children, typical patient 20 kg, median age 6.0 y",
+       "pma_weeks": null,
+       "pna_days": 2191.5,
+       "pna_range_days": [
+        90,
+        6574.5
+       ],
+       "preterm": false,
+       "weight_kg": 20,
+       "weight_quote": "a typical patient weighing 20 kg"
+      }
+     ],
+     "pmid": "39352409",
+     "reason": ""
+    }
+   },
+   "7845750": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "28 pediatric cancer patients 9 months to 13 years of age",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "Mean vancomycin clearance, volume of distribution and serum half-life were 0.153 +/- 0.033 liter/hour/kg",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.153
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "pediatric cancer patients, 9 mo-13 y",
+       "pma_weeks": null,
+       "pna_days": [
+        273.9375,
+        4748.25
+       ],
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "7845750",
+     "reason": ""
+    }
+   },
+   "8532423": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "33 infants and children with cancer (age 5.72 +/- 4.11 years, mean +/- SD)",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "an increase in vancomycin clearance (0.149 +/- 0.028 liter/hour/kg) in the malignancy group",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.149
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "malignancy group, mean age 5.72 y",
+       "pma_weeks": null,
+       "pna_days": 2089.23,
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      },
+      {
+       "age_quote": "31 patients without cancer (age 4.18 +/- 5.10 years)",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "as compared with that (0.114 +/- 0.031 liter/hour/kg) in the control group",
+        "summary": "mean",
+        "unit": "L/h/kg",
+        "value": 0.114
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "control group without cancer, mean age 4.18 y",
+       "pma_weeks": null,
+       "pna_days": 1526.745,
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "8532423",
+     "reason": ""
+    }
+   },
+   "9853975": {
+    "reason": "A14 \u00a71: clearance is not CL/F and the abstract mentions no non-intravenous dosing, so the study counts as intravenous, flagged route_unstated",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "increases with AGE up to 1 year of age",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "CL(L/hour per kg) = 0.119 + 0.00508 x (1 - AGE)",
+        "summary": "typical",
+        "unit": "L/h/kg",
+        "value": 0.119
+       },
+       "flags": [],
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "population model typical value at postnatal age 1 year",
+       "pma_weeks": null,
+       "pna_days": 365.25,
+       "pna_range_days": null,
+       "preterm": false,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "9853975",
+     "reason": ""
+    }
+   }
+  }
+ },
+ "zidovudine": {
+  "pediatric": {
+   "9559787": {
+    "reason": "A14 \u00a71: clearance (not CL/F) with no route stated and no non-IV dosing mentioned; included, flagged route_unstated. A14 \u00a75: birth weight at a central PNA of 5.5 d. Second group's GA not stated for the subset (preterm, imputed)",
+    "record": {
+     "decision": "include",
+     "flags": [
+      "route_unstated"
+     ],
+     "observations": [
+      {
+       "age_quote": "15 preterm neonates (mean gestational age, 29.4 weeks; mean birth weight, 1,230 g) at a mean age of 5.5 days",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "The values of the pharmacokinetic parameters were as follows: clearance, 2.53 +/- 0.44 ml/min/kg",
+        "summary": "mean",
+        "unit": "mL/min/kg",
+        "value": 2.53
+       },
+       "flags": [
+        "birth_weight"
+       ],
+       "ga_range_weeks": null,
+       "ga_weeks": 29.4,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "preterm neonates, mean age 5.5 d",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 5.5,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": 1.23,
+       "weight_quote": "mean birth weight, 1,230 g"
+      },
+      {
+       "age_quote": "For seven infants studied a second time, at a mean age of 17.7 days",
+       "bsa_m2": null,
+       "bsa_quote": null,
+       "cl": {
+        "quote": "an increase in the mean clearance (2.33 versus 4.35 ml/min/kg; P = 0.024)",
+        "summary": "mean",
+        "unit": "mL/min/kg",
+        "value": 4.35
+       },
+       "flags": [],
+       "ga_range_weeks": null,
+       "ga_weeks": null,
+       "height_cm": null,
+       "height_quote": null,
+       "label": "seven of the preterm neonates restudied at mean age 17.7 d",
+       "pma_range_weeks": null,
+       "pma_weeks": null,
+       "pna_days": 17.7,
+       "pna_range_days": null,
+       "preterm": true,
+       "weight_kg": null,
+       "weight_quote": null
+      }
+     ],
+     "pmid": "9559787",
+     "reason": ""
+    }
+   }
+  }
+ }
+}
