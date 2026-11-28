@@ -1,15 +1,19 @@
 ---
 title: "Adding organ maturation to allometric scaling of adult clearance for children: two pre-registered evaluations against labels and published clearance"
 subtitle: "Original Article. Draft for submission to the British Journal of Clinical Pharmacology. Decision-support research, not prescribing guidance."
-author: "[Author names, affiliations and ORCID iDs to be completed by the authors]"
+author: "Dhruvik Pandya¹, Surjit Singh¹, Shoban Singh¹ [to confirm: the same person as the next author?], Shoban Babu Varthia¹, Pradeep Trivedi¹, Mohammad Arif Shamim¹ [to confirm spelling: Arif Shamim or Akib Shamin], Ayushman Sadhu¹"
 date: "Draft of 28 November 2026"
 ---
 
+**Affiliation:** ¹ [Department to confirm], All India Institute of Medical Sciences (AIIMS), [campus to confirm], India. ORCID iDs to be added.
+
+**Author positions:** Dhruvik Pandya, Junior Resident; Surjit Singh, Professor; Shoban Babu Varthia and Pradeep Trivedi, Additional Professors [to confirm]; Mohammad Arif Shamim, Senior Resident; Ayushman Sadhu, Junior Resident.
+
 **Running head:** Maturation-adjusted scaling of adult clearance for children
 
-**Corresponding author:** [to be completed by the authors]
+**Corresponding author:** Dhruvik Pandya [to confirm; postal address and email to be added]
 
-**Principal Investigator statement:** [To be completed by the authors: either name the Principal Investigator, or state that there is no Principal Investigator because the study used no patient data.]
+**Principal Investigator statement:** There is no Principal Investigator. The study used only published drug labels and published abstracts, and no patients or volunteers were involved.
 
 **Keywords:** allometry; clearance; maturation; neonates; paediatric dosing; pharmacokinetics
 
@@ -177,9 +181,9 @@ Published maturation curves corrected most of the large overprediction that allo
 
 **Data availability statement.** The protocols, search snapshot (PMIDs, years and abstract hashes), extraction records of both passes, adjudication log, final dataset, label texts, analysis code, outputs and the manuscript build are openly available in the PaedScale repository at https://github.com/heyiamnotacoder/paedscale. Abstract texts are not redistributed; `python3 -m benchmark.external.curation.search restore` re-fetches them from PubMed and checks each against its committed hash.
 
-**Acknowledgements and funding.** The use of an AI assistant is described in the Methods. [Funding to be completed by the authors.]
+**Acknowledgements and funding.** The use of an AI assistant is described in the Methods. This research received no specific funding.
 
-**Competing interests.** [To be completed by the authors; state "none" if none.]
+**Competing interests.** The authors declare no competing interests.
 
 **Ethics.** The study used only public drug labels, published abstracts and published growth references. No human participants or patient data were involved.
 
